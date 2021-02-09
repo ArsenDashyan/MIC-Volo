@@ -18,7 +18,7 @@ namespace HomeWork1
                     arr[i] = result;
                 }
             }
-            Console.WriteLine();
+            Console.WriteLine(new string('-',20));
 
             ArrayAction.MaxDigitArray(arr);
 
