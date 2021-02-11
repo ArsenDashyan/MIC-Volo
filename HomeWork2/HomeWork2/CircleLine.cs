@@ -6,6 +6,9 @@ namespace HomeWork2
 {
     class CircleLine
     {
+        /// <summary>
+        /// Ditarkel em shrjanagci ev uxxi hatman 4 depq
+        /// </summary>
         private enum version { arajin, erkrord, errord, chorord };
         public static void IsInside(double x, double y)
         {
@@ -146,7 +149,7 @@ namespace HomeWork2
         {
             double yResC = 0.0;
             double yResL = 0.0;
-            if (r <= i && i <= 0 && 0 <= j && j <= r)
+            if (xI <= i && i <= 0 && 0 <= j && j <= r)
             {
                 yResC = Math.Sqrt(r * r - i * i);
                 yResL = r - r / xI * i;
