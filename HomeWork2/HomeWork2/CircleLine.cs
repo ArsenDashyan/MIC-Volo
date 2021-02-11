@@ -26,23 +26,33 @@ namespace HomeWork2
             Console.WriteLine("Խնդրում եմ մուտքագրեք շրջանի շառավղի r երկարությունը");
             rCircle = double.Parse(Console.ReadLine());
 
-            var vers = ReturnVersion(rCircle,xLine,yLine);
+            var vers = ReturnVersion(rCircle, xLine, yLine);
 
-            switch (vers)
+            //switch (vers)
+            //{
+            //    case version.arajin:
+            //        Inside(x,y,rCircle);
+            //        break;
+            //    case version.erkrord:
+            //        Inside(x, y, xLine, yLine);
+            //        break;
+            //    case version.errord:
+            //        InsideErr(x,y,rCircle,yLine);
+            //        break;
+            //    case version.chorord:
+            //        InsideCho(x, y, xLine, rCircle);
+            //        break;
+            //}
+
+            string str = vers switch
             {
-                case version.arajin:
-                    Inside(x,y,rCircle);
-                    break;
-                case version.erkrord:
-                    Inside(x, y, xLine, yLine);
-                    break;
-                case version.errord:
-                    InsideErr(x,y,rCircle,yLine);
-                    break;
-                case version.chorord:
-                    InsideCho(x, y, xLine, rCircle);
-                    break;
-            }
+                version.arajin => Inside(x, y, rCircle),
+                version.erkrord => Inside(x, y, xLine, yLine),
+                version.errord => InsideErr(x, y, rCircle, yLine),
+                version.chorord => InsideCho(x, y, xLine, rCircle),
+                _ => "Mutqagrvac tvyalneri mej sxal ka"
+            };
+            Console.WriteLine(str);
         }
 
         private static Enum ReturnVersion(double r, double x, double y)
@@ -67,7 +77,7 @@ namespace HomeWork2
             return (version)result;
         }
 
-        private static void Inside(double i, double j, double xI, double yI)
+        private static string Inside(double i, double j, double xI, double yI)
         {
             double yRes = 0.0;
             if (xI <= i && i <= 0 && 0 <= j && j <= yI)
@@ -75,40 +85,40 @@ namespace HomeWork2
                 yRes = yI - yI / xI * i;
                 if (yRes >= j)
                 {
-                    Console.WriteLine("Թիվը պատկանում է տիրույթին");
+                    return "Թիվը պատկանում է տիրույթին";
                 }
                 else
                 {
-                    Console.WriteLine("Թիվը չի պատկանում է տիրույթին");
+                    return "Թիվը չի պատկանում է տիրույթին";
                 }
             }
             else
             {
-                Console.WriteLine("Թիվը չի պատկանում է տիրույթին");
+                return "Թիվը չի պատկանում է տիրույթին";
             }
         }
-        private static void Inside(double i, double j, double r)
+        private static string Inside(double i, double j, double r)
         {
             double yRes = 0.0;
             if (r <= i && i <= 0 && 0 <= j && j <= r)
             {
-                yRes = Math.Sqrt(r*r - i*i);
+                yRes = Math.Sqrt(r * r - i * i);
                 if (yRes >= j)
                 {
-                    Console.WriteLine("Թիվը պատկանում է տիրույթին");
+                    return "Թիվը պատկանում է տիրույթին";
                 }
                 else
                 {
-                    Console.WriteLine("Թիվը չի պատկանում է տիրույթին");
+                    return "Թիվը չի պատկանում է տիրույթին";
                 }
             }
             else
             {
-                Console.WriteLine("Թիվը չի պատկանում է տիրույթին");
+                return "Թիվը չի պատկանում է տիրույթին";
             }
         }
 
-        private static void InsideErr(double i, double j, double r, double yI)
+        private static string InsideErr(double i, double j, double r, double yI)
         {
             double yResC = 0.0;
             double yResL = 0.0;
@@ -116,36 +126,36 @@ namespace HomeWork2
             {
                 yResC = Math.Sqrt(r * r - i * i);
                 yResL = yI - yI / r * i;
-                if (yResL<yResC)
+                if (yResL < yResC)
                 {
                     if (yResL >= j)
                     {
-                        Console.WriteLine("Թիվը պատկանում է տիրույթին");
+                        return "Թիվը պատկանում է տիրույթին";
                     }
                     else
                     {
-                        Console.WriteLine("Թիվը չի պատկանում է տիրույթին");
+                        return "Թիվը չի պատկանում է տիրույթին";
                     }
                 }
                 else
                 {
                     if (yResC >= j)
                     {
-                        Console.WriteLine("Թիվը պատկանում է տիրույթին");
+                        return "Թիվը պատկանում է տիրույթին";
                     }
                     else
                     {
-                        Console.WriteLine("Թիվը չի պատկանում է տիրույթին");
+                        return "Թիվը չի պատկանում է տիրույթին";
                     }
                 }
-               
+
             }
             else
             {
-                Console.WriteLine("Թիվը չի պատկանում է տիրույթին");
+                return "Թիվը չի պատկանում է տիրույթին";
             }
         }
-        private static void InsideCho(double i, double j, double xI, double r)
+        private static string InsideCho(double i, double j, double xI, double r)
         {
             double yResC = 0.0;
             double yResL = 0.0;
@@ -157,29 +167,29 @@ namespace HomeWork2
                 {
                     if (yResL >= j)
                     {
-                        Console.WriteLine("Թիվը պատկանում է տիրույթին");
+                        return "Թիվը պատկանում է տիրույթին";
                     }
                     else
                     {
-                        Console.WriteLine("Թիվը չի պատկանում է տիրույթին");
+                        return "Թիվը չի պատկանում է տիրույթին";
                     }
                 }
                 else
                 {
                     if (yResC >= j)
                     {
-                        Console.WriteLine("Թիվը պատկանում է տիրույթին");
+                        return "Թիվը պատկանում է տիրույթին";
                     }
                     else
                     {
-                        Console.WriteLine("Թիվը չի պատկանում է տիրույթին");
+                        return "Թիվը չի պատկանում է տիրույթին";
                     }
                 }
 
             }
             else
             {
-                Console.WriteLine("Թիվը չի պատկանում է տիրույթին");
+                return "Թիվը չի պատկանում է տիրույթին";
             }
         }
     }
