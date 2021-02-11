@@ -6,9 +6,10 @@ namespace HomeWork2
     {
         static void Main(string[] args)
         {
-            //Calculator.StartCalc();
-            CircleLine.IsInside(-1, 1.9);
-
+            Calculator.StartCalc();
+            //CircleLine.IsInside(-1, 1.9);
+            
+            
             Console.ReadLine();
         }
     }

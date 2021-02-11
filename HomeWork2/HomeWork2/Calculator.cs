@@ -59,7 +59,7 @@ namespace HomeWork2
                     }
                     break;
                 case 's':
-                    Console.WriteLine(Math.Sqrt(num1));
+                    Sqrtnumber(num1);
                     break;
                 default:
                     Console.WriteLine("Sorry you write a non correct operation");
@@ -67,7 +67,18 @@ namespace HomeWork2
             }
 
         }
-
+        private static void Sqrtnumber(double num)
+        {
+            int result = 0;
+            for (double i = 0; i < num; i += 0.1)
+            {
+                if ((int)(i * i) == (int)num)
+                {
+                    result = (int)i;
+                }
+            }
+            Console.WriteLine(result);
+        }
 
     }
 }
