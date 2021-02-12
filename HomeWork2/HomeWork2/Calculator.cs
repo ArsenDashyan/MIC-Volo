@@ -10,7 +10,7 @@ namespace HomeWork2
         {
             int num1 = 0;
             int num2 = 0;
-            char op;
+            char op = '.';
 
             Console.WriteLine("Please enter a first number");
             bool isParse = int.TryParse(Console.ReadLine(), out int result);
@@ -20,16 +20,21 @@ namespace HomeWork2
             }
 
             Console.WriteLine("Please select a operation\n" +
-                "For sum press +\n" +
-                "For subtraction press -\n" +
-                "For division press /\n" +
-                "For multiplication press *\n" +
-                "For Sqrt press s\n");
-            op = Convert.ToChar(Console.ReadLine());
+                "For Sum. press  +\n" +
+                "For Sub. press  -\n" +
+                "For Div. press  /\n" +
+                "For Mult press  *\n" +
+                "For Sqrt press  s\n");
 
+            string input = Console.ReadLine().ToLower();
+            if (char.TryParse(input, out char operation))
+            {
+               op = operation;
+            }
+            
             if (op != 's')
             {
-                Console.WriteLine("Please enter a second number");
+                Console.WriteLine("Please enter a second number\n");
                 bool isParse2 = int.TryParse(Console.ReadLine(), out int result2);
                 if (isParse2)
                 {
@@ -40,18 +45,18 @@ namespace HomeWork2
             switch (op)
             {
                 case '+':
-                    Console.WriteLine(num1 + num2);
+                    Console.WriteLine($"{num1} {op} {num2} = {num1 + num2}");
                     break;
                 case '-':
-                    Console.WriteLine(num1 - num2);
+                    Console.WriteLine($"{num1} {op} {num2} = {num1 - num2}");
                     break;
                 case '*':
-                    Console.WriteLine(num1 * num2);
+                    Console.WriteLine($"{num1} {op} {num2} = {num1 * num2}");
                     break;
                 case '/':
                     if (num2 != 0)
                     {
-                        Console.WriteLine(num1 + num2);
+                        Console.WriteLine($"{num1} {op} {num2} = {num1 / num2}");
                     }
                     else
                     {
