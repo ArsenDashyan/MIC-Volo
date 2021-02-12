@@ -50,7 +50,7 @@ namespace HomeWork2
                 version.erkrord => Inside(x, y, xLine, yLine),
                 version.errord => InsideErr(x, y, rCircle, yLine),
                 version.chorord => InsideCho(x, y, xLine, rCircle),
-                _ => "Mutqagrvac tvyalneri mej sxal ka"
+                _ => "Մուտքագրված տվյալների մեջ սխալ կա"
             };
             Console.WriteLine(str);
         }
