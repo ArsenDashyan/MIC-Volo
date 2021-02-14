@@ -1,15 +1,15 @@
 ﻿using System;
 
-namespace HomeWork2
+namespace ChessGame
 {
     class Program
     {
         static void Main(string[] args)
         {
-            //Calculator.StartCalc();
-            CircleLine.IsInside(-2, 2);
-            
-            
+            //View.ShowBoard(1, 5);
+            Manager manager = new Manager();
+            manager.Logic();
+
             Console.ReadLine();
         }
     }
