@@ -6,7 +6,6 @@ namespace ChessGame
     {
         static void Main(string[] args)
         {
-            //View.ShowBoard(1, 5);
             Manager manager = new Manager();
             manager.Logic();
 

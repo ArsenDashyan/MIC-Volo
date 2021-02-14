@@ -49,21 +49,21 @@ namespace ChessGame
         /// Consolic uzum e sev arqai nor koordinatnery
         /// </summary>
         /// <returns>veradardznum e sev arqai nor kordinatner </returns>
-        public static (int, int) GetCoordinats()
+        private static (int, int) GetCoordinats()
         {
             Console.WriteLine("Please enter a fisrt coordinate");
             int a = int.Parse(Console.ReadLine());
 
-            
+
             Console.WriteLine("Please enter a second coordinate");
             int b = int.Parse(Console.ReadLine());
-            if ((a - 1 < rookR.FCoord && b - 1 > queen.SCoord && a-1 < rookL.FCoord))
-                return (a,b);
+            if ((a - 1 < rookR.FCoord && b - 1 > queen.SCoord && a - 1 < rookL.FCoord))
+                return (a, b);
 
-            while (!(a-1 < rookR.FCoord && b-1 > queen.SCoord && a-1 < rookL.FCoord))
+            while (!(a - 1 < rookR.FCoord && b - 1 > queen.SCoord && a - 1 < rookL.FCoord))
             {
                 Console.WriteLine("Please enter a correct coordinats");
-                (a,b) = GetCoordinats();
+                (a, b) = GetCoordinats();
                 break;
             }
 

@@ -14,7 +14,7 @@ namespace ChessGame
         {
             Console.Clear();
             var arr = GetArray();
-            arr[a-1, b-1] = "(K)";
+            arr[a - 1, b - 1] = "(K)";
             arr[Manager.rookL.FCoord, Manager.rookL.SCoord] = "(R)";
             arr[Manager.rookR.FCoord, Manager.rookR.SCoord] = "(R)";
             arr[Manager.queen.FCoord, Manager.queen.SCoord] = "(Q)";
@@ -71,7 +71,7 @@ namespace ChessGame
                     arr[7, 4] = "(K)";
                     break;
             }
-           
+
             Print(arr);
         }
 
@@ -79,13 +79,13 @@ namespace ChessGame
         /// Ogtagorcvum e vorpessi tpenq mer erkchap zangvacy
         /// </summary>
         /// <param name="arr"> stacvox erkchap zangvaci anuny</param>
-        public static void Print(string[,] arr)
+        private static void Print(string[,] arr)
         {
             for (int i = 0; i < arr.GetLength(0); i++)
             {
                 for (int j = 0; j < arr.GetLength(1); j++)
                 {
-                    Console.Write(arr[i,j]);
+                    Console.Write(arr[i, j]);
                 }
                 Console.WriteLine();
             }
@@ -95,7 +95,7 @@ namespace ChessGame
         /// Stexcum e erkchap zangvac, 8*8 chapi
         /// </summary>
         /// <returns>veradardznum e erkchap zangvac 8*8 chapi</returns>
-        private static  string[,] GetArray()
+        private static string[,] GetArray()
         {
             string[,] arr = new string[8, 8];
 
