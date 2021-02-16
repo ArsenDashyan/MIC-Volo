@@ -8,13 +8,16 @@ namespace ChessGame
     class Manager
     {
         public static int count = 1;
-        public static Model king = new Model("King", 1, 5,ConsoleColor.Red);
-        public static Model rookL = new Model("RookL", 7, 0,ConsoleColor.DarkGreen);
-        public static Model rookR = new Model("RookR", 7, 7, ConsoleColor.DarkGreen);
-        public static Model queen = new Model("Queen", 7, 3, ConsoleColor.DarkGreen);
-        public static Model kingG = new Model("King", 7, 4, ConsoleColor.DarkGreen);
-        
-        public void Logic()
+        public static Model king = new Model("King", 5, 1, ConsoleColor.Red);
+        public static Model rookL = new Model("RookL", 7, 0, ConsoleColor.White);
+        public static Model rookR = new Model("RookR", 7, 7, ConsoleColor.White);
+        public static Model queen = new Model("Queen", 7, 3, ConsoleColor.White);
+        public static Model kingG = new Model("King", 7, 4, ConsoleColor.White);
+
+        /// <summary>
+        /// Խաղային լոգիկա, որը կազմակերպում է խաղի ընթացքը
+        /// </summary>
+        public static void ChessLogic()
         {
             View.ShowBoard(king.FCoord, king.SCoord);
 
@@ -39,38 +42,74 @@ namespace ChessGame
                     }
                     count++;
                 }
-                Console.WriteLine("Game over");
+                Console.WriteLine("\n\nGame over");
             }
             else
             {
                 Console.WriteLine("Non correct action");
             }
         }
-
         /// <summary>
-        /// Consolic uzum e sev arqai nor koordinatnery
+        /// Սև արքայի համար պահանջում է կոորդինատներ
         /// </summary>
-        /// <returns>veradardznum e sev arqai nor kordinatner </returns>
+        /// <returns>Վերադարձնում է սև արքայի կոորդինատները կորտեժի տեսքով</returns>
         private static (int, int) GetCoordinats()
         {
-            Console.WriteLine("Please enter a fisrt coordinate");
-            int a = int.Parse(Console.ReadLine()); 
+            Console.WriteLine("\n");
+            Console.WriteLine("Please enter a letter coordinate");
+            char a = char.Parse(Console.ReadLine());
+            int aFirst = GetLetters(a);
 
-            Console.WriteLine("Please enter a second coordinate");
+            Console.WriteLine("Please enter a number coordinate");
             int b = int.Parse(Console.ReadLine());
+            
+            if ((aFirst > queen.FCoord && b < rookL.SCoord && b < queen.SCoord ))
+                return (aFirst, b);
 
-            if ((a - 1 < rookR.FCoord && b - 1 > queen.SCoord && a - 1 < rookL.FCoord))
-                return (a, b);
-
-            while (!(a - 1 < rookR.FCoord && b - 1 > queen.SCoord && a - 1 < rookL.FCoord))
+            while (!(aFirst > queen.FCoord && b < rookL.SCoord && b < queen.SCoord))
             {
                 Console.WriteLine("Please enter a correct coordinats");
-                (a, b) = GetCoordinats();
+                (aFirst, b) = GetCoordinats();
                 break;
             }
 
-            return (a, b);
+            return (aFirst, b);
         }
-       
+        /// <summary>
+        /// Խաղացողի մուտքային տառի վերածում թվի
+        /// </summary>
+        /// <param name="ch">Ներմուծվող տառ</param>
+        /// <returns>Վերադարձնում է թվային արժեք սև արքայի առաջին կոորդինատի համար</returns>
+        private static int GetLetters(char ch)
+        {
+            switch (ch)
+            {
+                case 'A':
+                case 'a':
+                    return 1;
+                case 'B':
+                case 'b':
+                    return 2;
+                case 'C':
+                case 'c':
+                    return 3;
+                case 'D':
+                case 'd':
+                    return 4;
+                case 'E':
+                case 'e':
+                    return 5;
+                case 'F':
+                case 'f':
+                    return 6;
+                case 'G':
+                case 'g':
+                    return 7;
+                case 'H':
+                case 'h':
+                    return 8;
+            }
+            return 0;
+        }
     }
 }

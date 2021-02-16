@@ -1,119 +1,117 @@
 ﻿using System;
-
+using System.Collections.Generic;
+using System.Text;
 
 namespace ChessGame
 {
     class View
     {
         /// <summary>
-        /// Xaxi skzbnakan dast
+        /// Ցուցադրում է խաղադաշտի սկզբնական տեսքը
         /// </summary>
-        /// <param name="a">sev arqai i koordinatn e </param>
-        /// <param name="b">sev arqai j koordinatn e </param>
+        /// <param name="a">Խաղը սկսելուց սև արքաի առաջին կոորդինատ</param>
+        /// <param name="b">Խաղը սկսելուց սև արքաի երկրորդ կոորդինատ</param>
         public static void ShowBoard(int a, int b)
         {
-            Console.Clear();
-            var arr = GetArray();
-            arr[a - 1, b - 1] = "(K)";
-            arr[Manager.rookL.FCoord, Manager.rookL.SCoord] = "(R)";
-            arr[Manager.rookR.FCoord, Manager.rookR.SCoord] = "(R)";
-            arr[Manager.queen.FCoord, Manager.queen.SCoord] = "(Q)";
-            arr[7, 4] = "(K)";
-            Print(arr);
+            Board();
+            Manager.king.SetPosition(a,b);
+            Manager.rookL.SetPosition(1,8);
+            Manager.rookR.SetPosition(8,8);
+            Manager.queen.SetPosition(4,8);
+            Manager.kingG.SetPosition(5,8);
         }
-
         /// <summary>
-        /// Sev arqai katarac xaxin hamapatasxan trvox dasht
+        /// Ցուցադրում է խաղադաշտի տեսքը խաղի ժամանակ, ըստ կատարված քայլերի
         /// </summary>
-        /// <param name="a"> sev arqai i koordinat</param>
-        /// <param name="b">sev arqai j koordinat</param>
-        /// <param name="x">tarberak te vor qayli dimac inch petq e ereva </param>
-        public static void ShowBoard(int a, int b, int x)
+        /// <param name="a">Սև արքայի ստացվող առաջին կոորդինատ</param>
+        /// <param name="b">Սև արքայի ստացվող երկրորդ կոորդինատ</param>
+        /// <param name="versia">Ըստ արքայի կատարած խաղի որոշվող քայլերի հաջորդականություն</param>
+        public static void ShowBoard(int a, int b, int versia)
         {
-            Console.Clear();
-            var arr = GetArray();
-            switch (x)
+            Board();
+            switch (versia)
             {
                 case 1:
-                    Manager.rookR.FCoord = 2;
-                    Manager.rookR.SCoord = 7;
-                    arr[a - 1, b - 1] = "(K)";
-                    arr[Manager.rookL.FCoord, Manager.rookL.SCoord] = "(R)";
-                    arr[Manager.rookR.FCoord, Manager.rookR.SCoord] = "(R)";
-                    arr[Manager.queen.FCoord, Manager.queen.SCoord] = "(Q)";
-                    arr[7, 4] = "(K)";
+                    Manager.king.SetPosition(a, b);
+                    Manager.rookL.SetPosition(1, 3);
+                    Manager.rookR.SetPosition(8, 8);
+                    Manager.queen.SetPosition(4, 8);
+                    Manager.kingG.SetPosition(5, 8);
                     break;
                 case 2:
-                    Manager.rookL.FCoord = 1;
-                    Manager.rookL.SCoord = 0;
-                    arr[a - 1, b - 1] = "(K)";
-                    arr[Manager.rookL.FCoord, Manager.rookL.SCoord] = "(R)";
-                    arr[Manager.rookR.FCoord, Manager.rookR.SCoord] = "(R)";
-                    arr[Manager.queen.FCoord, Manager.queen.SCoord] = "(Q)";
-                    arr[7, 4] = "(K)";
+                    Manager.king.SetPosition(a, b);
+                    Manager.rookL.SetPosition(1, 3);
+                    Manager.rookR.SetPosition(8, 8);
+                    Manager.queen.SetPosition(4, 3);
+                    Manager.kingG.SetPosition(5, 8);
                     break;
                 case 3:
-                    Manager.queen.FCoord = 2;
-                    Manager.queen.SCoord = 3;
-                    arr[a - 1, b - 1] = "(K)";
-                    arr[Manager.rookL.FCoord, Manager.rookL.SCoord] = "(R)";
-                    arr[Manager.rookR.FCoord, Manager.rookR.SCoord] = "(R)";
-                    arr[Manager.queen.FCoord, Manager.queen.SCoord] = "(Q)";
-                    arr[7, 4] = "(K)";
+                    Manager.king.SetPosition(a, b);
+                    Manager.rookL.SetPosition(1, 2);
+                    Manager.rookR.SetPosition(8, 8);
+                    Manager.queen.SetPosition(4, 3);
+                    Manager.kingG.SetPosition(5, 8);
                     break;
                 case 4:
-                    Manager.queen.FCoord = 0;
-                    Manager.queen.SCoord = 1;
-                    arr[a - 1, b - 1] = "(K)";
-                    arr[Manager.rookL.FCoord, Manager.rookL.SCoord] = "(R)";
-                    arr[Manager.rookR.FCoord, Manager.rookR.SCoord] = "(R)";
-                    arr[Manager.queen.FCoord, Manager.queen.SCoord] = "(Q)";
-                    arr[7, 4] = "(K)";
-                    break;
-            }
-
-            Print(arr);
-        }
-
-        /// <summary>
-        /// Ogtagorcvum e vorpessi tpenq mer erkchap zangvacy
-        /// </summary>
-        /// <param name="arr"> stacvox erkchap zangvaci anuny</param>
-        private static void Print(string[,] arr)
-        {
-            for (int i = 0; i < arr.GetLength(0); i++)
-            {
-                for (int j = 0; j < arr.GetLength(1); j++)
-                {
-                    Console.Write(arr[i, j]);
-                }
-                Console.WriteLine();
-            }
-        }
-
-        /// <summary>
-        /// Stexcum e erkchap zangvac, 8*8 chapi
-        /// </summary>
-        /// <returns>veradardznum e erkchap zangvac 8*8 chapi</returns>
-        private static string[,] GetArray()
-        {
-            string[,] arr = new string[8, 8];
-
-            for (int i = 0; i < arr.GetLength(0); i++)
-            {
-                for (int j = 0; j < arr.GetLength(1); j++)
-                {
-                    if ((i + j) % 2 == 0)
+                    if (a== 5 && b ==1)
                     {
-                        arr[i, j] = "(*)";
+                        Manager.king.SetPosition(a, b);
+                        Manager.rookL.SetPosition(1, 2);
+                        Manager.rookR.SetPosition(8, 1);
+                        Manager.queen.SetPosition(4, 3);
+                        Manager.kingG.SetPosition(5, 8);
                     }
                     else
                     {
-                        arr[i, j] = "(%)";
+                        Manager.king.SetPosition(a, b);
+                        Manager.rookL.SetPosition(1, 2);
+                        Manager.rookR.SetPosition(8, 8);
+                        Manager.queen.SetPosition(4, 1);
+                        Manager.kingG.SetPosition(5, 8);
+                    }
+                    break;
+            }
+        }
+        /// <summary>
+        /// Ստեղծում է խաղադաշտ
+        /// </summary>
+        private static void Board()
+        {
+            Console.Clear();
+            Console.WriteLine(@"+---+---+---+---+---+---+---+---+");
+            for (int i = 1; i <9; i++)
+            {
+                Console.WriteLine($"|   |   |   |   |   |   |   |   |   {i}");
+                Console.WriteLine(@"+---+---+---+---+---+---+---+---+");
+            }
+            Console.WriteLine("  A   B   C   D   E   F   G   H");
+            BoardColor();
+        }
+        /// <summary>
+        /// Ստեղծում է դաշտի գույները
+        /// </summary>
+        private static void BoardColor()
+        {
+            for (int i = 1; i < 9; i++)
+            {
+                for (int j = 1; j < 9; j++)
+                {
+                    if ((i + j) % 2 == 0)
+                    {
+                        Console.SetCursorPosition(2 + (i - 1) * 4, 1 + (j - 1) * 2);
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.Write('*');
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(2 + (i - 1) * 4, 1 + (j - 1) * 2);
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.Write('*');
+                        Console.ResetColor();
                     }
                 }
             }
-            return arr;
         }
     }
 }
