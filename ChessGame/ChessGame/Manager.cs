@@ -22,7 +22,7 @@ namespace ChessGame
             View.ShowBoard(king.FCoord, king.SCoord);
 
             var tuple = GetCoordinats();
-            bool isAction = (Math.Abs(king.FCoord - tuple.Item1) <= 1 && Math.Abs(king.SCoord - tuple.Item2) <= 1);
+            bool isAction = (Math.Abs(king.FCoord - tuple.Item1) <= 1 & Math.Abs(king.SCoord - tuple.Item2) <= 1);
 
             if (isAction)
             {
@@ -35,9 +35,18 @@ namespace ChessGame
                     if (count != 4)
                     {
                         tuple = GetCoordinats();
-                        if (isAction)
+                        if ((Math.Abs(king.FCoord - tuple.Item1) <= 1 & Math.Abs(king.SCoord - tuple.Item2) <= 1))
                         {
                             View.ShowBoard(tuple.Item1, tuple.Item2, count);
+                        }
+                        else
+                        {
+                            Console.SetCursorPosition(40, 6);
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Non correct action");
+                            Console.ResetColor();
+                            Console.SetCursorPosition(0, 18);
+                            break;
                         }
                     }
                     count++;
@@ -46,7 +55,11 @@ namespace ChessGame
             }
             else
             {
+                Console.SetCursorPosition(40, 6);
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Non correct action");
+                Console.ResetColor();
+                Console.SetCursorPosition(0, 18);
             }
         }
         /// <summary>
@@ -55,12 +68,14 @@ namespace ChessGame
         /// <returns>Վերադարձնում է սև արքայի կոորդինատները կորտեժի տեսքով</returns>
         private static (int, int) GetCoordinats()
         {
-            Console.WriteLine("\n");
+            Console.SetCursorPosition(40, 0);
             Console.WriteLine("Please enter a letter coordinate");
+            Console.SetCursorPosition(40, 1);
             char a = char.Parse(Console.ReadLine());
             int aFirst = GetLetters(a);
-
+            Console.SetCursorPosition(40, 2);
             Console.WriteLine("Please enter a number coordinate");
+            Console.SetCursorPosition(40, 3);
             int b = int.Parse(Console.ReadLine());
             
             if ((aFirst > queen.FCoord && b < rookL.SCoord && b < queen.SCoord ))
@@ -68,6 +83,7 @@ namespace ChessGame
 
             while (!(aFirst > queen.FCoord && b < rookL.SCoord && b < queen.SCoord))
             {
+                Console.SetCursorPosition(40, 4);
                 Console.WriteLine("Please enter a correct coordinats");
                 (aFirst, b) = GetCoordinats();
                 break;
