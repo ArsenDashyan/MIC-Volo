@@ -32,13 +32,5 @@ namespace ChessGame
             this.SCoord = numS;
             Console.ResetColor();
         }
-        /// <summary>
-        /// Տվյալ քարի դիրքը
-        /// </summary>
-        /// <returns>Վերադարձնում է տվյալ քարի դիրքի երկու կոորդինաատ կորտեժի տեսքով </returns>
-        public (int,int) GetPosition()
-        {
-            return (this.FCoord, this.SCoord);
-        }
     }
 }
