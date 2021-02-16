@@ -8,10 +8,12 @@ namespace ChessGame
     class Manager
     {
         public static int count = 1;
-        public static Model king = new Model("King", 1, 5);
-        public static Model rookL = new Model("RookL", 7, 0);
-        public static Model rookR = new Model("RookR", 7, 7);
-        public static Model queen = new Model("Queen", 7, 3);
+        public static Model king = new Model("King", 1, 5,ConsoleColor.Red);
+        public static Model rookL = new Model("RookL", 7, 0,ConsoleColor.DarkGreen);
+        public static Model rookR = new Model("RookR", 7, 7, ConsoleColor.DarkGreen);
+        public static Model queen = new Model("Queen", 7, 3, ConsoleColor.DarkGreen);
+        public static Model kingG = new Model("King", 7, 4, ConsoleColor.DarkGreen);
+        
         public void Logic()
         {
             View.ShowBoard(king.FCoord, king.SCoord);
@@ -52,11 +54,11 @@ namespace ChessGame
         private static (int, int) GetCoordinats()
         {
             Console.WriteLine("Please enter a fisrt coordinate");
-            int a = int.Parse(Console.ReadLine());
-
+            int a = int.Parse(Console.ReadLine()); 
 
             Console.WriteLine("Please enter a second coordinate");
             int b = int.Parse(Console.ReadLine());
+
             if ((a - 1 < rookR.FCoord && b - 1 > queen.SCoord && a - 1 < rookL.FCoord))
                 return (a, b);
 
@@ -69,5 +71,6 @@ namespace ChessGame
 
             return (a, b);
         }
+       
     }
 }
