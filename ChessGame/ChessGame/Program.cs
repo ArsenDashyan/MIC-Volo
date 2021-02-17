@@ -10,7 +10,5 @@ namespace ChessGame
             
             Console.ReadLine();
         }
-
-       
     }
 }

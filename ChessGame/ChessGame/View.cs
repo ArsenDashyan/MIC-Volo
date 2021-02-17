@@ -37,36 +37,25 @@ namespace ChessGame
                     Manager.kingG.SetPosition(5, 8);
                     break;
                 case 2:
-                    Manager.king.SetPosition(a, b);
-                    Manager.rookL.SetPosition(1, 3);
-                    Manager.rookR.SetPosition(8, 8);
-                    Manager.queen.SetPosition(4, 3);
-                    Manager.kingG.SetPosition(5, 8);
+                        Manager.king.SetPosition(a, b);
+                        Manager.rookL.SetPosition(1, 3);
+                        Manager.rookR.SetPosition(8, 8);
+                        Manager.queen.SetPosition(4, 3);
+                        Manager.kingG.SetPosition(5, 8);
                     break;
                 case 3:
                     Manager.king.SetPosition(a, b);
-                    Manager.rookL.SetPosition(1, 2);
+                    Manager.rookL.SetPosition(1, 3);
                     Manager.rookR.SetPosition(8, 8);
-                    Manager.queen.SetPosition(4, 3);
+                    Manager.queen.SetPosition(3, 2);
                     Manager.kingG.SetPosition(5, 8);
                     break;
                 case 4:
-                    if (a== 5 && b ==1)
-                    {
                         Manager.king.SetPosition(a, b);
-                        Manager.rookL.SetPosition(1, 2);
-                        Manager.rookR.SetPosition(8, 1);
-                        Manager.queen.SetPosition(4, 3);
-                        Manager.kingG.SetPosition(5, 8);
-                    }
-                    else
-                    {
-                        Manager.king.SetPosition(a, b);
-                        Manager.rookL.SetPosition(1, 2);
+                        Manager.rookL.SetPosition(1, 1);
                         Manager.rookR.SetPosition(8, 8);
-                        Manager.queen.SetPosition(4, 1);
+                        Manager.queen.SetPosition(3, 2);
                         Manager.kingG.SetPosition(5, 8);
-                    }
                     break;
             }
         }
