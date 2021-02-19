@@ -12,12 +12,13 @@ namespace ChessGame
         public static void ShowBoard(int a, int b)
         {
             Board();
-            Manager.king.SetPosition(a,b);
-            Manager.rookL.SetPosition(1,8);
-            Manager.rookR.SetPosition(8,8);
-            Manager.queen.SetPosition(4,8);
-            Manager.kingG.SetPosition(5,8);
+            Manager.king.SetPosition(a, b);
+            Manager.rookL.SetPosition(1, 8);
+            Manager.rookR.SetPosition(8, 8);
+            Manager.queen.SetPosition(4, 8);
+            Manager.kingG.SetPosition(5, 8);
         }
+
         /// <summary>
         /// Ցուցադրում է խաղադաշտի տեսքը խաղի ժամանակ, ըստ կատարված քայլերի
         /// </summary>
@@ -37,11 +38,11 @@ namespace ChessGame
                     Manager.kingG.SetPosition(5, 8);
                     break;
                 case 2:
-                        Manager.king.SetPosition(a, b);
-                        Manager.rookL.SetPosition(1, 3);
-                        Manager.rookR.SetPosition(8, 8);
-                        Manager.queen.SetPosition(4, 3);
-                        Manager.kingG.SetPosition(5, 8);
+                    Manager.king.SetPosition(a, b);
+                    Manager.rookL.SetPosition(1, 3);
+                    Manager.rookR.SetPosition(8, 8);
+                    Manager.queen.SetPosition(4, 3);
+                    Manager.kingG.SetPosition(5, 8);
                     break;
                 case 3:
                     Manager.king.SetPosition(a, b);
@@ -51,11 +52,11 @@ namespace ChessGame
                     Manager.kingG.SetPosition(5, 8);
                     break;
                 case 4:
-                        Manager.king.SetPosition(a, b);
-                        Manager.rookL.SetPosition(1, 1);
-                        Manager.rookR.SetPosition(8, 8);
-                        Manager.queen.SetPosition(3, 2);
-                        Manager.kingG.SetPosition(5, 8);
+                    Manager.king.SetPosition(a, b);
+                    Manager.rookL.SetPosition(1, 1);
+                    Manager.rookR.SetPosition(8, 8);
+                    Manager.queen.SetPosition(3, 2);
+                    Manager.kingG.SetPosition(5, 8);
                     break;
             }
         }
@@ -66,7 +67,7 @@ namespace ChessGame
         {
             Console.Clear();
             Console.WriteLine(@"+---+---+---+---+---+---+---+---+");
-            for (int i = 1; i <9; i++)
+            for (int i = 1; i < 9; i++)
             {
                 Console.WriteLine($"|   |   |   |   |   |   |   |   |   {i}");
                 Console.WriteLine(@"+---+---+---+---+---+---+---+---+");
@@ -86,15 +87,15 @@ namespace ChessGame
                     if ((i + j) % 2 == 0)
                     {
                         Console.SetCursorPosition(2 + (i - 1) * 4, 1 + (j - 1) * 2);
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.Write('*');
+                        Console.BackgroundColor = ConsoleColor.White;
+                        Console.Write(" ");
                         Console.ResetColor();
                     }
                     else
                     {
                         Console.SetCursorPosition(2 + (i - 1) * 4, 1 + (j - 1) * 2);
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.Write('*');
+                        Console.BackgroundColor = ConsoleColor.Black;
+                        Console.Write(' ');
                         Console.ResetColor();
                     }
                 }

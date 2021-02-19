@@ -7,11 +7,11 @@ namespace ChessGame
     class Manager
     {
         public static int count = 1;
-        public static Model king = new Model("King", 5, 1, ConsoleColor.Red);
-        public static Model rookL = new Model("RookL", 7, 0, ConsoleColor.White);
-        public static Model rookR = new Model("RookR", 7, 7, ConsoleColor.White);
-        public static Model queen = new Model("Queen", 7, 3, ConsoleColor.White);
-        public static Model kingG = new Model("King", 7, 4, ConsoleColor.White);
+        public static Model king = new Model("\u2654", 5, 1, ConsoleColor.Red);
+        public static Model rookL = new Model("\u2656", 7, 0, ConsoleColor.White);
+        public static Model rookR = new Model("\u2656", 7, 7, ConsoleColor.White);
+        public static Model queen = new Model("\u2655", 7, 3, ConsoleColor.White);
+        public static Model kingG = new Model("\u2654", 7, 4, ConsoleColor.White);
 
         /// <summary>
         /// Խաղային լոգիկա, որը կազմակերպում է խաղի ընթացքը
@@ -99,30 +99,22 @@ namespace ChessGame
         /// <returns>Վերադարձնում է թվային արժեք սև արքայի առաջին կոորդինատի համար</returns>
         private static int GetLetters(char ch)
         {
-            switch (ch)
+            switch (Char.ToLower(ch))
             {
-                case 'A':
                 case 'a':
                     return 1;
-                case 'B':
                 case 'b':
                     return 2;
-                case 'C':
                 case 'c':
                     return 3;
-                case 'D':
                 case 'd':
                     return 4;
-                case 'E':
                 case 'e':
                     return 5;
-                case 'F':
                 case 'f':
                     return 6;
-                case 'G':
                 case 'g':
                     return 7;
-                case 'H':
                 case 'h':
                     return 8;
             }

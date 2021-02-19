@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace ChessGame
 {
@@ -23,10 +24,10 @@ namespace ChessGame
         /// <param name="numS">Քարի երկրորդ կոորրդինատ՝ թիվ</param>
         public void SetPosition(int numF, int numS)
         {
+            Console.OutputEncoding = Encoding.UTF8;
             Console.SetCursorPosition(2 +(numF-1)*4,1+(numS-1)*2);
             Console.ForegroundColor = Color;
-            char ch = this.Name[0];
-            Console.WriteLine(ch);
+            Console.WriteLine(this.Name[0]);
             this.FCoord = numF;
             this.SCoord = numS;
             Console.ResetColor();
