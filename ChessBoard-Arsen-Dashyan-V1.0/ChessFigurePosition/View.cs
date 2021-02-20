@@ -1,31 +1,21 @@
 ﻿using System;
 
-namespace ChessGame
+namespace ChessFigurePosition
 {
     class View
     {
-        /// <summary>
-        /// Խաղի սկզբնական դաշտ, երբ քարերը տեղադրու է օգտագործողը
-        /// </summary>
-        public static void ShowBoardForStart()
-        {
-            Board();
-            Manager.GetCoordForFigur();
-        }
-
         /// <summary>
         /// Ցուցադրում է խաղադաշտի սկզբնական տեսքը
         /// </summary>
         /// <param name="a">Խաղը սկսելուց սև արքաի առաջին կոորդինատ</param>
         /// <param name="b">Խաղը սկսելուց սև արքաի երկրորդ կոորդինատ</param>
-        public static void ShowBoard(int a, int b)
+        public static void ShowBoard()
         {
             Board();
-            Manager.king.SetPosition(a, b);
-            Manager.rookL.SetPosition(1, 8);
-            Manager.rookR.SetPosition(8, 8);
-            Manager.queen.SetPosition(4, 8);
-            Manager.kingW.SetPosition(5, 8);
+            Console.WriteLine();
+            Console.WriteLine();
+            FigurCoord.GetCoordForFigur();
+           
         }
 
         /// <summary>

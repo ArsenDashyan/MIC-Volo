@@ -1,36 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace ChessGame
+namespace ChessFigurePosition
 {
     class Manager
     {
-        private static int count = 1;
-        private static List<(int letter, int number)> positions = new List<(int, int)>();
-        private const int queenFigurActionMaxLenght = 13;
-        private const int boardLeftSize = 8;
-        private const int boardRightSize = 1;
-        public static Model king = new Model("King", 5, 1, ConsoleColor.Red);
-        public static Model rookL = new Model("Rook", 7, 0, ConsoleColor.White);
-        public static Model rookR = new Model("Rook", 7, 7, ConsoleColor.White);
-        public static Model queen = new Model("Queen", 7, 3, ConsoleColor.White);
-        public static Model kingW = new Model("King", 7, 4, ConsoleColor.White);
+        public static int count = 1;
+        public static Model king = new Model("\u2654", 5, 1, ConsoleColor.Red);
+        public static Model rookL = new Model("\u2656", 7, 0, ConsoleColor.White);
+        public static Model rookR = new Model("\u2656", 7, 7, ConsoleColor.White);
+        public static Model queen = new Model("\u2655", 7, 3, ConsoleColor.White);
+        public static Model kingW = new Model("\u2654", 7, 4, ConsoleColor.White);
 
         /// <summary>
         /// Խաղային լոգիկա, որը կազմակերպում է խաղի ընթացքը
         /// </summary>
         public static void ChessLogic()
         {
-            View.ShowBoard(king.FCoord, king.SCoord);
+            View.ShowBoard();
 
             var tuple = GetCoordinats();
             bool isAction = (Math.Abs(king.FCoord - tuple.Item1) <= 1 & Math.Abs(king.SCoord - tuple.Item2) <= 1);
 
             if (isAction)
             {
-                View.ShowBoard(tuple.Item1, tuple.Item2);
+                View.ShowBoard();
 
                 while (count <= 4)
                 {
@@ -138,14 +133,14 @@ namespace ChessGame
         /// <returns>Վերադարձնում է true, եթե արքայի մուտքային կոորդինատները սպիտակ թագուգու աջ անկյունագծի վրա են</returns>
         public static bool GetRightIndex(int a, int b, int x, int y)
         {
-            (int, int)[] arri = new (int, int)[queenFigurActionMaxLenght];
+            (int, int)[] arri = new (int, int)[13];
             bool result = true;
             int sum = a + b;
             int count = 0;
 
-            for (int i = 1; i < boardLeftSize + 1; i++)
+            for (int i = 1; i < 9; i++)
             {
-                for (int j = 1; j < boardLeftSize + 1; j++)
+                for (int j = 1; j < 9; j++)
                 {
                     if (i + j == sum)
                     {
@@ -202,55 +197,6 @@ namespace ChessGame
                 }
             }
             return result;
-        }
-
-        /// <summary>
-        /// Խաղի սկզբում քարերը տեղադրում է ըստ տրված կոորդինատների
-        /// </summary>
-        public static void GetCoordForFigur()
-        {
-            var tupl = GetCoord("White", "King");
-            Manager.kingW.SetPosition(tupl.letter, tupl.number);
-
-            tupl = GetCoord("White", "Quuen");
-            Manager.queen.SetPosition(tupl.letter, tupl.number);
-
-            tupl = GetCoord("White", "Left Rook");
-            Manager.rookL.SetPosition(tupl.letter, tupl.number);
-
-            tupl = GetCoord("White", "Right Rook");
-            Manager.rookR.SetPosition(tupl.letter, tupl.number);
-        }
-
-        /// <summary>
-        /// Օգտագործողից ստանում և ստուգում է քարերի կոորդինատները
-        /// </summary>
-        /// <param name="figureName">Խաղաքարի անունը</param>
-        /// <param name="figureColor">Խաղաքարի գույնը</param>
-        /// <returns>Վերադարձնում է քարի կոորդինատը կորտեժի տեսքով</returns>
-        public static (int letter, int number) GetCoord(string figureName, string figureColor)
-        {
-            Console.SetCursorPosition(40, 0);
-            Console.WriteLine($"Please enter a position for {figureColor} {figureName}");
-            Console.SetCursorPosition(40, 1);
-            string input = Console.ReadLine();
-            int i = GetLetters(input[0]);
-            int j = Convert.ToInt32(input[1].ToString());
-            bool isEqual = (i <= boardLeftSize && i >= boardRightSize && j >= boardRightSize
-                           && j <= boardLeftSize && !positions.Contains((i, j)));
-
-            if (isEqual)
-            {
-                positions.Add((i, j));
-                return (i, j);
-            }
-            while (!isEqual)
-            {
-                Console.WriteLine("You write non correct position!!!");
-                (i, j) = GetCoord(figureName, figureColor);
-                break;
-            }
-            return (i, j);
         }
     }
 }

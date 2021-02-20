@@ -1,14 +1,12 @@
 ﻿using System;
 
-namespace ChessGame
+namespace ChessFigurePosition
 {
     class Program
     {
         static void Main(string[] args)
         {
-            // Manager.ChessLogic();
-            View.ShowBoardForStart();
-
+            View.ShowBoard();
             Console.ReadLine();
         }
     }
