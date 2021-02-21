@@ -7,9 +7,11 @@ namespace ChessGame
 {
     class Manager
     {
+        #region Property and Field
         private static int count = 1;
         private static List<(int letter, int number)> positions = new List<(int, int)>();
         private const int queenFigurActionMaxLenght = 13;
+        private const int FigurMoveLenght = 14;
         private const int boardLeftSize = 8;
         private const int boardRightSize = 1;
         public static Model king = new Model("King", 5, 1, ConsoleColor.Red);
@@ -17,6 +19,8 @@ namespace ChessGame
         public static Model rookR = new Model("Rook", 7, 7, ConsoleColor.White);
         public static Model queen = new Model("Queen", 7, 3, ConsoleColor.White);
         public static Model kingW = new Model("King", 7, 4, ConsoleColor.White);
+
+        #endregion
 
         /// <summary>
         /// Խաղային լոգիկա, որը կազմակերպում է խաղի ընթացքը
@@ -128,6 +132,49 @@ namespace ChessGame
             return 0;
         }
 
+        #region Queen and Rook Dangerous ocupancy
+        /// <summary>
+        /// Ստեղծում է տագուհու և նավակների հորիզոնական և ուղղահայաց հարվածի տիրույթները
+        /// </summary>
+        /// <param name="a">սկզբնական առաջին կոորդինատ</param>
+        /// <param name="b">սկզբնական երկրորդ կոորդինա</param>
+        /// <param name="x">Սև արքայի մուտքային առաջին կոորդինատ</param>
+        /// <param name="y">Սև արքայի մուտքային երկրորդ կոորդինատ</param>
+        /// <returns>Վերադարձնում է true, եթե արքայի մուտքային կոորդինատները ֆիգուրի ուղղահայաց և հորիզոնական հարվածի վրա են</returns>
+        public static bool GetHorizontalVerticalIndex(int a, int b, int x, int y)
+        {
+            (int, int)[] arri = new (int, int)[FigurMoveLenght];
+            int count = 0;
+            bool result = true;
+
+            for (int i = 1; i <= boardLeftSize; i++)
+            {
+                if (i != a)
+                {
+                    arri[count] = (i, b);
+                    count++;
+                }
+            }
+            for (int i = 1; i <= boardLeftSize; i++)
+            {
+                if (i != b)
+                {
+                    arri[count] = (a, i);
+                    count++;
+                }
+            }
+            for (int i = 0; i < arri.Length; i++)
+            {
+                if ((x, y) == arri[i])
+                {
+                    result = false;
+                    break;
+                }
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Ստեղծում է սպիտակ թագուհու դեպի աջ անկյունագծային հարվածի տիրույթը
         /// </summary>
@@ -143,9 +190,9 @@ namespace ChessGame
             int sum = a + b;
             int count = 0;
 
-            for (int i = 1; i < boardLeftSize + 1; i++)
+            for (int i = 1; i <= boardLeftSize; i++)
             {
-                for (int j = 1; j < boardLeftSize + 1; j++)
+                for (int j = 1; j <= boardLeftSize; j++)
                 {
                     if (i + j == sum)
                     {
@@ -204,6 +251,9 @@ namespace ChessGame
             return result;
         }
 
+        #endregion
+
+        #region ForStartGame
         /// <summary>
         /// Խաղի սկզբում քարերը տեղադրում է ըստ տրված կոորդինատների
         /// </summary>
@@ -215,11 +265,14 @@ namespace ChessGame
             tupl = GetCoord("White", "Quuen");
             Manager.queen.SetPosition(tupl.letter, tupl.number);
 
-            tupl = GetCoord("White", "Left Rook");
+            tupl = GetCoord("White", "Rook");
             Manager.rookL.SetPosition(tupl.letter, tupl.number);
 
-            tupl = GetCoord("White", "Right Rook");
+            tupl = GetCoord("White", "Rook");
             Manager.rookR.SetPosition(tupl.letter, tupl.number);
+
+            tupl = GetCoord("Black", "King");
+            Manager.king.SetPosition(tupl.letter, tupl.number);
         }
 
         /// <summary>
@@ -228,7 +281,7 @@ namespace ChessGame
         /// <param name="figureName">Խաղաքարի անունը</param>
         /// <param name="figureColor">Խաղաքարի գույնը</param>
         /// <returns>Վերադարձնում է քարի կոորդինատը կորտեժի տեսքով</returns>
-        public static (int letter, int number) GetCoord(string figureName, string figureColor)
+        public static (int letter, int number) GetCoord(string figureColor, string figureName)
         {
             Console.SetCursorPosition(40, 0);
             Console.WriteLine($"Please enter a position for {figureColor} {figureName}");
@@ -236,8 +289,20 @@ namespace ChessGame
             string input = Console.ReadLine();
             int i = GetLetters(input[0]);
             int j = Convert.ToInt32(input[1].ToString());
-            bool isEqual = (i <= boardLeftSize && i >= boardRightSize && j >= boardRightSize
+            bool isEqual;
+            if (figureColor == "Black" && figureName == "King")
+            {
+                isEqual = (i <= boardLeftSize && i >= boardRightSize && j >= boardRightSize
+                          && j <= boardLeftSize && !positions.Contains((i, j)) && GetRightIndex(queen.FCoord, queen.SCoord, i, j)
+                          && GetLeftIndex(queen.FCoord, queen.SCoord, i, j) && GetHorizontalVerticalIndex(queen.FCoord, queen.SCoord, i, j)
+                          && GetHorizontalVerticalIndex(rookL.FCoord, rookL.SCoord, i, j) && GetHorizontalVerticalIndex(rookR.FCoord, rookR.SCoord, i, j)
+                          && (Math.Abs(i - kingW.FCoord) > 1 || Math.Abs(j - kingW.SCoord) > 1));
+            }
+            else
+            {
+                isEqual = (i <= boardLeftSize && i >= boardRightSize && j >= boardRightSize
                            && j <= boardLeftSize && !positions.Contains((i, j)));
+            }
 
             if (isEqual)
             {
@@ -246,11 +311,14 @@ namespace ChessGame
             }
             while (!isEqual)
             {
+                Console.SetCursorPosition(40, 3);
                 Console.WriteLine("You write non correct position!!!");
-                (i, j) = GetCoord(figureName, figureColor);
+                (i, j) = GetCoord(figureColor, figureName);
                 break;
             }
             return (i, j);
         }
+
+        #endregion
     }
 }

@@ -6,7 +6,7 @@ namespace ChessGame
     {
         static void Main(string[] args)
         {
-            // Manager.ChessLogic();
+            //Manager.ChessLogic();
             View.ShowBoardForStart();
 
             Console.ReadLine();

@@ -4,10 +4,13 @@ namespace ChessGame
 {
     public class Model
     {
+        #region Property and Field
         public string Name { get; set; }
         public int FCoord { get; set; }
         public int SCoord { get; set; }
         public ConsoleColor Color { get; set; }
+
+        #endregion
 
         public Model(string name, int fCorod, int sCoord, ConsoleColor color)
         {
