@@ -223,19 +223,38 @@ namespace ChessGame
         /// <returns>Վերադարձնում է true, եթե արքայի մուտքային կոորդինատները սպիտակ թագուգու ձախ անկյունագծի վրա են</returns>
         public static bool GetLeftIndex(int a, int b, int x, int y)
         {
-            (int, int)[] arri = new (int, int)[13];
-            int sub = Math.Abs(a - b);
+            (int, int)[] arri = new (int, int)[queenFigurActionMaxLenght];
+            int sub = 0;
             int count = 0;
             bool result = true;
 
-            for (int i = 1; i < 9; i++)
+            if (a < b)
             {
-                for (int j = 1; j < 9; j++)
+                sub = Math.Abs(a - b);
+                for (int i = 1; i <= boardLeftSize; i++)
                 {
-                    if (i - j == sub)
+                    for (int j = 1; j <= boardLeftSize; j++)
                     {
-                        arri[count] = (j, i);
-                        count++;
+                        if (i - j == sub)
+                        {
+                            arri[count] = (j, i);
+                            count++;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                sub = a - b;
+                for (int i = 1; i <= 8; i++)
+                {
+                    for (int j = 1; j <= 8; j++)
+                    {
+                        if (i - j == sub)
+                        {
+                            arri[count] = (i, j);
+                            count++;
+                        }
                     }
                 }
             }
