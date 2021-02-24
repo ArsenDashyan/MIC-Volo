@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace ChessGame
+namespace Chess
 {
-    class View
+    class ChessBoard
     {
         public static void Board()
         {
@@ -14,8 +16,9 @@ namespace ChessGame
                 Console.WriteLine(@"+---+---+---+---+---+---+---+---+");
             }
             Console.WriteLine("  A   B   C   D   E   F   G   H");
+            BoardColor();
         }
-        /*private static void BoardColor()
+        private static void BoardColor()
         {
             for (int i = 1; i < 9; i++)
             {
@@ -38,6 +41,5 @@ namespace ChessGame
                 }
             }
         }
-        */
     }
 }
