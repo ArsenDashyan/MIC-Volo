@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Chess
 {
@@ -27,10 +25,11 @@ namespace Chess
         }
         public void DeleteFigure()
         {
-            Console.SetCursorPosition(2 + (this.FirstCoord - 1) * 4, 1 + (this.SCoord - 1) * 2);
+            Console.SetCursorPosition(2 + (this.FirstCoord - 1) * 4, 1 + (this.SecondCoord - 1) * 2);
             Console.ForegroundColor = Color;
             Console.WriteLine(" ");
             Console.ResetColor();
         }
+
     }
 }

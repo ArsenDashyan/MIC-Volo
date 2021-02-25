@@ -85,7 +85,7 @@ namespace ChessGame
             var result = new List<(int, int)>();
             result.AddRange(RightIndex());
             result.AddRange(LeftIndex());
-            result.AddRange(HorizontalVertical());
+            result.AddRange(Crosswise());
             return result;
         }
     }

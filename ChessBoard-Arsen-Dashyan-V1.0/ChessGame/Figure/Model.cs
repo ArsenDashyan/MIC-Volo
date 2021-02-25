@@ -6,12 +6,11 @@ namespace ChessGame
 {
     public class Model
     {
-        #region Property and Field
+        #region Property and Feld
         public string Name { get; set; }
         public int FCoord { get; set; }
         public int SCoord { get; set; }
         public ConsoleColor Color { get; set; }
-
         #endregion
 
         public Model(string name, ConsoleColor color)
@@ -39,7 +38,7 @@ namespace ChessGame
             Console.WriteLine(" ");
             Console.ResetColor();
         }
-        private List<(int, int)> VerticalIndex()
+        private List<(int, int)> Vertical()
         {
             List<(int, int)> arr = new List<(int, int)>();
             var positionsWithOut = Manager.positions.Where(c => c != (this.FCoord, this.SCoord)).ToList();
@@ -66,7 +65,7 @@ namespace ChessGame
             }
             return arr;
         }
-        private List<(int, int)> HorizontalIndex()
+        private List<(int, int)> Horizontal()
         {
             List<(int, int)> arr = new List<(int, int)>();
             var positionsWithOut = Manager.positions.Where(c => c != (this.FCoord, this.SCoord)).ToList();
@@ -93,12 +92,17 @@ namespace ChessGame
             }
             return arr;
         }
-        public List<(int, int)> HorizontalVertical()
+        public List<(int, int)> Crosswise()
         {
-            var arrayHor = this.HorizontalIndex();
-            var arrayVert = this.VerticalIndex();
+            var arrayHor = this.Horizontal();
+            var arrayVert = this.Vertical();
             arrayHor.AddRange(arrayVert);
             return arrayHor;
         }
+        public override string ToString()
+        {
+            return this.Name;
+        }
+
     }
 }

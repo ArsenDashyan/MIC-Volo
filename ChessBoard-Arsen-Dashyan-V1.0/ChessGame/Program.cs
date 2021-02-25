@@ -8,7 +8,7 @@ namespace ChessGame
     {
         static void Main(string[] args)
         {
-            Manager.Logic();
+            Manager.Play();
 
             Console.ReadLine();
         }

@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Chess.Figure
+namespace Chess
 {
-    class Queen
+    class Queen :Figure
     {
+        public Queen(string name, ConsoleColor color) : base(name, color)
+        {
+
+        }
+
+
     }
 }

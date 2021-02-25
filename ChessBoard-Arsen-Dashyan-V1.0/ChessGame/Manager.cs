@@ -1,44 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace ChessGame
 {
     partial class Manager
     {
-        #region Property and Field
+        #region Property and Feld
         public static List<(int letter, int number)> positions = new List<(int, int)>();
-        private const int boardLeftSize = 8;
-        private const int boardRightSize = 1;
+        private const int leftSize = 8;
+        private const int rightSize = 1;
         public static King king = new King("King", ConsoleColor.Red);
-        public static Rook rookL = new Rook("Rook", ConsoleColor.White);
-        public static Rook rookR = new Rook("Rook", ConsoleColor.White);
+        public static Rook rookL = new Rook("RookL", ConsoleColor.White);
+        public static Rook rookR = new Rook("RookR", ConsoleColor.White);
         public static Queen queen = new Queen("Queen", ConsoleColor.White);
         public static King kingW = new King("King", ConsoleColor.White);
         #endregion
-        private static int GetLetters(char ch)
-        {
-            switch (Char.ToLower(ch))
-            {
-                case 'a':
-                    return 1;
-                case 'b':
-                    return 2;
-                case 'c':
-                    return 3;
-                case 'd':
-                    return 4;
-                case 'e':
-                    return 5;
-                case 'f':
-                    return 6;
-                case 'g':
-                    return 7;
-                case 'h':
-                    return 8;
-            }
-            return 0;
-        }
 
         #region ForStartGame
         /// <summary>
@@ -74,7 +52,7 @@ namespace ChessGame
             Console.WriteLine($"Please enter a position for {figureColor} {figureName}");
             Console.SetCursorPosition(40, 1);
             string input = Console.ReadLine();
-            int i = GetLetters(input[0]);
+            int i = input[0].CharToInt();
             int j = Convert.ToInt32(input[1].ToString());
             bool isEqual;
             if (figureColor == "Black")
@@ -119,7 +97,7 @@ namespace ChessGame
         }
         private static bool InsideBord(int i, int j)
         {
-            if (i <= boardLeftSize && i >= boardRightSize && j >= boardRightSize && j <= boardLeftSize)
+            if (i <= leftSize && i >= rightSize && j >= rightSize && j <= leftSize)
                 return true;
             else
                 return false;
@@ -136,65 +114,75 @@ namespace ChessGame
 
         #endregion
 
-        #region Random Game
-
-        public static void Logic()
+        #region Random Game Logic
+        public static void Play()
         {
             View.Board();
             Placement();
-
-            while (king.FCoord != 1)
+            do
             {
                 KingPosition();
-            }
-        }
+                if (king.FCoord == 1 || king.FCoord == 8)
+                {
+                    break;
+                }
 
+            } while (king.FCoord != 1 || king.FCoord != 8);
+
+            KingPositionEnd();
+        }
         public static void KingPosition()
         {
             var tupl = InputCoordinats("Black", "King");
             if (king.IsMove(tupl.let, tupl.num))
             {
                 if (tupl.let <= 4)
-                {
-                    FirstHalf(tupl.let, tupl.num);
-                }
+                    Half(tupl.let, tupl.num, 1);
                 else
-                {
-                    SecondHalf(tupl.let, tupl.num);
-                }
+                    Half(tupl.let, tupl.num, 2);
             }
         }
-
-        public static (int, int) WhenFirstHalf(List<(int, int)> arr, int i, int j)
+        public static void KingPositionEnd()
         {
-            foreach (var tupl in arr)
+            var tupl = InputCoordinats("Black", "King");
+            if (king.IsMove(tupl.let, tupl.num))
             {
-                if (tupl.Item1 - i == 1 && Math.Abs(tupl.Item2 - j) > 1)
+                if (rookL.FCoord == 2 || rookL.FCoord == 7)
                 {
-                    return (tupl.Item1, tupl.Item2);
+                    EndGame(tupl.let, tupl.num, queen, rookR);
+                    return;
+                }
+                if (rookR.FCoord == 2 || rookR.FCoord == 7)
+                {
+                    EndGame(tupl.let, tupl.num, queen, rookL);
+                    return;
+                }
+                if (queen.FCoord == 2 || queen.FCoord == 7)
+                {
+                    EndGame(tupl.let, tupl.num, rookR, rookL);
+                    return;
                 }
             }
-            return (0, 0);
         }
-        public static (int, int) WhenSecondHalf(List<(int, int)> arr, int i, int j)
-        {
-            foreach (var tupl in arr)
-            {
-                if (i - tupl.Item1 == 1 && Math.Abs(tupl.Item2 - j) > 1)
-                {
-                    return (tupl.Item1, tupl.Item2);
-                }
-            }
-            return (0, 0);
-        }
-        private static void FirstHalf(int a, int b)
+        private static void Half(int a, int b, int vers)
         {
             king.SetPosition(a, b);
             int figureRandom = new Random().Next(1, 4);
-            var tuplL = WhenFirstHalf(rookL.AvAvailableMoves(), a, b);
-            var tuplR = WhenFirstHalf(rookR.AvAvailableMoves(), a, b);
-            var tuplQ = WhenFirstHalf(queen.AvAvailableMoves(), a, b);
-
+            var tuplL = (0, 0);
+            var tuplR = (0, 0);
+            var tuplQ = (0, 0);
+            if (vers == 1)
+            {
+                tuplL = rookL.AvAvailableMoves().WhenFirstHalf(a, b);
+                tuplR = rookR.AvAvailableMoves().WhenFirstHalf(a, b);
+                tuplQ = queen.AvAvailableMoves().WhenFirstHalf(a, b);
+            }
+            else
+            {
+                tuplL = rookL.AvAvailableMoves().WhenSecondHalf(a, b);
+                tuplR = rookR.AvAvailableMoves().WhenSecondHalf(a, b);
+                tuplQ = queen.AvAvailableMoves().WhenSecondHalf(a, b);
+            }
             switch (figureRandom)
             {
                 case 1:
@@ -217,37 +205,56 @@ namespace ChessGame
                     break;
             }
         }
-        private static void SecondHalf(int a, int b)
+        private static void EndGame(int a, int b, Queen qu, Rook ro)
         {
             king.SetPosition(a, b);
-            int figureRandom = new Random().Next(1, 4);
-            var tuplL = WhenSecondHalf(rookL.AvAvailableMoves(), a, b);
-            var tuplR = WhenSecondHalf(rookR.AvAvailableMoves(), a, b);
-            var tuplQ = WhenSecondHalf(queen.AvAvailableMoves(), a, b);
+            int figureRandom = new Random().Next(2, 4);
+            var tuplQ = qu.AvAvailableMoves().EndPosition(a);
+            var tuplR = ro.AvAvailableMoves().EndPosition(a);
 
             switch (figureRandom)
             {
-                case 1:
-                    if (tuplL != (0, 0))
-                        rookL.SetPosition(tuplL.Item1, tuplL.Item2);
-                    else
-                        goto case 2;
-                    break;
                 case 2:
                     if (tuplR != (0, 0))
-                        rookR.SetPosition(tuplR.Item1, tuplR.Item2);
+                        ro.SetPosition(tuplR.Item1, tuplR.Item2);
                     else
                         goto case 3;
                     break;
                 case 3:
                     if (tuplQ != (0, 0))
-                        queen.SetPosition(tuplQ.Item1, tuplQ.Item2);
+                        qu.SetPosition(tuplQ.Item1, tuplQ.Item2);
                     else
-                        goto case 1;
+                        goto case 2;
                     break;
             }
+            Console.SetCursorPosition(40, 8);
+            Console.WriteLine("Game over");
         }
+        private static void EndGame(int a, int b, Rook qu, Rook ro)
+        {
+            king.SetPosition(a, b);
+            int figureRandom = new Random().Next(2, 4);
+            var tuplQ = qu.AvAvailableMoves().EndPosition(a);
+            var tuplR = ro.AvAvailableMoves().EndPosition(a);
 
+            switch (figureRandom)
+            {
+                case 2:
+                    if (tuplR != (0, 0))
+                        ro.SetPosition(tuplR.Item1, tuplR.Item2);
+                    else
+                        goto case 3;
+                    break;
+                case 3:
+                    if (tuplQ != (0, 0))
+                        qu.SetPosition(tuplQ.Item1, tuplQ.Item2);
+                    else
+                        goto case 2;
+                    break;
+            }
+            Console.SetCursorPosition(40, 8);
+            Console.WriteLine("Game over");
+        }
         #endregion
     }
 }

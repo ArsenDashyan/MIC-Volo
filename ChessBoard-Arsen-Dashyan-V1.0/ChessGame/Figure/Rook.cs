@@ -15,9 +15,8 @@ namespace ChessGame
         public List<(int, int)> AvAvailableMoves()
         {
             var result = new List<(int, int)>();
-            result.AddRange(HorizontalVertical());
+            result.AddRange(Crosswise());
             return result;
         }
-
     }
 }
