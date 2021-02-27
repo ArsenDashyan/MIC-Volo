@@ -8,9 +8,10 @@ namespace ChessGame
 {
     class Queen : Model
     {
-        public Queen(string name, ConsoleColor color) : base(name, color)
+        public Queen(string name, ConsoleColor color)
         {
-
+            Name = name;
+            Color = color;
         }
         private List<(int, int)> RightIndex()
         {
@@ -80,7 +81,7 @@ namespace ChessGame
 
             return arr;
         }
-        public List<(int, int)> AvAvailableMoves()
+        public List<(int, int)> AvailableMoves()
         {
             var result = new List<(int, int)>();
             result.AddRange(RightIndex());

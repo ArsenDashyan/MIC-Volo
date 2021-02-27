@@ -12,12 +12,6 @@ namespace ChessGame
         public int SCoord { get; set; }
         public ConsoleColor Color { get; set; }
         #endregion
-
-        public Model(string name, ConsoleColor color)
-        {
-            Name = name;
-            Color = color;
-        }
         public void SetPosition(int numF, int numS)
         {
             DeleteFigure();
@@ -28,7 +22,7 @@ namespace ChessGame
             this.SCoord = numS;
             Console.ResetColor();
         }
-        private void DeleteFigure()
+        protected void DeleteFigure()
         {
             if (this.FCoord != 0 && this.SCoord != 0)
                 Console.SetCursorPosition(2 + (this.FCoord - 1) * 4, 1 + (this.SCoord - 1) * 2);
@@ -38,7 +32,7 @@ namespace ChessGame
             Console.WriteLine(" ");
             Console.ResetColor();
         }
-        private List<(int, int)> Vertical()
+        protected List<(int, int)> Vertical()
         {
             List<(int, int)> arr = new List<(int, int)>();
             var positionsWithOut = Manager.positions.Where(c => c != (this.FCoord, this.SCoord)).ToList();
@@ -65,7 +59,7 @@ namespace ChessGame
             }
             return arr;
         }
-        private List<(int, int)> Horizontal()
+        protected List<(int, int)> Horizontal()
         {
             List<(int, int)> arr = new List<(int, int)>();
             var positionsWithOut = Manager.positions.Where(c => c != (this.FCoord, this.SCoord)).ToList();
@@ -92,17 +86,12 @@ namespace ChessGame
             }
             return arr;
         }
-        public List<(int, int)> Crosswise()
+        protected List<(int, int)> Crosswise()
         {
             var arrayHor = this.Horizontal();
             var arrayVert = this.Vertical();
             arrayHor.AddRange(arrayVert);
             return arrayHor;
         }
-        public override string ToString()
-        {
-            return this.Name;
-        }
-
     }
 }

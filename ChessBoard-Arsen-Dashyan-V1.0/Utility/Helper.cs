@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ChessGame
+namespace Utility
 {
     public static class Helper
     {
