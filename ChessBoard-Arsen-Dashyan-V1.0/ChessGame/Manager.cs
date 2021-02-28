@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+using Utility;
 
 namespace ChessGame
 {
@@ -86,9 +85,9 @@ namespace ChessGame
         private static List<(int, int)> DangerousPosition()
         {
             List<(int, int)> result = new List<(int, int)>();
-            var arrayQueen = queen.AvAvailableMoves();
-            var arrayRookL = rookL.AvAvailableMoves();
-            var arrayRookR = rookR.AvAvailableMoves();
+            var arrayQueen = queen.AvailableMoves();
+            var arrayRookL = rookL.AvailableMoves();
+            var arrayRookR = rookR.AvailableMoves();
             result.AddRange(arrayQueen);
             result.AddRange(arrayRookL);
             result.AddRange(arrayRookR);
@@ -173,15 +172,15 @@ namespace ChessGame
             var tuplQ = (0, 0);
             if (vers == 1)
             {
-                tuplL = rookL.AvAvailableMoves().WhenFirstHalf(a, b);
-                tuplR = rookR.AvAvailableMoves().WhenFirstHalf(a, b);
-                tuplQ = queen.AvAvailableMoves().WhenFirstHalf(a, b);
+                tuplL = rookL.AvailableMoves().WhenFirstHalf(a, b);
+                tuplR = rookR.AvailableMoves().WhenFirstHalf(a, b);
+                tuplQ = queen.AvailableMoves().WhenFirstHalf(a, b);
             }
             else
             {
-                tuplL = rookL.AvAvailableMoves().WhenSecondHalf(a, b);
-                tuplR = rookR.AvAvailableMoves().WhenSecondHalf(a, b);
-                tuplQ = queen.AvAvailableMoves().WhenSecondHalf(a, b);
+                tuplL = rookL.AvailableMoves().WhenSecondHalf(a, b);
+                tuplR = rookR.AvailableMoves().WhenSecondHalf(a, b);
+                tuplQ = queen.AvailableMoves().WhenSecondHalf(a, b);
             }
             switch (figureRandom)
             {
@@ -209,8 +208,8 @@ namespace ChessGame
         {
             king.SetPosition(a, b);
             int figureRandom = new Random().Next(2, 4);
-            var tuplQ = qu.AvAvailableMoves().EndPosition(a);
-            var tuplR = ro.AvAvailableMoves().EndPosition(a);
+            var tuplQ = qu.AvailableMoves().EndPosition(a);
+            var tuplR = ro.AvailableMoves().EndPosition(a);
 
             switch (figureRandom)
             {
@@ -234,8 +233,8 @@ namespace ChessGame
         {
             king.SetPosition(a, b);
             int figureRandom = new Random().Next(2, 4);
-            var tuplQ = qu.AvAvailableMoves().EndPosition(a);
-            var tuplR = ro.AvAvailableMoves().EndPosition(a);
+            var tuplQ = qu.AvailableMoves().EndPosition(a);
+            var tuplR = ro.AvailableMoves().EndPosition(a);
 
             switch (figureRandom)
             {

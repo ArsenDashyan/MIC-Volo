@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChessGame
 {
@@ -80,12 +78,13 @@ namespace ChessGame
 
             return arr;
         }
-        public List<(int, int)> AvAvailableMoves()
+        public List<(int, int)> AvailableMoves()
         {
             var result = new List<(int, int)>();
             result.AddRange(RightIndex());
             result.AddRange(LeftIndex());
             result.AddRange(Crosswise());
+            result.Remove((this.FCoord,this.SCoord));
             return result;
         }
     }

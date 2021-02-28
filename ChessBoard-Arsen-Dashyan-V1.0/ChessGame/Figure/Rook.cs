@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChessGame
 {
@@ -12,11 +9,9 @@ namespace ChessGame
         {
 
         }
-        public List<(int, int)> AvAvailableMoves()
+        public List<(int, int)> AvailableMoves()
         {
-            var result = new List<(int, int)>();
-            result.AddRange(Crosswise());
-            return result;
+            return this.Crosswise();
         }
     }
 }

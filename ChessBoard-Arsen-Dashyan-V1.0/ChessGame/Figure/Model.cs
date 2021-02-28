@@ -28,7 +28,7 @@ namespace ChessGame
             this.SCoord = numS;
             Console.ResetColor();
         }
-        private void DeleteFigure()
+        protected void DeleteFigure()
         {
             if (this.FCoord != 0 && this.SCoord != 0)
                 Console.SetCursorPosition(2 + (this.FCoord - 1) * 4, 1 + (this.SCoord - 1) * 2);
@@ -38,7 +38,7 @@ namespace ChessGame
             Console.WriteLine(" ");
             Console.ResetColor();
         }
-        private List<(int, int)> Vertical()
+        protected List<(int, int)> Vertical()
         {
             List<(int, int)> arr = new List<(int, int)>();
             var positionsWithOut = Manager.positions.Where(c => c != (this.FCoord, this.SCoord)).ToList();
@@ -53,19 +53,17 @@ namespace ChessGame
                     if (arr.IndexOf((this.FCoord, this.SCoord)) < arr.IndexOf(item))
                     {
                         arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item)).ToList();
-                        arr.Add((this.FCoord, this.SCoord));
                     }
                     else
                     {
                         arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item)).ToList();
-                        arr.Add((this.FCoord, this.SCoord));
                     }
                 }
 
             }
             return arr;
         }
-        private List<(int, int)> Horizontal()
+        protected List<(int, int)> Horizontal()
         {
             List<(int, int)> arr = new List<(int, int)>();
             var positionsWithOut = Manager.positions.Where(c => c != (this.FCoord, this.SCoord)).ToList();
@@ -80,12 +78,10 @@ namespace ChessGame
                     if (arr.IndexOf((this.FCoord, this.SCoord)) < arr.IndexOf(item))
                     {
                         arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item)).ToList();
-                        arr.Add((this.FCoord, this.SCoord));
                     }
                     else
                     {
                         arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item)).ToList();
-                        arr.Add((this.FCoord, this.SCoord));
                     }
                 }
 
@@ -97,12 +93,8 @@ namespace ChessGame
             var arrayHor = this.Horizontal();
             var arrayVert = this.Vertical();
             arrayHor.AddRange(arrayVert);
+            arrayHor.Remove((this.FCoord, this.SCoord));
             return arrayHor;
         }
-        public override string ToString()
-        {
-            return this.Name;
-        }
-
     }
 }

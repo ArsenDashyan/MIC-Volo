@@ -15,29 +15,29 @@ namespace ChessGame
             }
             Console.WriteLine("  A   B   C   D   E   F   G   H");
         }
-        /*private static void BoardColor()
-        {
-            for (int i = 1; i < 9; i++)
-            {
-                for (int j = 1; j < 9; j++)
-                {
-                    if ((i + j) % 2 == 0)
-                    {
-                        Console.SetCursorPosition(2 + (i - 1) * 4, 1 + (j - 1) * 2);
-                        Console.BackgroundColor = ConsoleColor.White;
-                        Console.Write(" ");
-                        Console.ResetColor();
-                    }
-                    else
-                    {
-                        Console.SetCursorPosition(2 + (i - 1) * 4, 1 + (j - 1) * 2);
-                        Console.BackgroundColor = ConsoleColor.Black;
-                        Console.Write(' ');
-                        Console.ResetColor();
-                    }
-                }
-            }
-        }
-        */
+        //private static void BoardColor()
+        //{
+        //    for (int i = 1; i < 9; i++)
+        //    {
+        //        for (int j = 1; j < 9; j++)
+        //        {
+        //            if ((i + j) % 2 == 0)
+        //            {
+        //                Console.SetCursorPosition(2 + (i - 1) * 4, 1 + (j - 1) * 2);
+        //                Console.BackgroundColor = ConsoleColor.White;
+        //                Console.Write(" ");
+        //                Console.ResetColor();
+        //            }
+        //            else
+        //            {
+        //                Console.SetCursorPosition(2 + (i - 1) * 4, 1 + (j - 1) * 2);
+        //                Console.BackgroundColor = ConsoleColor.Black;
+        //                Console.Write(' ');
+        //                Console.ResetColor();
+        //            }
+        //        }
+        //    }
+        //}
+
     }
 }
