@@ -75,14 +75,26 @@ namespace ChessGame
             return (i, j);
         }
         #region Chack The Dangerous Positions
+
+        /// <summary>
+        /// Chack tke king move
+        /// </summary>
+        /// <param name="i">Black king first coordinat</param>
+        /// <param name="j">Black king second coordinat</param>
+        /// <returns>Return true if king coordinat is a permissible</returns>
         private static bool IsKingAction(int i, int j)
         {
-            if (InsideBord(i, j) && !positions.Contains((i, j)) && !DangerousPosition().Contains((i, j)) && WhiteKingOcupancy(i, j))
+            if (InsideBord(i, j) && !positions.Contains((i, j)) && !DangerousPosition().Contains((i, j)) && WhiteKingOcupancy(i, j) && (king.FCoord,king.SCoord) != (i,j))
                 return true;
             else
                 return false;
         }
-        private static List<(int, int)> DangerousPosition()
+
+        /// <summary>
+        /// Created a positions whithe wer can a white figures move
+        /// </summary>
+        /// <returns>Return the Available moves</returns>
+        public static List<(int, int)> DangerousPosition()
         {
             List<(int, int)> result = new List<(int, int)>();
             var arrayQueen = queen.AvailableMoves();
@@ -94,6 +106,13 @@ namespace ChessGame
 
             return result;
         }
+
+        /// <summary>
+        /// Chack the coordinat inside bord or no
+        /// </summary>
+        /// <param name="i">First Coordinat</param>
+        /// <param name="j">Second Coordinat</param>
+        /// <returns>Return true when input coordinats inside bord</returns>
         private static bool InsideBord(int i, int j)
         {
             if (i <= leftSize && i >= rightSize && j >= rightSize && j <= leftSize)
@@ -101,6 +120,13 @@ namespace ChessGame
             else
                 return false;
         }
+
+        /// <summary>
+        /// Chack black king and white king positions
+        /// </summary>
+        /// <param name="i">Black king first coordinat</param>
+        /// <param name="j">Black king second coordinat</param>
+        /// <returns>Return true when black and white king away</returns>
         private static bool WhiteKingOcupancy(int i, int j)
         {
             if ((Math.Abs(i - kingW.FCoord) > 1 || Math.Abs(j - kingW.SCoord) > 1))
@@ -114,22 +140,48 @@ namespace ChessGame
         #endregion
 
         #region Random Game Logic
+
+        /// <summary>
+        /// Play the Game
+        /// </summary>
         public static void Play()
         {
             View.Board();
             Placement();
             do
             {
-                KingPosition();
-                if (king.FCoord == 1 || king.FCoord == 8)
+                if (king.AvailableMoves().Count != 0)
                 {
+                    KingPosition();
+                    if (king.FCoord == 1 || king.FCoord == 8)
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    Console.SetCursorPosition(40, 8);
+                    Console.WriteLine("Game over");
                     break;
                 }
 
             } while (king.FCoord != 1 || king.FCoord != 8);
 
-            KingPositionEnd();
+            if (king.AvailableMoves().Count != 0)
+            {
+                PositionEnd();
+            }
+            else
+            {
+                Console.SetCursorPosition(40, 8);
+                Console.WriteLine("Game over");
+                return;
+            }
         }
+
+        /// <summary>
+        /// Chack the Black king position in bord
+        /// </summary>
         public static void KingPosition()
         {
             var tupl = InputCoordinats("Black", "King");
@@ -141,7 +193,11 @@ namespace ChessGame
                     Half(tupl.let, tupl.num, 2);
             }
         }
-        public static void KingPositionEnd()
+
+        /// <summary>
+        /// Start the finish game when black king in first or end position
+        /// </summary>
+        public static void PositionEnd()
         {
             var tupl = InputCoordinats("Black", "King");
             if (king.IsMove(tupl.let, tupl.num))
@@ -163,6 +219,13 @@ namespace ChessGame
                 }
             }
         }
+
+        /// <summary>
+        /// Chack the versia for king positions and random moving white figure
+        /// </summary>
+        /// <param name="a">Black king first coordinat</param>
+        /// <param name="b">Black king second coordinat</param>
+        /// <param name="vers">King position in bord half</param>
         private static void Half(int a, int b, int vers)
         {
             king.SetPosition(a, b);
@@ -204,6 +267,14 @@ namespace ChessGame
                     break;
             }
         }
+
+        /// <summary>
+        /// For end game chack white figure coordinat avialable move 
+        /// </summary>
+        /// <param name="a">black king first coordinat</param>
+        /// <param name="b">black king second coordinat</param>
+        /// <param name="qu">Queen instanse</param>
+        /// <param name="ro">Rook instanse</param>
         private static void EndGame(int a, int b, Queen qu, Rook ro)
         {
             king.SetPosition(a, b);
@@ -229,6 +300,14 @@ namespace ChessGame
             Console.SetCursorPosition(40, 8);
             Console.WriteLine("Game over");
         }
+
+        /// <summary>
+        /// For end game chack white figure coordinat avialable move 
+        /// </summary>
+        /// <param name="a">black king first coordinat</param>
+        /// <param name="b">black king second coordinat</param>
+        /// <param name="qu">Rook instanse</param>
+        /// <param name="ro">Rook instanse</param>
         private static void EndGame(int a, int b, Rook qu, Rook ro)
         {
             king.SetPosition(a, b);

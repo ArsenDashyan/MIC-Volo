@@ -93,7 +93,7 @@ namespace ChessGame
             var arrayHor = this.Horizontal();
             var arrayVert = this.Vertical();
             arrayHor.AddRange(arrayVert);
-            arrayHor.Remove((this.FCoord, this.SCoord));
+            arrayHor = arrayHor.Where(c => c != (this.FCoord, this.SCoord)).ToList();
             return arrayHor;
         }
     }

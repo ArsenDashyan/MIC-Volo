@@ -84,7 +84,7 @@ namespace ChessGame
             result.AddRange(RightIndex());
             result.AddRange(LeftIndex());
             result.AddRange(Crosswise());
-            result.Remove((this.FCoord,this.SCoord));
+            result = result.Where(c => c != (this.FCoord, this.SCoord)).ToList();
             return result;
         }
     }
