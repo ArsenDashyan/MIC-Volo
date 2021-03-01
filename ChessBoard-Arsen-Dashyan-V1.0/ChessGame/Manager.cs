@@ -134,7 +134,6 @@ namespace ChessGame
             else
                 return false;
         }
-
         #endregion
 
         #endregion

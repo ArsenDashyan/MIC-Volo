@@ -6,9 +6,10 @@ namespace ChessGame
 {
     class Queen : Model
     {
-        public Queen(string name, ConsoleColor color) : base(name, color)
+        public Queen(string name, ConsoleColor color)
         {
-
+            Name = name;
+            Color = color;
         }
         private List<(int, int)> RightIndex()
         {

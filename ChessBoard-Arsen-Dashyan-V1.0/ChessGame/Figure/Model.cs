@@ -12,12 +12,6 @@ namespace ChessGame
         public int SCoord { get; set; }
         public ConsoleColor Color { get; set; }
         #endregion
-
-        public Model(string name, ConsoleColor color)
-        {
-            Name = name;
-            Color = color;
-        }
         public void SetPosition(int numF, int numS)
         {
             DeleteFigure();
@@ -88,7 +82,7 @@ namespace ChessGame
             }
             return arr;
         }
-        public List<(int, int)> Crosswise()
+        protected List<(int, int)> Crosswise()
         {
             var arrayHor = this.Horizontal();
             var arrayVert = this.Vertical();
