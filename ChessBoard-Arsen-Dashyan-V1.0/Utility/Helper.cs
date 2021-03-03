@@ -5,11 +5,11 @@ namespace Utility
 {
     public static class Helper
     {
-        public static (int, int) EndPosition(this List<(int, int)> arr, int i)
+        public static (int, int) EndPosition(this List<(int, int)> arr, int i, int j)
         {
             foreach (var item in arr)
             {
-                if (item.Item1 == i)
+                if (item.Item1 == i && Math.Abs(item.Item2 - j) > 1)
                 {
                     return (item);
                 }

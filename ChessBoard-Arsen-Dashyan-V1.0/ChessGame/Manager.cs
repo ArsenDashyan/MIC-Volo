@@ -84,7 +84,7 @@ namespace ChessGame
         /// <returns>Return true if king coordinat is a permissible</returns>
         private static bool IsKingAction(int i, int j)
         {
-            if (InsideBord(i, j) && !positions.Contains((i, j)) && !DangerousPosition().Contains((i, j)) && WhiteKingOcupancy(i, j) && (king.FCoord,king.SCoord) != (i,j))
+            if (InsideBord(i, j) && !positions.Contains((i, j)) && !DangerousPosition().Contains((i, j)) && WhiteKingOcupancy(i, j) && (king.FCoord, king.SCoord) != (i, j))
                 return true;
             else
                 return false;
@@ -278,8 +278,8 @@ namespace ChessGame
         {
             king.SetPosition(a, b);
             int figureRandom = new Random().Next(2, 4);
-            var tuplQ = qu.AvailableMoves().EndPosition(a);
-            var tuplR = ro.AvailableMoves().EndPosition(a);
+            var tuplQ = qu.AvailableMoves().EndPosition(a, b);
+            var tuplR = ro.AvailableMoves().EndPosition(a, b);
 
             switch (figureRandom)
             {
@@ -311,8 +311,8 @@ namespace ChessGame
         {
             king.SetPosition(a, b);
             int figureRandom = new Random().Next(2, 4);
-            var tuplQ = qu.AvailableMoves().EndPosition(a);
-            var tuplR = ro.AvailableMoves().EndPosition(a);
+            var tuplQ = qu.AvailableMoves().EndPosition(a, b);
+            var tuplR = ro.AvailableMoves().EndPosition(a, b);
 
             switch (figureRandom)
             {
