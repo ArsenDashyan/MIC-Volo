@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Utility
 {
@@ -60,6 +61,26 @@ namespace Utility
                     return 8;
             }
             return 0;
+        }
+        public static string IntToString(this int a)
+        {
+            string result = a switch
+            {
+                1 => "White King",
+                2 => "White Queen",
+                3 => "White RookL",
+                4 => "White RookR",
+                5 => "White Knight",
+                6 => "Black King",
+                _ => ""
+            };
+            return result;
+        }
+        public static (string, string) StringSplit(this string word)
+        {
+            string[] array = new string[2];
+            array = word.Split(" ");
+            return (array[0], array[1]);
         }
     }
 }

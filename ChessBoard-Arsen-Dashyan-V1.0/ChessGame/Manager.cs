@@ -4,76 +4,23 @@ using Utility;
 
 namespace ChessGame
 {
-    partial class Manager
+    public partial class Manager
     {
         #region Property and Feld
-        public static List<(int letter, int number)> positions = new List<(int, int)>();
         private const int leftSize = 8;
         private const int rightSize = 1;
-        public static King king = new King("King", ConsoleColor.Red);
+        public static int count = 0;
+        public static King kingBlack = new King("King", ConsoleColor.Red);
         public static Rook rookL = new Rook("RookL", ConsoleColor.White);
         public static Rook rookR = new Rook("RookR", ConsoleColor.White);
         public static Queen queen = new Queen("Queen", ConsoleColor.White);
-        public static King kingW = new King("King", ConsoleColor.White);
+        public static King kingWhite = new King("King", ConsoleColor.White);
+        public static Knights knight = new Knights("knight", ConsoleColor.White);
+        public static List<(int letter, int number)> positions = new List<(int, int)>()
+        {(queen.FCoord,queen.SCoord),(rookL.FCoord,rookL.SCoord),(rookR.FCoord, rookR.SCoord),
+        (kingBlack.FCoord,kingBlack.SCoord),(kingWhite.FCoord,kingWhite.SCoord),(knight.FCoord,knight.SCoord) };
         #endregion
 
-        #region ForStartGame
-        /// <summary>
-        /// Խաղի սկզբում քարերը տեղադրում է ըստ տրված կոորդինատների
-        /// </summary>
-        public static void Placement()
-        {
-            var tupl = InputCoordinats("White", "King");
-            kingW.SetPosition(tupl.let, tupl.num);
-
-            tupl = InputCoordinats("White", "Queen");
-            queen.SetPosition(tupl.let, tupl.num);
-
-            tupl = InputCoordinats("White ", "Rook");
-            rookL.SetPosition(tupl.let, tupl.num);
-
-            tupl = InputCoordinats("White ", "Rook");
-            rookR.SetPosition(tupl.let, tupl.num);
-
-            tupl = InputCoordinats("Black", " King");
-            king.SetPosition(tupl.let, tupl.num);
-        }
-
-        /// <summary>
-        /// Օգտագործողից ստանում և ստուգում է քարերի կոորդինատները
-        /// </summary>
-        /// <param name="figureName">Խաղաքարի անունը</param>
-        /// <param name="figureColor">Խաղաքարի գույնը</param>
-        /// <returns>Վերադարձնում է քարի կոորդինատը կորտեժի տեսքով</returns>
-        public static (int let, int num) InputCoordinats(string figureColor, string figureName)
-        {
-            Console.SetCursorPosition(40, 0);
-            Console.WriteLine($"Please enter a position for {figureColor} {figureName}");
-            Console.SetCursorPosition(40, 1);
-            string input = Console.ReadLine();
-            int i = input[0].CharToInt();
-            int j = Convert.ToInt32(input[1].ToString());
-            bool isEqual;
-            if (figureColor == "Black")
-                isEqual = IsKingAction(i, j);
-            else
-                isEqual = (InsideBord(i, j) && !positions.Contains((i, j)));
-
-            if (isEqual)
-            {
-                if (figureColor != "Black")
-                    positions.Add((i, j));
-                return (i, j);
-            }
-            while (!isEqual)
-            {
-                Console.SetCursorPosition(40, 3);
-                Console.WriteLine("Non correct position!");
-                (i, j) = InputCoordinats(figureColor, figureName);
-                break;
-            }
-            return (i, j);
-        }
         #region Chack The Dangerous Positions
 
         /// <summary>
@@ -84,7 +31,7 @@ namespace ChessGame
         /// <returns>Return true if king coordinat is a permissible</returns>
         private static bool IsKingAction(int i, int j)
         {
-            if (InsideBord(i, j) && !positions.Contains((i, j)) && !DangerousPosition().Contains((i, j)) && WhiteKingOcupancy(i, j) && (king.FCoord, king.SCoord) != (i, j))
+            if (InsideBord(i, j) && !positions.Contains((i, j)) && !DangerousPosition().Contains((i, j)) && WhiteKingOcupancy(i, j) && (kingBlack.FCoord, kingBlack.SCoord) != (i, j))
                 return true;
             else
                 return false;
@@ -129,13 +76,11 @@ namespace ChessGame
         /// <returns>Return true when black and white king away</returns>
         private static bool WhiteKingOcupancy(int i, int j)
         {
-            if ((Math.Abs(i - kingW.FCoord) > 1 || Math.Abs(j - kingW.SCoord) > 1))
+            if ((Math.Abs(i - kingWhite.FCoord) > 1 || Math.Abs(j - kingWhite.SCoord) > 1))
                 return true;
             else
                 return false;
         }
-        #endregion
-
         #endregion
 
         #region Random Game Logic
@@ -146,13 +91,13 @@ namespace ChessGame
         public static void Play()
         {
             View.Board();
-            Placement();
+            PlacementManager();
             do
             {
-                if (king.AvailableMoves().Count != 0)
+                if (kingBlack.AvailableMoves().Count != 0)
                 {
                     KingPosition();
-                    if (king.FCoord == 1 || king.FCoord == 8)
+                    if (kingBlack.FCoord == 1 || kingBlack.FCoord == 8)
                     {
                         break;
                     }
@@ -164,9 +109,9 @@ namespace ChessGame
                     break;
                 }
 
-            } while (king.FCoord != 1 || king.FCoord != 8);
+            } while (kingBlack.FCoord != 1 || kingBlack.FCoord != 8);
 
-            if (king.AvailableMoves().Count != 0)
+            if (kingBlack.AvailableMoves().Count != 0)
             {
                 PositionEnd();
             }
@@ -184,7 +129,7 @@ namespace ChessGame
         public static void KingPosition()
         {
             var tupl = InputCoordinats("Black", "King");
-            if (king.IsMove(tupl.let, tupl.num))
+            if (kingBlack.IsMove(tupl.let, tupl.num))
             {
                 if (tupl.let <= 4)
                     Half(tupl.let, tupl.num, 1);
@@ -199,7 +144,7 @@ namespace ChessGame
         public static void PositionEnd()
         {
             var tupl = InputCoordinats("Black", "King");
-            if (king.IsMove(tupl.let, tupl.num))
+            if (kingBlack.IsMove(tupl.let, tupl.num))
             {
                 if (rookL.FCoord == 2 || rookL.FCoord == 7)
                 {
@@ -227,7 +172,7 @@ namespace ChessGame
         /// <param name="vers">King position in bord half</param>
         private static void Half(int a, int b, int vers)
         {
-            king.SetPosition(a, b);
+            kingBlack.SetPosition(a, b);
             int figureRandom = new Random().Next(1, 4);
             var tuplL = (0, 0);
             var tuplR = (0, 0);
@@ -276,7 +221,7 @@ namespace ChessGame
         /// <param name="ro">Rook instanse</param>
         private static void EndGame(int a, int b, Queen qu, Rook ro)
         {
-            king.SetPosition(a, b);
+            kingBlack.SetPosition(a, b);
             int figureRandom = new Random().Next(2, 4);
             var tuplQ = qu.AvailableMoves().EndPosition(a, b);
             var tuplR = ro.AvailableMoves().EndPosition(a, b);
@@ -309,7 +254,7 @@ namespace ChessGame
         /// <param name="ro">Rook instanse</param>
         private static void EndGame(int a, int b, Rook qu, Rook ro)
         {
-            king.SetPosition(a, b);
+            kingBlack.SetPosition(a, b);
             int figureRandom = new Random().Next(2, 4);
             var tuplQ = qu.AvailableMoves().EndPosition(a, b);
             var tuplR = ro.AvailableMoves().EndPosition(a, b);
@@ -332,6 +277,7 @@ namespace ChessGame
             Console.SetCursorPosition(40, 8);
             Console.WriteLine("Game over");
         }
+
         #endregion
     }
 }

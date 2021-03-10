@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ChessGame
 {
@@ -31,64 +29,6 @@ namespace ChessGame
             Console.ForegroundColor = Color;
             Console.WriteLine(" ");
             Console.ResetColor();
-        }
-        protected List<(int, int)> Vertical()
-        {
-            List<(int, int)> arr = new List<(int, int)>();
-            var positionsWithOut = Manager.positions.Where(c => c != (this.FCoord, this.SCoord)).ToList();
-            for (int i = 1; i <= 8; i++)
-            {
-                arr.Add((this.FCoord, i));
-            }
-            foreach (var item in positionsWithOut)
-            {
-                if (arr.Contains(item))
-                {
-                    if (arr.IndexOf((this.FCoord, this.SCoord)) < arr.IndexOf(item))
-                    {
-                        arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item)).ToList();
-                    }
-                    else
-                    {
-                        arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item)).ToList();
-                    }
-                }
-
-            }
-            return arr;
-        }
-        protected List<(int, int)> Horizontal()
-        {
-            List<(int, int)> arr = new List<(int, int)>();
-            var positionsWithOut = Manager.positions.Where(c => c != (this.FCoord, this.SCoord)).ToList();
-            for (int i = 1; i <= 8; i++)
-            {
-                arr.Add((i, this.SCoord));
-            }
-            foreach (var item in positionsWithOut)
-            {
-                if (arr.Contains(item))
-                {
-                    if (arr.IndexOf((this.FCoord, this.SCoord)) < arr.IndexOf(item))
-                    {
-                        arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item)).ToList();
-                    }
-                    else
-                    {
-                        arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item)).ToList();
-                    }
-                }
-
-            }
-            return arr;
-        }
-        protected List<(int, int)> Crosswise()
-        {
-            var arrayHor = this.Horizontal();
-            var arrayVert = this.Vertical();
-            arrayHor.AddRange(arrayVert);
-            arrayHor = arrayHor.Where(c => c != (this.FCoord, this.SCoord)).ToList();
-            return arrayHor;
         }
     }
 }

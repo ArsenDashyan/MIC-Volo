@@ -4,40 +4,12 @@ using System.Linq;
 
 namespace ChessGame
 {
-    class King
+    public class King : Model, ICrosswise, IDiagonal
     {
-        #region Property and Field
-        public string Name { get; set; }
-        public int FCoord { get; set; }
-        public int SCoord { get; set; }
-        public ConsoleColor Color { get; set; }
-
-        #endregion
         public King(string name, ConsoleColor color)
         {
             Name = name;
             Color = color;
-        }
-        public void SetPosition(int numF, int numS)
-        {
-            DeleteFigure();
-            Console.SetCursorPosition(2 + (numF - 1) * 4, 1 + (numS - 1) * 2);
-            Console.ForegroundColor = Color;
-            Console.WriteLine(this.Name[0]);
-            this.FCoord = numF;
-            this.SCoord = numS;
-            Console.ResetColor();
-        }
-        private void DeleteFigure()
-        {
-            if (this.FCoord != 0 && this.SCoord != 0)
-                Console.SetCursorPosition(2 + (this.FCoord - 1) * 4, 1 + (this.SCoord - 1) * 2);
-            else
-                Console.SetCursorPosition(0, 0);
-            Console.ForegroundColor = Color;
-            Console.WriteLine(" ");
-            Console.ResetColor();
-
         }
         public bool IsMove(int let, int num)
         {
@@ -46,7 +18,7 @@ namespace ChessGame
             else
                 return false;
         }
-        private List<(int, int)> Horizontal()
+        public List<(int, int)> Horizontal()
         {
             List<(int, int)> arr = new List<(int, int)>();
             if (this.FCoord -1<=8 && this.FCoord - 1>=1)
@@ -59,7 +31,7 @@ namespace ChessGame
             }
             return arr;
         }
-        private List<(int, int)> Vertical()
+        public List<(int, int)> Vertical()
         {
             List<(int, int)> arr = new List<(int, int)>();
             if (this.SCoord - 1 <= 8 && this.SCoord - 1 >= 1)
@@ -72,14 +44,14 @@ namespace ChessGame
             }
             return arr;
         }
-        private List<(int, int)> Crosswise()
+        public List<(int, int)> Crosswise()
         {
             var arrayHor = this.Horizontal();
             var arrayVert = this.Vertical();
             arrayHor.AddRange(arrayVert);
             return arrayHor;
         }
-        private List<(int, int)> RightIndex()
+        public List<(int, int)> RightIndex()
         {
             List<(int, int)> arr = new List<(int, int)>();
             if (this.FCoord + 1 <=8 && this.SCoord -1 >=1)
@@ -92,7 +64,7 @@ namespace ChessGame
             }
             return arr;
         }
-        private List<(int, int)> LeftIndex()
+        public List<(int, int)> LeftIndex()
         {
             List<(int, int)> arr = new List<(int, int)>();
             if (this.FCoord - 1 >= 1 && this.SCoord - 1 >= 1)
