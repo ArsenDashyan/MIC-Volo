@@ -1,43 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Coordinats;
 
 namespace Utility
 {
     public static class Helper
     {
-        public static (int, int) EndPosition(this List<(int, int)> arr, int i, int j)
+        public static Point EndPosition(this List<Point> arr, Point poi)
         {
-            foreach (var item in arr)
+            foreach (var point in arr)
             {
-                if (item.Item1 == i && Math.Abs(item.Item2 - j) > 1)
+                if (point.X == poi.X && Math.Abs(point.Y - poi.Y) > 1)
                 {
-                    return (item);
+                    return point;
                 }
             }
-            return (0, 0);
+            return null;
         }
-        public static (int, int) WhenFirstHalf(this List<(int, int)> arr, int i, int j)
+        public static Point WhenFirstHalf(this List<Point> arr, Point poi, int versia)
         {
-            foreach (var tupl in arr)
+            if (versia == 1)
             {
-                if (tupl.Item1 - i == 1 && Math.Abs(tupl.Item2 - j) > 1)
+                foreach (var tupl in arr)
                 {
-                    return (tupl.Item1, tupl.Item2);
+                    if (tupl.X - poi.X == 1 && Math.Abs(tupl.Y - poi.Y) > 1)
+                    {
+                        return tupl;
+                    }
                 }
             }
-            return (0, 0);
-        }
-        public static (int, int) WhenSecondHalf(this List<(int, int)> arr, int i, int j)
-        {
-            foreach (var tupl in arr)
+            else
             {
-                if (i - tupl.Item1 == 1 && Math.Abs(tupl.Item2 - j) > 1)
+                foreach (var point in arr)
                 {
-                    return (tupl.Item1, tupl.Item2);
+                    if (poi.X - point.X == 1 && Math.Abs(point.Y - poi.Y) > 1)
+                    {
+                        return point;
+                    }
                 }
             }
-            return (0, 0);
+            return null;
         }
         public static int CharToInt(this char ch)
         {
@@ -81,6 +83,34 @@ namespace Utility
             string[] array = new string[2];
             array = word.Split(" ");
             return (array[0], array[1]);
+        }
+        public static Point RandomMove(this List<Point> arr)
+        {
+            return arr[new Random().Next(0,arr.Count)];
+        }
+        public static Point WhenFirstHalfOn(this List<Point> arr, Point poi, int versia)
+        {
+            if (versia ==1)
+            {
+                foreach (var tupl in arr)
+                {
+                    if (tupl.X == poi.X && Math.Abs(tupl.Y - poi.Y) > 1)
+                    {
+                        return tupl;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var tupl in arr)
+                {
+                    if (tupl.X == poi.X && Math.Abs(tupl.Y - poi.Y) > 1)
+                    {
+                        return tupl;
+                    }
+                }
+            }
+            return null;
         }
     }
 }

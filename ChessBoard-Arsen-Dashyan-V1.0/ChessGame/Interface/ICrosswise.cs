@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Coordinats;
 
 namespace ChessGame
 {
     interface ICrosswise
     {
-        List<(int, int)> Vertical();
-        List<(int, int)> Horizontal();
-        List<(int, int)> Crosswise();
+        List<Point> Vertical();
+        List<Point> Horizontal();
+        List<Point> Crosswise();
     }
 }

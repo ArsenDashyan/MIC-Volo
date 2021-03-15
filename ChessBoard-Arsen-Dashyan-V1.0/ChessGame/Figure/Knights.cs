@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Utility;
 using static Utility.KnightMove;
-
+using Coordinats;
 namespace ChessGame
 {
     public class Knights : Model, ICrosswise
@@ -13,76 +13,76 @@ namespace ChessGame
             Name = name;
             Color = color;
         }
-        public List<(int, int)> Horizontal()
+        public List<Point> Horizontal()
         {
-            List<(int, int)> result = new List<(int, int)>();
+            List<Point> result = new List<Point>();
 
-            if (this.SCoord + 2 >= 1 && this.SCoord + 2 <= 8)
+            if (this.point.Y + 2 >= 1 && this.point.Y + 2 <= 8)
             {
-                if (this.FCoord - 1 >= 1 && this.FCoord - 1 <= 8)
-                    result.Add((this.FCoord - 1, this.SCoord + 2));
-                if (this.FCoord + 1 <= 8 && this.FCoord + 1 >= 1)
-                    result.Add((this.FCoord + 1, this.SCoord + 2));
+                if (this.point.X - 1 >= 1 && this.point.X - 1 <= 8)
+                    result.Add(new Point(this.point.X - 1, this.point.Y + 2));
+                if (this.point.X + 1 <= 8 && this.point.X + 1 >= 1)
+                    result.Add(new Point(this.point.X + 1, this.point.Y + 2));
             }
-            if (this.SCoord - 2 <= 8 && this.SCoord - 2 >= 1)
+            if (this.point.Y - 2 <= 8 && this.point.Y - 2 >= 1)
             {
-                if (this.FCoord - 1 >= 1 && this.FCoord - 1 <= 8)
-                    result.Add((this.FCoord - 1, this.SCoord - 2));
-                if (this.FCoord + 1 <= 8 && this.FCoord + 1 >= 1)
-                    result.Add((this.FCoord + 1, this.SCoord - 2));
+                if (this.point.X - 1 >= 1 && this.point.X - 1 <= 8)
+                    result.Add(new Point(this.point.X - 1, this.point.Y - 2));
+                if (this.point.X + 1 <= 8 && this.point.X + 1 >= 1)
+                    result.Add(new Point(this.point.X + 1, this.point.Y - 2));
             }
             return result;
         }
-        public List<(int, int)> Vertical()
+        public List<Point> Vertical()
         {
-            List<(int, int)> result = new List<(int, int)>();
+            List<Point> result = new List<Point>();
 
-            if (this.SCoord + 1 >= 1 && this.SCoord + 1 <= 8)
+            if (this.point.Y + 1 >= 1 && this.point.Y + 1 <= 8)
             {
-                if (this.FCoord - 2 >= 1 && this.FCoord - 2 <= 8)
-                    result.Add((this.FCoord - 2, this.SCoord + 1));
-                if (this.FCoord + 2 <= 8 && this.FCoord + 2 >= 1)
-                    result.Add((this.FCoord + 2, this.SCoord + 1));
+                if (this.point.X - 2 >= 1 && this.point.X - 2 <= 8)
+                    result.Add(new Point(this.point.X - 2, this.point.Y + 1));
+                if (this.point.X + 2 <= 8 && this.point.X + 2 >= 1)
+                    result.Add(new Point(this.point.X + 2, this.point.Y + 1));
             }
-            if (this.SCoord - 1 <= 8 && this.SCoord - 1 >= 1)
+            if (this.point.Y - 1 <= 8 && this.point.Y - 1 >= 1)
             {
-                if (this.FCoord - 2 >= 1 && this.FCoord - 2 <= 8)
-                    result.Add((this.FCoord - 2, this.SCoord - 1));
-                if (this.FCoord + 2 <= 8 && this.FCoord + 2 >= 1)
-                    result.Add((this.FCoord + 2, this.SCoord - 1));
+                if (this.point.X - 2 >= 1 && this.point.X - 2 <= 8)
+                    result.Add(new Point(this.point.X - 2, this.point.Y - 1));
+                if (this.point.X + 2 <= 8 && this.point.X + 2 >= 1)
+                    result.Add(new Point(this.point.X + 2, this.point.Y - 1));
             }
             return result;
         }
-        public List<(int, int)> Crosswise()
+        public List<Point> Crosswise()
         {
             var arrayHor = this.Horizontal();
             var arrayVert = this.Vertical();
             arrayHor.AddRange(arrayVert);
             return arrayHor;
         }
-        public List<(int, int)> AvailableMoves()
+        public List<Point> AvailableMoves()
         {
             return this.Crosswise();
         }
-        public int MinCount(int eF, int eS)
+        public int MinCount(Point point)
         {
-            var knightMoves = KnightMove.Crosswise(this.FCoord, this.SCoord);
-            var endMoves = KnightMove.Crosswise(eF, eS);
-            if (knightMoves.Contains((eF, eS)))
+            var knightMoves = KnightMove.Crosswise(this.point);
+            var endMoves = KnightMove.Crosswise(point);
+            if (knightMoves.Contains((point)))
             {
                 return count;
             }
             else
             {
                 count++;
-                if (KnightMove.Equals(this.FCoord, this.SCoord, eF, eS))
+                if (KnightMove.Equals(this.point,point))
                 {
                     return count;
                 }
                 else
                 {
                     count++;
-                    if (KnightMove.Equals(knightMoves, eF, eS))
+                    if (KnightMove.Equals(knightMoves, point))
                     {
                         return count;
                     }

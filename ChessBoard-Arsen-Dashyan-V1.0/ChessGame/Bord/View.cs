@@ -58,5 +58,13 @@ namespace ChessGame
                 Console.WriteLine(item);
             }
         }
+        public static void ClearText()
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                Console.SetCursorPosition(40, i);
+                Console.WriteLine("                                              ");
+            }
+        }
     }
 }

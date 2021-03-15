@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using Coordinats;
 
 namespace ChessGame
 {
     interface IDiagonal
     {
-        List<(int, int)> RightIndex();
-        List<(int, int)> LeftIndex();
+        List<Point> RightIndex();
+        List<Point> LeftIndex();
     }
 }

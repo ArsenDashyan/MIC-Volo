@@ -1,5 +1,6 @@
 ﻿using System;
 using Utility;
+using Coordinats;
 
 namespace ChessGame
 {
@@ -65,7 +66,11 @@ namespace ChessGame
             var tuplFigur = corrent.StringSplit();
 
             var tupl = InputCoordinats(tuplFigur.Item1, tuplFigur.Item2);
-            StringToModel(corrent).SetPosition(tupl.let, tupl.num);
+            if (corrent != "Black King")
+            {
+                models.Add(StringToModel(corrent));
+            }
+            StringToModel(corrent).SetPosition(tupl);
         }
         public static Model StringToModel(string word)
         {
@@ -111,7 +116,7 @@ namespace ChessGame
                 }
             }
         }
-        public static (int let, int num) InputCoordinats(string figureColor, string figureName)
+        public static Point InputCoordinats(string figureColor, string figureName)
         {
             Console.SetCursorPosition(40, 10);
             Console.WriteLine("                                                       ");
@@ -123,17 +128,16 @@ namespace ChessGame
             string input = Console.ReadLine();
             int i = input[0].CharToInt();
             int j = Convert.ToInt32(input[1].ToString());
+            Point point = new Point(i, j);
             bool isEqual;
             if (figureColor == "Black")
-                isEqual = IsKingAction(i, j);
+                isEqual = IsKingAction(point);
             else
-                isEqual = (InsideBord(i, j) && !positions.Contains((i, j)));
-
+                isEqual = (InsideBord(point) && !positions.Contains(point));
             if (isEqual)
             {
                 if (figureColor != "Black")
-                    positions.Add((i, j));
-                return (i, j);
+                    return point;
             }
             while (!isEqual)
             {
@@ -141,10 +145,10 @@ namespace ChessGame
                 Console.WriteLine("                                                       ");
                 Console.SetCursorPosition(40, 13);
                 Console.WriteLine("Non correct position!");
-                (i, j) = InputCoordinats(figureColor, figureName);
+                point = InputCoordinats(figureColor, figureName);
                 break;
             }
-            return (i, j);
+            return point;
         }
 
         #region Knight Play
@@ -154,15 +158,15 @@ namespace ChessGame
             var knightMoves = knight.AvailableMoves();
             foreach (var item in knightMoves)
             {
-                SetPositionCoolor(item.Item1, item.Item2);
+                SetPositionCoolor(item);
             }
             var tupl = InputCoordinats("End", "");
             Console.SetCursorPosition(40, 13);
-            Console.WriteLine($"Your need a {knight.MinCount(tupl.let, tupl.num)} move");
+            Console.WriteLine($"Your need a {knight.MinCount(tupl)} move");
         }
-        public static void SetPositionCoolor(int numF, int numS)
+        public static void SetPositionCoolor(Point point)
         {
-            Console.SetCursorPosition(2 + (numF - 1) * 4, 1 + (numS - 1) * 2);
+            Console.SetCursorPosition(2 + (point.X - 1) * 4, 1 + (point.Y - 1) * 2);
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine('*');
             Console.ResetColor();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Coordinats;
 
 namespace ChessGame
 {
@@ -11,65 +12,67 @@ namespace ChessGame
             Name = name;
             Color = color;
         }
-        public List<(int, int)> Vertical()
+        public List<Point> Vertical()
         {
-            List<(int, int)> arr = new List<(int, int)>();
-            var positionsWithOut = Manager.positions.Where(c => c != (this.FCoord, this.SCoord)).ToList();
+            List<Point> arr = new List<Point>();
+            var model = Manager.models.Where(c=>c != this).ToList();
             for (int i = 1; i <= 8; i++)
             {
-                arr.Add((this.FCoord, i));
+                Point pointTemp = new Point(this.point.X, i);
+                arr.Add(pointTemp);
             }
-            foreach (var item in positionsWithOut)
+            foreach (var item in model)
             {
-                if (arr.Contains(item))
+                if (arr.Contains(item.point))
                 {
-                    if (arr.IndexOf((this.FCoord, this.SCoord)) < arr.IndexOf(item))
+                    if (arr.IndexOf(this.point) < arr.IndexOf(item.point))
                     {
-                        arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item)).ToList();
+                        arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.point)).ToList();
                     }
                     else
                     {
-                        arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item)).ToList();
+                        arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.point)).ToList();
                     }
                 }
-
             }
+            arr.Remove(this.point);
             return arr;
         }
-        public List<(int, int)> Horizontal()
+        public List<Point> Horizontal()
         {
-            List<(int, int)> arr = new List<(int, int)>();
-            var positionsWithOut = Manager.positions.Where(c => c != (this.FCoord, this.SCoord)).ToList();
+            List<Point> arr = new List<Point>();
+            var model = Manager.models.Where(c => c != this).ToList();
             for (int i = 1; i <= 8; i++)
             {
-                arr.Add((i, this.SCoord));
+                Point pointTemp = new Point(i, this.point.Y);
+                arr.Add(pointTemp);
             }
-            foreach (var item in positionsWithOut)
+            foreach (var item in model)
             {
-                if (arr.Contains(item))
+                if (arr.Contains(item.point))
                 {
-                    if (arr.IndexOf((this.FCoord, this.SCoord)) < arr.IndexOf(item))
+                    if (arr.IndexOf(this.point) < arr.IndexOf(item.point))
                     {
-                        arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item)).ToList();
+                        arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.point)).ToList();
                     }
                     else
                     {
-                        arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item)).ToList();
+                        arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.point)).ToList();
                     }
                 }
-
             }
+            arr.Remove(this.point);
             return arr;
         }
-        public List<(int, int)> Crosswise()
+        public List<Point> Crosswise()
         {
             var arrayHor = this.Horizontal();
             var arrayVert = this.Vertical();
             arrayHor.AddRange(arrayVert);
-            arrayHor = arrayHor.Where(c => c != (this.FCoord, this.SCoord)).ToList();
+            arrayHor.Remove(this.point);
             return arrayHor;
         }
-        public List<(int, int)> AvailableMoves()
+        public List<Point> AvailableMoves()
         {
             return this.Crosswise();
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Coordinats;
 
 namespace ChessGame
 {
@@ -11,79 +12,73 @@ namespace ChessGame
             Name = name;
             Color = color;
         }
-        public bool IsMove(int let, int num)
+        public bool IsMove(Point point) => (Math.Abs(this.point.X - point.X) <= 1 && Math.Abs(this.point.Y - point.Y) <= 1);
+        public List<Point> Horizontal()
         {
-            if (Math.Abs(this.FCoord - let) <= 1 && Math.Abs(this.SCoord - num) <= 1)
-                return true;
-            else
-                return false;
-        }
-        public List<(int, int)> Horizontal()
-        {
-            List<(int, int)> arr = new List<(int, int)>();
-            if (this.FCoord -1<=8 && this.FCoord - 1>=1)
+            List<Point> arr = new List<Point>();
+            if (this.point.X - 1 <= 8 && this.point.X - 1 >= 1)
             {
-                arr.Add((this.FCoord - 1, this.SCoord));
+                arr.Add(new Point(this.point.X - 1, this.point.Y));
             }
-            if (this.FCoord + 1 <= 8 && this.FCoord + 1>=1)
+            if (this.point.X + 1 <= 8 && this.point.X + 1 >= 1)
             {
-                arr.Add((this.FCoord + 1, this.SCoord));
+                arr.Add(new Point(this.point.X + 1, this.point.Y));
             }
             return arr;
         }
-        public List<(int, int)> Vertical()
+        public List<Point> Vertical()
         {
-            List<(int, int)> arr = new List<(int, int)>();
-            if (this.SCoord - 1 <= 8 && this.SCoord - 1 >= 1)
+            List<Point> arr = new List<Point>();
+            if (this.point.Y - 1 <= 8 && this.point.Y - 1 >= 1)
             {
-                arr.Add((this.FCoord, this.SCoord-1));
+                arr.Add(new Point(this.point.X, this.point.Y - 1));
             }
-            if (this.SCoord + 1 <= 8 && this.SCoord + 1 >= 1)
+            if (this.point.Y + 1 <= 8 && this.point.Y + 1 >= 1)
             {
-                arr.Add((this.FCoord, this.SCoord +1));
+                arr.Add(new Point(this.point.X, this.point.Y + 1));
             }
             return arr;
         }
-        public List<(int, int)> Crosswise()
+        public List<Point> Crosswise()
         {
             var arrayHor = this.Horizontal();
             var arrayVert = this.Vertical();
             arrayHor.AddRange(arrayVert);
             return arrayHor;
         }
-        public List<(int, int)> RightIndex()
+        public List<Point> RightIndex()
         {
-            List<(int, int)> arr = new List<(int, int)>();
-            if (this.FCoord + 1 <=8 && this.SCoord -1 >=1)
+            List<Point> arr = new List<Point>();
+            if (this.point.X + 1 <= 8 && this.point.Y - 1 >= 1)
             {
-                arr.Add((this.FCoord + 1, this.SCoord - 1));
+                arr.Add(new Point(this.point.X + 1, this.point.Y - 1));
             }
-            if (this.FCoord - 1 >=1 && this.SCoord + 1 <= 8)
+            if (this.point.X - 1 >= 1 && this.point.Y + 1 <= 8)
             {
-                arr.Add((this.FCoord - 1, this.SCoord + 1));
+                arr.Add(new Point(this.point.X - 1, this.point.Y + 1));
             }
             return arr;
         }
-        public List<(int, int)> LeftIndex()
+        public List<Point> LeftIndex()
         {
-            List<(int, int)> arr = new List<(int, int)>();
-            if (this.FCoord - 1 >= 1 && this.SCoord - 1 >= 1)
+            List<Point> arr = new List<Point>();
+            if (this.point.X - 1 >= 1 && this.point.Y - 1 >= 1)
             {
-                arr.Add((this.FCoord - 1, this.SCoord - 1));
+                arr.Add(new Point(this.point.X - 1, this.point.Y - 1));
             }
-            if (this.FCoord + 1 <= 8 && this.SCoord + 1 <= 8)
+            if (this.point.X + 1 <= 8 && this.point.Y + 1 <= 8)
             {
-                arr.Add((this.FCoord + 1, this.SCoord + 1));
+                arr.Add(new Point(this.point.X + 1, this.point.Y + 1));
             }
             return arr;
         }
-        public List<(int, int)> AvailableMoves()
+        public List<Point> AvailableMoves()
         {
-            var result = new List<(int, int)>();
+            var result = new List<Point>();
             result.AddRange(RightIndex());
             result.AddRange(LeftIndex());
             result.AddRange(Crosswise());
-            result = result.Where(c => c != (this.FCoord, this.SCoord) && !Manager.DangerousPosition().Contains(c)).ToList();
+            result = result.Where(c => c != this.point && !Manager.DangerousPosition().Contains(c)).ToList();
             return result;
         }
     }
