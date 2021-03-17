@@ -14,9 +14,9 @@ namespace ChessGame
         {
             DeleteFigure();
             Console.SetCursorPosition(2 + (point.X - 1) * 4, 1 + (point.Y - 1) * 2);
-            this.point = point;
             Console.ForegroundColor = Color;
             Console.WriteLine(this.Name[0]);
+            this.point = point;
             Console.ResetColor();
         }
         public void DeleteFigure()

@@ -6,17 +6,6 @@ namespace Utility
 {
     public static class Helper
     {
-        public static Point EndPosition(this List<Point> arr, Point poi)
-        {
-            foreach (var point in arr)
-            {
-                if (point.X == poi.X && Math.Abs(point.Y - poi.Y) > 1)
-                {
-                    return point;
-                }
-            }
-            return null;
-        }
         public static Point WhenFirstHalf(this List<Point> arr, Point poi, int versia)
         {
             if (versia == 1)
@@ -84,10 +73,6 @@ namespace Utility
             array = word.Split(" ");
             return (array[0], array[1]);
         }
-        public static Point RandomMove(this List<Point> arr)
-        {
-            return arr[new Random().Next(0,arr.Count)];
-        }
         public static Point WhenFirstHalfOn(this List<Point> arr, Point poi, int versia)
         {
             if (versia ==1)
@@ -112,5 +97,6 @@ namespace Utility
             }
             return null;
         }
+        
     }
 }

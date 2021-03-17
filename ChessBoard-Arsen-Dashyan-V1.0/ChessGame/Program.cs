@@ -6,6 +6,7 @@ namespace ChessGame
     {
         static void Main(string[] args)
         {
+            //Manager.Play();
             Manager.PlayNew();
             //Manager.KnightWhitePlay();
 

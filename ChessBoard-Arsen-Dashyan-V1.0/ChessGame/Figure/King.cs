@@ -24,6 +24,7 @@ namespace ChessGame
             {
                 arr.Add(new Point(this.point.X + 1, this.point.Y));
             }
+            arr.Remove(this.point);
             return arr;
         }
         public List<Point> Vertical()
@@ -37,6 +38,7 @@ namespace ChessGame
             {
                 arr.Add(new Point(this.point.X, this.point.Y + 1));
             }
+            arr.Remove(this.point);
             return arr;
         }
         public List<Point> Crosswise()
@@ -57,6 +59,7 @@ namespace ChessGame
             {
                 arr.Add(new Point(this.point.X - 1, this.point.Y + 1));
             }
+            arr.Remove(this.point);
             return arr;
         }
         public List<Point> LeftIndex()
@@ -70,6 +73,7 @@ namespace ChessGame
             {
                 arr.Add(new Point(this.point.X + 1, this.point.Y + 1));
             }
+            arr.Remove(this.point);
             return arr;
         }
         public List<Point> AvailableMoves()
@@ -78,7 +82,8 @@ namespace ChessGame
             result.AddRange(RightIndex());
             result.AddRange(LeftIndex());
             result.AddRange(Crosswise());
-            result = result.Where(c => c != this.point && !Manager.DangerousPosition().Contains(c)).ToList();
+            result.Remove(this.point);
+            result = result.Where(c =>!Manager.DangerousPosition().Contains(c)).ToList();
             return result;
         }
     }
