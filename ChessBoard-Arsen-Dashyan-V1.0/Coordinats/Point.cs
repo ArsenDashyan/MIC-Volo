@@ -1,4 +1,6 @@
-﻿namespace Coordinats
+﻿using System;
+
+namespace Coordinats
 {
     public class Point
     {
@@ -18,6 +20,11 @@
         public override int GetHashCode()
         {
             return X ^ Y;
+        }
+        public static int Modul(Point point, Point point1)
+        {
+            return (int)Math.Sqrt((point1.X - point.X) * (point1.X - point.X) +
+                            (point1.Y - point.Y) * (point1.Y - point.Y));
         }
     }
 }

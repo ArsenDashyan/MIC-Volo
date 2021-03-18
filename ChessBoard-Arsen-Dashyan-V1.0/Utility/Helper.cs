@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Coordinats;
 
 namespace Utility
@@ -97,6 +98,73 @@ namespace Utility
             }
             return null;
         }
-        
+        public static bool BabyGame(this List<Point> list)
+        {
+            List<Point> tempOne = new List<Point>();
+            List<Point> tempTwo = new List<Point>();
+            if (list.Count>=6)
+            {
+                for (int i = list.Count-1; i >= list.Count - 5; i-=2)
+                {
+                    tempOne.Add(list[i]);
+                }
+                for (int i = list.Count - 2; i >= list.Count - 5; i -= 2)
+                {
+                    tempTwo.Add(list[i]);
+                }
+            }
+            var tempEndOne = tempOne.Distinct().ToList();
+            var tempEndTwo = tempTwo.Distinct().ToList();
+            if (tempEndOne.Count == 1 && tempEndTwo.Count == 1)
+            {
+                    return true;
+            }
+            return false;
+        }
+
+        #region Draft
+        //Tagavori dirqin hamarjeq qayler
+        //public static List<Point> KingAvailableMoves(this Point point)
+        //{
+        //    List<Point> list = new List<Point>();
+        //    int versia = KingPositionInBord(point);
+        //    switch (versia)
+        //    {
+        //        case 1:
+        //        case 4:
+        //            for (int i = point.X+1; i <= 8; i++)
+        //            {
+        //                var tempPoint = new Point(i, point.Y);
+        //                list.Add(tempPoint);
+        //            }
+        //            break;
+        //        case 2:
+        //        case 3:
+        //            for (int i = point.X-1; i >= 1; i--)
+        //            {
+        //                var tempPoint = new Point(i, point.Y);
+        //                list.Add(tempPoint);
+        //            }
+        //            break;
+        //    }
+        //    return list;
+        //}
+
+        //Tagavori dirq yst qarordneri
+        //public static int KingPositionInBord(this Point point)
+        //{
+        //    int versia = 0;
+        //    if (point.X >=5 && point.X <=8)
+        //    {
+        //        versia = point.Y >= 5 && point.Y <= 8 ? 4 : 1;
+        //        return versia; 
+        //    }
+        //    else
+        //    {
+        //        versia = point.Y >= 1 && point.Y <= 4 ? 2 : 3;
+        //        return versia;
+        //    }
+        //}
+        #endregion
     }
 }

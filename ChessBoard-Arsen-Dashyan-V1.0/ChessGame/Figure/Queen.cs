@@ -82,7 +82,7 @@ namespace ChessGame
                 {
                     if (i + j == sum)
                     {
-                        Point pointTemp = new Point(i,j);
+                        Point pointTemp = new Point(i, j);
                         arr.Add(pointTemp);
                     }
                 }
@@ -201,17 +201,40 @@ namespace ChessGame
             }
             return false;
         }
-        public Point RandomMove()
+        public Point RandomMove(King king)
         {
+            Point temp = this.point;
+            Point tempForItem = null;
             foreach (var item in AvailableMoves())
             {
+                this.point = item;
                 if (IsProtected(item))
                 {
-                    return item;
+                    if (Point.Modul(item, king.point) >= 2)
+                    {
+                        if (AvailableMoves().Contains(king.point))
+                        {
+                            tempForItem = item;
+                        }
+                    }
+                    else
+                    {
+                        tempForItem = item;
+                    }
                 }
             }
-            int rnd = (new Random().Next(0, this.AvailableMoves().Count));
-            return AvailableMoves()[rnd];
+            this.point = temp;
+            if (tempForItem == null)
+            {
+                foreach (var item in AvailableMoves())
+                {
+                    if (!IsUnderAttack(king))
+                    {
+                        tempForItem = item;
+                    }
+                }
+            }
+            return tempForItem;
         }
     }
 }

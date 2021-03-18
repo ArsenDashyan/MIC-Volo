@@ -57,6 +57,11 @@ namespace ChessGame
                     var arrayR = rook.AvailableMoves();
                     result.AddRange(arrayR);
                 }
+                if (item is Knights)
+                {
+                    var arrayKnight = knight.AvailableMoves();
+                    result.AddRange(arrayKnight);
+                }
             }
             return result;
         }
@@ -86,7 +91,7 @@ namespace ChessGame
             var modelNew = models.Where(c => !(c is King)).ToList();
             if (!MoveNextTo(modelNew, point, versia))
             {
-                Point point1 = queen.RandomMove();
+                Point point1 = queen.RandomMove(kingBlack);
                 queen.SetPosition(point1);
             }
             return false;
@@ -105,7 +110,7 @@ namespace ChessGame
             modelNew.Remove(temp);
             if (!MoveOnFigur(modelNew, point, versia))
             {
-                Point point1 = queen.RandomMove();
+                Point point1 = queen.RandomMove(kingBlack);
                 queen.SetPosition(point1);
             }
             return true;
@@ -223,25 +228,27 @@ namespace ChessGame
         #endregion
 
         #region New Game Logic
-        private static void KingMinCount(List<Model> models)
+        private static void KingMinCount()
         {
             var modelNew = models.Where(c => !(c is King)).ToList();
             Dictionary<Point, (int, Model)> countListQ = new Dictionary<Point, (int, Model)>();
             Dictionary<Point, (int, Model)> countListRL = new Dictionary<Point, (int, Model)>();
             Dictionary<Point, (int, Model)> countListRR = new Dictionary<Point, (int, Model)>();
+            Dictionary<Point, (int, Model)> countListKnight = new Dictionary<Point, (int, Model)>();
             foreach (var figur in modelNew)
             {
                 if (figur is Queen queen)
                 {
                     Point temp = queen.point;
-                    var list = queen.AvailableMoves();
-                    foreach (var item in list)
+                    foreach (var item in queen.AvailableMoves())
                     {
                         queen.point = item;
-                        if (Math.Sqrt((item.X - kingBlack.point.X) * (item.X - kingBlack.point.X) +
-                            (item.Y - kingBlack.point.Y) * (item.Y - kingBlack.point.Y)) > 2)
+                        if (Point.Modul(item, kingBlack.point) >= 2)
                         {
-                            countListQ.Add(item, (kingBlack.AvailableMoves().Count, queen));
+                            if (queen.AvailableMoves().Contains(kingBlack.point))
+                            {
+                                countListQ.Add(item, (kingBlack.AvailableMoves().Count, queen));
+                            }
                         }
                     }
                     queen.point = temp;
@@ -249,14 +256,15 @@ namespace ChessGame
                 if (ReferenceEquals(figur, rookL))
                 {
                     Point temp = rookL.point;
-                    var listRookL = rookL.AvailableMoves();
-                    foreach (var item in listRookL)
+                    foreach (var item in rookL.AvailableMoves())
                     {
                         rookL.point = item;
-                        if (Math.Sqrt((item.X - kingBlack.point.X) * (item.X - kingBlack.point.X) +
-                            (item.Y - kingBlack.point.Y) * (item.Y - kingBlack.point.Y)) > 2)
+                        if (Point.Modul(item, kingBlack.point) >= 2)
                         {
-                            countListRL.Add(item, (kingBlack.AvailableMoves().Count, rookL));
+                            if (rookL.AvailableMoves().Contains(kingBlack.point))
+                            {
+                                countListRL.Add(item, (kingBlack.AvailableMoves().Count, rookL));
+                            }
                         }
                     }
                     rookL.point = temp;
@@ -264,23 +272,41 @@ namespace ChessGame
                 if (ReferenceEquals(figur, rookR))
                 {
                     Point temp = rookR.point;
-                    var listRookR = rookR.AvailableMoves();
-                    foreach (var item in listRookR)
+                    foreach (var item in rookR.AvailableMoves())
                     {
                         rookR.point = item;
-                        if (Math.Sqrt((item.X - kingBlack.point.X) * (item.X - kingBlack.point.X) +
-                            (item.Y - kingBlack.point.Y) * (item.Y - kingBlack.point.Y)) > 2)
+                        if (Point.Modul(item, kingBlack.point) >= 2)
                         {
-                            countListRR.Add(item, (kingBlack.AvailableMoves().Count, rookR));
+                            if (rookR.AvailableMoves().Contains(kingBlack.point))
+                            {
+                                countListRR.Add(item, (kingBlack.AvailableMoves().Count, rookR));
+                            }
                         }
                     }
                     rookR.point = temp;
+                }
+                if (ReferenceEquals(figur, knight))
+                {
+                    Point temp = knight.point;
+                    foreach (var item in knight.AvailableMoves())
+                    {
+                        knight.point = item;
+                        if (Point.Modul(item, kingBlack.point) >= 2)
+                        {
+                            if (knight.AvailableMoves().Contains(kingBlack.point))
+                            {
+                                countListRR.Add(item, (kingBlack.AvailableMoves().Count, knight));
+                            }
+                        }
+                    }
+                    knight.point = temp;
                 }
             }
             List<KeyValuePair<Point, (int, Model)>> listEnd = new List<KeyValuePair<Point, (int, Model)>>();
             KeyValuePair<Point, (int, Model)> queenMin;
             KeyValuePair<Point, (int, Model)> rookLMin;
             KeyValuePair<Point, (int, Model)> rookRMin;
+            KeyValuePair<Point, (int, Model)> knightMin;
             if (countListQ.Count != 0)
             {
                 queenMin = countListQ.OrderBy(k => k.Value.Item1).FirstOrDefault();
@@ -296,18 +322,76 @@ namespace ChessGame
                 rookRMin = countListRR.OrderBy(k => k.Value.Item1).FirstOrDefault();
                 listEnd.Add(rookRMin);
             }
-            var min = listEnd.OrderBy(c => c.Value.Item1).First();
-            if (min.Value.Item2 is Queen)
+            if (countListKnight.Count != 0)
             {
-                queen.SetPosition(min.Key);
+                knightMin = countListKnight.OrderBy(k => k.Value.Item1).FirstOrDefault();
+                listEnd.Add(knightMin);
             }
-            else if (ReferenceEquals(min.Value.Item2, rookL))
+            var minMoves = listEnd.OrderBy(c => c.Value.Item1).First();
+            if (minMoves.Value.Item2 is Queen)
             {
-                rookL.SetPosition(min.Key);
+                queen.SetPosition(minMoves.Key);
             }
-            else if (ReferenceEquals(min.Value.Item2, rookL))
+            else if (ReferenceEquals(minMoves.Value.Item2, rookL))
             {
-                rookR.SetPosition(min.Key);
+                rookL.SetPosition(minMoves.Key);
+            }
+            else if (ReferenceEquals(minMoves.Value.Item2, rookR))
+            {
+                rookR.SetPosition(minMoves.Key);
+            }
+            else if (ReferenceEquals(minMoves.Value.Item2, knight))
+            {
+                knight.SetPosition(minMoves.Key);
+            }
+        }
+        private static void AntiBabyGame()
+        {
+            var modelNew = models.Where(c => !(c is King)).ToList();
+            List<(int, Model)> destination = new List<(int, Model)>();
+            int queenDestination = 0;
+            int rookLDestination = 0;
+            int rookRDestination = 0;
+            int knightDestination = 0;
+            foreach (var figur in modelNew)
+            {
+                if (figur is Queen queen)
+                {
+                    queenDestination = Point.Modul(queen.point, kingBlack.point);
+                    destination.Add((queenDestination, queen));
+                }
+                if (ReferenceEquals(figur, rookL))
+                {
+                    rookLDestination = Point.Modul(rookL.point, kingBlack.point);
+                    destination.Add((rookLDestination, rookL));
+                }
+                if (ReferenceEquals(figur, rookR))
+                {
+                    rookRDestination = Point.Modul(rookR.point, kingBlack.point);
+                    destination.Add((rookRDestination, rookR));
+                }
+                if (ReferenceEquals(figur, knight))
+                {
+                    knightDestination = Point.Modul(knight.point, kingBlack.point);
+                    destination.Add((knightDestination, knight));
+                }
+            }
+            (int,Model) max = destination.OrderBy(k => k.Item1).LastOrDefault();
+            if (max.Item2 is Queen)
+            {
+                queen.SetPosition(queen.RandomMove(kingBlack));
+            }
+            else if (ReferenceEquals(max.Item2, rookL))
+            {
+                rookL.SetPosition(rookL.RandomMove(kingBlack));
+            }
+            else if (ReferenceEquals(max.Item2, rookR))
+            {
+                rookR.SetPosition(rookR.RandomMove(kingBlack));
+            }
+            else if (ReferenceEquals(max.Item2, knight))
+            {
+                knight.SetPosition(knight.RandomMove(kingBlack));
             }
         }
         private static bool UnderAttack()
@@ -321,7 +405,7 @@ namespace ChessGame
                     {
                         if (!queen.IsProtected())
                         {
-                            Point point1 = queen.RandomMove();
+                            Point point1 = queen.RandomMove(kingBlack);
                             queen.SetPosition(point1);
                             return true;
                         }
@@ -333,7 +417,7 @@ namespace ChessGame
                     {
                         if (!rookL.IsProtected())
                         {
-                            Point point1 = rookL.RandomMove();
+                            Point point1 = rookL.RandomMove(kingBlack);
                             rookL.SetPosition(point1);
                             return true;
                         }
@@ -345,8 +429,20 @@ namespace ChessGame
                     {
                         if (!rookR.IsProtected())
                         {
-                            Point point1 = rookR.RandomMove();
+                            Point point1 = rookR.RandomMove(kingBlack);
                             rookL.SetPosition(point1);
+                            return true;
+                        }
+                    }
+                }
+                if (ReferenceEquals(figur, knight))
+                {
+                    if (knight.IsUnderAttack(kingBlack))
+                    {
+                        if (!knight.IsProtected())
+                        {
+                            Point point1 = knight.RandomMove(kingBlack);
+                            knight.SetPosition(point1);
                             return true;
                         }
                     }
@@ -358,17 +454,210 @@ namespace ChessGame
         {
             View.Board();
             PlacementManager();
+            List<Point> list = new List<Point>();
             while (kingBlack.AvailableMoves().Count != 0)
             {
                 View.ClearText();
                 var point = InputCoordinats("Black", "King");
+                list.Add(point);
                 kingBlack.SetPosition(point);
                 if (!UnderAttack())
-                    KingMinCount(models);
+                {
+                    if (!list.BabyGame())
+                        KingMinCount();
+                    else
+                        AntiBabyGame();
+                }
             }
             Console.SetCursorPosition(40, 8);
             Console.WriteLine("Game over");
         }
+        #endregion
+
+        #region Draft
+        // Tagavori xodery sahmanapakox etod
+        //private static void KingMinCount(List<Model> models)
+        //{
+        //    var modelNew = models.Where(c => !(c is King)).ToList();
+        //    Dictionary<Point, (int, Model)> countListQ = new Dictionary<Point, (int, Model)>();
+        //    Dictionary<Point, (int, Model)> countListRL = new Dictionary<Point, (int, Model)>();
+        //    Dictionary<Point, (int, Model)> countListRR = new Dictionary<Point, (int, Model)>();
+        //    foreach (var figur in modelNew)
+        //    {
+        //        if (figur is Queen queen)
+        //        {
+        //            Point temp = queen.point;
+        //            var list = queen.AvailableMoves();
+        //            foreach (var item in list)
+        //            {
+        //                queen.point = item;
+        //                if (Math.Sqrt((item.X - kingBlack.point.X) * (item.X - kingBlack.point.X) +
+        //                    (item.Y - kingBlack.point.Y) * (item.Y - kingBlack.point.Y)) > 2)
+        //                {
+        //                    countListQ.Add(item, (kingBlack.AvailableMoves().Count, queen));
+        //                }
+        //            }
+        //            queen.point = temp;
+        //        }
+        //        if (ReferenceEquals(figur, rookL))
+        //        {
+        //            Point temp = rookL.point;
+        //            var listRookL = rookL.AvailableMoves();
+        //            foreach (var item in listRookL)
+        //            {
+        //                rookL.point = item;
+        //                if (Math.Sqrt((item.X - kingBlack.point.X) * (item.X - kingBlack.point.X) +
+        //                    (item.Y - kingBlack.point.Y) * (item.Y - kingBlack.point.Y)) > 2)
+        //                {
+        //                    countListRL.Add(item, (kingBlack.AvailableMoves().Count, rookL));
+        //                }
+        //            }
+        //            rookL.point = temp;
+        //        }
+        //        if (ReferenceEquals(figur, rookR))
+        //        {
+        //            Point temp = rookR.point;
+        //            var listRookR = rookR.AvailableMoves();
+        //            foreach (var item in listRookR)
+        //            {
+        //                rookR.point = item;
+        //                if (Math.Sqrt((item.X - kingBlack.point.X) * (item.X - kingBlack.point.X) +
+        //                    (item.Y - kingBlack.point.Y) * (item.Y - kingBlack.point.Y)) > 2)
+        //                {
+        //                    countListRR.Add(item, (kingBlack.AvailableMoves().Count, rookR));
+        //                }
+        //            }
+        //            rookR.point = temp;
+        //        }
+        //    }
+        //    List<KeyValuePair<Point, (int, Model)>> listEnd = new List<KeyValuePair<Point, (int, Model)>>();
+        //    KeyValuePair<Point, (int, Model)> queenMin;
+        //    KeyValuePair<Point, (int, Model)> rookLMin;
+        //    KeyValuePair<Point, (int, Model)> rookRMin;
+        //    if (countListQ.Count != 0)
+        //    {
+        //        queenMin = countListQ.OrderBy(k => k.Value.Item1).FirstOrDefault();
+        //        listEnd.Add(queenMin);
+        //    }
+        //    if (countListRL.Count != 0)
+        //    {
+        //        rookLMin = countListRL.OrderBy(k => k.Value.Item1).FirstOrDefault();
+        //        listEnd.Add(rookLMin);
+        //    }
+        //    if (countListRR.Count != 0)
+        //    {
+        //        rookRMin = countListRR.OrderBy(k => k.Value.Item1).FirstOrDefault();
+        //        listEnd.Add(rookRMin);
+        //    }
+        //    var min = listEnd.OrderBy(c => c.Value.Item1).First();
+        //    if (min.Value.Item2 is Queen)
+        //    {
+        //        queen.SetPosition(min.Key);
+        //    }
+        //    else if (ReferenceEquals(min.Value.Item2, rookL))
+        //    {
+        //        rookL.SetPosition(min.Key);
+        //    }
+        //    else if (ReferenceEquals(min.Value.Item2, rookL))
+        //    {
+        //        rookR.SetPosition(min.Key);
+        //    }
+        //}
+
+        //Tagavori dirqin hamapatasxn sahmanapakum
+        //private static void KingPostionCount(List<Model> models)
+        //{
+        //    var modelNew = models.Where(c => !(c is King)).ToList();
+        //    var listOfKing = kingBlack.point.KingAvailableMoves();
+        //    foreach (var figur in modelNew)
+        //    {
+        //        if (figur is Queen queen)
+        //        {
+        //            var list = queen.AvailableMoves();
+        //            Point temp = null;
+        //            Point tempfigur = queen.point;
+        //            foreach (var item in list)
+        //            {
+        //                queen.point = item;
+        //                if (Math.Sqrt((item.X - kingBlack.point.X) * (item.X - kingBlack.point.X) +
+        //                    (item.Y - kingBlack.point.Y) * (item.Y - kingBlack.point.Y)) == 2)
+        //                {
+        //                    foreach (var moves in listOfKing)
+        //                    {
+        //                        if (kingBlack.AvailableMoves().Contains(moves))
+        //                        {
+        //                            temp = item;
+        //                            break;
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //            queen.point = tempfigur;
+        //            if (temp != null)
+        //            {
+        //                queen.SetPosition(temp);
+        //                break;
+        //            }
+
+        //        }
+        //        if (ReferenceEquals(figur, rookL))
+        //        {
+        //            Point temp = null;
+        //            Point tempfigur = rookL.point;
+        //            var listRookL = rookL.AvailableMoves();
+        //            foreach (var item in listRookL)
+        //            {
+        //                rookL.point = item;
+        //                if (Math.Sqrt((item.X - kingBlack.point.X) * (item.X - kingBlack.point.X) +
+        //                    (item.Y - kingBlack.point.Y) * (item.Y - kingBlack.point.Y)) == 2)
+        //                {
+        //                    foreach (var moves in listOfKing)
+        //                    {
+        //                        if (kingBlack.AvailableMoves().Contains(moves))
+        //                        {
+        //                            temp = item;
+        //                            break;
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //            rookL.point = tempfigur;
+        //            if (temp != null)
+        //            {
+        //                rookL.SetPosition(temp);
+        //                break;
+        //            }
+        //        }
+        //        if (ReferenceEquals(figur, rookR))
+        //        {
+        //            var listRookR = rookR.AvailableMoves();
+        //            Point temp = null;
+        //            Point tempfigur = rookL.point;
+        //            foreach (var item in listRookR)
+        //            {
+        //                rookR.point = item;
+        //                if (Math.Sqrt((item.X - kingBlack.point.X) * (item.X - kingBlack.point.X) +
+        //                    (item.Y - kingBlack.point.Y) * (item.Y - kingBlack.point.Y)) == 2)
+        //                {
+        //                    foreach (var moves in listOfKing)
+        //                    {
+        //                        if (kingBlack.AvailableMoves().Contains(moves))
+        //                        {
+        //                            temp = item;
+        //                            break;
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //            rookR.point = tempfigur;
+        //            if (temp != null)
+        //            {
+        //                rookR.SetPosition(temp);
+        //                break;
+        //            }
+        //        }
+        //    }
+        //}
         #endregion
     }
 }
