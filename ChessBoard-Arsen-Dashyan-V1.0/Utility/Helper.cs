@@ -7,30 +7,6 @@ namespace Utility
 {
     public static class Helper
     {
-        public static Point WhenFirstHalf(this List<Point> arr, Point poi, int versia)
-        {
-            if (versia == 1)
-            {
-                foreach (var tupl in arr)
-                {
-                    if (tupl.X - poi.X == 1 && Math.Abs(tupl.Y - poi.Y) > 1)
-                    {
-                        return tupl;
-                    }
-                }
-            }
-            else
-            {
-                foreach (var point in arr)
-                {
-                    if (poi.X - point.X == 1 && Math.Abs(point.Y - poi.Y) > 1)
-                    {
-                        return point;
-                    }
-                }
-            }
-            return null;
-        }
         public static int CharToInt(this char ch)
         {
             switch (Char.ToLower(ch))
@@ -74,30 +50,6 @@ namespace Utility
             array = word.Split(" ");
             return (array[0], array[1]);
         }
-        public static Point WhenFirstHalfOn(this List<Point> arr, Point poi, int versia)
-        {
-            if (versia ==1)
-            {
-                foreach (var tupl in arr)
-                {
-                    if (tupl.X == poi.X && Math.Abs(tupl.Y - poi.Y) > 1)
-                    {
-                        return tupl;
-                    }
-                }
-            }
-            else
-            {
-                foreach (var tupl in arr)
-                {
-                    if (tupl.X == poi.X && Math.Abs(tupl.Y - poi.Y) > 1)
-                    {
-                        return tupl;
-                    }
-                }
-            }
-            return null;
-        }
         public static bool BabyGame(this List<Point> list)
         {
             List<Point> tempOne = new List<Point>();
@@ -123,6 +75,57 @@ namespace Utility
         }
 
         #region Draft
+
+        //public static Point WhenFirstHalf(this List<Point> arr, Point poi, int versia)
+        //{
+        //    if (versia == 1)
+        //    {
+        //        foreach (var tupl in arr)
+        //        {
+        //            if (tupl.X - poi.X == 1 && Math.Abs(tupl.Y - poi.Y) > 1)
+        //            {
+        //                return tupl;
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        foreach (var point in arr)
+        //        {
+        //            if (poi.X - point.X == 1 && Math.Abs(point.Y - poi.Y) > 1)
+        //            {
+        //                return point;
+        //            }
+        //        }
+        //    }
+        //    return null;
+        //}
+
+        //public static Point WhenFirstHalfOn(this List<Point> arr, Point poi, int versia)
+        //{
+        //    if (versia ==1)
+        //    {
+        //        foreach (var tupl in arr)
+        //        {
+        //            if (tupl.X == poi.X && Math.Abs(tupl.Y - poi.Y) > 1)
+        //            {
+        //                return tupl;
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        foreach (var tupl in arr)
+        //        {
+        //            if (tupl.X == poi.X && Math.Abs(tupl.Y - poi.Y) > 1)
+        //            {
+        //                return tupl;
+        //            }
+        //        }
+        //    }
+        //    return null;
+        //}
+
         //Tagavori dirqin hamarjeq qayler
         //public static List<Point> KingAvailableMoves(this Point point)
         //{

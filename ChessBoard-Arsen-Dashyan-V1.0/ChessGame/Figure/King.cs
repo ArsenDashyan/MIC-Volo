@@ -12,7 +12,14 @@ namespace ChessGame
             Name = name;
             Color = color;
         }
-        public bool IsMove(Point point) => (Math.Abs(this.point.X - point.X) <= 1 && Math.Abs(this.point.Y - point.Y) <= 1);
+        public bool IsMove(Point point)
+        {
+            if (this.point == null)
+            {
+                return true;
+            }
+            return (Math.Abs((int)this.point?.X - point.X) <= 1 && Math.Abs((int)this.point?.Y - point.Y) <= 1);
+        }
         public List<Point> Horizontal()
         {
             List<Point> arr = new List<Point>();

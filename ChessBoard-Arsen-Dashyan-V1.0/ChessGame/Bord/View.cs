@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ChessGame
 {
@@ -18,6 +17,28 @@ namespace ChessGame
                 Console.WriteLine(@"+---+---+---+---+---+---+---+---+");
             }
             Console.WriteLine("  A   B   C   D   E   F   G   H");
+        }
+        public static void ShowFigurs(int corrent)
+        {
+            Console.SetCursorPosition(40, 0);
+            Console.WriteLine("Please enter a figur | For exit enter a e");
+            if (corrent <= figurs.Count)
+            {
+                figurs[corrent -1] = "Filled          ";
+            }
+            foreach (var item in figurs)
+            {
+                Console.SetCursorPosition(40, figurs.IndexOf(item) + 1);
+                Console.WriteLine(item);
+            }
+        }
+        public static void ClearText()
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                Console.SetCursorPosition(40, i);
+                Console.WriteLine("                                              ");
+            }
         }
 
         //private static void BoardColor()
@@ -43,28 +64,5 @@ namespace ChessGame
         //        }
         //    }
         //}
-
-        public static void ShowFigurs(int corrent)
-        {
-            Console.SetCursorPosition(40, 0);
-            Console.WriteLine("Please enter a figur | For exit enter a e");
-            if (corrent <= figurs.Count)
-            {
-                figurs[corrent -1] = "Filled          ";
-            }
-            foreach (var item in figurs)
-            {
-                Console.SetCursorPosition(40, figurs.IndexOf(item) + 1);
-                Console.WriteLine(item);
-            }
-        }
-        public static void ClearText()
-        {
-            for (int i = 0; i < 9; i++)
-            {
-                Console.SetCursorPosition(40, i);
-                Console.WriteLine("                                              ");
-            }
-        }
     }
 }

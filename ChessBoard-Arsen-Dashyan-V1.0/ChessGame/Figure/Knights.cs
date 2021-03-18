@@ -144,13 +144,9 @@ namespace ChessGame
                     if (Point.Modul(item, king.point) > 2)
                     {
                         if (AvailableMoves().Contains(king.point))
-                        {
                             tempForItem = item;
-                        }
-                    }
-                    else
-                    {
-                        tempForItem = item;
+                        else
+                            tempForItem = item;
                     }
                 }
             }
@@ -160,9 +156,7 @@ namespace ChessGame
                 foreach (var item in AvailableMoves())
                 {
                     if (!IsUnderAttack(king))
-                    {
                         tempForItem = item;
-                    }
                 }
             }
             return tempForItem;
