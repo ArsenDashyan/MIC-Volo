@@ -3,7 +3,7 @@ using Coordinats;
 
 namespace ChessGame
 {
-    public class Model
+    public class Model : ISetPosition
     {
         #region Property and Feld
         public string Name { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Utility;
 using Coordinats;
+using System.Collections.Generic;
 
 namespace ChessGame
 {
@@ -133,11 +134,13 @@ namespace ChessGame
             if (figureColor == "Black")
                 isEqual = IsKingAction(point);
             else
-                isEqual = (InsideBord(point) && !positions.Contains(point));
+                isEqual = (InsideBord(point) && !GetPosition().Contains(point));
             if (isEqual)
             {
                 if (figureColor != "Black")
+                {
                     return point;
+                }
             }
             while (!isEqual)
             {
@@ -149,6 +152,15 @@ namespace ChessGame
                 break;
             }
             return point;
+        }
+        private static List<Point> GetPosition()
+        {
+            List<Point> positions = new List<Point>();
+            foreach (var item in models)
+            {
+                positions.Add(item.point);
+            }
+            return positions;
         }
 
         #region Knight Play

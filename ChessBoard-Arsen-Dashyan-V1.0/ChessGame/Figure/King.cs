@@ -5,7 +5,7 @@ using Coordinats;
 
 namespace ChessGame
 {
-    public class King : Model, ICrosswise, IDiagonal
+    public class King : Model, ICrosswise, IDiagonal,IAvailableMoves
     {
         public King(string name, ConsoleColor color)
         {

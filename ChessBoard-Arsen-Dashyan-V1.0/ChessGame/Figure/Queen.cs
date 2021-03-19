@@ -5,7 +5,7 @@ using Coordinats;
 
 namespace ChessGame
 {
-    public class Queen : Model, IDiagonal, ICrosswise
+    public class Queen : Model, IDiagonal, ICrosswise, IAvailableMoves, IRandomeMove
     {
         public Queen(string name, ConsoleColor color)
         {
@@ -150,8 +150,8 @@ namespace ChessGame
         }
         public bool IsUnderAttack(King king)
         {
-            if (Math.Sqrt((this.point.X - king.point.X) * (this.point.X - king.point.X) +
-                    (this.point.Y - king.point.Y) * (this.point.Y - king.point.Y)) <= 2)
+            if (Math.Abs(this.point.X - king.point.X) +
+                    Math.Abs(this.point.Y - king.point.Y) <= 2)
             {
                 return true;
             }
@@ -162,18 +162,10 @@ namespace ChessGame
             var model = Manager.models.Where(c => c != this).ToList();
             foreach (var item in model)
             {
-                if (Math.Sqrt((this.point.X - item.point.X) * (this.point.X - item.point.X) +
-                    (this.point.Y - item.point.Y) * (this.point.Y - item.point.Y)) <= 2)
+                IAvailableMoves tempfigur = (IAvailableMoves)item;
+                if (tempfigur.AvailableMoves().Contains(this.point))
                 {
                     return true;
-                }
-            }
-            foreach (var item in model)
-            {
-                if (item is Rook rook)
-                {
-                    if (AvailableMoves().Contains(rook.point))
-                        return true;
                 }
             }
             return false;
@@ -183,20 +175,10 @@ namespace ChessGame
             var model = Manager.models.Where(c => c != this).ToList();
             foreach (var item in model)
             {
-                if (Math.Sqrt((point.X - item.point.X) * (point.X - item.point.X) +
-                    (point.Y - item.point.Y) * (point.Y - item.point.Y)) <= 2)
+                IAvailableMoves tempfigur = (IAvailableMoves)item;
+                if (tempfigur.AvailableMoves().Contains(point))
                 {
                     return true;
-                }
-            }
-            foreach (var item in model)
-            {
-                if (item is Rook rook)
-                {
-                    if (rook.point.X == point.X)
-                        return true;
-                    if (rook.point.Y == point.Y)
-                        return true;
                 }
             }
             return false;
@@ -213,7 +195,15 @@ namespace ChessGame
                     if (Point.Modul(item, king.point) >= 2)
                     {
                         if (AvailableMoves().Contains(king.point))
+                        {
                             tempForItem = item;
+                            break;
+                        }
+                        else if (AvailableMoves().Count == 14)
+                        {
+                            tempForItem = item;
+                            break;
+                        }
                         else
                             tempForItem = item;
                     }
