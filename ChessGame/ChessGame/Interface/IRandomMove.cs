@@ -1,7 +1,7 @@
 ﻿using Coordinats;
 
-namespace ChessGameLibrary
-{ 
+namespace ChessGame
+{
     interface IRandomMove : IAvailableMoves
     {
         bool IsUnderAttack(CoordinatPoint CoordinatPoint);

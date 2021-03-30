@@ -7,31 +7,31 @@ namespace ChessGameLibrary
 {
     public class King : FigureBase, ICrosswise, IDiagonal, IRandomMove
     {
-        public King(string name, ConsoleColor color)
+        public King(string name, ConsoleColor color, List<FigureBase> othereFigures) : base(othereFigures)
         {
             Name = name;
             Color = color;
         }
         #region Move
-        public bool IsMove(Point point)
+        public bool IsMove(CoordinatPoint CoordinatPoint)
         {
             if (this.Coordinate == null)
             {
                 return true;
             }
-            return (Math.Abs((int)this.Coordinate?.X - point.X) <= 1 && Math.Abs((int)this.Coordinate?.Y - point.Y) <= 1);
+            return (Math.Abs((int)this.Coordinate?.X - CoordinatPoint.X) <= 1 && Math.Abs((int)this.Coordinate?.Y - CoordinatPoint.Y) <= 1);
         }
-        public List<Point> Horizontal()
+        public List<CoordinatPoint> Horizontal()
         {
-            List<Point> arr = new List<Point>();
-            var model = Manager.models.Where(c => c.Color == this.Color && c != this).ToList();
+            List<CoordinatPoint> arr = new List<CoordinatPoint>();
+            var model =othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
             if (this.Coordinate.X - 1 <= 8 && this.Coordinate.X - 1 >= 1)
             {
-                arr.Add(new Point(this.Coordinate.X - 1, this.Coordinate.Y));
+                arr.Add(new CoordinatPoint(this.Coordinate.X - 1, this.Coordinate.Y));
             }
             if (this.Coordinate.X + 1 <= 8 && this.Coordinate.X + 1 >= 1)
             {
-                arr.Add(new Point(this.Coordinate.X + 1, this.Coordinate.Y));
+                arr.Add(new CoordinatPoint(this.Coordinate.X + 1, this.Coordinate.Y));
             }
             foreach (var item in model)
             {
@@ -50,17 +50,17 @@ namespace ChessGameLibrary
             arr.Remove(this.Coordinate);
             return arr;
         }
-        public List<Point> Vertical()
+        public List<CoordinatPoint> Vertical()
         {
-            List<Point> arr = new List<Point>();
-            var model = Manager.models.Where(c => c.Color == this.Color && c != this).ToList();
+            List<CoordinatPoint> arr = new List<CoordinatPoint>();
+            var model =othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
             if (this.Coordinate.Y - 1 <= 8 && this.Coordinate.Y - 1 >= 1)
             {
-                arr.Add(new Point(this.Coordinate.X, this.Coordinate.Y - 1));
+                arr.Add(new CoordinatPoint(this.Coordinate.X, this.Coordinate.Y - 1));
             }
             if (this.Coordinate.Y + 1 <= 8 && this.Coordinate.Y + 1 >= 1)
             {
-                arr.Add(new Point(this.Coordinate.X, this.Coordinate.Y + 1));
+                arr.Add(new CoordinatPoint(this.Coordinate.X, this.Coordinate.Y + 1));
             }
             foreach (var item in model)
             {
@@ -79,24 +79,24 @@ namespace ChessGameLibrary
             arr.Remove(this.Coordinate);
             return arr;
         }
-        public List<Point> Crosswise()
+        public List<CoordinatPoint> Crosswise()
         {
             var arrayHor = this.Horizontal();
             var arrayVert = this.Vertical();
             arrayHor.AddRange(arrayVert);
             return arrayHor;
         }
-        public List<Point> RightIndex()
+        public List<CoordinatPoint> RightIndex()
         {
-            List<Point> arr = new List<Point>();
-            var model = Manager.models.Where(c => c.Color == this.Color && c != this).ToList();
+            List<CoordinatPoint> arr = new List<CoordinatPoint>();
+            var model =othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
             if (this.Coordinate.X + 1 <= 8 && this.Coordinate.Y - 1 >= 1)
             {
-                arr.Add(new Point(this.Coordinate.X + 1, this.Coordinate.Y - 1));
+                arr.Add(new CoordinatPoint(this.Coordinate.X + 1, this.Coordinate.Y - 1));
             }
             if (this.Coordinate.X - 1 >= 1 && this.Coordinate.Y + 1 <= 8)
             {
-                arr.Add(new Point(this.Coordinate.X - 1, this.Coordinate.Y + 1));
+                arr.Add(new CoordinatPoint(this.Coordinate.X - 1, this.Coordinate.Y + 1));
             }
             foreach (var item in model)
             {
@@ -115,17 +115,17 @@ namespace ChessGameLibrary
             arr.Remove(this.Coordinate);
             return arr;
         }
-        public List<Point> LeftIndex()
+        public List<CoordinatPoint> LeftIndex()
         {
-            List<Point> arr = new List<Point>();
-            var model = Manager.models.Where(c => c.Color == this.Color && c != this).ToList();
+            List<CoordinatPoint> arr = new List<CoordinatPoint>();
+            var model =othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
             if (this.Coordinate.X - 1 >= 1 && this.Coordinate.Y - 1 >= 1)
             {
-                arr.Add(new Point(this.Coordinate.X - 1, this.Coordinate.Y - 1));
+                arr.Add(new CoordinatPoint(this.Coordinate.X - 1, this.Coordinate.Y - 1));
             }
             if (this.Coordinate.X + 1 <= 8 && this.Coordinate.Y + 1 <= 8)
             {
-                arr.Add(new Point(this.Coordinate.X + 1, this.Coordinate.Y + 1));
+                arr.Add(new CoordinatPoint(this.Coordinate.X + 1, this.Coordinate.Y + 1));
             }
             foreach (var item in model)
             {
@@ -144,9 +144,9 @@ namespace ChessGameLibrary
             arr.Remove(this.Coordinate);
             return arr;
         }
-        public List<Point> AvailableMoves()
+        public List<CoordinatPoint> AvailableMoves()
         {
-            var result = new List<Point>();
+            var result = new List<CoordinatPoint>();
             result.AddRange(RightIndex());
             result.AddRange(LeftIndex());
             result.AddRange(Crosswise());
@@ -155,13 +155,13 @@ namespace ChessGameLibrary
         }
         #endregion
 
-        public bool IsUnderAttack(Point point)
+        public bool IsUnderAttack(CoordinatPoint CoordinatPoint)
         {
-            var modelNew = Manager.models.Where(c => c.Color == ConsoleColor.Red).ToList();
+            var modelNew =othereFigures.Where(c => c.Color == ConsoleColor.Red).ToList();
             foreach (var item in modelNew)
             {
                 IAvailableMoves itemFigur = (IAvailableMoves)item;
-                if (itemFigur.AvailableMoves().Contains(point))
+                if (itemFigur.AvailableMoves().Contains(CoordinatPoint))
                 {
                     return true;
                 }
@@ -170,7 +170,7 @@ namespace ChessGameLibrary
         }
         public bool IsProtected()
         {
-            var model = Manager.models.Where(c => c.Color == this.Color && c != this).ToList();
+            var model =othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
             foreach (var item in model)
             {
                 IAvailableMoves tempfigur = (IAvailableMoves)item;
@@ -181,33 +181,33 @@ namespace ChessGameLibrary
             }
             return false;
         }
-        public bool IsProtected(Point point)
+        public bool IsProtected(CoordinatPoint CoordinatPoint)
         {
-            var model = Manager.models.Where(c => c.Color == this.Color && c != this).ToList();
+            var model =othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
             foreach (var item in model)
             {
                 IAvailableMoves tempfigur = (IAvailableMoves)item;
-                if (tempfigur.AvailableMoves().Contains(point))
+                if (tempfigur.AvailableMoves().Contains(CoordinatPoint))
                 {
                     return true;
                 }
             }
             return false;
         }
-        public Point RandomMove(King king)
+        public CoordinatPoint RandomMove(King king)
         {
-            Point temp = null;
-            if (ProtectedShax(king, out Point tempForItem))
+            CoordinatPoint temp = null;
+            if (ProtectedShax(king, out CoordinatPoint tempForItem))
             {
                 temp = tempForItem;
                 return temp;
             }
-            else if (IsUnderAttackShax(king, out Point tempForItem2))
+            else if (IsUnderAttackShax(king, out CoordinatPoint tempForItem2))
             {
                 temp = tempForItem2;
                 return temp;
             }
-            else if (IsUnderAttackMax(king, out Point tempForItem3))
+            else if (IsUnderAttackMax(king, out CoordinatPoint tempForItem3))
             {
                 temp = tempForItem3;
                 return temp;
@@ -225,15 +225,15 @@ namespace ChessGameLibrary
             }
             return temp;
         }
-        private bool ProtectedShax(King king, out Point tempForItem)
+        private bool ProtectedShax(King king, out CoordinatPoint tempForItem)
         {
-            Point temp = this.Coordinate;
+            CoordinatPoint temp = this.Coordinate;
             foreach (var item in AvailableMoves())
             {
                 this.Coordinate = item;
                 if (IsProtected(item))
                 {
-                    if (Point.Modul(item, king.Coordinate) >= 2d)
+                    if (CoordinatPoint.Modul(item, king.Coordinate) >= 2d)
                     {
                         if (AvailableMoves().Contains(king.Coordinate))
                         {
@@ -248,15 +248,15 @@ namespace ChessGameLibrary
             tempForItem = null;
             return false;
         }
-        private bool IsUnderAttackShax(King king, out Point tempForItem)
+        private bool IsUnderAttackShax(King king, out CoordinatPoint tempForItem)
         {
-            Point temp = this.Coordinate;
+            CoordinatPoint temp = this.Coordinate;
             foreach (var item in AvailableMoves())
             {
                 this.Coordinate = item;
                 if (!IsUnderAttack(this.Coordinate))
                 {
-                    if (Point.Modul(item, king.Coordinate) >= 2d)
+                    if (CoordinatPoint.Modul(item, king.Coordinate) >= 2d)
                     {
                         if (AvailableMoves().Contains(king.Coordinate))
                         {
@@ -271,15 +271,15 @@ namespace ChessGameLibrary
             tempForItem = null;
             return false;
         }
-        private bool IsUnderAttackMax(King king, out Point tempForItem)
+        private bool IsUnderAttackMax(King king, out CoordinatPoint tempForItem)
         {
-            Point temp = this.Coordinate;
+            CoordinatPoint temp = this.Coordinate;
             foreach (var item in AvailableMoves())
             {
                 this.Coordinate = item;
                 if (!IsUnderAttack(this.Coordinate))
                 {
-                    if (Point.Modul(item, king.Coordinate) >= 2d)
+                    if (CoordinatPoint.Modul(item, king.Coordinate) >= 2d)
                     {
                         if (AvailableMoves().Count == 14)
                         {
@@ -294,9 +294,9 @@ namespace ChessGameLibrary
             tempForItem = null;
             return false;
         }
-        public bool IsUnderAttack(Point point, Point point1)
+        public bool IsUnderAttack(CoordinatPoint CoordinatPoint, CoordinatPoint CoordinatPoint1)
         {
-            if (Point.Modul(point1, point) < 2d)
+            if (CoordinatPoint.Modul(CoordinatPoint1, CoordinatPoint) < 2d)
             {
                 return true;
             }

@@ -53,10 +53,10 @@ namespace ChessGameLibrary
             array = word.Split(" ");
             return (array[0], array[1]);
         }
-        public static bool BabyGame(this List<Point> list)
+        public static bool BabyGame(this List<CoordinatPoint> list)
         {
-            List<Point> tempOne = new List<Point>();
-            List<Point> tempTwo = new List<Point>();
+            List<CoordinatPoint> tempOne = new List<CoordinatPoint>();
+            List<CoordinatPoint> tempTwo = new List<CoordinatPoint>();
             if (list.Count >= 4)
             {
                 for (int i = list.Count - 1; i >= list.Count - 3; i -= 2)

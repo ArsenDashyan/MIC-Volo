@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Coordinats;
+﻿using Coordinats;
+using System.Collections.Generic;
 
-namespace ChessGameLibrary
-{ 
+namespace ChessGame
+{
     interface IAvailableMoves
     {
         List<CoordinatPoint> AvailableMoves();

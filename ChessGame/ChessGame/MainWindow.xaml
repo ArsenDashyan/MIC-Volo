@@ -21,7 +21,7 @@
 
         <Grid x:Name="GamePanel" Background="Black" Margin="18,18,18,18" Grid.RowSpan="2">
 
-            <Grid Name="Bord" Background="LightSkyBlue" Margin="20,20,20,20">
+            <Grid Name="Board" Background="LightSkyBlue" Margin="20,20,20,20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -42,258 +42,69 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="0">
-                    <Image Name="Image00">
-                    </Image>
-                </Border>
-                <Border Name="Bord2" Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="0">
-                    <Image Name="Image01">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="0">
-                    <Image Name="Image02">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="0">
-                    <Image Name="Image03">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="0">
-                    <Image Name="Image04">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="0">
-                    <Image Name="Image05">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="0">
-                    <Image Name="Image06">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="0">
-                    <Image Name="Image07">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="1">
-                    <Image Name="Image10">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="1">
-                    <Image Name="Image11">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="1">
-                    <Image Name="Image12">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="1">
-                    <Image Name="Image13">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="1">
-                    <Image Name="Image14">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="1">
-                    <Image Name="Image15">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="1">
-                    <Image Name="Image16">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="1">
-                    <Image Name="Image17">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="2">
-                    <Image Name="Image20">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="2">
-                    <Image Name="Image21">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="2">
-                    <Image Name="Image22">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="2">
-                    <Image Name="Image23">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="2">
-                    <Image Name="Image24">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="2">
-                    <Image Name="Image25">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="2">
-                    <Image Name="Image26">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="2">
-                    <Image Name="Image27">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="3">
-                    <Image Name="Image30">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="3">
-                    <Image Name="Image31">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="3">
-                    <Image Name="Image32">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="3">
-                    <Image Name="Image33">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="3">
-                    <Image Name="Image34">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="3">
-                    <Image Name="Image35">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="3">
-                    <Image Name="Image36">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="3">
-                    <Image Name="Image37">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="4">
-                    <Image Name="Image40">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="4">
-                    <Image Name="Image41">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="4">
-                    <Image Name="Image42">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="4">
-                    <Image Name="Image43">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="4">
-                    <Image Name="Image44">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="4">
-                    <Image Name="Image45">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="4">
-                    <Image Name="Image46">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="4">
-                    <Image Name="Image47">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="5">
-                    <Image Name="Image50">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="5">
-                    <Image Name="Image51">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="5">
-                    <Image Name="Image52">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="5">
-                    <Image Name="Image53">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="5">
-                    <Image Name="Image54">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="5">
-                    <Image Name="Image55">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="5">
-                    <Image Name="Image56">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="5">
-                    <Image Name="Image57">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="6">
-                    <Image Name="Image60">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="6">
-                    <Image Name="Image61">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="6">
-                    <Image Name="Image62">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="6">
-                    <Image Name="Image63">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="6">
-                    <Image Name="Image64">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="6">
-                    <Image Name="Image65">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="6">
-                    <Image Name="Image66">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="6">
-                    <Image Name="Image67">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="7">
-                    <Image Name="Image70">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="7">
-                    <Image Name="Image71">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="7">
-                    <Image Name="Image72">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="7">
-                    <Image Name="Image73">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="7">
-                    <Image Name="Image74">
-                    </Image>
-                </Border>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="7">
-                    <Image Name="Image75">
-                    </Image>
-                </Border>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="7">
-                    <Image Name="Image76">
-                    </Image>
-                </Border>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="0"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="0"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="0"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="0"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="0"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="0"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="0"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="0"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="1"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="1"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="1"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="1"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="1"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="1"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="1"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="1"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="2"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="2"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="2"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="2"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="2"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="2"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="2"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="2"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="3"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="3"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="3"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="3"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="3"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="3"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="3"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="3"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="4"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="4"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="4"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="4"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="4"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="4"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="4"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="4"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="5"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="5"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="5"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="5"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="5"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="5"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="5"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="5"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="6"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="6"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="6"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="6"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="6"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="6"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="6"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="6"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="7"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="7"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="7"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="7"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="7"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="7"/>
+                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="7"/>
                 <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="7">
                     <Image Name="Image77">
                     </Image>
@@ -303,32 +114,82 @@
         </Grid>
         <Grid x:Name="FigurPanel" Background="Black" Grid.Column="2" Margin="30,2,2,2" Grid.RowSpan="2">
             <Grid Background="LightSlateGray" Margin="2,2,2,2">
-                <TextBox x:Name="InputCoordinats" HorizontalAlignment="Left" Margin="10,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="90" Height="30"/>
-                <Label Content="Coordinats" HorizontalAlignment="Left" Margin="6,108,0,0" VerticalAlignment="Top"/>
-                <Button x:Name="PleacementB1" Content="Pleacement&#10003;" Background="YellowGreen" HorizontalAlignment="Left" Margin="130,130,0,0" VerticalAlignment="Top" Height="30" Width="90" FontSize="14" Click="PleacementB1_Click"/>
-                <Button x:Name="PlayB2" Content="Play&#10148;" Background="Green" HorizontalAlignment="Left" Margin="250,130,0,0" VerticalAlignment="Top" Height="30" Width="90" FontSize="16"/>
-                <Button x:Name="QueenBlackB1" Content="&#9819;" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Height="40" Width="40" FontSize="30"/>
-                <Button x:Name="QueenWhiteB2" Content="&#9813;" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="40" Width="40" FontSize="30" Click="QueenWhiteB2_Click"/>
-                <Button x:Name="KingBlackB3" Content="&#9818;" HorizontalAlignment="Left" Margin="70,60,0,0" VerticalAlignment="Top" Height="40" Width="40" FontSize="30"/>
-                <Button x:Name="KingWhiteB4" Content="&#9812;" HorizontalAlignment="Left" Margin="70,10,0,0" VerticalAlignment="Top" Height="40" Width="40" FontSize="30"/>
-                <Button x:Name="BishopBlackB5" Content="&#9821;" HorizontalAlignment="Left" Margin="130,60,0,0" VerticalAlignment="Top" Height="40" Width="40" FontSize="30"/>
-                <Button x:Name="BishopWhiteB6" Content="&#9815;" HorizontalAlignment="Left" Margin="130,10,0,0" VerticalAlignment="Top" Height="40" Width="40" FontSize="30"/>
-                <Button x:Name="RookBlackB7" Content="&#9820;" HorizontalAlignment="Left" Margin="190,60,0,0" VerticalAlignment="Top" Height="40" Width="40" FontSize="30"/>
-                <Button x:Name="RookWhiteB8" Content="&#9814;" HorizontalAlignment="Left" Margin="190,10,0,0" VerticalAlignment="Top" Height="40" Width="40" FontSize="30"/>
-                <Button x:Name="KnightBlackB9" Content="&#9822;" HorizontalAlignment="Left" Margin="240,60,0,0" VerticalAlignment="Top" Height="40" Width="40" FontSize="30"/>
-                <Button x:Name="KnightWhiteB10" Content="&#9816;" HorizontalAlignment="Left" Margin="240,10,0,0" VerticalAlignment="Top" Height="40" Width="40" FontSize="30"/>
-                <Button x:Name="PawnBlackB11" Content="&#9823;" HorizontalAlignment="Left" Margin="300,60,0,0" VerticalAlignment="Top" Height="40" Width="40" FontSize="20"/>
-                <Button x:Name="PawnWhiteB12" Content="&#9817;" HorizontalAlignment="Left" Margin="300,10,0,0" VerticalAlignment="Top" Height="40" Width="40" FontSize="30"/>
-                <ComboBox Name="SelectFigur" HorizontalAlignment="Left" Margin="10,180,0,0" VerticalAlignment="Top" Width="340" Height="30" FontSize="16" FontWeight="Bold" FontStyle="Italic">
-                    <ComboBoxItem>King</ComboBoxItem>
-                    <ComboBoxItem>Queen</ComboBoxItem>
-                    <ComboBoxItem>Bishop</ComboBoxItem>
-                    <ComboBoxItem>Knight</ComboBoxItem>
-                    <ComboBoxItem>Rook</ComboBoxItem>
-                    <ComboBoxItem>Pawn</ComboBoxItem>
+                <TextBox x:Name="InputCoordinatsLetter" HorizontalAlignment="Left" Margin="10,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                    <TextBox.Effect>
+                        <DropShadowEffect/>
+                    </TextBox.Effect>
+                </TextBox>
+                <Label Content="Letter     Number" HorizontalAlignment="Left" Margin="6,60,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                <Button x:Name="PleacementB1" Content="Pleacement✓" Background="Gray" HorizontalAlignment="Left" Margin="175,80,0,0" VerticalAlignment="Top" Height="30" Width="155" FontSize="14" Click="PleacementB1_Click">
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                </Button>
+                <Button x:Name="PlayB2" Content="Play➤" Background="LightGray" HorizontalAlignment="Left" Margin="240,130,0,0" VerticalAlignment="Top" Height="30" Width="90" FontSize="16" Click="PlayB2_Click">
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                </Button>
+                <ComboBox x:Name="SelectFigur" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="320" Height="30" FontSize="16" FontWeight="Bold" FontStyle="Normal">
+                    <ComboBox.Effect>
+                        <DropShadowEffect/>
+                    </ComboBox.Effect>
+                    <ComboBoxItem Content="King"/>
+                    <ComboBoxItem Content="Queen"/>
+                    <ComboBoxItem Content="Bishop"/>
+                    <ComboBoxItem Content="Knight"/>
+                    <ComboBoxItem Content="Rook"/>
+                    <ComboBoxItem Content="Pawn"/>
                 </ComboBox>
-                <CheckBox x:Name="CheckWhite" Content="White" HorizontalAlignment="Left" Margin="100,230,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" FontStyle="Italic"/>
-                <CheckBox x:Name="CheckBlack" Content="Black" HorizontalAlignment="Left" Margin="200,230,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" FontStyle="Italic"/>
+                <CheckBox x:Name="CheckWhite" Content="White" HorizontalAlignment="Left" Margin="110,79,0,0" VerticalAlignment="Top" FontWeight="Bold" FontStyle="Normal" RenderTransformOrigin="0.5,0.5" Foreground="#FFF5ECEC"/>
+                <CheckBox x:Name="CheckBlack" Content="Black" HorizontalAlignment="Left" Margin="110,96,0,0" VerticalAlignment="Top" FontWeight="Bold" FontStyle="Normal"/>
+                <TextBox x:Name="InputCoordinatsNumber" HorizontalAlignment="Left" Margin="60,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" RenderTransformOrigin="0.458,1.747" TextAlignment="Center">
+                    <TextBox.Effect>
+                        <DropShadowEffect/>
+                    </TextBox.Effect>
+                </TextBox>
+                <TextBox x:Name="InputCoordinatsLetter_Corrent" IsEnabled="False" HorizontalAlignment="Left" Margin="10,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                    <TextBox.Effect>
+                        <DropShadowEffect/>
+                    </TextBox.Effect>
+                </TextBox>
+                <TextBox x:Name="InputCoordinatsNumber_Corrent" IsEnabled="False" HorizontalAlignment="Left" Margin="75,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                    <TextBox.Effect>
+                        <DropShadowEffect/>
+                    </TextBox.Effect>
+                </TextBox>
+                <Label Content="Current Coordinates" HorizontalAlignment="Left" Margin="6,180,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                <TextBox x:Name="InputCoordinatsLetter_Selected" IsEnabled="False" HorizontalAlignment="Left" Margin="135,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                    <TextBox.Effect>
+                        <DropShadowEffect/>
+                    </TextBox.Effect>
+                </TextBox>
+                <TextBox x:Name="InputCoordinatsNumber_Selected" IsEnabled="False" HorizontalAlignment="Left" Margin="200,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                    <TextBox.Effect>
+                        <DropShadowEffect/>
+                    </TextBox.Effect>
+                </TextBox>
+                <Label Content="Target Coordinates" HorizontalAlignment="Left" Margin="132,180,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                <Button Name="InstalB3"  Content="Install" IsEnabled="False" HorizontalAlignment="Left" Margin="265,200,0,0" VerticalAlignment="Top" Width="65" Height="30" FontSize="14" FontWeight="Bold" Click="Button_Click">
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                </Button>
+                <Label Content="Select your color" HorizontalAlignment="Left" Margin="6,120,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                <CheckBox Name="PlayColorWhite" Content="White" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="#FFEEEAEA"/>
+                <CheckBox Name="PlayColorBlack" Content="Black" HorizontalAlignment="Left" Margin="111,150,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                <TextBox Name="MovesTextBox" HorizontalAlignment="Left" Margin="10,260,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="111" Height="277" TextAlignment="Center" FontWeight="Bold">
+                    <TextBox.Effect>
+                        <DropShadowEffect/>
+                    </TextBox.Effect>
+                </TextBox>
+                <Label Content="Moves" HorizontalAlignment="Left" Margin="6,238,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                <TextBox Name="MessageHandle" HorizontalAlignment="Left" Margin="135,260,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" FontWeight="Bold" Height="92" FontSize="14" TextAlignment="Center" Background="#FFE0D1D1" Foreground="#FF8F0720" SelectionBrush="#FF02111D">
+                    <TextBox.Effect>
+                        <DropShadowEffect/>
+                    </TextBox.Effect>
+                </TextBox>
+                <Label Content="Message" HorizontalAlignment="Left" Margin="132,238,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.184,0.233" FontWeight="Bold"/>
             </Grid>
         </Grid>
         <Label Content="A" HorizontalAlignment="Left" Margin="60,480,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FFAE0A0A" Height="29" Width="20"/>

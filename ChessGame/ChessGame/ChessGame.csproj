@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChessGameLibrary\ChessGameLibrary.csproj" />
+    <ProjectReference Include="..\Coordinats\Coordinats.csproj" />
+    <ProjectReference Include="..\Utility\Utility.csproj" />
   </ItemGroup>
 
 </Project>

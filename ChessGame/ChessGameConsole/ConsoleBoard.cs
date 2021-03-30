@@ -1,10 +1,6 @@
 ﻿using ChessGameLibrary;
 using Coordinats;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChessGameConsole
 {
@@ -24,7 +20,7 @@ namespace ChessGameConsole
             }
         }
 
-        public void SetFigurePosition(FigureBase figure, Point coordinate)
+        public void SetFigurePosition(FigureBase figure, CoordinatPoint coordinate)
         {
             if (figure == null)
                 throw new ArgumentNullException(nameof(figure));
@@ -41,5 +37,9 @@ namespace ChessGameConsole
 
         }
 
+        public void WriteGameText(string text)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

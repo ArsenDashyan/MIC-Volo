@@ -9,8 +9,10 @@ namespace ChessGameLibrary
 {
     public interface IChessBoard
     {
-        void SetFigurePosition(FigureBase figure, Point coordinate);
+        void SetFigurePosition(FigureBase figure, CoordinatPoint coordinate);
 
         void RemoveFigureFromBoard(FigureBase figure);
+
+        void WriteGameText(string text);
     }
 }
