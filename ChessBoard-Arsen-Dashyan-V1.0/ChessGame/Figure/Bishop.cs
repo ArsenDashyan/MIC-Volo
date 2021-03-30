@@ -1,112 +1,121 @@
 ﻿using System;
 using System.Collections.Generic;
-using Utility;
-using static Utility.KnightMove;
-using Coordinats;
 using System.Linq;
+using Coordinats;
 
 namespace ChessGame
 {
-    public class Knights : Model, ICrosswise, IRandomeMove
+   public class Bishop : Model, IDiagonal, IRandomeMove
     {
-        static int count = 1;
-        public Knights(string name, ConsoleColor color)
+        public Bishop(string name, ConsoleColor color)
         {
             Name = name;
             Color = color;
         }
 
         #region Move
-        public List<Point> Horizontal()
+        public List<Point> RightIndex()
         {
-            List<Point> result = new List<Point>();
+            List<Point> arr = new List<Point>();
             var model = Manager.models.Where(c => c != this).ToList();
-            if (this.point.Y + 2 >= 1 && this.point.Y + 2 <= 8)
+            int sum = this.point.X + this.point.Y;
+            for (int i = 1; i <= 8; i++)
             {
-                if (this.point.X - 1 >= 1 && this.point.X - 1 <= 8)
-                    result.Add(new Point(this.point.X - 1, this.point.Y + 2));
-                if (this.point.X + 1 <= 8 && this.point.X + 1 >= 1)
-                    result.Add(new Point(this.point.X + 1, this.point.Y + 2));
-            }
-            if (this.point.Y - 2 <= 8 && this.point.Y - 2 >= 1)
-            {
-                if (this.point.X - 1 >= 1 && this.point.X - 1 <= 8)
-                    result.Add(new Point(this.point.X - 1, this.point.Y - 2));
-                if (this.point.X + 1 <= 8 && this.point.X + 1 >= 1)
-                    result.Add(new Point(this.point.X + 1, this.point.Y - 2));
-            }
-            foreach (var item in model)
-            {
-                if (result.Contains(item.point))
+                for (int j = 1; j <= 8; j++)
                 {
-                    if (item.Color == this.Color)
+                    if (i + j == sum)
                     {
-                        if (result.IndexOf(this.point) < result.IndexOf(item.point))
-                            result = result.Where(c => result.IndexOf(c) < result.IndexOf(item.point)).ToList();
-                        else
-                            result = result.Where(c => result.IndexOf(c) > result.IndexOf(item.point)).ToList();
-                    }
-                    else
-                    {
-                        if (result.IndexOf(this.point) < result.IndexOf(item.point))
-                            result = result.Where(c => result.IndexOf(c) <= result.IndexOf(item.point)).ToList();
-                        else
-                            result = result.Where(c => result.IndexOf(c) >= result.IndexOf(item.point)).ToList();
+                        Point pointTemp = new Point(i, j);
+                        arr.Add(pointTemp);
                     }
                 }
             }
-            return result;
-        }
-        public List<Point> Vertical()
-        {
-            List<Point> result = new List<Point>();
-            var model = Manager.models.Where(c => c != this).ToList();
-            if (this.point.Y + 1 >= 1 && this.point.Y + 1 <= 8)
-            {
-                if (this.point.X - 2 >= 1 && this.point.X - 2 <= 8)
-                    result.Add(new Point(this.point.X - 2, this.point.Y + 1));
-                if (this.point.X + 2 <= 8 && this.point.X + 2 >= 1)
-                    result.Add(new Point(this.point.X + 2, this.point.Y + 1));
-            }
-            if (this.point.Y - 1 <= 8 && this.point.Y - 1 >= 1)
-            {
-                if (this.point.X - 2 >= 1 && this.point.X - 2 <= 8)
-                    result.Add(new Point(this.point.X - 2, this.point.Y - 1));
-                if (this.point.X + 2 <= 8 && this.point.X + 2 >= 1)
-                    result.Add(new Point(this.point.X + 2, this.point.Y - 1));
-            }
             foreach (var item in model)
             {
-                if (result.Contains(item.point))
+                if (arr.Contains(item.point))
                 {
                     if (item.Color == this.Color)
                     {
-                        if (result.IndexOf(this.point) < result.IndexOf(item.point))
-                            result = result.Where(c => result.IndexOf(c) < result.IndexOf(item.point)).ToList();
+                        if (arr.IndexOf(this.point) < arr.IndexOf(item.point))
+                        {
+                            arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.point)).ToList();
+                        }
                         else
-                            result = result.Where(c => result.IndexOf(c) > result.IndexOf(item.point)).ToList();
+                        {
+                            arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.point)).ToList();
+                        }
                     }
                     else
                     {
-                        if (result.IndexOf(this.point) < result.IndexOf(item.point))
-                            result = result.Where(c => result.IndexOf(c) <= result.IndexOf(item.point)).ToList();
+                        if (arr.IndexOf(this.point) < arr.IndexOf(item.point))
+                        {
+                            arr = arr.Where(c => arr.IndexOf(c) <= arr.IndexOf(item.point)).ToList();
+                        }
                         else
-                            result = result.Where(c => result.IndexOf(c) >= result.IndexOf(item.point)).ToList();
+                        {
+                            arr = arr.Where(c => arr.IndexOf(c) >= arr.IndexOf(item.point)).ToList();
+                        }
                     }
                 }
             }
-            return result;
+            arr.Remove(this.point);
+            return arr;
         }
-        public List<Point> Crosswise()
+        public List<Point> LeftIndex()
         {
-            var arrayHor = this.Horizontal();
-            var arrayVert = this.Vertical();
-            arrayHor.AddRange(arrayVert);
-            return arrayHor;
+            List<Point> arr = new List<Point>();
+            int sub = this.point.X - this.point.Y;
+            var model = Manager.models.Where(c => c != this).ToList();
+
+            for (int i = 1; i <= 8; i++)
+            {
+                for (int j = 1; j <= 8; j++)
+                {
+                    if (i - j == sub)
+                    {
+                        Point pointTemp = new Point(i, j);
+                        arr.Add(pointTemp);
+                    }
+                }
+            }
+            foreach (var item in model)
+            {
+                if (arr.Contains(item.point))
+                {
+                    if (item.Color ==this.Color)
+                    {
+                        if (arr.IndexOf(this.point) < arr.IndexOf(item.point))
+                        {
+                            arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.point)).ToList();
+                        }
+                        else
+                        {
+                            arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.point)).ToList();
+                        }
+                    }
+                    else
+                    {
+                        if (arr.IndexOf(this.point) < arr.IndexOf(item.point))
+                        {
+                            arr = arr.Where(c => arr.IndexOf(c) <= arr.IndexOf(item.point)).ToList();
+                        }
+                        else
+                        {
+                            arr = arr.Where(c => arr.IndexOf(c) >= arr.IndexOf(item.point)).ToList();
+                        }
+                    }
+                }
+            }
+            arr.Remove(this.point);
+            return arr;
         }
         public List<Point> AvailableMoves()
         {
-            return this.Crosswise();
+            var result = new List<Point>();
+            result.AddRange(RightIndex());
+            result.AddRange(LeftIndex());
+            result.Remove(this.point);
+            return result;
         }
 
         #endregion
@@ -143,7 +152,9 @@ namespace ChessGame
             {
                 IAvailableMoves tempfigur = (IAvailableMoves)item;
                 if (tempfigur.AvailableMoves().Contains(point))
+                {
                     return true;
+                }
             }
             return false;
         }
@@ -246,51 +257,6 @@ namespace ChessGame
             this.point = temp;
             tempForItem = null;
             return false;
-        }
-        public int MinCount(Point point)
-        {
-            var knightMoves = KnightMove.Crosswise(this.point);
-            var endMoves = KnightMove.Crosswise(point);
-            if (knightMoves.Contains((point)))
-            {
-                return count;
-            }
-            else
-            {
-                count++;
-                if (KnightMove.Equals(this.point,point))
-                {
-                    return count;
-                }
-                else
-                {
-                    count++;
-                    if (KnightMove.Equals(knightMoves, point))
-                    {
-                        return count;
-                    }
-                    else
-                    {
-                        count++;
-                        if (KnightMove.Equals(knightMoves, endMoves))
-                        {
-                            return count;
-                        }
-                        else
-                        {
-                            count++;
-                            if (KnightMove.EqualsEnd(knightMoves, endMoves))
-                            {
-                                return count;
-                            }
-                            else
-                            {
-                                return 6;
-                            }
-                        }
-                    }
-                }
-            }
         }
         public bool IsUnderAttack(Point point, Point point1)
         {

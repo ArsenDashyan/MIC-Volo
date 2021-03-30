@@ -1,7 +1,7 @@
 ﻿using System;
 using ChessGame;
 
-Manager.PlayNew();
+Manager.PlayNewWithShaxAndBox();
 
 Console.ReadLine();
 

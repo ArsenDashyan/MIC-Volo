@@ -10,9 +10,9 @@ namespace ChessGame
         public static bool FigurSelection(out int result)
         {
             View.ShowFigurs(10);
-            Console.SetCursorPosition(40, 8);
+            Console.SetCursorPosition(40, 10);
             Console.WriteLine("                                                       ");
-            Console.SetCursorPosition(40, 8);
+            Console.SetCursorPosition(40, 10);
             string exit = Console.ReadLine();
             if (exit.ToLower() != "e")
             {
@@ -37,9 +37,9 @@ namespace ChessGame
         public static bool FigurSelection(int number, out int result)
         {
             View.ShowFigurs(number);
-            Console.SetCursorPosition(40, 8);
+            Console.SetCursorPosition(40, 10);
             Console.WriteLine("                                                       ");
-            Console.SetCursorPosition(40, 8);
+            Console.SetCursorPosition(40, 10);
             string exit = Console.ReadLine();
             if (exit.ToLower() != "e")
             {
@@ -67,10 +67,7 @@ namespace ChessGame
             var tuplFigur = corrent.StringSplit();
 
             var tupl = InputCoordinats(tuplFigur.Item1, tuplFigur.Item2);
-            if (corrent != "Black King")
-            {
                 models.Add(StringToModel(corrent));
-            }
             StringToModel(corrent).SetPosition(tupl);
         }
         public static Model StringToModel(string word)
@@ -91,6 +88,23 @@ namespace ChessGame
                     return queen;
                 case "knightWhite":
                     return knight;
+                case "bishoplWhite":
+                    return bishopL;
+                case "bishoprWhite":
+                    return bishopL;
+                case "rooklBlack":
+                    return rookBlackL;
+            }
+            return null;
+        }
+        public static Model StringToModelForBlack(string word)
+        {
+            switch (word.ToLower())
+            {
+                case "rookl":
+                    return rookBlackL;
+                case "king":
+                    return kingBlack;
             }
             return null;
         }
@@ -102,7 +116,7 @@ namespace ChessGame
             {
                 Placement(result);
                 count++;
-                while (count != 6)
+                while (count != View.figurs.Count)
                 {
                     isFigur = FigurSelection(result, out int res);
                     if (isFigur)
@@ -119,19 +133,19 @@ namespace ChessGame
         }
         public static Point InputCoordinats(string figureColor, string figureName)
         {
-            Console.SetCursorPosition(40, 10);
+            Console.SetCursorPosition(40, 12);
             Console.WriteLine("                                                       ");
-            Console.SetCursorPosition(40, 10);
+            Console.SetCursorPosition(40, 12);
             Console.WriteLine($"Please enter a position for {figureColor} {figureName}");
-            Console.SetCursorPosition(40, 11);
+            Console.SetCursorPosition(40, 13);
             Console.WriteLine("                                                       ");
-            Console.SetCursorPosition(40, 11);
+            Console.SetCursorPosition(40, 13);
             string input = Console.ReadLine();
             int i = input[0].CharToInt();
             int j = Convert.ToInt32(input[1].ToString());
             Point point = new Point(i, j);
             bool isEqual;
-            if (figureColor == "Black")
+            if (figureColor == "Black" && figureName.ToLower() == "king")
                 isEqual = IsKingAction(point);
             else
                 isEqual = (InsideBord(point) && !GetPosition().Contains(point));
@@ -144,11 +158,43 @@ namespace ChessGame
             }
             while (!isEqual)
             {
-                Console.SetCursorPosition(40, 13);
+                Console.SetCursorPosition(40, 15);
                 Console.WriteLine("                                                       ");
-                Console.SetCursorPosition(40, 13);
+                Console.SetCursorPosition(40, 15);
                 Console.WriteLine("Non correct position!");
                 point = InputCoordinats(figureColor, figureName);
+                break;
+            }
+            return point;
+        }
+        public static Point InputCoordinatsForGame(string figureName)
+        {
+            Console.SetCursorPosition(40, 2);
+            Console.WriteLine("                                                       ");
+            Console.SetCursorPosition(40, 2);
+            Console.WriteLine($"Please enter a position for Black {figureName}");
+            Console.SetCursorPosition(40, 3);
+            Console.WriteLine("                                                       ");
+            Console.SetCursorPosition(40, 3);
+            IAvailableMoves blackFigur = (IAvailableMoves)StringToModelForBlack(figureName);
+            string input = Console.ReadLine();
+            int i = input[0].CharToInt();
+            int j = Convert.ToInt32(input[1].ToString());
+            Point point = new Point(i, j);
+            bool isEqual;
+            if (figureName.ToLower() == "king")
+                isEqual = IsKingAction(point);
+            else
+                isEqual = InsideBord(point) && blackFigur.AvailableMoves().Contains(point);
+            if (isEqual)
+                    return point;
+            while (!isEqual)
+            {
+                Console.SetCursorPosition(40, 5);
+                Console.WriteLine("                                                       ");
+                Console.SetCursorPosition(40, 5);
+                Console.WriteLine("Non correct position!");
+                point = InputCoordinatsForGame(figureName);
                 break;
             }
             return point;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Coordinats;
 
-namespace Utility
+namespace ChessGameLibrary
 {
     public static class Helper
     {
@@ -57,9 +57,9 @@ namespace Utility
         {
             List<Point> tempOne = new List<Point>();
             List<Point> tempTwo = new List<Point>();
-            if (list.Count>=4)
+            if (list.Count >= 4)
             {
-                for (int i = list.Count-1; i >= list.Count - 3; i-=2)
+                for (int i = list.Count - 1; i >= list.Count - 3; i -= 2)
                 {
                     tempOne.Add(list[i]);
                 }
@@ -72,9 +72,10 @@ namespace Utility
             var tempEndTwo = tempTwo.Distinct().ToList();
             if (tempEndOne.Count == 1 && tempEndTwo.Count == 1)
             {
-                    return true;
+                return true;
             }
             return false;
         }
+        
     }
 }

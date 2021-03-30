@@ -21,6 +21,16 @@ namespace Coordinats
         {
             return X ^ Y;
         }
+
+#nullable enable
+        public static bool operator ==(Point? p1, Point? p2)
+        {
+            return p1?.X == p2?.X && p1?.Y == p2?.Y;
+        }
+        public static bool operator !=(Point? p1, Point? p2)
+        {
+            return !(p1?.X == p2?.X && p1?.Y == p2?.Y);
+        }
         public static double Modul(Point point, Point point1)
         {
             return Math.Sqrt((point1.X - point.X) * (point1.X - point.X) +
