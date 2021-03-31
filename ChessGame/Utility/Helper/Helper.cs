@@ -77,6 +77,31 @@ namespace Utility
         }
 
         /// <summary>
+        /// Check current king position half
+        /// </summary>
+        /// <param name="coordinat">Current king coordinate</param>
+        /// <returns>Return the half with inside current king</returns>
+        public static int GetCurrentKingHalf(this CoordinatPoint coordinat)
+        {
+            if (coordinat.X >=5 && coordinat.Y <=4)
+            {
+                return 1;
+            }
+            else if (coordinat.X >= 5 && coordinat.Y >= 5)
+            {
+                return 4;
+            }
+            else if (coordinat.X <= 4 && coordinat.Y <= 4)
+            {
+                return 2;
+            }
+            else
+            {
+                return 3;
+            }
+        }
+
+        /// <summary>
         /// Universal filtr method for IEnumerable collections
         /// </summary>
         /// <typeparam name="T">Type for collectios</typeparam>
@@ -92,6 +117,14 @@ namespace Utility
             }
             return false;
         }
+
+        /// <summary>
+        /// Universal filtr method for IEnumerable collections
+        /// </summary>
+        /// <typeparam name="T">Type for collectios</typeparam>
+        /// <param name="list">Collections name</param>
+        /// <param name="func">Funcon for filtr</param>
+        /// <returns></returns>
         public static IEnumerable<T> FiltrFor<T>(this IEnumerable<T> list, Func<T, bool> func)
         {
             foreach (var item in list)

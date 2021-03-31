@@ -52,25 +52,27 @@ namespace ChessGame
                 MessageHandle.Text = "Mate";
         }
 
+        #region Block Methods
+
         /// <summary>
-        /// Change the positon with block when king is min available move and king inside in 2 half
+        /// Change the positon with block when king is min available move and king inside in one half
         /// </summary>
         /// <param name="figure">Figure instance</param>
         /// <param name="keyValuePair">The out parametr</param>
         /// <returns>Reteurn the coordinate and king available move count ande figure</returns>
-        private bool GetMinMovesWithBlock(BaseFigure figure, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair)
+        private bool GetMinMovesWithBlockInOneHaalf(BaseFigure figure, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair)
         {
             var countList = new Dictionary<CoordinatPoint, (int, BaseFigure)>();
             IRandomMove tempFigur = (IRandomMove)figure;
             CoordinatPoint temp = figure.Coordinate;
-            int targetX = CurentKing.Coordinate.X - 1 == -1 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X - 1;
+            int targetX = CurentKing.Coordinate.X + 1 == 8 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X + 1;
             int targetY = CurentKing.Coordinate.Y - 1 == -1 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y - 1;
-            foreach (var item in tempFigur.AvailableMoves().FiltrFor(c => c.X >= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
+            foreach (var item in tempFigur.AvailableMoves().FiltrFor(c => c.X <= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
             {
                 figure.Coordinate = item;
                 if (!tempFigur.IsUnderAttack(figure.Coordinate))
                 {
-                    if (GetCurrentKingMoves().Filtr(c => c.X <= targetX && c.Y <= targetY) && !tempFigur.AvailableMoves().Contains(CurentKing.Coordinate))
+                    if (GetCurrentKingMoves().Filtr(c => c.X >= targetX | c.Y <= targetY) && !tempFigur.AvailableMoves().Contains(CurentKing.Coordinate))
                         countList.Add(item, (GetCurrentKingMoves().Count, figure));
                 }
             }
@@ -88,22 +90,111 @@ namespace ChessGame
         }
 
         /// <summary>
-        /// Check the available moves for current king 
+        /// Change the positon with block when king is min available move and king inside in two half
         /// </summary>
-        /// <returns>Return the list</returns>
-        private List<CoordinatPoint> GetCurrentKingMoves()
+        /// <param name="figure">Figure instance</param>
+        /// <param name="keyValuePair">The out parametr</param>
+        /// <returns>Reteurn the coordinate and king available move count ande figure</returns>
+        private bool GetMinMovesWithBlockInTwoHaalf(BaseFigure figure, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair)
         {
-            IRandomMove currentKing = (IRandomMove)CurentKing;
-            List<CoordinatPoint> result = new List<CoordinatPoint>();
-            foreach (var item in currentKing.AvailableMoves())
+            var countList = new Dictionary<CoordinatPoint, (int, BaseFigure)>();
+            IRandomMove tempFigur = (IRandomMove)figure;
+            CoordinatPoint temp = figure.Coordinate;
+            int targetX = CurentKing.Coordinate.X - 1 == -1 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X - 1;
+            int targetY = CurentKing.Coordinate.Y - 1 == -1 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y - 1;
+            foreach (var item in tempFigur.AvailableMoves().FiltrFor(c => c.X >= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
             {
-                if (!DangerPosition(CurentKing).Contains(item))
+                figure.Coordinate = item;
+                if (!tempFigur.IsUnderAttack(figure.Coordinate))
                 {
-                    result.Add(item);
+                    if (GetCurrentKingMoves().Filtr(c => c.X <= targetX | c.Y <= targetY) && !tempFigur.AvailableMoves().Contains(CurentKing.Coordinate))
+                        countList.Add(item, (GetCurrentKingMoves().Count, figure));
                 }
             }
-            return result;
+            figure.Coordinate = temp;
+            if (countList.Count != 0)
+            {
+                keyValuePair = countList.Where(k => k.Value.Item1 != 0).OrderBy(k => k.Value.Item1).FirstOrDefault();
+                return true;
+            }
+            else
+            {
+                keyValuePair = new KeyValuePair<CoordinatPoint, (int, BaseFigure)>();
+                return false;
+            }
         }
+
+        /// <summary>
+        /// Change the positon with block when king is min available move and king inside in three half
+        /// </summary>
+        /// <param name="figure">Figure instance</param>
+        /// <param name="keyValuePair">The out parametr</param>
+        /// <returns>Reteurn the coordinate and king available move count ande figure</returns>
+        private bool GetMinMovesWithBlockInThreeHaalf(BaseFigure figure, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair)
+        {
+            var countList = new Dictionary<CoordinatPoint, (int, BaseFigure)>();
+            IRandomMove tempFigur = (IRandomMove)figure;
+            CoordinatPoint temp = figure.Coordinate;
+            int targetX = CurentKing.Coordinate.X - 1 == -1 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X - 1;
+            int targetY = CurentKing.Coordinate.Y + 1 == 8 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y + 1;
+            foreach (var item in tempFigur.AvailableMoves().FiltrFor(c => c.X >= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
+            {
+                figure.Coordinate = item;
+                if (!tempFigur.IsUnderAttack(figure.Coordinate))
+                {
+                    if (GetCurrentKingMoves().Filtr(c => c.X <= targetX | c.Y >= targetY) && !tempFigur.AvailableMoves().Contains(CurentKing.Coordinate))
+                        countList.Add(item, (GetCurrentKingMoves().Count, figure));
+                }
+            }
+            figure.Coordinate = temp;
+            if (countList.Count != 0)
+            {
+                keyValuePair = countList.Where(k => k.Value.Item1 != 0).OrderBy(k => k.Value.Item1).FirstOrDefault();
+                return true;
+            }
+            else
+            {
+                keyValuePair = new KeyValuePair<CoordinatPoint, (int, BaseFigure)>();
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Change the positon with block when king is min available move and king inside in four half
+        /// </summary>
+        /// <param name="figure">Figure instance</param>
+        /// <param name="keyValuePair">The out parametr</param>
+        /// <returns>Reteurn the coordinate and king available move count ande figure</returns>
+        private bool GetMinMovesWithBlockInFourHaalf(BaseFigure figure, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair)
+        {
+            var countList = new Dictionary<CoordinatPoint, (int, BaseFigure)>();
+            IRandomMove tempFigur = (IRandomMove)figure;
+            CoordinatPoint temp = figure.Coordinate;
+            int targetX = CurentKing.Coordinate.X + 1 == 8 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X + 1;
+            int targetY = CurentKing.Coordinate.Y + 1 == 8 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y + 1;
+            foreach (var item in tempFigur.AvailableMoves().FiltrFor(c => c.X <= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
+            {
+                figure.Coordinate = item;
+                if (!tempFigur.IsUnderAttack(figure.Coordinate))
+                {
+                    if (GetCurrentKingMoves().Filtr(c => c.X >= targetX | c.Y >= targetY) && !tempFigur.AvailableMoves().Contains(CurentKing.Coordinate))
+                        countList.Add(item, (GetCurrentKingMoves().Count, figure));
+                }
+            }
+            figure.Coordinate = temp;
+            if (countList.Count != 0)
+            {
+                keyValuePair = countList.Where(k => k.Value.Item1 != 0).OrderBy(k => k.Value.Item1).FirstOrDefault();
+                return true;
+            }
+            else
+            {
+                keyValuePair = new KeyValuePair<CoordinatPoint, (int, BaseFigure)>();
+                return false;
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// Change the positon with shax when king is min available move
@@ -203,10 +294,28 @@ namespace ChessGame
             var modelNew = models.Where(c => c.Color != currentFigureColor).Reverse().ToList();
             var list = new List<KeyValuePair<CoordinatPoint, (int, BaseFigure)>>();
             IRandomMove currentKing = (IRandomMove)CurentKing;
+            int currentKingHalf = CurentKing.Coordinate.GetCurrentKingHalf();
             foreach (var figur in modelNew)
             {
-                if (GetMinMovesWithBlock(figur, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair))
-                    list.Add(keyValuePair);
+                switch (currentKingHalf)
+                {
+                    case 1:
+                        if (GetMinMovesWithBlockInOneHaalf(figur, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair1))
+                        list.Add(keyValuePair1);
+                        break;
+                    case 2:
+                        if (GetMinMovesWithBlockInTwoHaalf(figur, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair2))
+                            list.Add(keyValuePair2);
+                        break;
+                    case 3:
+                        if (GetMinMovesWithBlockInThreeHaalf(figur, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair3))
+                            list.Add(keyValuePair3);
+                        break;
+                    case 4:
+                        if (GetMinMovesWithBlockInFourHaalf(figur, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair4))
+                            list.Add(keyValuePair4);
+                        break;
+                }
             }
             list = list.Where(c => c.Value.Item1 != 0).ToList();
             var minMoves = list.OrderBy(c => c.Value.Item1).FirstOrDefault();
@@ -316,6 +425,24 @@ namespace ChessGame
         }
 
         /// <summary>
+        /// Check the available moves for current king 
+        /// </summary>
+        /// <returns>Return the list</returns>
+        private List<CoordinatPoint> GetCurrentKingMoves()
+        {
+            IRandomMove currentKing = (IRandomMove)CurentKing;
+            List<CoordinatPoint> result = new List<CoordinatPoint>();
+            foreach (var item in currentKing.AvailableMoves())
+            {
+                if (!DangerPosition(CurentKing).Contains(item))
+                {
+                    result.Add(item);
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
         /// Check the danger position for current king
         /// </summary>
         /// <param name="model">King instance withe or Black</param>
@@ -332,5 +459,6 @@ namespace ChessGame
             }
             return result;
         }
+
     }
 }
