@@ -59,7 +59,7 @@ namespace Coordinats
         public static double Modul(CoordinatPoint CoordinatPoint, CoordinatPoint CoordinatPoint1)
         {
             return Math.Sqrt((CoordinatPoint1.X - CoordinatPoint.X) * (CoordinatPoint1.X - CoordinatPoint.X) +
-                            (CoordinatPoint1.Y - CoordinatPoint.Y) * (CoordinatPoint1.Y - CoordinatPoint.Y));
+                             (CoordinatPoint1.Y - CoordinatPoint.Y) * (CoordinatPoint1.Y - CoordinatPoint.Y));
         }
     }
 }

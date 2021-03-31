@@ -1,4 +1,5 @@
 ﻿using Coordinats;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -165,11 +166,7 @@ namespace ChessGame
         }
         public bool IsUnderAttack(CoordinatPoint CoordinatPoint, CoordinatPoint CoordinatPoint1)
         {
-            if (CoordinatPoint.Modul(CoordinatPoint1, CoordinatPoint) < 2d)
-            {
-                return true;
-            }
-            return false;
+            return CoordinatPoint.Modul(CoordinatPoint1, CoordinatPoint) <= Math.Sqrt(2d);
         }
         public bool IsProtected()
         {

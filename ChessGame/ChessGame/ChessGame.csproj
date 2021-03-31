@@ -8,12 +8,44 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Black.Bishop.png" />
+    <None Remove="Resources\Black.King.png" />
+    <None Remove="Resources\Black.Knight.png" />
+    <None Remove="Resources\Black.Pawn.png" />
+    <None Remove="Resources\Black.Queen.png" />
+    <None Remove="Resources\Black.Rook.png" />
+    <None Remove="Resources\White.Bishop.png" />
+    <None Remove="Resources\White.King.png" />
+    <None Remove="Resources\White.Knight.png" />
+    <None Remove="Resources\White.Pawn.png" />
+    <None Remove="Resources\White.Queen.png" />
+    <None Remove="Resources\White.Rook.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Coordinats\Coordinats.csproj" />
     <ProjectReference Include="..\Utility\Utility.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Black.Bishop.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Black.King.png" />
+    <Resource Include="Resources\Black.Knight.png" />
+    <Resource Include="Resources\Black.Pawn.png" />
+    <Resource Include="Resources\Black.Queen.png" />
+    <Resource Include="Resources\Black.Rook.png" />
+    <Resource Include="Resources\White.Bishop.png" />
+    <Resource Include="Resources\White.King.png" />
+    <Resource Include="Resources\White.Knight.png" />
+    <Resource Include="Resources\White.Pawn.png" />
+    <Resource Include="Resources\White.Queen.png" />
+    <Resource Include="Resources\White.Rook.png" />
   </ItemGroup>
 
 </Project>

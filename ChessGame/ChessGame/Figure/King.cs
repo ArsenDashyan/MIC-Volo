@@ -13,14 +13,6 @@ namespace ChessGame
             Color = color;
         }
         #region Move
-        public bool IsMove(CoordinatPoint CoordinatPoint)
-        {
-            if (this.Coordinate == null)
-            {
-                return true;
-            }
-            return (Math.Abs((int)this.Coordinate?.X - CoordinatPoint.X) <= 1 && Math.Abs((int)this.Coordinate?.Y - CoordinatPoint.Y) <= 1);
-        }
         public List<CoordinatPoint> Horizontal()
         {
             List<CoordinatPoint> arr = new List<CoordinatPoint>();
@@ -308,11 +300,7 @@ namespace ChessGame
         }
         public bool IsUnderAttack(CoordinatPoint CoordinatPoint, CoordinatPoint CoordinatPoint1)
         {
-            if (CoordinatPoint.Modul(CoordinatPoint1, CoordinatPoint) < 2d)
-            {
-                return true;
-            }
-            return false;
+            return CoordinatPoint.Modul(CoordinatPoint1, CoordinatPoint) <= Math.Sqrt(2d);
         }
     }
 }

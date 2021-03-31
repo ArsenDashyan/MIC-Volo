@@ -42,9 +42,9 @@ namespace ChessGame
         {
             BitmapImage bitmap = new BitmapImage();
             bitmap.BeginInit();
-            bitmap.UriSource = new Uri(GetCurrentFigureForPleacement());
+            bitmap.UriSource = new Uri(GetCurrentFigureColor(), UriKind.Relative);
             bitmap.EndInit();
-            string[] tempFigure = GetCurrentFigureForPleacement().Split('\\');
+            string[] tempFigure = GetCurrentFigureColor().Split('/');
             string color = tempFigure[tempFigure.Length - 1].Split('.')[0];
             string figure = tempFigure[tempFigure.Length - 1].Split('.')[1];
             if (GetCoordinatsForPleacement(out CoordinatPoint CoordinatPoint) && GetFigureBase(figure, color, out BaseFigure temp))
@@ -108,22 +108,22 @@ namespace ChessGame
             PlayB2.IsEnabled = false;
             if (GetCurrentFigure())
             {
-                Manager manager = new Manager(currentListForBabyGame, CurentKing, models, currentFigureColor, Board, MovesTextBox, MessageHandle);
+                Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor, Board, MovesTextBox, MessageHandle);
                 manager.Logic();
             }
 
         }
-        private string GetCurrentFigureForPleacement()
+        private string GetCurrentFigureColor()
         {
             string str = SelectFigur.Text;
             string result = string.Empty;
             if (CheckWhite.IsChecked == true)
             {
-                result = WhiteFigurePath(str);
+                result = str.WhiteFigurePath();
             }
             else if (CheckBlack.IsChecked == true)
             {
-                result = BlackFigurePath(str);
+                result = str.BlackFigurePath();
             }
             else
             {
@@ -338,46 +338,6 @@ namespace ChessGame
                         return false;
                 }
             }
-        }
-
-        /// <summary>
-        /// Change the white figure image
-        /// </summary>
-        /// <param name="str">Figure</param>
-        /// <returns>Return image path for figure instance</returns>
-        private string WhiteFigurePath(string str)
-        {
-            string result = str switch
-            {
-                "Queen" => @"C:\Users\arsen\source\repos\VoloMic\HomeWork\ChessGame\Picturs\White.Queen.png",
-                "King" => @"C:\Users\arsen\source\repos\VoloMic\HomeWork\ChessGame\Picturs\White.King.png",
-                "Bishop" => @"C:\Users\arsen\source\repos\VoloMic\HomeWork\ChessGame\Picturs\White.Bishop.png",
-                "Rook" => @"C:\Users\arsen\source\repos\VoloMic\HomeWork\ChessGame\Picturs\White.Rook.png",
-                "Knight" => @"C:\Users\arsen\source\repos\VoloMic\HomeWork\ChessGame\Picturs\White.Knight.png",
-                "Pawn" => @"C:\Users\arsen\source\repos\VoloMic\HomeWork\ChessGame\Picturs\White.Pawn.png",
-                _ => ""
-            };
-            return result;
-        }
-
-        /// <summary>
-        /// Change the black figure image
-        /// </summary>
-        /// <param name="str">Figure</param>
-        /// <returns>Return image path for figure instance</returns>
-        private string BlackFigurePath(string str)
-        {
-            string result = str switch
-            {
-                "Queen" => @"C:\Users\arsen\source\repos\VoloMic\HomeWork\ChessGame\Picturs\Black.Queen.png",
-                "King" => @"C:\Users\arsen\source\repos\VoloMic\HomeWork\ChessGame\Picturs\Black.King.png",
-                "Bishop" => @"C:\Users\arsen\source\repos\VoloMic\HomeWork\ChessGame\Picturs\Black.Bishop.png",
-                "Rook" => @"C:\Users\arsen\source\repos\VoloMic\HomeWork\ChessGame\Picturs\Black.Rook.png",
-                "Knight" => @"C:\Users\arsen\source\repos\VoloMic\HomeWork\ChessGame\Picturs\Black.Knight.png",
-                "Pawn" => @"C:\Users\arsen\source\repos\VoloMic\HomeWork\ChessGame\Picturs\Black.Pawn.png",
-                _ => ""
-            };
-            return result;
         }
 
         /// <summary>

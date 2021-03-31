@@ -1,4 +1,5 @@
 ﻿using Coordinats;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,6 +12,7 @@ namespace ChessGame
             Name = name;
             Color = color;
         }
+
         #region Move
         public List<CoordinatPoint> Vertical()
         {
@@ -86,7 +88,6 @@ namespace ChessGame
         }
         #endregion
         #endregion
-
         public bool IsUnderAttack(CoordinatPoint CoordinatPoint)
         {
             var modelNew = othereFigures.Where(c => c.Color != this.Color).ToList();
@@ -228,14 +229,8 @@ namespace ChessGame
         }
         public bool IsUnderAttack(CoordinatPoint CoordinatPoint, CoordinatPoint CoordinatPoint1)
         {
-            if (CoordinatPoint.Modul(CoordinatPoint1, CoordinatPoint) < 2d)
-            {
-                return true;
-            }
-            return false;
+            return CoordinatPoint.Modul(CoordinatPoint1, CoordinatPoint) <= Math.Sqrt(2d);
         }
-
-        
     }
 }
 

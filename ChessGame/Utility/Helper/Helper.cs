@@ -133,5 +133,45 @@ namespace Utility
                   yield  return item;
             }
         }
+
+        /// <summary>
+        /// Change the white figure image
+        /// </summary>
+        /// <param name="str">Figure</param>
+        /// <returns>Return image path for figure instance</returns>
+        public static string WhiteFigurePath(this string str)
+        {
+            string result = str switch
+            {
+                "Queen" => "Resources/White.Queen.png",
+                "King" => "Resources/White.King.png",
+                "Bishop" => "Resources/White.Bishop.png",
+                "Rook" => "Resources/White.Rook.png",
+                "Knight" => "Resources/White.Knight.png",
+                "Pawn" => "Resources/White.Pawn.png",
+                _ => ""
+            };
+            return result;
+        }
+
+        /// <summary>
+        /// Change the black figure image
+        /// </summary>
+        /// <param name="str">Figure</param>
+        /// <returns>Return image path for figure instance</returns>
+        public static string BlackFigurePath(this string str)
+        {
+            string result = str switch
+            {
+                "Queen" => "Resources/Black.Queen.png",
+                "King" => "Resources/Black.King.png",
+                "Bishop" => "Resources/Black.Bishop.png",
+                "Rook" => "Resources/Black.Rook.png",
+                "Knight" => "Resources/Black.Knight.png",
+                "Pawn" => "Resources/Black.Pawn.png",
+                _ => ""
+            };
+            return result;
+        }
     }
 }

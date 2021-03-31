@@ -194,6 +194,39 @@ namespace ChessGame
             }
         }
 
+        /// <summary>
+        /// Checks which position is best for blocking depending on the king position
+        /// </summary>
+        /// <returns>Return blocking position list</returns>
+        private List<KeyValuePair<CoordinatPoint, (int, BaseFigure)>> HalfBlock()
+        {
+            var modelNew = models.Where(c => c.Color != currentFigureColor).Reverse().ToList();
+            var list = new List<KeyValuePair<CoordinatPoint, (int, BaseFigure)>>();
+            int currentKingHalf = CurentKing.Coordinate.GetCurrentKingHalf();
+            foreach (var figur in modelNew)
+            {
+                switch (currentKingHalf)
+                {
+                    case 1:
+                        if (GetMinMovesWithBlockInOneHaalf(figur, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair1))
+                            list.Add(keyValuePair1);
+                        break;
+                    case 2:
+                        if (GetMinMovesWithBlockInTwoHaalf(figur, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair2))
+                            list.Add(keyValuePair2);
+                        break;
+                    case 3:
+                        if (GetMinMovesWithBlockInThreeHaalf(figur, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair3))
+                            list.Add(keyValuePair3);
+                        break;
+                    case 4:
+                        if (GetMinMovesWithBlockInFourHaalf(figur, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair4))
+                            list.Add(keyValuePair4);
+                        break;
+                }
+            }
+            return list;
+        }
         #endregion
 
         /// <summary>
@@ -236,7 +269,6 @@ namespace ChessGame
         {
             var modelNew = models.Where(c => c.Color != currentFigureColor && !(c is King)).ToList();
             var list = new List<KeyValuePair<CoordinatPoint, (int, BaseFigure)>>();
-            IRandomMove currentKing = (IRandomMove)CurentKing;
             foreach (var figur in modelNew)
             {
                 if (GetMinMovesWithShax(figur, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair))
@@ -251,7 +283,7 @@ namespace ChessGame
                 if (GetCurrentKingMoves().Count == 1)
                 {
                     IRandomMove randomeMove = (IRandomMove)setFigurFirst;
-                    if (!randomeMove.IsUnderAttack(minMoves.Key, GetCurrentKingMoves()[0]))
+                    if (!randomeMove.IsUnderAttack(minMoves.Key, CurentKing.Coordinate))
                     {
                         moveTextBox.Text += $"{setFigurFirst.Coordinate} - " +
                                            $"{minMoves.Key}\n{new string('-', 8)}\n";
@@ -292,32 +324,7 @@ namespace ChessGame
         private void MoveWithBlock()
         {
             var modelNew = models.Where(c => c.Color != currentFigureColor).Reverse().ToList();
-            var list = new List<KeyValuePair<CoordinatPoint, (int, BaseFigure)>>();
-            IRandomMove currentKing = (IRandomMove)CurentKing;
-            int currentKingHalf = CurentKing.Coordinate.GetCurrentKingHalf();
-            foreach (var figur in modelNew)
-            {
-                switch (currentKingHalf)
-                {
-                    case 1:
-                        if (GetMinMovesWithBlockInOneHaalf(figur, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair1))
-                        list.Add(keyValuePair1);
-                        break;
-                    case 2:
-                        if (GetMinMovesWithBlockInTwoHaalf(figur, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair2))
-                            list.Add(keyValuePair2);
-                        break;
-                    case 3:
-                        if (GetMinMovesWithBlockInThreeHaalf(figur, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair3))
-                            list.Add(keyValuePair3);
-                        break;
-                    case 4:
-                        if (GetMinMovesWithBlockInFourHaalf(figur, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair4))
-                            list.Add(keyValuePair4);
-                        break;
-                }
-            }
-            list = list.Where(c => c.Value.Item1 != 0).ToList();
+            var list = HalfBlock().Where(c => c.Value.Item1 != 0).ToList();
             var minMoves = list.OrderBy(c => c.Value.Item1).FirstOrDefault();
             var maxMoves = list.OrderBy(c => c.Value.Item1).LastOrDefault();
             BaseFigure setFigurFirst = minMoves.Value.Item2;
@@ -325,7 +332,7 @@ namespace ChessGame
             if (GetCurrentKingMoves().Count == 1)
             {
                 IRandomMove randomeMove = (IRandomMove)setFigurFirst;
-                if (!randomeMove.IsUnderAttack(minMoves.Key, GetCurrentKingMoves()[0]))
+                if (!randomeMove.IsUnderAttack(minMoves.Key, CurentKing.Coordinate))
                 {
                     moveTextBox.Text += $"{setFigurFirst.Coordinate} - " +
                                            $"{minMoves.Key}\n{new string('-', 8)}\n";
@@ -353,7 +360,7 @@ namespace ChessGame
         private bool IsMate()
         {
             var modelNew = models.Where(c => c.Color != currentFigureColor && !(c is King)).ToList();
-            List<KeyValuePair<CoordinatPoint, (int, BaseFigure)>> list = new List<KeyValuePair<CoordinatPoint, (int, BaseFigure)>>();
+            var list = new List<KeyValuePair<CoordinatPoint, (int, BaseFigure)>>();
             foreach (var figur in modelNew)
             {
                 if (GetMinMovesWithShax(figur, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair))
@@ -362,11 +369,7 @@ namespace ChessGame
             if (list.Count != 0)
             {
                 var minMoves = list.Where(c => c.Value.Item1 == 0).FirstOrDefault();
-                if (minMoves.Key != null)
-                {
-                    return true;
-                }
-                return false;
+                return minMoves.Key != null;
             }
             return false;
         }
@@ -459,6 +462,5 @@ namespace ChessGame
             }
             return result;
         }
-
     }
 }
