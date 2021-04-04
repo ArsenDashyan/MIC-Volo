@@ -14,8 +14,8 @@ namespace Utility
         /// <returns>Return true if figure move is baby</returns>
         public static bool BabyGame(this List<CoordinatPoint> list)
         {
-            List<CoordinatPoint> tempOne = new List<CoordinatPoint>();
-            List<CoordinatPoint> tempTwo = new List<CoordinatPoint>();
+            var tempOne = new List<CoordinatPoint>();
+            var tempTwo = new List<CoordinatPoint>();
             if (list.Count >= 4)
             {
                 for (int i = list.Count - 1; i >= list.Count - 3; i -= 2)

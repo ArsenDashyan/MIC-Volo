@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ChessGame"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="ChessGame" Height="600" Width="1000" Background="Gray">
+        Title="ChessGame" Height="600" Width="1348" Background="Gray">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="600"/>
@@ -19,9 +19,9 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid x:Name="GamePanel" Background="Black" Margin="18,18,18,18" Grid.RowSpan="2">
+        <Grid x:Name="GamePanel" Background="Black" Margin="18,18,18,18" Grid.RowSpan="2" >
 
-            <Grid Name="Board" Background="LightSkyBlue" Margin="20,20,20,20">
+            <Grid Name="Board" Background="LightSkyBlue" Margin="20,20,20,20"   >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -42,7 +42,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="0"/>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="0" />
                 <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="0"/>
                 <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="0"/>
                 <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="0"/>
@@ -105,10 +105,7 @@
                 <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="7"/>
                 <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="7"/>
                 <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="7"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="7">
-                    <Image Name="Image77">
-                    </Image>
-                </Border>
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="7"/>
             </Grid>
 
         </Grid>
@@ -190,6 +187,8 @@
                     </TextBox.Effect>
                 </TextBox>
                 <Label Content="Message" HorizontalAlignment="Left" Margin="132,238,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.184,0.233" FontWeight="Bold"/>
+                <GroupBox HorizontalAlignment="Left" Width="356" />
+                <GroupBox  Margin="367,0,0,0"/>
             </Grid>
         </Grid>
         <Label Content="A" HorizontalAlignment="Left" Margin="60,480,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FFAE0A0A" Height="29" Width="20"/>
@@ -208,5 +207,6 @@
         <Label Content="3" HorizontalAlignment="Left" Margin="19,130,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FFAE0A0A" Height="29" Width="20"/>
         <Label Content="2" HorizontalAlignment="Left" Margin="19,75,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FFAE0A0A" Height="29" Width="20"/>
         <Label Content="1" HorizontalAlignment="Left" Margin="19,15,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FFAE0A0A" Height="29" Width="20"/>
+        <Border BorderThickness="1" BorderBrush="Black" Grid.Column="2" Margin="36,28,366,388" Grid.RowSpan="2"/>
     </Grid>
 </Window>

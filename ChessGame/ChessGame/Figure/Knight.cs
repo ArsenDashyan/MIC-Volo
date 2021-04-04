@@ -1,12 +1,13 @@
 ﻿using Coordinats;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Utility;
 
 namespace ChessGame
 {
     public class Knight : BaseFigure, ICrosswise, IRandomMove, IDangerMoves
     {
+        static int count = 1;
         public Knight(string name, string color, List<BaseFigure> othereFigures) : base(othereFigures)
         {
             Name = name;
@@ -323,55 +324,50 @@ namespace ChessGame
             tempForItem = null;
             return false;
         }
-
-        //public int MinCount(CoordinatPoint CoordinatPoint)
-        //{
-        //    var knightMoves = KnightMove.Crosswise(this.Coordinate);
-        //    var endMoves = KnightMove.Crosswise(CoordinatPoint);
-        //    if (knightMoves.Contains((CoordinatPoint)))
-        //    {
-        //        return count;
-        //    }
-        //    else
-        //    {
-        //        count++;
-        //        if (KnightMove.Equals(this.Coordinate, CoordinatPoint))
-        //        {
-        //            return count;
-        //        }
-        //        else
-        //        {
-        //            count++;
-        //            if (KnightMove.Equals(knightMoves, CoordinatPoint))
-        //            {
-        //                return count;
-        //            }
-        //            else
-        //            {
-        //                count++;
-        //                if (KnightMove.Equals(knightMoves, endMoves))
-        //                {
-        //                    return count;
-        //                }
-        //                else
-        //                {
-        //                    count++;
-        //                    if (KnightMove.EqualsEnd(knightMoves, endMoves))
-        //                    {
-        //                        return count;
-        //                    }
-        //                    else
-        //                    {
-        //                        return 6;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-        public bool IsUnderAttack(CoordinatPoint CoordinatPoint, CoordinatPoint CoordinatPoint1)
+        public int MinKnightCount(CoordinatPoint CoordinatPoint)
         {
-            return CoordinatPoint.Modul(CoordinatPoint1, CoordinatPoint) <= Math.Sqrt(2d);
+            var knightMoves = KnightMove.Crosswise(this.Coordinate);
+            var endMoves = KnightMove.Crosswise(CoordinatPoint);
+            if (knightMoves.Contains((CoordinatPoint)))
+            {
+                return count;
+            }
+            else
+            {
+                count++;
+                if (KnightMove.Equals(this.Coordinate, CoordinatPoint))
+                {
+                    return count;
+                }
+                else
+                {
+                    count++;
+                    if (KnightMove.Equals(knightMoves, CoordinatPoint))
+                    {
+                        return count;
+                    }
+                    else
+                    {
+                        count++;
+                        if (KnightMove.Equals(knightMoves, endMoves))
+                        {
+                            return count;
+                        }
+                        else
+                        {
+                            count++;
+                            if (KnightMove.EqualsEnd(knightMoves, endMoves))
+                            {
+                                return count;
+                            }
+                            else
+                            {
+                                return 6;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Coordinats;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -226,10 +225,6 @@ namespace ChessGame
             this.Coordinate = temp;
             tempForItem = null;
             return false;
-        }
-        public bool IsUnderAttack(CoordinatPoint CoordinatPoint, CoordinatPoint CoordinatPoint1)
-        {
-            return CoordinatPoint.Modul(CoordinatPoint1, CoordinatPoint) <= Math.Sqrt(2d);
         }
     }
 }

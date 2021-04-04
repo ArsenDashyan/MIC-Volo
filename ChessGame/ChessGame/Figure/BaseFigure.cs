@@ -30,6 +30,7 @@ namespace ChessGame
             Grid.SetRow(FigureImage, (int)coordinate.Y);
             this.Coordinate = coordinate;
             grid.Children.Add(FigureImage);
+            FigureImage.Name = this.Name;
             DeleteFigur(this, grid);
         }
         public void RemoveFigureFromBoard(BaseFigure figure, Grid grid)

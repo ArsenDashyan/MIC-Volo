@@ -274,47 +274,24 @@ namespace ChessGame
                 if (GetMinMovesWithShax(figur, out KeyValuePair<CoordinatPoint, (int, BaseFigure)> keyValuePair))
                     list.Add(keyValuePair);
             }
-            if (list.Count != 0)
+            var minMoves = list.OrderBy(c => c.Value.Item1).FirstOrDefault();
+            var maxMoves = list.OrderBy(c => c.Value.Item1).LastOrDefault();
+            BaseFigure setFigurFirst = minMoves.Value.Item2;
+            BaseFigure setFigurLast = maxMoves.Value.Item2;
+            IRandomMove randomeMove = (IRandomMove)setFigurFirst;
+            if (!randomeMove.IsUnderAttack(minMoves.Key))
             {
-                var minMoves = list.OrderBy(c => c.Value.Item1).FirstOrDefault();
-                var maxMoves = list.OrderBy(c => c.Value.Item1).LastOrDefault();
-                BaseFigure setFigurFirst = minMoves.Value.Item2;
-                BaseFigure setFigurLast = maxMoves.Value.Item2;
-                if (GetCurrentKingMoves().Count == 1)
-                {
-                    IRandomMove randomeMove = (IRandomMove)setFigurFirst;
-                    if (!randomeMove.IsUnderAttack(minMoves.Key, CurentKing.Coordinate))
-                    {
-                        moveTextBox.Text += $"{setFigurFirst.Coordinate} - " +
-                                           $"{minMoves.Key}\n{new string('-', 8)}\n";
-                        MessageHandle.Text = "Check";
-                        setFigurFirst.SetFigurePosition(minMoves.Key, Board);
-                    }
-                    else
-                    {
-                        moveTextBox.Text += $"{setFigurLast.Coordinate} - " +
-                                           $"{maxMoves.Key}\n{new string('-', 8)}\n";
-                        MessageHandle.Text = "Check";
-                        setFigurLast.SetFigurePosition(maxMoves.Key, Board);
-                    }
-                }
-                else
-                {
-                    moveTextBox.Text += $"{setFigurFirst.Coordinate} - " +
-                                           $"{minMoves.Key}\n{new string('-', 8)}\n";
-                    MessageHandle.Text = "Check";
-                    setFigurFirst.SetFigurePosition(minMoves.Key, Board);
-                }
+                moveTextBox.Text += $"{setFigurFirst.Coordinate} - " +
+                                   $"{minMoves.Key}\n{new string('-', 8)}\n";
+                MessageHandle.Text = "Check";
+                setFigurFirst.SetFigurePosition(minMoves.Key, Board);
             }
             else
             {
-                var randomFigur = modelNew[new Random().Next(0, modelNew.Count)];
-                IRandomMove setFigur = (IRandomMove)randomFigur;
-                CoordinatPoint CoordinatPoint1 = setFigur.RandomMove((King)CurentKing);
-                moveTextBox.Text += $"{randomFigur.Coordinate} - " +
-                                          $"{CoordinatPoint1}\n{new string('-', 8)}\n";
+                moveTextBox.Text += $"{setFigurLast.Coordinate} - " +
+                                   $"{maxMoves.Key}\n{new string('-', 8)}\n";
                 MessageHandle.Text = "Check";
-                randomFigur.SetFigurePosition(CoordinatPoint1, Board);
+                setFigurLast.SetFigurePosition(maxMoves.Key, Board);
             }
         }
 
@@ -329,27 +306,18 @@ namespace ChessGame
             var maxMoves = list.OrderBy(c => c.Value.Item1).LastOrDefault();
             BaseFigure setFigurFirst = minMoves.Value.Item2;
             BaseFigure setFigurLast = maxMoves.Value.Item2;
-            if (GetCurrentKingMoves().Count == 1)
+            IRandomMove randomeMove = (IRandomMove)setFigurFirst;
+            if (!randomeMove.IsUnderAttack(minMoves.Key))
             {
-                IRandomMove randomeMove = (IRandomMove)setFigurFirst;
-                if (!randomeMove.IsUnderAttack(minMoves.Key, CurentKing.Coordinate))
-                {
-                    moveTextBox.Text += $"{setFigurFirst.Coordinate} - " +
-                                           $"{minMoves.Key}\n{new string('-', 8)}\n";
-                    setFigurFirst.SetFigurePosition(minMoves.Key, Board);
-                }
-                else
-                {
-                    moveTextBox.Text += $"{setFigurLast.Coordinate} - " +
-                                           $"{maxMoves.Key}\n{new string('-', 8)}\n";
-                    setFigurLast.SetFigurePosition(maxMoves.Key, Board);
-                }
+                moveTextBox.Text += $"{setFigurFirst.Coordinate} - " +
+                                       $"{minMoves.Key}\n{new string('-', 8)}\n";
+                setFigurFirst.SetFigurePosition(minMoves.Key, Board);
             }
             else
             {
-                moveTextBox.Text += $"{setFigurFirst.Coordinate} - " +
-                                           $"{minMoves.Key}\n{new string('-', 8)}\n";
-                setFigurFirst.SetFigurePosition(minMoves.Key, Board);
+                moveTextBox.Text += $"{setFigurLast.Coordinate} - " +
+                                       $"{maxMoves.Key}\n{new string('-', 8)}\n";
+                setFigurLast.SetFigurePosition(maxMoves.Key, Board);
             }
         }
 
