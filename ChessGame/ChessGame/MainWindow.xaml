@@ -187,8 +187,53 @@
                     </TextBox.Effect>
                 </TextBox>
                 <Label Content="Message" HorizontalAlignment="Left" Margin="132,238,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.184,0.233" FontWeight="Bold"/>
-                <GroupBox HorizontalAlignment="Left" Width="356" />
-                <GroupBox  Margin="367,0,0,0"/>
+                <Grid Name="KnightPage" Margin="365,0,0,0" Background="DarkSlateGray" >
+                    <Grid.Effect>
+                        <DropShadowEffect/>
+                    </Grid.Effect>
+
+                    <Label Content="Start CoordinateLetter and Number" HorizontalAlignment="Left"  VerticalAlignment="Top" RenderTransformOrigin="0.434,-0.133" FontSize="14" FontWeight="Bold" Margin="2,14,0,0"/>
+                    <TextBox Name="KnightStartLetter" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="60" Height="30" Margin="20,50,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                        <TextBox.Effect>
+                            <DropShadowEffect/>
+                        </TextBox.Effect>
+                        <TextBox.Style>
+                            <Style/>
+                        </TextBox.Style>
+                    </TextBox>
+                    <TextBox Name="KnightStartNumber" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="104,50,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                        <TextBox.Effect>
+                            <DropShadowEffect/>
+                        </TextBox.Effect>
+                        <TextBox.Style>
+                            <Style/>
+                        </TextBox.Style>
+                    </TextBox>
+                    <TextBox Name="KnightTargetLetter" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="20,130,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                        <TextBox.Effect>
+                            <DropShadowEffect/>
+                        </TextBox.Effect>
+                        <TextBox.Style>
+                            <Style/>
+                        </TextBox.Style>
+                    </TextBox>
+                    <TextBox Name="KnightTargetNumber" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="104,130,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                        <TextBox.Effect>
+                            <DropShadowEffect/>
+                        </TextBox.Effect>
+                        <TextBox.Style>
+                            <Style/>
+                        </TextBox.Style>
+                    </TextBox>
+                    <Label Content="Target Coordinate Letter and Number" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" FontWeight="Bold" Margin="-2,98,0,0"/>
+                    <Button Name="KnightMoveCheck" Content="Check" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="130" Height="32" Background="#FF877979" FontSize="14" FontWeight="Bold" Margin="20,178,0,0" Click="KnightMoveCheck_Click"/>
+                    <TextBox Name="KnightMovesMessage"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="152" Height="56" Margin="20,230,0,0" FontSize="14">
+                        <TextBox.Effect>
+                            <DropShadowEffect/>
+                        </TextBox.Effect>
+                    </TextBox>
+                    <Button Content="Set" HorizontalAlignment="Left" Margin="203,52,0,0" VerticalAlignment="Top" Width="60" Height="30" FontSize="14" FontWeight="Bold" Click="Button_Click_1"/>
+                </Grid>
             </Grid>
         </Grid>
         <Label Content="A" HorizontalAlignment="Left" Margin="60,480,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FFAE0A0A" Height="29" Width="20"/>
@@ -207,6 +252,5 @@
         <Label Content="3" HorizontalAlignment="Left" Margin="19,130,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FFAE0A0A" Height="29" Width="20"/>
         <Label Content="2" HorizontalAlignment="Left" Margin="19,75,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FFAE0A0A" Height="29" Width="20"/>
         <Label Content="1" HorizontalAlignment="Left" Margin="19,15,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FFAE0A0A" Height="29" Width="20"/>
-        <Border BorderThickness="1" BorderBrush="Black" Grid.Column="2" Margin="36,28,366,388" Grid.RowSpan="2"/>
     </Grid>
 </Window>

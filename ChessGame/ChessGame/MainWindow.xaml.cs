@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Utility;
 
@@ -33,6 +31,7 @@ namespace ChessGame
         private int blackPawnCount = 0;
         private int blackKnightCount = 0;
         private string currentFigureColor;
+        private Knight knightForeMoves;
         //BaseFigure dragObject = null;
         //UIElement dragObjectImage = null;
         //private bool _isMoving;
@@ -650,7 +649,85 @@ namespace ChessGame
             return positions;
         }
 
+        #region For Knight Moves
 
+        private bool GetCoordinateKnight(TextBox textBoxLetter, TextBox textBoxNumber, out CoordinatPoint CoordinatPoint)
+        {
+            string inputLetter = textBoxLetter.Text;
+            if (inputLetter.Length > 1)
+            {
+                MessageBox.Show("This letter not found");
+                CoordinatPoint = null;
+                return false;
+            }
+            else
+            {
+                if (Convert.ToChar(inputLetter).CharToInt(out int o))
+                {
+                    try
+                    {
+                        string inputNumber = textBoxNumber.Text;
+                        int j = Convert.ToInt32(inputNumber.ToString());
+                        if (j <= 8 && j >= 1)
+                        {
+                            CoordinatPoint = new CoordinatPoint(o - 1, j - 1);
+
+                            return true;
+                        }
+                        else
+                        {
+                            MessageBox.Show("The number is not found");
+                            CoordinatPoint = null;
+                            return false;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("The number is not found");
+                        CoordinatPoint = null;
+                        return false;
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("This letter note found");
+                    CoordinatPoint = null;
+                    return false;
+                }
+            }
+
+        }
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            if (GetCoordinateKnight(KnightStartLetter, KnightStartNumber, out CoordinatPoint coordinatPoint))
+            {
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri("Resources/Black.Knight.png", UriKind.Relative);
+                bitmap.EndInit();
+                this.knightForeMoves = new Knight("KnightMoves", "Black", models);
+                this.knightForeMoves.Bitmap = bitmap;
+                this.knightForeMoves.SetFigurePosition(coordinatPoint, Board);
+            }
+        }
+        private void KnightMoveCheck_Click(object sender, RoutedEventArgs e)
+        {
+            if (GetCoordinateKnight(KnightTargetLetter, KnightTargetNumber, out CoordinatPoint coordinatPoint))
+            {
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri("Resources/Black.Knight.png", UriKind.Relative);
+                bitmap.EndInit();
+                Knight knight = new Knight("KnightMovesTaarget", "Black", models);
+                knight.Bitmap = bitmap;
+                knight.SetFigurePosition(coordinatPoint, Board);
+                var count = this.knightForeMoves.MinKnightCount(coordinatPoint);
+                KnightMovesMessage.Text = $"For target coordinate your need {count} moves";
+            }
+        }
+
+        #endregion
 
         #endregion
 
