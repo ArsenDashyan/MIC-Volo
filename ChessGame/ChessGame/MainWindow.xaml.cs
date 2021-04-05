@@ -837,5 +837,46 @@ namespace ChessGame
             KnightTargetNumber.Text = " ";
         }
 
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("This Game Create Arsen Dashyan");
+        }
+        private void KingGame_Click(object sender, RoutedEventArgs e)
+        {
+            this.Width = 1348;
+            Thickness thickness = new Thickness(365);
+            this.KnightPage.Margin = thickness;
+            this.Width = 1000;
+            ResetBoard();
+            PlayB2.IsEnabled = true;
+            CheckBlack.IsEnabled = true;
+            CheckWhite.IsEnabled = true;
+            SelectFigur.IsEnabled = true;
+            InputCoordinatsLetter.IsEnabled = true;
+            InputCoordinatsNumber.IsEnabled = true;
+            PleacementB1.IsEnabled = true;
+            PlayColorWhite.IsEnabled = true;
+            PlayColorBlack.IsEnabled = true;
+            InputCoordinatsLetter_Corrent.IsEnabled = false;
+            InputCoordinatsNumber_Corrent.IsEnabled = false;
+            InputCoordinatsLetter_Selected.IsEnabled = false;
+            InputCoordinatsNumber_Selected.IsEnabled = false;
+            InstalB3.IsEnabled = false;
+            MessageBox.Show("You Change A King Game, Good Luck");
+        }
+        private void KnightGame_Click(object sender, RoutedEventArgs e)
+        {
+            this.Width = 1348;
+            Thickness thickness = new Thickness(0);
+            this.KnightPage.Margin = thickness;
+            this.Width = 1000;
+            ResetBoard();
+            KnightMovesMessage.Text = " ";
+            KnightStartLetter.Text = " ";
+            KnightStartNumber.Text = " ";
+            KnightTargetLetter.Text = " ";
+            KnightTargetNumber.Text = " ";
+            MessageBox.Show("You Change A Knight Game, Good Luck");
+        }
     }
 }

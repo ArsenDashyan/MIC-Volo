@@ -18,7 +18,13 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
+        <Menu HorizontalAlignment="Left" Margin="0,0,0,16" Width="79" Background="Gray">
+            <MenuItem Header="File">
+                <MenuItem Header="New King Game" Click="KingGame_Click"/>
+                <MenuItem Header="New Knight Game" Click="KnightGame_Click"/>
+            </MenuItem>
+            <MenuItem Header="Help" Click="MenuItem_Click"/>
+        </Menu>
         <Grid x:Name="GamePanel" Background="Black" Margin="18,18,18,18" Grid.RowSpan="2" >
 
             <Grid Name="Board" Background="LightSkyBlue" Margin="20,20,20,20" AllowDrop="true" Drop="Image_Drop" MouseDown = "Board_MouseDown">
