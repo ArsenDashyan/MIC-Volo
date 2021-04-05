@@ -666,7 +666,6 @@ namespace ChessGame
                         if (j <= 8 && j >= 1)
                         {
                             CoordinatPoint = new CoordinatPoint(o - 1, j - 1);
-
                             return true;
                         }
                         else
@@ -830,11 +829,11 @@ namespace ChessGame
         private void Reset_ButtonForKnight(object sender, RoutedEventArgs e)
         {
             ResetBoard();
-            KnightMovesMessage.Text = " ";
-            KnightStartLetter.Text = " ";
-            KnightStartNumber.Text = " ";
-            KnightTargetLetter.Text = " ";
-            KnightTargetNumber.Text = " ";
+            KnightMovesMessage.Text = "";
+            KnightStartLetter.Text = "";
+            KnightStartNumber.Text = "";
+            KnightTargetLetter.Text = "";
+            KnightTargetNumber.Text = "";
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -871,11 +870,11 @@ namespace ChessGame
             this.KnightPage.Margin = thickness;
             this.Width = 1000;
             ResetBoard();
-            KnightMovesMessage.Text = " ";
-            KnightStartLetter.Text = " ";
-            KnightStartNumber.Text = " ";
-            KnightTargetLetter.Text = " ";
-            KnightTargetNumber.Text = " ";
+            KnightMovesMessage.Text = "";
+            KnightStartLetter.Text = "";
+            KnightStartNumber.Text = "";
+            KnightTargetLetter.Text = "";
+            KnightTargetNumber.Text = "";
             MessageBox.Show("You Change A Knight Game, Good Luck");
         }
     }
