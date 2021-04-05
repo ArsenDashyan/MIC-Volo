@@ -836,5 +836,6 @@ namespace ChessGame
             KnightTargetLetter.Text = " ";
             KnightTargetNumber.Text = " ";
         }
+
     }
 }

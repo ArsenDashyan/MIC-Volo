@@ -122,6 +122,11 @@
                         <DropShadowEffect/>
                     </Button.Effect>
                 </Button>
+                <Button Content="Reset" FontSize="14" FontWeight="Bold" Background="#FFDA1717" HorizontalAlignment="Left" Margin="175,369,0,0" VerticalAlignment="Top" Height="30" Width="155" Click="Reset_Button">
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                </Button>
                 <Button x:Name="PlayB2" Content="Play➤" Background="LightGray" HorizontalAlignment="Left" Margin="240,130,0,0" VerticalAlignment="Top" Height="30" Width="90" FontSize="16" Click="PlayB2_Click">
                     <Button.Effect>
                         <DropShadowEffect/>
@@ -238,13 +243,8 @@
                             <DropShadowEffect/>
                         </Button.Effect>
                     </Button>
-                    <Button HorizontalAlignment="Left" Margin="186,391,0,0" VerticalAlignment="Top" Click="Reset_Button"/>
                 </Grid>
-                <Button Content="Reset" FontSize="14" FontWeight="Bold" Background="#FFDA1717" Margin="138,368,510,158">
-                    <Button.Effect>
-                        <DropShadowEffect/>
-                    </Button.Effect>
-                </Button>
+
             </Grid>
         </Grid>
         <Label Content="A" HorizontalAlignment="Left" Margin="60,480,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FFAE0A0A" Height="29" Width="20"/>
