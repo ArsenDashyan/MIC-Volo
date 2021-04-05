@@ -21,7 +21,7 @@
 
         <Grid x:Name="GamePanel" Background="Black" Margin="18,18,18,18" Grid.RowSpan="2" >
 
-            <Grid Name="Board" Background="LightSkyBlue" Margin="20,20,20,20"   >
+            <Grid Name="Board" Background="LightSkyBlue" Margin="20,20,20,20" AllowDrop="true" Drop="Image_Drop" MouseDown = "Board_MouseDown">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -42,7 +42,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="0" />
+                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="0"/>
                 <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="0"/>
                 <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="0"/>
                 <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="0"/>
@@ -187,7 +187,7 @@
                     </TextBox.Effect>
                 </TextBox>
                 <Label Content="Message" HorizontalAlignment="Left" Margin="132,238,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.184,0.233" FontWeight="Bold"/>
-                <Grid Name="KnightPage" Margin="365,0,0,0" Background="DarkSlateGray" >
+                <Grid Name="KnightPage" Margin="365,0,0,0" Background="LightSlateGray" >
                     <Grid.Effect>
                         <DropShadowEffect/>
                     </Grid.Effect>

@@ -32,14 +32,9 @@ namespace ChessGame
         private int blackKnightCount = 0;
         private string currentFigureColor;
         private Knight knightForeMoves;
-        //BaseFigure dragObject = null;
-        //UIElement dragObjectImage = null;
-        //private bool _isMoving;
-        //private Point? _buttonPosition;
-        //private double deltaX;
-        //private double deltaY;
-        //private TranslateTransform _currentTT;
-        //private CoordinatPoint startCoordinate;
+        BaseFigure dragObject = null;
+        UIElement dragObjectImage = null;
+        private CoordinatPoint startCoordinate;
 
         #endregion
 
@@ -47,6 +42,8 @@ namespace ChessGame
         {
             InitializeComponent();
         }
+
+        #region Game
         private void PleacementB1_Click(object sender, RoutedEventArgs e)
         {
             BitmapImage bitmap = new BitmapImage();
@@ -65,7 +62,6 @@ namespace ChessGame
                         models.Add(temp);
                         temp.Bitmap = bitmap;
                         temp.SetFigurePosition(CoordinatPoint, Board);
-                        //temp.FigureImage.PreviewMouseDown += GamePanel_PreviewMouseDown;
                     }
                     else
                     {
@@ -81,7 +77,6 @@ namespace ChessGame
                     models.Add(temp);
                     temp.Bitmap = bitmap;
                     temp.SetFigurePosition(CoordinatPoint, Board);
-                    //temp.FigureImage.PreviewMouseDown += GamePanel_PreviewMouseDown;
                 }
             }
         }
@@ -597,7 +592,6 @@ namespace ChessGame
             return false;
         }
 
-        #region Game
 
         /// <summary>
         /// Check the available moves for current king 
@@ -648,6 +642,7 @@ namespace ChessGame
             }
             return positions;
         }
+        #endregion
 
         #region For Knight Moves
 
@@ -728,83 +723,64 @@ namespace ChessGame
         }
 
         #endregion
+        private void Board_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var image = e.Source as Image;
+            if (image != null && image.Name.Contains(currentFigureColor))
+            {
+                CoordinatPoint coordinatPoint = new CoordinatPoint(0, 0);
+                this.dragObjectImage = image;
+                coordinatPoint.X = Grid.GetColumn(image);
+                coordinatPoint.Y = Grid.GetRow(image);
+                foreach (var item in models)
+                {
+                    if (item.Coordinate == coordinatPoint)
+                    {
+                        dragObject = item;
+                        this.startCoordinate = dragObject.Coordinate;
+                        break;
+                    }
+                }
+                DragDrop.DoDragDrop(image, dragObject, DragDropEffects.Move);
+            }
+        }
+        private void Image_Drop(object sender, DragEventArgs e)
+        {
+            var temp = (Border)e.OriginalSource;
+            CoordinatPoint coordinatPoint = new CoordinatPoint(0, 0);
+            coordinatPoint.X = Grid.GetColumn(temp);
+            coordinatPoint.Y = Grid.GetRow(temp);
+            IAvailableMoves currentFigur = (IAvailableMoves)dragObject;
+            if (currentFigur is King)
+            {
+                if (GetCurrentKingMoves().Contains(coordinatPoint))
+                {
+                    dragObject.SetFigurePosition(coordinatPoint, Board);
+                    MovesTextBox.Text += $"{startCoordinate} - " +
+                                           $"{coordinatPoint}\n{new string('-', 8)}\n";
+                    Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor, Board, MovesTextBox, MessageHandle);
+                    manager.Logic();
+                }
+                else
+                {
+                    dragObject.SetFigurePosition(startCoordinate, Board);
+                    return;
+                }
+            }
+            else if (currentFigur.AvailableMoves().Contains(coordinatPoint))
+            {
+                dragObject.SetFigurePosition(coordinatPoint, Board);
+                MovesTextBox.Text += $"{startCoordinate.X + startCoordinate.Y} - " +
+                                           $"{coordinatPoint.X + coordinatPoint.Y}\n{new string('-', 8)}\n";
+                Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor, Board, MovesTextBox, MessageHandle);
+                manager.Logic();
+            }
+            else
+            {
+                dragObject.SetFigurePosition(startCoordinate, Board);
+                return;
+            }
+        }
 
-        #endregion
-
-        //private void GamePanel_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    //var image = e.Source as Image;
-        //    //if (image != null && image.Name.Contains(currentFigureColor))
-        //    //{
-        //    //    CoordinatPoint coordinatPoint = new CoordinatPoint(0, 0);
-        //    //    this.dragObjectImage = image;
-        //    //    coordinatPoint.X = Grid.GetColumn(image);
-        //    //    coordinatPoint.Y = Grid.GetRow(image);
-        //    //    foreach (var item in models)
-        //    //    {
-        //    //        if (item.Coordinate == coordinatPoint)
-        //    //        {
-        //    //            dragObject = item;
-        //    //            this.startCoordinate = dragObject.Coordinate;
-        //    //            break;
-        //    //        }
-        //    //    }
-        //    //    if (_buttonPosition == null)
-        //    //        _buttonPosition = dragObjectImage.TransformToAncestor(Board).Transform(new Point(0, 0));
-        //    //    var mousePosition = Mouse.GetPosition(Board);
-        //    //    deltaX = mousePosition.X - _buttonPosition.Value.X;
-        //    //    deltaY = mousePosition.Y - _buttonPosition.Value.Y;
-        //    //    _isMoving = true;
-        //    }
-        //}
-
-        //private void GamePanel_PreviewMouseMove(object sender, MouseEventArgs e)
-        //{
-        //    //if (!_isMoving) return;
-
-        //    //var mousePoint = Mouse.GetPosition(Board);
-
-        //    //var offsetX = (_currentTT == null ? _buttonPosition.Value.X : _buttonPosition.Value.X - _currentTT.X) + deltaX - mousePoint.X;
-        //    //var offsetY = (_currentTT == null ? _buttonPosition.Value.Y : _buttonPosition.Value.Y - _currentTT.Y) + deltaY - mousePoint.Y;
-
-        //    //this.dragObjectImage.RenderTransform = new TranslateTransform(-offsetX, -offsetY);
-        //}
-        //private void GamePanel_PreviewMouseUp(object sender, MouseEventArgs e)
-        //{
-        //    //_currentTT = dragObjectImage.RenderTransform as TranslateTransform;
-        //    //var mousePosition = Mouse.GetPosition(Board);
-        //    //CoordinatPoint coordinatPoint = new CoordinatPoint(0, 0);
-        //    //coordinatPoint.X = (int)Math.Floor((mousePosition.X) / 65);
-        //    //coordinatPoint.Y = (int)Math.Floor((mousePosition.Y) / 65);
-        //    //IAvailableMoves currentFigur = (IAvailableMoves)dragObject;
-        //    //if (currentFigur is King)
-        //    //{
-        //    //    if (GetCurrentKingMoves().Contains(coordinatPoint))
-        //    //    {
-        //    //        dragObject.SetFigurePosition(coordinatPoint, Board);
-        //    //        Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor, Board, MovesTextBox, MessageHandle);
-        //    //        manager.Logic();
-        //    //        _isMoving = false;
-        //    //    }
-        //    //    else
-        //    //    {
-        //    //        dragObject.SetFigurePosition(startCoordinate, Board);
-        //    //        return;
-        //    //    }
-        //    //}
-        //    //else if (currentFigur.AvailableMoves().Contains(coordinatPoint))
-        //    //{
-        //    //    dragObject.SetFigurePosition(coordinatPoint, Board);
-        //    //    Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor, Board, MovesTextBox, MessageHandle);
-        //    //    manager.Logic();
-        //    //    _isMoving = false;
-        //    //}
-        //    //else
-        //    //{
-        //    //    dragObject.SetFigurePosition(startCoordinate, Board);
-        //    //    return;
-        //    //}
-
-        //}
     }
 }

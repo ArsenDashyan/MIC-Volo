@@ -8,7 +8,7 @@
         ResizeMode="NoResize"
         Title="Chess Type" Height="218" Width="463">
 
-    <Grid>
+    <Grid Background="#FFA8857D">
         <Label Content="Chess Game Type" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Foreground="#FF440505"/>
         <Image Source="Resources/Black.Knight.png" Width="80" HorizontalAlignment="Left" Margin="315,-19,0,-1" />
         <Image Source="Resources/Black.King.png" Width="80" Margin="43,-20,307,0" />
