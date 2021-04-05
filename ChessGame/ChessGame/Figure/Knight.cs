@@ -7,7 +7,7 @@ namespace ChessGame
 {
     public class Knight : BaseFigure, ICrosswise, IRandomMove, IDangerMoves
     {
-        static int count = 1;
+        private int count = 1;
         public Knight(string name, string color, List<BaseFigure> othereFigures) : base(othereFigures)
         {
             Name = name;

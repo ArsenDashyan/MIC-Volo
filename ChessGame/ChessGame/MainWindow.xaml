@@ -233,7 +233,18 @@
                         </TextBox.Effect>
                     </TextBox>
                     <Button Content="Set" HorizontalAlignment="Left" Margin="203,52,0,0" VerticalAlignment="Top" Width="60" Height="30" FontSize="14" FontWeight="Bold" Click="Button_Click_1"/>
+                    <Button Content="Reset" Height="50" Width="64" HorizontalAlignment="Left" Margin="210,234,0,0" VerticalAlignment="Top" Background="#FFC71919" FontSize="14" FontWeight="Bold" Click="Reset_ButtonForKnight">
+                        <Button.Effect>
+                            <DropShadowEffect/>
+                        </Button.Effect>
+                    </Button>
+                    <Button HorizontalAlignment="Left" Margin="186,391,0,0" VerticalAlignment="Top" Click="Reset_Button"/>
                 </Grid>
+                <Button Content="Reset" FontSize="14" FontWeight="Bold" Background="#FFDA1717" Margin="138,368,510,158">
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                </Button>
             </Grid>
         </Grid>
         <Label Content="A" HorizontalAlignment="Left" Margin="60,480,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FFAE0A0A" Height="29" Width="20"/>

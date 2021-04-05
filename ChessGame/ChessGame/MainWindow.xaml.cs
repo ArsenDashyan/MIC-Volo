@@ -32,6 +32,7 @@ namespace ChessGame
         private int blackKnightCount = 0;
         private string currentFigureColor;
         private Knight knightForeMoves;
+        private int countForKnightMoves = 0;
         BaseFigure dragObject = null;
         UIElement dragObjectImage = null;
         private CoordinatPoint startCoordinate;
@@ -86,12 +87,11 @@ namespace ChessGame
             {
                 if (PlayB2.IsEnabled == true)
                 {
-                    CheckBlack.IsChecked = false;
-                    CheckWhite.IsChecked = false;
+                    CheckBlack.IsEnabled = false;
+                    CheckWhite.IsEnabled = false;
                     SelectFigur.Text = "";
                     InputCoordinatsLetter.Text = "";
                     InputCoordinatsNumber.Text = "";
-                    PleacementB1.Content = "";
                     CheckBlack.IsEnabled = false;
                     CheckWhite.IsEnabled = false;
                     SelectFigur.IsEnabled = false;
@@ -704,6 +704,7 @@ namespace ChessGame
                 this.knightForeMoves = new Knight("KnightMoves", "Black", models);
                 this.knightForeMoves.Bitmap = bitmap;
                 this.knightForeMoves.SetFigurePosition(coordinatPoint, Board);
+                models.Add(this.knightForeMoves);
             }
         }
         private void KnightMoveCheck_Click(object sender, RoutedEventArgs e)
@@ -716,13 +717,40 @@ namespace ChessGame
                 bitmap.EndInit();
                 Knight knight = new Knight("KnightMovesTaarget", "Black", models);
                 knight.Bitmap = bitmap;
+                models.Add(knight);
                 knight.SetFigurePosition(coordinatPoint, Board);
-                var count = this.knightForeMoves.MinKnightCount(coordinatPoint);
-                KnightMovesMessage.Text = $"For target coordinate your need {count} moves";
+                countForKnightMoves = this.knightForeMoves.MinKnightCount(coordinatPoint);
+                KnightMovesMessage.Text = $"For target coordinate your need {countForKnightMoves} moves";
+                countForKnightMoves = 0;
             }
         }
 
         #endregion
+
+        /// <summary>
+        /// Reset Board for start game
+        /// </summary>
+        private void ResetBoard()
+        {
+            foreach (var item in models)
+            {
+                Board.Children.Remove(item.FigureImage);
+            }
+            models.Clear();
+            whiteKingCount = 0;
+            whiteQueenCount = 0;
+            whiteBishopCount = 0;
+            whiteRookCount = 0;
+            whitePawnCount = 0;
+            whiteKnightCount = 0;
+            blackKingCount = 0;
+            blackQueenCount = 0;
+            blackBishopCount = 0;
+            blackRookCount = 0;
+            blackPawnCount = 0;
+            blackKnightCount = 0;
+            MovesTextBox.Text = "";
+        }
         private void Board_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var image = e.Source as Image;
@@ -781,6 +809,32 @@ namespace ChessGame
                 return;
             }
         }
-
+        private void Reset_Button(object sender, RoutedEventArgs e)
+        {
+            ResetBoard();
+            PlayB2.IsEnabled = true;
+            CheckBlack.IsEnabled = true;
+            CheckWhite.IsEnabled = true;
+            SelectFigur.IsEnabled = true;
+            InputCoordinatsLetter.IsEnabled = true;
+            InputCoordinatsNumber.IsEnabled = true;
+            PleacementB1.IsEnabled = true;
+            PlayColorWhite.IsEnabled = true;
+            PlayColorBlack.IsEnabled = true;
+            InputCoordinatsLetter_Corrent.IsEnabled = false;
+            InputCoordinatsNumber_Corrent.IsEnabled = false;
+            InputCoordinatsLetter_Selected.IsEnabled = false;
+            InputCoordinatsNumber_Selected.IsEnabled = false;
+            InstalB3.IsEnabled = false;
+        }
+        private void Reset_ButtonForKnight(object sender, RoutedEventArgs e)
+        {
+            ResetBoard();
+            KnightMovesMessage.Text = " ";
+            KnightStartLetter.Text = " ";
+            KnightStartNumber.Text = " ";
+            KnightTargetLetter.Text = " ";
+            KnightTargetNumber.Text = " ";
+        }
     }
 }
