@@ -808,6 +808,12 @@ namespace ChessGame
                 return;
             }
         }
+
+        /// <summary>
+        /// Reset button the Board for start King game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Reset_Button(object sender, RoutedEventArgs e)
         {
             ResetBoard();
@@ -826,6 +832,11 @@ namespace ChessGame
             InputCoordinatsNumber_Selected.IsEnabled = false;
             InstalB3.IsEnabled = false;
         }
+        /// <summary>
+        /// Reset button the Board for start Knight game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Reset_ButtonForKnight(object sender, RoutedEventArgs e)
         {
             ResetBoard();
@@ -836,6 +847,7 @@ namespace ChessGame
             KnightTargetNumber.Text = "";
         }
 
+        #region MenuStrip
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("This Game Create Arsen Dashyan");
@@ -877,5 +889,6 @@ namespace ChessGame
             KnightTargetNumber.Text = "";
             MessageBox.Show("You Change A Knight Game, Good Luck");
         }
+        #endregion
     }
 }

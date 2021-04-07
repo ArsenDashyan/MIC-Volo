@@ -83,15 +83,15 @@ namespace Utility
         /// <returns>Return the half with inside current king</returns>
         public static int GetCurrentKingHalf(this CoordinatPoint coordinat)
         {
-            if (coordinat.X >=5 && coordinat.Y <=4)
+            if (coordinat.X >=4 && coordinat.Y <=3)
             {
                 return 1;
             }
-            else if (coordinat.X >= 5 && coordinat.Y >= 5)
+            else if (coordinat.X >= 4 && coordinat.Y >= 4)
             {
                 return 4;
             }
-            else if (coordinat.X <= 4 && coordinat.Y <= 4)
+            else if (coordinat.X <= 3 && coordinat.Y <= 3)
             {
                 return 2;
             }
