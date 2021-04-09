@@ -278,7 +278,7 @@ namespace ChessGame
             var maxMoves = list.OrderBy(c => c.Value.Item1).LastOrDefault();
             BaseFigure setFigurFirst = minMoves.Value.Item2;
             BaseFigure setFigurLast = maxMoves.Value.Item2;
-            IRandomMove randomeMove = (IRandomMove)setFigurFirst;
+            var randomeMove = (IRandomMove)setFigurFirst;
             if (!randomeMove.IsUnderAttack(minMoves.Key))
             {
                 moveTextBox.Text += $"{setFigurFirst.Coordinate} - " +
@@ -356,7 +356,7 @@ namespace ChessGame
                 destination.Add((tempDestination, figur));
             }
             (double, BaseFigure) max = destination.OrderBy(k => k.Item1).FirstOrDefault();
-            IRandomMove tempFigur = (IRandomMove)max.Item2;
+            var tempFigur = (IRandomMove)max.Item2;
             var tempCoordinate = tempFigur.RandomMove((King)CurentKing);
             moveTextBox.Text += $"{max.Item2.Coordinate} - " +
                                           $"{tempCoordinate}\n{new string('-', 8)}\n";
@@ -379,10 +379,10 @@ namespace ChessGame
             var modelNew = models.Where(c => c.Color != currentFigureColor).ToList();
             foreach (var figur in modelNew)
             {
-                IRandomMove tempFigur = (IRandomMove)figur;
+                var tempFigur = (IRandomMove)figur;
                 if (tempFigur.IsUnderAttack(figur.Coordinate))
                 {
-                    if (!tempFigur.IsProtected())
+                    if (!tempFigur.IsProtected(figur.Coordinate))
                     {
                         CoordinatPoint CoordinatPoint1 = tempFigur.RandomMove((King)CurentKing);
                         moveTextBox.Text += $"{figur.Coordinate} - " +
@@ -402,7 +402,7 @@ namespace ChessGame
         private List<CoordinatPoint> GetCurrentKingMoves()
         {
             IRandomMove currentKing = (IRandomMove)CurentKing;
-            List<CoordinatPoint> result = new List<CoordinatPoint>();
+            var result = new List<CoordinatPoint>();
             foreach (var item in currentKing.AvailableMoves())
             {
                 if (!DangerPosition(CurentKing).Contains(item))
@@ -420,8 +420,8 @@ namespace ChessGame
         /// <returns>Return danger position List for current king </returns>
         private List<CoordinatPoint> DangerPosition(BaseFigure model)
         {
-            List<CoordinatPoint> result = new List<CoordinatPoint>();
             var modelNew = models.Where(c => c.Color != model.Color);
+            var result = new List<CoordinatPoint>();
             foreach (var item in modelNew)
             {
                 var temp = (IDangerMoves)item;

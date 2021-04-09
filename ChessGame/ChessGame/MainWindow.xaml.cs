@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Utility;
 
@@ -15,9 +17,10 @@ namespace ChessGame
     public partial class MainWindow : Window
     {
         #region Property and Feld
-        public List<BaseFigure> models = new List<BaseFigure>();
-        public List<CoordinatPoint> currentListForBabyGame = new List<CoordinatPoint>();
+        private List<BaseFigure> models = new();
+        private List<CoordinatPoint> currentListForBabyGame = new();
         private BaseFigure CurentKing => (BaseFigure)models.Where(c => c.Color == currentFigureColor && c is King).Single();
+        public UIElement DragObjectImage { get => dragObjectImage; set => dragObjectImage = value; }
         private int whiteKingCount = 0;
         private int whiteQueenCount = 0;
         private int whiteBishopCount = 0;
@@ -33,10 +36,9 @@ namespace ChessGame
         private string currentFigureColor;
         private Knight knightForeMoves;
         private int countForKnightMoves = 0;
-        BaseFigure dragObject = null;
-        UIElement dragObjectImage = null;
+        private BaseFigure dragObject = null;
+        private UIElement dragObjectImage = null;
         private CoordinatPoint startCoordinate;
-
         #endregion
 
         public MainWindow()
@@ -54,7 +56,7 @@ namespace ChessGame
             string[] tempFigure = GetCurrentFigureColor().Split('/');
             string color = tempFigure[tempFigure.Length - 1].Split('.')[0];
             string figure = tempFigure[tempFigure.Length - 1].Split('.')[1];
-            if (GetCoordinatsForPleacement(out CoordinatPoint CoordinatPoint) && GetFigureBase(figure, color, out BaseFigure temp))
+            if (GetCoordinatesForPleacement(out CoordinatPoint CoordinatPoint) && GetFigureBase(figure, color, out BaseFigure temp))
             {
                 if (temp is King king)
                 {
@@ -352,7 +354,7 @@ namespace ChessGame
         /// </summary>
         /// <param name="CoordinatPoint">Coordinate with out parametr</param>
         /// <returns>Return the current figure coordinate</returns>
-        private bool GetCoordinatsForPleacement(out CoordinatPoint CoordinatPoint)
+        private bool GetCoordinatesForPleacement(out CoordinatPoint CoordinatPoint)
         {
             string inputLetter = InputCoordinatsLetter.Text;
             if (inputLetter.Length > 1)
@@ -413,7 +415,7 @@ namespace ChessGame
         /// </summary>
         /// <param name="CoordinatPoint">Coordinate with out parametr</param>
         /// <returns>Return the current figure coordinate</returns>
-        private bool GetCurrentCoordinats(out CoordinatPoint CoordinatPoint, out BaseFigure baseFigureTemp)
+        private bool GetCurrentCoordinates(out CoordinatPoint CoordinatPoint, out BaseFigure baseFigureTemp)
         {
             string inputLetter = InputCoordinatsLetter_Corrent.Text;
             baseFigureTemp = null;
@@ -490,7 +492,7 @@ namespace ChessGame
         /// <param name="CoordinatPoint">Coordinate for fih=gure</param>
         /// <param name="figure">Figure instance</param>
         /// <returns>Return true if figure coordinate is availabe position</returns>
-        private bool GetTargetCoordinats(out CoordinatPoint CoordinatPoint, BaseFigure figure)
+        private bool GetTargetCoordinates(out CoordinatPoint CoordinatPoint, BaseFigure figure)
         {
             string inputLetter = InputCoordinatsLetter_Selected.Text;
             if (inputLetter.Length > 1)
@@ -563,8 +565,8 @@ namespace ChessGame
         /// <returns>Return true if figure new coordinate is changed</returns>
         private bool GetCurrentFigure()
         {
-            if (GetCurrentCoordinats(out CoordinatPoint coordinatPoint, out BaseFigure baseFigureTemp)
-                           && GetTargetCoordinats(out CoordinatPoint selectedPoint, baseFigureTemp))
+            if (GetCurrentCoordinates(out CoordinatPoint coordinatPoint, out BaseFigure baseFigureTemp)
+                           && GetTargetCoordinates(out CoordinatPoint selectedPoint, baseFigureTemp))
             {
                 if (baseFigureTemp.Color == currentFigureColor)
                 {
@@ -592,7 +594,6 @@ namespace ChessGame
             return false;
         }
 
-
         /// <summary>
         /// Check the available moves for current king 
         /// </summary>
@@ -600,7 +601,7 @@ namespace ChessGame
         private List<CoordinatPoint> GetCurrentKingMoves()
         {
             IRandomMove currentKing = (IRandomMove)CurentKing;
-            List<CoordinatPoint> result = new List<CoordinatPoint>();
+            var result = new List<CoordinatPoint>();
             foreach (var item in currentKing.AvailableMoves())
             {
                 if (!DangerPosition(CurentKing).Contains(item))
@@ -618,7 +619,7 @@ namespace ChessGame
         /// <returns>Return danger position List for current king </returns>
         public List<CoordinatPoint> DangerPosition(BaseFigure model)
         {
-            List<CoordinatPoint> result = new List<CoordinatPoint>();
+            var result = new List<CoordinatPoint>();
             var modelNew = models.Where(c => c.Color != model.Color);
             foreach (var item in modelNew)
             {
@@ -635,7 +636,7 @@ namespace ChessGame
         /// <returns>Return the figurs position</returns>
         private List<CoordinatPoint> GetPosition()
         {
-            List<CoordinatPoint> positions = new List<CoordinatPoint>();
+            var positions = new List<CoordinatPoint>();
             foreach (var item in models)
             {
                 positions.Add(item.Coordinate);
@@ -749,6 +750,7 @@ namespace ChessGame
             blackPawnCount = 0;
             blackKnightCount = 0;
             MovesTextBox.Text = "";
+            MessageHandle.Text = "";
         }
         private void Board_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -756,7 +758,7 @@ namespace ChessGame
             if (image != null && image.Name.Contains(currentFigureColor))
             {
                 CoordinatPoint coordinatPoint = new CoordinatPoint(0, 0);
-                this.dragObjectImage = image;
+                this.DragObjectImage = image;
                 coordinatPoint.X = Grid.GetColumn(image);
                 coordinatPoint.Y = Grid.GetRow(image);
                 foreach (var item in models)

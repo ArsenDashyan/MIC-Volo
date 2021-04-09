@@ -4,8 +4,8 @@ namespace ChessGame
 {
     interface IRandomMove : IAvailableMoves
     {
-        bool IsUnderAttack(CoordinatPoint CoordinatPoint);
-        bool IsProtected();
+        bool IsUnderAttack(CoordinatPoint coordinatPoint);
+        bool IsProtected(CoordinatPoint coordinatPoint);
         CoordinatPoint RandomMove(King king);
     }
 }

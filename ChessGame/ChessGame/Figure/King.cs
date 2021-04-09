@@ -171,19 +171,6 @@ namespace ChessGame
             }
             return false;
         }
-        public bool IsProtected()
-        {
-            var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
-            foreach (var item in model)
-            {
-                IAvailableMoves tempfigur = (IAvailableMoves)item;
-                if (tempfigur.AvailableMoves().Contains(this.Coordinate))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
         public bool IsProtected(CoordinatPoint CoordinatPoint)
         {
             var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();

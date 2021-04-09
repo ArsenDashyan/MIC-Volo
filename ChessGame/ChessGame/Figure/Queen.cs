@@ -14,7 +14,7 @@ namespace ChessGame
         #region Move
         public List<CoordinatPoint> Vertical()
         {
-            List<CoordinatPoint> arr = new List<CoordinatPoint>();
+            var arr = new List<CoordinatPoint>();
             var model = othereFigures.Where(c => c != this).ToList();
             for (int i = 0; i <= 7; i++)
             {
@@ -46,7 +46,7 @@ namespace ChessGame
         }
         public List<CoordinatPoint> Horizontal()
         {
-            List<CoordinatPoint> arr = new List<CoordinatPoint>();
+            var arr = new List<CoordinatPoint>();
             var model = othereFigures.Where(c => c != this).ToList();
             for (int i = 0; i <= 7; i++)
             {
@@ -93,7 +93,7 @@ namespace ChessGame
         }
         public List<CoordinatPoint> RightIndex()
         {
-            List<CoordinatPoint> arr = new List<CoordinatPoint>();
+            var arr = new List<CoordinatPoint>();
             var model = othereFigures.Where(c => c != this).ToList();
             int sum = this.Coordinate.X + this.Coordinate.Y;
             for (int i = 0; i <= 7; i++)
@@ -140,7 +140,7 @@ namespace ChessGame
         }
         public List<CoordinatPoint> LeftIndex()
         {
-            List<CoordinatPoint> arr = new List<CoordinatPoint>();
+            var arr = new List<CoordinatPoint>();
             int sub = this.Coordinate.X - this.Coordinate.Y;
             var model = othereFigures.Where(c => c != this).ToList();
 
@@ -199,7 +199,7 @@ namespace ChessGame
         #region Danger Moves
         private List<CoordinatPoint> VerticalForDanger()
         {
-            List<CoordinatPoint> arr = new List<CoordinatPoint>();
+            var arr = new List<CoordinatPoint>();
             var model = othereFigures.Where(c => c != this).ToList();
             for (int i = 0; i <= 7; i++)
             {
@@ -224,7 +224,7 @@ namespace ChessGame
         }
         private List<CoordinatPoint> HorizontalForDanger()
         {
-            List<CoordinatPoint> arr = new List<CoordinatPoint>();
+            var arr = new List<CoordinatPoint>();
             var model = othereFigures.Where(c => c != this).ToList();
             for (int i = 0; i <= 7; i++)
             {
@@ -249,7 +249,7 @@ namespace ChessGame
         }
         private List<CoordinatPoint> RightIndexForDanger()
         {
-            List<CoordinatPoint> arr = new List<CoordinatPoint>();
+            var arr = new List<CoordinatPoint>();
             var model = othereFigures.Where(c => c != this).ToList();
             int sum = this.Coordinate.X + this.Coordinate.Y;
             for (int i = 0; i <= 7; i++)
@@ -285,7 +285,7 @@ namespace ChessGame
         }
         private List<CoordinatPoint> LeftIndexForDanger()
         {
-            List<CoordinatPoint> arr = new List<CoordinatPoint>();
+            var arr = new List<CoordinatPoint>();
             int sub = this.Coordinate.X - this.Coordinate.Y;
             var model = othereFigures.Where(c => c != this).ToList();
 
@@ -338,19 +338,6 @@ namespace ChessGame
             {
                 IAvailableMoves itemFigur = (IAvailableMoves)item;
                 if (itemFigur.AvailableMoves().Contains(CoordinatPoint))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        public bool IsProtected()
-        {
-            var model = othereFigures.Where(c => c != this && c.Color == this.Color).ToList();
-            foreach (var item in model)
-            {
-                IAvailableMoves tempfigur = (IAvailableMoves)item;
-                if (tempfigur.AvailableMoves().Contains(this.Coordinate))
                 {
                     return true;
                 }
