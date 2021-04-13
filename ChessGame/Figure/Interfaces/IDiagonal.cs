@@ -1,9 +1,9 @@
 ﻿using Coordinates;
 using System.Collections.Generic;
 
-namespace ChessGame
+namespace Figure
 {
-    interface IDiagonal
+    public interface IDiagonal
     {
         List<CoordinatePoint> RightIndex();
         List<CoordinatePoint> LeftIndex();

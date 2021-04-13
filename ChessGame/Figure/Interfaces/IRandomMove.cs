@@ -1,8 +1,8 @@
 ﻿using Coordinates;
 
-namespace ChessGame
+namespace Figure
 {
-    interface IRandomMove : IAvailableMoves
+    public interface IRandomMove : IAvailableMoves
     {
         bool IsUnderAttack(CoordinatePoint coordinatPoint);
         bool IsProtected(CoordinatePoint coordinatPoint);

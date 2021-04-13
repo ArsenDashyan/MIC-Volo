@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ChessGame
+namespace Figure
 {
     public class Queen : BaseFigure, IDiagonal, ICrosswise, IRandomMove, IDangerMoves
     {

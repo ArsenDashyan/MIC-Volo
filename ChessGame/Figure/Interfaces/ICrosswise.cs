@@ -1,9 +1,9 @@
 ﻿using Coordinates;
 using System.Collections.Generic;
 
-namespace ChessGame
+namespace Figure
 {
-    interface ICrosswise
+    public interface ICrosswise
     {
         List<CoordinatePoint> Vertical();
         List<CoordinatePoint> Horizontal();

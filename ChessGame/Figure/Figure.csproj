@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Coordinats\Coordinates.csproj" />
+    <ProjectReference Include="..\Utility\Utility.csproj" />
   </ItemGroup>
 
 </Project>

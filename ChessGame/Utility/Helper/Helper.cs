@@ -1,4 +1,4 @@
-﻿using Coordinats;
+﻿using Coordinates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +12,10 @@ namespace Utility
         /// </summary>
         /// <param name="list">Current figur last fore moves</param>
         /// <returns>Return true if figure move is baby</returns>
-        public static bool BabyGame(this List<CoordinatPoint> list)
+        public static bool BabyGame(this List<CoordinatePoint> list)
         {
-            var tempOne = new List<CoordinatPoint>();
-            var tempTwo = new List<CoordinatPoint>();
+            var tempOne = new List<CoordinatePoint>();
+            var tempTwo = new List<CoordinatePoint>();
             if (list.Count >= 4)
             {
                 for (int i = list.Count - 1; i >= list.Count - 3; i -= 2)
@@ -81,7 +81,7 @@ namespace Utility
         /// </summary>
         /// <param name="coordinat">Current king coordinate</param>
         /// <returns>Return the half with inside current king</returns>
-        public static int GetCurrentKingHalf(this CoordinatPoint coordinat)
+        public static int GetCurrentKingHalf(this CoordinatePoint coordinat)
         {
             if (coordinat.X >=4 && coordinat.Y <=3)
             {

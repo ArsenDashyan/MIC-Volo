@@ -1,87 +1,105 @@
 ﻿using Coordinates;
 using System.Collections.Generic;
 using System.Linq;
+using Utility;
 
-namespace ChessGame
+namespace Figure
 {
-    public class Rook : BaseFigure, ICrosswise, IRandomMove, IDangerMoves
+    public class Knight : BaseFigure, ICrosswise, IRandomMove, IDangerMoves
     {
-        public Rook(string name, string color, List<BaseFigure> othereFigures) : base(othereFigures)
+        private int count = 1;
+        public Knight(string name, string color, List<BaseFigure> othereFigures) : base(othereFigures)
         {
             Name = name;
             Color = color;
         }
+
         #region Move
-        public List<CoordinatePoint> Vertical()
-        {
-            List<CoordinatePoint> arr = new List<CoordinatePoint>();
-            var model = othereFigures.Where(c => c != this).ToList();
-            for (int i = 0; i <= 7; i++)
-            {
-                CoordinatePoint CoordinatPointTemp = new CoordinatePoint(this.Coordinate.X, i);
-                arr.Add(CoordinatPointTemp);
-            }
-            foreach (var item in model)
-            {
-                if (arr.Contains(item.Coordinate))
-                {
-                    if (item.Color == this.Color)
-                    {
-                        if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                            arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
-                        else
-                            arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                    }
-                    else
-                    {
-                        if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                            arr = arr.Where(c => arr.IndexOf(c) <= arr.IndexOf(item.Coordinate)).ToList();
-                        else
-                            arr = arr.Where(c => arr.IndexOf(c) >= arr.IndexOf(item.Coordinate)).ToList();
-                    }
-                }
-            }
-            arr.Remove(this.Coordinate);
-            return arr;
-        }
         public List<CoordinatePoint> Horizontal()
         {
-            List<CoordinatePoint> arr = new List<CoordinatePoint>();
+            List<CoordinatePoint> result = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
-            for (int i = 0; i <= 7; i++)
+            if (this.Coordinate.Y + 2 <= 7)
             {
-                CoordinatePoint CoordinatPointTemp = new CoordinatePoint(i, this.Coordinate.Y);
-                arr.Add(CoordinatPointTemp);
+                if (this.Coordinate.X - 1 >= 0)
+                    result.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y + 2));
+                if (this.Coordinate.X + 1 <= 7)
+                    result.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y + 2));
+            }
+            if (this.Coordinate.Y - 2 >= 0)
+            {
+                if (this.Coordinate.X - 1 >= 0)
+                    result.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y - 2));
+                if (this.Coordinate.X + 1 <= 7)
+                    result.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y - 2));
             }
             foreach (var item in model)
             {
-                if (arr.Contains(item.Coordinate))
+                if (result.Contains(item.Coordinate))
                 {
                     if (item.Color == this.Color)
                     {
-                        if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                            arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
+                        if (result.IndexOf(this.Coordinate) < result.IndexOf(item.Coordinate))
+                            result = result.Where(c => result.IndexOf(c) < result.IndexOf(item.Coordinate)).ToList();
                         else
-                            arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
+                            result = result.Where(c => result.IndexOf(c) > result.IndexOf(item.Coordinate)).ToList();
                     }
                     else
                     {
-                        if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                            arr = arr.Where(c => arr.IndexOf(c) <= arr.IndexOf(item.Coordinate)).ToList();
+                        if (result.IndexOf(this.Coordinate) < result.IndexOf(item.Coordinate))
+                            result = result.Where(c => result.IndexOf(c) <= result.IndexOf(item.Coordinate)).ToList();
                         else
-                            arr = arr.Where(c => arr.IndexOf(c) >= arr.IndexOf(item.Coordinate)).ToList();
+                            result = result.Where(c => result.IndexOf(c) >= result.IndexOf(item.Coordinate)).ToList();
                     }
                 }
             }
-            arr.Remove(this.Coordinate);
-            return arr;
+            return result;
+        }
+        public List<CoordinatePoint> Vertical()
+        {
+            List<CoordinatePoint> result = new List<CoordinatePoint>();
+            var model = othereFigures.Where(c => c != this).ToList();
+            if (this.Coordinate.Y + 1 <= 7)
+            {
+                if (this.Coordinate.X - 2 >= 0)
+                    result.Add(new CoordinatePoint(this.Coordinate.X - 2, this.Coordinate.Y + 1));
+                if (this.Coordinate.X + 2 <= 7)
+                    result.Add(new CoordinatePoint(this.Coordinate.X + 2, this.Coordinate.Y + 1));
+            }
+            if (this.Coordinate.Y - 1 >= 0)
+            {
+                if (this.Coordinate.X - 2 >= 0)
+                    result.Add(new CoordinatePoint(this.Coordinate.X - 2, this.Coordinate.Y - 1));
+                if (this.Coordinate.X + 2 <= 7)
+                    result.Add(new CoordinatePoint(this.Coordinate.X + 2, this.Coordinate.Y - 1));
+            }
+            foreach (var item in model)
+            {
+                if (result.Contains(item.Coordinate))
+                {
+                    if (item.Color == this.Color)
+                    {
+                        if (result.IndexOf(this.Coordinate) < result.IndexOf(item.Coordinate))
+                            result = result.Where(c => result.IndexOf(c) < result.IndexOf(item.Coordinate)).ToList();
+                        else
+                            result = result.Where(c => result.IndexOf(c) > result.IndexOf(item.Coordinate)).ToList();
+                    }
+                    else
+                    {
+                        if (result.IndexOf(this.Coordinate) < result.IndexOf(item.Coordinate))
+                            result = result.Where(c => result.IndexOf(c) <= result.IndexOf(item.Coordinate)).ToList();
+                        else
+                            result = result.Where(c => result.IndexOf(c) >= result.IndexOf(item.Coordinate)).ToList();
+                    }
+                }
+            }
+            return result;
         }
         public List<CoordinatePoint> Crosswise()
         {
             var arrayHor = this.Horizontal();
             var arrayVert = this.Vertical();
             arrayHor.AddRange(arrayVert);
-            arrayHor.Remove(this.Coordinate);
             return arrayHor;
         }
         public List<CoordinatePoint> AvailableMoves()
@@ -90,14 +108,24 @@ namespace ChessGame
         }
 
         #region Danger Moves
+
         private List<CoordinatePoint> VerticalForDanger()
         {
             List<CoordinatePoint> arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
-            for (int i = 0; i <= 7; i++)
+            if (this.Coordinate.Y + 1 <= 7)
             {
-                CoordinatePoint CoordinatPointTemp = new CoordinatePoint(this.Coordinate.X, i);
-                arr.Add(CoordinatPointTemp);
+                if (this.Coordinate.X - 2 >= 0)
+                    arr.Add(new CoordinatePoint(this.Coordinate.X - 2, this.Coordinate.Y + 1));
+                if (this.Coordinate.X + 2 <= 7)
+                    arr.Add(new CoordinatePoint(this.Coordinate.X + 2, this.Coordinate.Y + 1));
+            }
+            if (this.Coordinate.Y - 1 >= 0)
+            {
+                if (this.Coordinate.X - 2 >= 0)
+                    arr.Add(new CoordinatePoint(this.Coordinate.X - 2, this.Coordinate.Y - 1));
+                if (this.Coordinate.X + 2 <= 7)
+                    arr.Add(new CoordinatePoint(this.Coordinate.X + 2, this.Coordinate.Y - 1));
             }
             foreach (var item in model)
             {
@@ -119,10 +147,19 @@ namespace ChessGame
         {
             List<CoordinatePoint> arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
-            for (int i = 0; i <= 7; i++)
+            if (this.Coordinate.Y + 2 <= 7)
             {
-                CoordinatePoint CoordinatPointTemp = new CoordinatePoint(i, this.Coordinate.Y);
-                arr.Add(CoordinatPointTemp);
+                if (this.Coordinate.X - 1 >= 0)
+                    arr.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y + 2));
+                if (this.Coordinate.X + 1 <= 7)
+                    arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y + 2));
+            }
+            if (this.Coordinate.Y - 2 >= 0)
+            {
+                if (this.Coordinate.X - 1 >= 0)
+                    arr.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y - 2));
+                if (this.Coordinate.X + 1 <= 7)
+                    arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y - 2));
             }
             foreach (var item in model)
             {
@@ -259,7 +296,7 @@ namespace ChessGame
                 this.Coordinate = item;
                 if (!IsUnderAttack(this.Coordinate))
                 {
-                    if (CoordinatePoint.Modul(item, king.Coordinate) > 2)
+                    if (CoordinatePoint.Modul(item, king.Coordinate) >= 2d)
                     {
                         if (AvailableMoves().Count == 14)
                         {
@@ -274,6 +311,50 @@ namespace ChessGame
             tempForItem = null;
             return false;
         }
-
+        public int MinKnightCount(CoordinatePoint CoordinatPoint)
+        {
+            var knightMoves = KnightMove.Crosswise(this.Coordinate);
+            var endMoves = KnightMove.Crosswise(CoordinatPoint);
+            if (knightMoves.Contains((CoordinatPoint)))
+            {
+                return count;
+            }
+            else
+            {
+                count++;
+                if (KnightMove.Equals(this.Coordinate, CoordinatPoint))
+                {
+                    return count;
+                }
+                else
+                {
+                    count++;
+                    if (KnightMove.Equals(knightMoves, CoordinatPoint))
+                    {
+                        return count;
+                    }
+                    else
+                    {
+                        count++;
+                        if (KnightMove.Equals(knightMoves, endMoves))
+                        {
+                            return count;
+                        }
+                        else
+                        {
+                            count++;
+                            if (KnightMove.EqualsEnd(knightMoves, endMoves))
+                            {
+                                return count;
+                            }
+                            else
+                            {
+                                return 6;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

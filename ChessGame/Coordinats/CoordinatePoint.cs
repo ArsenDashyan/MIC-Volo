@@ -1,19 +1,19 @@
 ﻿using System;
 
-namespace Coordinats
+namespace Coordinates
 {
-    public class CoordinatPoint
+    public class CoordinatePoint
     {
         public int X { get; set; }
         public int Y { get; set; }
-        public CoordinatPoint(int x, int y) => (X, Y) = (x, y);
+        public CoordinatePoint(int x, int y) => (X, Y) = (x, y);
         public override bool Equals(object obj)
         {
-            if (!(obj is CoordinatPoint))
+            if (!(obj is CoordinatePoint))
                 return false;
             else
             {
-                CoordinatPoint temp = (CoordinatPoint)obj;
+                CoordinatePoint temp = (CoordinatePoint)obj;
                 return this.X == temp.X && this.Y == temp.Y;
             }
         }
@@ -42,21 +42,21 @@ namespace Coordinats
             return ch;
         }
 #nullable enable
-        public static bool operator ==(CoordinatPoint? p1, CoordinatPoint? p2)
+        public static bool operator ==(CoordinatePoint? p1, CoordinatePoint? p2)
         {
             return p1?.X == p2?.X && p1?.Y == p2?.Y;
         }
-        public static bool operator !=(CoordinatPoint? p1, CoordinatPoint? p2)
+        public static bool operator !=(CoordinatePoint? p1, CoordinatePoint? p2)
         {
             return !(p1?.X == p2?.X && p1?.Y == p2?.Y);
         }
 
-        public static double operator -(CoordinatPoint CoordinatPoint, CoordinatPoint CoordinatPoint1)
+        public static double operator -(CoordinatePoint CoordinatPoint, CoordinatePoint CoordinatPoint1)
         {
             return Math.Sqrt((CoordinatPoint1.X - CoordinatPoint.X) * (CoordinatPoint1.X - CoordinatPoint.X) +
                             (CoordinatPoint1.Y - CoordinatPoint.Y) * (CoordinatPoint1.Y - CoordinatPoint.Y));
         }
-        public static double Modul(CoordinatPoint CoordinatPoint, CoordinatPoint CoordinatPoint1)
+        public static double Modul(CoordinatePoint CoordinatPoint, CoordinatePoint CoordinatPoint1)
         {
             return Math.Sqrt((CoordinatPoint1.X - CoordinatPoint.X) * (CoordinatPoint1.X - CoordinatPoint.X) +
                              (CoordinatPoint1.Y - CoordinatPoint.Y) * (CoordinatPoint1.Y - CoordinatPoint.Y));

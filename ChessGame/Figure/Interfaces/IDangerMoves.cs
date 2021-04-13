@@ -1,9 +1,9 @@
 ﻿using Coordinates;
 using System.Collections.Generic;
 
-namespace ChessGame
+namespace Figure
 {
-    interface IDangerMoves
+    public interface IDangerMoves
     {
         public List<CoordinatePoint> DangerMoves();
     }

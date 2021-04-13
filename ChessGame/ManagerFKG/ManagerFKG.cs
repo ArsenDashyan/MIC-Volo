@@ -2,25 +2,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Controls;
 using Utility;
+using Figure;
 
-namespace ChessGame
+namespace ManagerFKG
 {
-    class Manager
+    class Manager<T,U>
     {
         #region Property and Feld
         private readonly List<BaseFigure> models;
         private readonly List<CoordinatePoint> currentListForBabyGame;
         private readonly BaseFigure CurentKing;
         private readonly string currentFigureColor;
-        private readonly Grid Board;
-        private readonly TextBox moveTextBox;
-        private readonly TextBox MessageHandle;
+        private readonly T Board;
+        private readonly U moveTextBox;
+        private readonly U MessageHandle;
         #endregion
 
         public Manager(List<CoordinatePoint> currentListForBabyGame, BaseFigure CurentKing, List<BaseFigure> models,
-                                 string currentFigureColor, Grid grid, TextBox moveTextBox, TextBox MessageHandle)
+                                 string currentFigureColor, T grid, U moveTextBox, U MessageHandle)
         {
             this.currentListForBabyGame = currentListForBabyGame;
             this.CurentKing = CurentKing;

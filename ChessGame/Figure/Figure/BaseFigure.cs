@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
-namespace ChessGame
+namespace Figure
 {
     public class BaseFigure : ISetPosition
     {

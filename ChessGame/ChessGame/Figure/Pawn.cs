@@ -1,4 +1,4 @@
-﻿using Coordinats;
+﻿using Coordinates;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,13 +13,13 @@ namespace ChessGame
         }
 
         #region Move
-        public List<CoordinatPoint> Vertical()
+        public List<CoordinatePoint> Vertical()
         {
-            List<CoordinatPoint> arr = new List<CoordinatPoint>();
+            List<CoordinatePoint> arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
             if (this.Coordinate.Y + 1 <= 7 && this.Coordinate.Y + 1 >= 0)
             {
-                arr.Add(new CoordinatPoint(this.Coordinate.X, this.Coordinate.Y + 1));
+                arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y + 1));
             }
             foreach (var item in model)
             {
@@ -44,26 +44,26 @@ namespace ChessGame
             arr.Remove(this.Coordinate);
             return arr;
         }
-        public List<CoordinatPoint> Crosswise()
+        public List<CoordinatePoint> Crosswise()
         {
             return this.Vertical();
         }
-        public List<CoordinatPoint> AvailableMoves()
+        public List<CoordinatePoint> AvailableMoves()
         {
-            var result = new List<CoordinatPoint>();
+            var result = new List<CoordinatePoint>();
             result.AddRange(Crosswise());
             result.Remove(this.Coordinate);
             return result;
         }
 
         #region Danger Moves
-        private List<CoordinatPoint> VerticalForDanger()
+        private List<CoordinatePoint> VerticalForDanger()
         {
-            List<CoordinatPoint> arr = new List<CoordinatPoint>();
+            List<CoordinatePoint> arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
             if (this.Coordinate.Y + 1 <= 7 && this.Coordinate.Y + 1 >= 0)
             {
-                arr.Add(new CoordinatPoint(this.Coordinate.X, this.Coordinate.Y + 1));
+                arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y + 1));
             }
             foreach (var item in model)
             {
@@ -81,13 +81,13 @@ namespace ChessGame
             arr.Remove(this.Coordinate);
             return arr;
         }
-        public List<CoordinatPoint> DangerMoves()
+        public List<CoordinatePoint> DangerMoves()
         {
             return this.VerticalForDanger();
         }
         #endregion
         #endregion
-        public bool IsUnderAttack(CoordinatPoint CoordinatPoint)
+        public bool IsUnderAttack(CoordinatePoint CoordinatPoint)
         {
             var modelNew = othereFigures.Where(c => c.Color != this.Color).ToList();
             foreach (var item in modelNew)
@@ -100,7 +100,7 @@ namespace ChessGame
             }
             return false;
         }
-        public bool IsProtected(CoordinatPoint CoordinatPoint)
+        public bool IsProtected(CoordinatePoint CoordinatPoint)
         {
             var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
             foreach (var item in model)
@@ -113,20 +113,20 @@ namespace ChessGame
             }
             return false;
         }
-        public CoordinatPoint RandomMove(King king)
+        public CoordinatePoint RandomMove(King king)
         {
-            CoordinatPoint temp = null;
-            if (ProtectedShax(king, out CoordinatPoint tempForItem))
+            CoordinatePoint temp = null;
+            if (ProtectedShax(king, out CoordinatePoint tempForItem))
             {
                 temp = tempForItem;
                 return temp;
             }
-            else if (IsUnderAttackShax(king, out CoordinatPoint tempForItem2))
+            else if (IsUnderAttackShax(king, out CoordinatePoint tempForItem2))
             {
                 temp = tempForItem2;
                 return temp;
             }
-            else if (IsUnderAttackMax(king, out CoordinatPoint tempForItem3))
+            else if (IsUnderAttackMax(king, out CoordinatePoint tempForItem3))
             {
                 temp = tempForItem3;
                 return temp;
@@ -144,15 +144,15 @@ namespace ChessGame
             }
             return temp;
         }
-        private bool ProtectedShax(King king, out CoordinatPoint tempForItem)
+        private bool ProtectedShax(King king, out CoordinatePoint tempForItem)
         {
-            CoordinatPoint temp = this.Coordinate;
+            CoordinatePoint temp = this.Coordinate;
             foreach (var item in AvailableMoves())
             {
                 this.Coordinate = item;
                 if (IsProtected(item))
                 {
-                    if (CoordinatPoint.Modul(item, king.Coordinate) >= 2d)
+                    if (CoordinatePoint.Modul(item, king.Coordinate) >= 2d)
                     {
                         if (AvailableMoves().Contains(king.Coordinate))
                         {
@@ -167,15 +167,15 @@ namespace ChessGame
             tempForItem = null;
             return false;
         }
-        private bool IsUnderAttackShax(King king, out CoordinatPoint tempForItem)
+        private bool IsUnderAttackShax(King king, out CoordinatePoint tempForItem)
         {
-            CoordinatPoint temp = this.Coordinate;
+            CoordinatePoint temp = this.Coordinate;
             foreach (var item in AvailableMoves())
             {
                 this.Coordinate = item;
                 if (!IsUnderAttack(this.Coordinate))
                 {
-                    if (CoordinatPoint.Modul(item, king.Coordinate) >= 2d)
+                    if (CoordinatePoint.Modul(item, king.Coordinate) >= 2d)
                     {
                         if (AvailableMoves().Contains(king.Coordinate))
                         {
@@ -190,15 +190,15 @@ namespace ChessGame
             tempForItem = null;
             return false;
         }
-        private bool IsUnderAttackMax(King king, out CoordinatPoint tempForItem)
+        private bool IsUnderAttackMax(King king, out CoordinatePoint tempForItem)
         {
-            CoordinatPoint temp = this.Coordinate;
+            CoordinatePoint temp = this.Coordinate;
             foreach (var item in AvailableMoves())
             {
                 this.Coordinate = item;
                 if (!IsUnderAttack(this.Coordinate))
                 {
-                    if (CoordinatPoint.Modul(item, king.Coordinate) >= 2d)
+                    if (CoordinatePoint.Modul(item, king.Coordinate) >= 2d)
                     {
                         if (AvailableMoves().Count == 14)
                         {

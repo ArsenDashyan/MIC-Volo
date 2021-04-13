@@ -1,9 +1,9 @@
 ﻿using Coordinates;
 using System.Collections.Generic;
 
-namespace ChessGame
+namespace Figure
 {
-    interface IVertical
+    public interface IVertical
     {
         public List<CoordinatePoint> Vertical();
     }

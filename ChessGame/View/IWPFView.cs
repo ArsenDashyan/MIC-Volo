@@ -1,26 +1,16 @@
 ﻿using Coordinates;
-using System.Collections.Generic;
+using System;
 using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Media.Imaging;
 
-namespace ChessGame
+namespace View
 {
-    public class BaseFigure : ISetPosition
+    public interface IWPFView
     {
-        protected readonly List<BaseFigure> othereFigures;
-        #region Property and Feld
         public string Name { get; set; }
         public string Color { get; set; }
-        public CoordinatePoint Coordinate { get; set; }
         public BitmapImage Bitmap { get; set; }
         public Image FigureImage { get; set; }
-        #endregion
-
-        public BaseFigure(List<BaseFigure> othereFigures)
-        {
-            this.othereFigures = othereFigures;
-        }
+        public CoordinatePoint Coordinate { get; set; }
         public void SetFigurePosition(CoordinatePoint coordinate, Grid grid)
         {
             RemoveFigureFromBoard(this, grid);
@@ -33,7 +23,7 @@ namespace ChessGame
             FigureImage.Name = this.Name;
             DeleteFigur(this, grid);
         }
-        public void RemoveFigureFromBoard(BaseFigure figure, Grid grid)
+        public void RemoveFigureFromBoard(object figure, Grid grid)
         {
             if (figure.Coordinate != null)
             {
@@ -43,7 +33,7 @@ namespace ChessGame
                 grid.Children.Remove(this.FigureImage);
             }
         }
-        private void DeleteFigur(BaseFigure model, Grid grid)
+        public void DeleteFigur(Object model, Grid grid)
         {
             var modelTemp = othereFigures.Where(c => c.Color != model.Color);
             foreach (var item in modelTemp)
