@@ -1,11 +1,9 @@
-﻿using Coordinates;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Media.Imaging;
 
 namespace Figure
 {
+    public delegate void SetPicture(object sender, CoordinatePoint e);
     public class BaseFigure : ISetPosition
     {
         protected readonly List<BaseFigure> othereFigures;
@@ -13,37 +11,22 @@ namespace Figure
         public string Name { get; set; }
         public string Color { get; set; }
         public CoordinatePoint Coordinate { get; set; }
-        public BitmapImage Bitmap { get; set; }
-        public Image FigureImage { get; set; }
+
+        public event SetPicture setPicture;
+
         #endregion
 
         public BaseFigure(List<BaseFigure> othereFigures)
         {
             this.othereFigures = othereFigures;
         }
-        public void SetFigurePosition(CoordinatePoint coordinate, Grid grid)
+        public void SetFigurePosition(CoordinatePoint coordinate)
         {
-            RemoveFigureFromBoard(this, grid);
-            this.FigureImage = new Image();
-            this.FigureImage.Source = this.Bitmap;
-            Grid.SetColumn(FigureImage, (int)coordinate.X);
-            Grid.SetRow(FigureImage, (int)coordinate.Y);
             this.Coordinate = coordinate;
-            grid.Children.Add(FigureImage);
-            FigureImage.Name = this.Name;
-            DeleteFigur(this, grid);
+            setPicture(this, this.Coordinate);
+            DeleteFigur(this);
         }
-        public void RemoveFigureFromBoard(BaseFigure figure, Grid grid)
-        {
-            if (figure.Coordinate != null)
-            {
-                this.FigureImage.Source = figure.Bitmap;
-                Grid.SetColumn(this.FigureImage, (int)figure.Coordinate.X);
-                Grid.SetRow(this.FigureImage, (int)figure.Coordinate.Y);
-                grid.Children.Remove(this.FigureImage);
-            }
-        }
-        private void DeleteFigur(BaseFigure model, Grid grid)
+        private void DeleteFigur(BaseFigure model)
         {
             var modelTemp = othereFigures.Where(c => c.Color != model.Color);
             foreach (var item in modelTemp)
@@ -51,7 +34,6 @@ namespace Figure
                 if (model.Coordinate == item.Coordinate)
                 {
                     ISetPosition tempItem = (ISetPosition)item;
-                    tempItem.RemoveFigureFromBoard(item, grid);
                     othereFigures.Remove(item);
                     break;
                 }

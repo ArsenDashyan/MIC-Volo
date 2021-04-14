@@ -1,6 +1,4 @@
-﻿using Coordinates;
-
-namespace Figure
+﻿namespace Figure
 {
     public interface IRandomMove : IAvailableMoves
     {

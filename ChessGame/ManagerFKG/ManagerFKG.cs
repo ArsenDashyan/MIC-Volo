@@ -1,8 +1,7 @@
-﻿using Coordinates;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Utility;
+using Helper;
 using Figure;
 
 namespace ManagerFKG
@@ -14,21 +13,15 @@ namespace ManagerFKG
         private readonly List<CoordinatePoint> currentListForBabyGame;
         private readonly BaseFigure CurentKing;
         private readonly string currentFigureColor;
-        private readonly T Board;
-        private readonly U moveTextBox;
-        private readonly U MessageHandle;
         #endregion
 
         public Manager(List<CoordinatePoint> currentListForBabyGame, BaseFigure CurentKing, List<BaseFigure> models,
-                                 string currentFigureColor, T grid, U moveTextBox, U MessageHandle)
+                                 string currentFigureColor)
         {
             this.currentListForBabyGame = currentListForBabyGame;
             this.CurentKing = CurentKing;
             this.models = models;
             this.currentFigureColor = currentFigureColor;
-            this.Board = grid;
-            this.moveTextBox = moveTextBox;
-            this.MessageHandle = MessageHandle;
         }
 
         /// <summary>
@@ -48,8 +41,7 @@ namespace ManagerFKG
                 else
                     AntiBabyGame();
             }
-            if (GetCurrentKingMoves().Count == 0)
-                MessageHandle.Text = "Mate";
+            //if (GetCurrentKingMoves().Count == 0)
         }
 
         #region Block Methods
@@ -281,17 +273,11 @@ namespace ManagerFKG
             var randomeMove = (IRandomMove)setFigurFirst;
             if (!randomeMove.IsUnderAttack(minMoves.Key))
             {
-                moveTextBox.Text += $"{setFigurFirst.Coordinate} - " +
-                                   $"{minMoves.Key}\n{new string('-', 8)}\n";
-                MessageHandle.Text = "Check";
-                setFigurFirst.SetFigurePosition(minMoves.Key, Board);
+                setFigurFirst.SetFigurePosition(minMoves.Key);
             }
             else
             {
-                moveTextBox.Text += $"{setFigurLast.Coordinate} - " +
-                                   $"{maxMoves.Key}\n{new string('-', 8)}\n";
-                MessageHandle.Text = "Check";
-                setFigurLast.SetFigurePosition(maxMoves.Key, Board);
+                setFigurLast.SetFigurePosition(maxMoves.Key);
             }
         }
 
@@ -309,15 +295,11 @@ namespace ManagerFKG
             IRandomMove randomeMove = (IRandomMove)setFigurFirst;
             if (!randomeMove.IsUnderAttack(minMoves.Key))
             {
-                moveTextBox.Text += $"{setFigurFirst.Coordinate} - " +
-                                       $"{minMoves.Key}\n{new string('-', 8)}\n";
-                setFigurFirst.SetFigurePosition(minMoves.Key, Board);
+                setFigurFirst.SetFigurePosition(minMoves.Key);
             }
             else
             {
-                moveTextBox.Text += $"{setFigurLast.Coordinate} - " +
-                                       $"{maxMoves.Key}\n{new string('-', 8)}\n";
-                setFigurLast.SetFigurePosition(maxMoves.Key, Board);
+                setFigurLast.SetFigurePosition(maxMoves.Key);
             }
         }
 
@@ -358,9 +340,7 @@ namespace ManagerFKG
             (double, BaseFigure) max = destination.OrderBy(k => k.Item1).FirstOrDefault();
             var tempFigur = (IRandomMove)max.Item2;
             var tempCoordinate = tempFigur.RandomMove((King)CurentKing);
-            moveTextBox.Text += $"{max.Item2.Coordinate} - " +
-                                          $"{tempCoordinate}\n{new string('-', 8)}\n";
-            max.Item2.SetFigurePosition(tempCoordinate, Board);
+            max.Item2.SetFigurePosition(tempCoordinate);
             //BaseFigure temp = modelNew[new Random().Next(0, modelNew.Count())];
             //IRandomMove tempFigur = (IRandomMove)temp;
             //var tempCoordinate = tempFigur.RandomMove((King)CurentKing);
@@ -385,9 +365,7 @@ namespace ManagerFKG
                     if (!tempFigur.IsProtected(figur.Coordinate))
                     {
                         CoordinatePoint CoordinatPoint1 = tempFigur.RandomMove((King)CurentKing);
-                        moveTextBox.Text += $"{figur.Coordinate} - " +
-                                           $"{CoordinatPoint1}\n{new string('-', 8)}\n";
-                        figur.SetFigurePosition(CoordinatPoint1, Board);
+                        figur.SetFigurePosition(CoordinatPoint1);
                         return true;
                     }
                 }
