@@ -116,7 +116,6 @@ namespace ChessGame
                 Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor);
                 manager.Logic();
             }
-
         }
         public void SetFigurePicture(object baseFigure, CoordinatePoint coordinate)
         {
@@ -241,7 +240,7 @@ namespace ChessGame
                         if (whiteRookCount <= 1)
                         {
                             whiteRookCount++;
-                            baseFigure = new Rook(figure + "." + color + whiteRookCount, color, models);
+                            baseFigure = new Rook(figure + "." + color + "." + whiteRookCount, color, models);
                             return true;
                         }
                         else
@@ -254,7 +253,7 @@ namespace ChessGame
                         if (whiteBishopCount <= 1)
                         {
                             whiteBishopCount++;
-                            baseFigure = new Bishop(figure + "." + color + whiteBishopCount, color, models);
+                            baseFigure = new Bishop(figure + "." + color + "." + whiteBishopCount, color, models);
                             return true;
                         }
                         else
@@ -267,7 +266,7 @@ namespace ChessGame
                         if (whiteKnightCount <= 1)
                         {
                             whiteKnightCount++;
-                            baseFigure = new Knight(figure + "." + color + whiteKnightCount, color, models);
+                            baseFigure = new Knight(figure + "." + color + "." + whiteKnightCount, color, models);
                             return true;
                         }
                         else
@@ -280,7 +279,7 @@ namespace ChessGame
                         if (whitePawnCount <= 7)
                         {
                             whitePawnCount++;
-                            baseFigure = new Pawn(figure + "." + color + whitePawnCount, color, models);
+                            baseFigure = new Pawn(figure + "." + color + "." + whitePawnCount, color, models);
                             return true;
                         }
                         else
@@ -328,7 +327,7 @@ namespace ChessGame
                         if (blackRookCount <= 1)
                         {
                             blackRookCount++;
-                            baseFigure = new Rook(figure + "." + color + blackRookCount, color, models);
+                            baseFigure = new Rook(figure + "." + color + "." + blackRookCount, color, models);
                             return true;
                         }
                         else
@@ -341,7 +340,7 @@ namespace ChessGame
                         if (blackBishopCount <= 1)
                         {
                             blackBishopCount++;
-                            baseFigure = new Bishop(figure + "." + color + blackBishopCount, color, models);
+                            baseFigure = new Bishop(figure + "." + color + "." + blackBishopCount, color, models);
                             return true;
                         }
                         else
@@ -354,7 +353,7 @@ namespace ChessGame
                         if (blackKnightCount <= 1)
                         {
                             blackKnightCount++;
-                            baseFigure = new Knight(figure + "." + color + blackKnightCount, color, models);
+                            baseFigure = new Knight(figure + "." + color + "." + blackKnightCount, color, models);
                             return true;
                         }
                         else
@@ -367,7 +366,7 @@ namespace ChessGame
                         if (blackPawnCount <= 7)
                         {
                             blackPawnCount++;
-                            baseFigure = new Pawn(figure + "." + color + blackPawnCount, color, models);
+                            baseFigure = new Pawn(figure + "." + color + "." + blackPawnCount, color, models);
                             return true;
                         }
                         else
@@ -761,10 +760,10 @@ namespace ChessGame
         /// </summary>
         private void ResetBoard()
         {
-            //foreach (var item in models)
-            //{
-            //    Board.Children.Remove(item);
-            //}
+            foreach (var item in models)
+            {
+                item.RemoveFigurePosition();
+            }
             models.Clear();
             whiteKingCount = 0;
             whiteQueenCount = 0;
