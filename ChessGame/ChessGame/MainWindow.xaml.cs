@@ -46,8 +46,9 @@ namespace ChessGame
             InitializeComponent();
         }
 
-
         #region Game
+
+        #region King game Button
         private void PleacementB1_Click(object sender, RoutedEventArgs e)
         {
             string[] tempFigure = GetCurrentFigureImage().Split('/');
@@ -108,7 +109,7 @@ namespace ChessGame
                 }
             }
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void InstallButton(object sender, RoutedEventArgs e)
         {
             PlayB2.IsEnabled = false;
             if (GetCurrentFigure())
@@ -117,6 +118,12 @@ namespace ChessGame
                 manager.Logic();
             }
         }
+
+        /// <summary>
+        /// Set the figure image
+        /// </summary>
+        /// <param name="baseFigure">Figure instance</param>
+        /// <param name="coordinate">Figure </param>
         public void SetFigurePicture(object baseFigure, CoordinatePoint coordinate)
         {
             BaseFigure tempFigure = (BaseFigure)baseFigure;
@@ -131,6 +138,12 @@ namespace ChessGame
             Grid.SetRow(image, (int)coordinate.Y);
             Board.Children.Add(image);
         }
+
+        /// <summary>
+        /// Remove the figure image
+        /// </summary>
+        /// <param name="baseFigure">Figure instance</param>
+        /// <param name="coordinate">Figure </param>
         public void RemoveFigurePicture(object baseFigure, CoordinatePoint coordinate)
         {
             BaseFigure tempFigure = (BaseFigure)baseFigure;
@@ -149,12 +162,31 @@ namespace ChessGame
             }
 
         }
+
+        /// <summary>
+        /// Get a figure image source
+        /// </summary>
+        /// <param name="name">Figure name</param>
+        /// <returns>Return the instance image source</returns>
+
+
+        #endregion
+
+        /// <summary>
+        /// Get a figure image source
+        /// </summary>
+        /// <returns>Return the instance image source</returns>
         private string GetCurrentFigureImage(string name)
         {
             string[] str = name.Split('.');
             string result = str[1] == "White" ? str[0].WhiteFigurePath() : str[0].BlackFigurePath();
             return result;
         }
+
+        /// <summary>
+        /// Get a figure image source
+        /// </summary>
+        /// <returns>Return the instance image source</returns>
         private string GetCurrentFigureImage()
         {
             string str = SelectFigur.Text;
@@ -676,10 +708,18 @@ namespace ChessGame
             }
             return positions;
         }
+
         #endregion
 
         #region For Knight Moves
 
+        /// <summary>
+        /// Get a coordinate for knight start position
+        /// </summary>
+        /// <param name="textBoxLetter">Letter coordinate text box name</param>
+        /// <param name="textBoxNumber">Number coordinate text box name</param>
+        /// <param name="CoordinatPoint">Out parametr</param>
+        /// <returns>Return the coordinate for knight start position</returns>
         private bool GetCoordinateKnight(TextBox textBoxLetter, TextBox textBoxNumber, out CoordinatePoint CoordinatPoint)
         {
             string inputLetter = textBoxLetter.Text;
@@ -726,7 +766,7 @@ namespace ChessGame
             }
 
         }
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void KnightSetButton(object sender, RoutedEventArgs e)
         {
             if (GetCoordinateKnight(KnightStartLetter, KnightStartNumber, out CoordinatePoint coordinatPoint))
             {
@@ -755,6 +795,8 @@ namespace ChessGame
 
         #endregion
 
+        #region Reset Method and buttons
+
         /// <summary>
         /// Reset Board for start game
         /// </summary>
@@ -780,6 +822,49 @@ namespace ChessGame
             MovesTextBox.Text = "";
             MessageHandle.Text = "";
         }
+
+        /// <summary>
+        /// Reset button the Board for start King game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Reset_Button(object sender, RoutedEventArgs e)
+        {
+            ResetBoard();
+            PlayB2.IsEnabled = true;
+            CheckBlack.IsEnabled = true;
+            CheckWhite.IsEnabled = true;
+            SelectFigur.IsEnabled = true;
+            InputCoordinatsLetter.IsEnabled = true;
+            InputCoordinatsNumber.IsEnabled = true;
+            PleacementB1.IsEnabled = true;
+            PlayColorWhite.IsEnabled = true;
+            PlayColorBlack.IsEnabled = true;
+            InputCoordinatsLetter_Corrent.IsEnabled = false;
+            InputCoordinatsNumber_Corrent.IsEnabled = false;
+            InputCoordinatsLetter_Selected.IsEnabled = false;
+            InputCoordinatsNumber_Selected.IsEnabled = false;
+            InstalB3.IsEnabled = false;
+        }
+
+        /// <summary>
+        /// Reset button the Board for start Knight game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Reset_ButtonForKnight(object sender, RoutedEventArgs e)
+        {
+            ResetBoard();
+            KnightMovesMessage.Text = "";
+            KnightStartLetter.Text = "";
+            KnightStartNumber.Text = "";
+            KnightTargetLetter.Text = "";
+            KnightTargetNumber.Text = "";
+        }
+
+        #endregion
+
+        #region Drag and Drop
         private void Board_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var image = e.Source as Image;
@@ -840,43 +925,7 @@ namespace ChessGame
             }
         }
 
-        /// <summary>
-        /// Reset button the Board for start King game
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Reset_Button(object sender, RoutedEventArgs e)
-        {
-            ResetBoard();
-            PlayB2.IsEnabled = true;
-            CheckBlack.IsEnabled = true;
-            CheckWhite.IsEnabled = true;
-            SelectFigur.IsEnabled = true;
-            InputCoordinatsLetter.IsEnabled = true;
-            InputCoordinatsNumber.IsEnabled = true;
-            PleacementB1.IsEnabled = true;
-            PlayColorWhite.IsEnabled = true;
-            PlayColorBlack.IsEnabled = true;
-            InputCoordinatsLetter_Corrent.IsEnabled = false;
-            InputCoordinatsNumber_Corrent.IsEnabled = false;
-            InputCoordinatsLetter_Selected.IsEnabled = false;
-            InputCoordinatsNumber_Selected.IsEnabled = false;
-            InstalB3.IsEnabled = false;
-        }
-        /// <summary>
-        /// Reset button the Board for start Knight game
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Reset_ButtonForKnight(object sender, RoutedEventArgs e)
-        {
-            ResetBoard();
-            KnightMovesMessage.Text = "";
-            KnightStartLetter.Text = "";
-            KnightStartNumber.Text = "";
-            KnightTargetLetter.Text = "";
-            KnightTargetNumber.Text = "";
-        }
+        #endregion
 
         #region MenuStrip
         private void MenuItem_Click(object sender, RoutedEventArgs e)

@@ -178,7 +178,7 @@
                     </TextBox.Effect>
                 </TextBox>
                 <Label Content="Target Coordinates" HorizontalAlignment="Left" Margin="132,180,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                <Button Name="InstalB3"  Content="Install" IsEnabled="False" HorizontalAlignment="Left" Margin="265,200,0,0" VerticalAlignment="Top" Width="65" Height="30" FontSize="14" FontWeight="Bold" Click="Button_Click">
+                <Button Name="InstalB3"  Content="Install" IsEnabled="False" HorizontalAlignment="Left" Margin="265,200,0,0" VerticalAlignment="Top" Width="65" Height="30" FontSize="14" FontWeight="Bold" Click="InstallButton">
                     <Button.Effect>
                         <DropShadowEffect/>
                     </Button.Effect>
@@ -243,7 +243,7 @@
                             <DropShadowEffect/>
                         </TextBox.Effect>
                     </TextBox>
-                    <Button Content="Set" HorizontalAlignment="Left" Margin="203,52,0,0" VerticalAlignment="Top" Width="60" Height="30" FontSize="14" FontWeight="Bold" Click="Button_Click_1"/>
+                    <Button Content="Set" HorizontalAlignment="Left" Margin="203,52,0,0" VerticalAlignment="Top" Width="60" Height="30" FontSize="14" FontWeight="Bold" Click="KnightSetButton"/>
                     <Button Content="Reset" Height="50" Width="64" HorizontalAlignment="Left" Margin="210,234,0,0" VerticalAlignment="Top" Background="#FFC71919" FontSize="14" FontWeight="Bold" Click="Reset_ButtonForKnight">
                         <Button.Effect>
                             <DropShadowEffect/>
