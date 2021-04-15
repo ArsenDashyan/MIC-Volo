@@ -27,7 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Coordinats\Coordinates.csproj" />
+    <ProjectReference Include="..\Figure\Figure.csproj" />
+    <ProjectReference Include="..\ManagerFKG\ManagerFKG.csproj" />
+    <ProjectReference Include="..\MovesFKnight\MovesFKnight.csproj" />
     <ProjectReference Include="..\Utility\Utility.csproj" />
   </ItemGroup>
 

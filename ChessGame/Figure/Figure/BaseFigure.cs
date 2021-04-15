@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Figure
 {
-    public delegate void SetPicture(object sender, CoordinatePoint e);
+    public delegate void Picture(object sender, CoordinatePoint e);
     public class BaseFigure : ISetPosition
     {
         protected readonly List<BaseFigure> othereFigures;
@@ -12,7 +12,8 @@ namespace Figure
         public string Color { get; set; }
         public CoordinatePoint Coordinate { get; set; }
 
-        public event SetPicture setPicture;
+        public event Picture setPicture;
+        public event Picture removePicture;
 
         #endregion
 
@@ -22,9 +23,18 @@ namespace Figure
         }
         public void SetFigurePosition(CoordinatePoint coordinate)
         {
+            RemoveFigurePosition();
             this.Coordinate = coordinate;
             setPicture(this, this.Coordinate);
             DeleteFigur(this);
+        }
+
+        public void RemoveFigurePosition()
+        {
+            if (this.Coordinate != null)
+            {
+                removePicture(this, this.Coordinate);
+            }
         }
         private void DeleteFigur(BaseFigure model)
         {

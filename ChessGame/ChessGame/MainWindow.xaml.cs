@@ -1,13 +1,13 @@
-﻿using Coordinates;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Utility;
+using Figure;
+using ManagerFKG;
+using MovesFKnight;
 
 namespace ChessGame
 {
@@ -46,25 +46,23 @@ namespace ChessGame
             InitializeComponent();
         }
 
+
         #region Game
         private void PleacementB1_Click(object sender, RoutedEventArgs e)
         {
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(GetCurrentFigureColor(), UriKind.Relative);
-            bitmap.EndInit();
-            string[] tempFigure = GetCurrentFigureColor().Split('/');
+            string[] tempFigure = GetCurrentFigureImage().Split('/');
             string color = tempFigure[tempFigure.Length - 1].Split('.')[0];
             string figure = tempFigure[tempFigure.Length - 1].Split('.')[1];
             if (GetCoordinatesForPleacement(out CoordinatePoint CoordinatPoint) && GetFigureBase(figure, color, out BaseFigure temp))
             {
+                temp.setPicture += SetFigurePicture;
+                temp.removePicture += RemoveFigurePicture;
                 if (temp is King king)
                 {
                     if (!DangerPosition(king).Contains(CoordinatPoint))
                     {
                         models.Add(temp);
-                        temp.Bitmap = bitmap;
-                        temp.SetFigurePosition(CoordinatPoint, Board);
+                        temp.SetFigurePosition(CoordinatPoint);
                     }
                     else
                     {
@@ -78,8 +76,7 @@ namespace ChessGame
                 else
                 {
                     models.Add(temp);
-                    temp.Bitmap = bitmap;
-                    temp.SetFigurePosition(CoordinatPoint, Board);
+                    temp.SetFigurePosition(CoordinatPoint);
                 }
             }
         }
@@ -116,13 +113,50 @@ namespace ChessGame
             PlayB2.IsEnabled = false;
             if (GetCurrentFigure())
             {
-                Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor, Board, MovesTextBox, MessageHandle);
+                Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor);
                 manager.Logic();
             }
 
         }
+        public void SetFigurePicture(object baseFigure, CoordinatePoint coordinate)
+        {
+            BaseFigure tempFigure = (BaseFigure)baseFigure;
+            string str = tempFigure.Name;
+            Image image = new Image();
+            BitmapImage bitmap = new();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(GetCurrentFigureImage(str), UriKind.Relative);
+            bitmap.EndInit();
+            image.Source = bitmap;
+            Grid.SetColumn(image, (int)coordinate.X);
+            Grid.SetRow(image, (int)coordinate.Y);
+            Board.Children.Add(image);
+        }
+        public void RemoveFigurePicture(object baseFigure, CoordinatePoint coordinate)
+        {
+            BaseFigure tempFigure = (BaseFigure)baseFigure;
+            string[] str = tempFigure.Name.Split('.');
+            foreach (var item in Board.Children)
+            {
+                if (item is Image image1)
+                {
+                    string temp = image1.Source.ToString();
+                    if (temp.Contains(str[1] + '.' + str[0]))
+                    {
+                        Board.Children.Remove(image1);
+                        break;
+                    }
+                }
+            }
 
-        private string GetCurrentFigureColor()
+        }
+        private string GetCurrentFigureImage(string name)
+        {
+            string[] str = name.Split('.');
+            string result = str[1] == "White" ? str[0].WhiteFigurePath() : str[0].BlackFigurePath();
+            return result;
+        }
+        private string GetCurrentFigureImage()
         {
             string str = SelectFigur.Text;
             string result = string.Empty;
@@ -181,7 +215,7 @@ namespace ChessGame
                         if (whiteQueenCount == 0)
                         {
                             whiteQueenCount++;
-                            baseFigure = new Queen(figure + color, color, models);
+                            baseFigure = new Queen(figure + "." + color, color, models);
                             return true;
                         }
                         else
@@ -194,7 +228,7 @@ namespace ChessGame
                         if (whiteKingCount == 0)
                         {
                             whiteKingCount++;
-                            baseFigure = new King(figure + color, color, models);
+                            baseFigure = new King(figure + "." + color, color, models);
                             return true;
                         }
                         else
@@ -207,7 +241,7 @@ namespace ChessGame
                         if (whiteRookCount <= 1)
                         {
                             whiteRookCount++;
-                            baseFigure = new Rook(figure + color + whiteRookCount, color, models);
+                            baseFigure = new Rook(figure + "." + color + whiteRookCount, color, models);
                             return true;
                         }
                         else
@@ -220,7 +254,7 @@ namespace ChessGame
                         if (whiteBishopCount <= 1)
                         {
                             whiteBishopCount++;
-                            baseFigure = new Bishop(figure + color + whiteBishopCount, color, models);
+                            baseFigure = new Bishop(figure + "." + color + whiteBishopCount, color, models);
                             return true;
                         }
                         else
@@ -233,7 +267,7 @@ namespace ChessGame
                         if (whiteKnightCount <= 1)
                         {
                             whiteKnightCount++;
-                            baseFigure = new Knight(figure + color + whiteKnightCount, color, models);
+                            baseFigure = new Knight(figure + "." + color + whiteKnightCount, color, models);
                             return true;
                         }
                         else
@@ -246,7 +280,7 @@ namespace ChessGame
                         if (whitePawnCount <= 7)
                         {
                             whitePawnCount++;
-                            baseFigure = new Pawn(figure + color + whitePawnCount, color, models);
+                            baseFigure = new Pawn(figure + "." + color + whitePawnCount, color, models);
                             return true;
                         }
                         else
@@ -268,7 +302,7 @@ namespace ChessGame
                         if (blackQueenCount == 0)
                         {
                             blackQueenCount++;
-                            baseFigure = new Queen(figure + color, color, models);
+                            baseFigure = new Queen(figure + "." + color, color, models);
                             return true;
                         }
                         else
@@ -281,7 +315,7 @@ namespace ChessGame
                         if (blackKingCount == 0)
                         {
                             blackKingCount++;
-                            baseFigure = new King(figure + color, color, models);
+                            baseFigure = new King(figure + "." + color, color, models);
                             return true;
                         }
                         else
@@ -294,7 +328,7 @@ namespace ChessGame
                         if (blackRookCount <= 1)
                         {
                             blackRookCount++;
-                            baseFigure = new Rook(figure + color + blackRookCount, color, models);
+                            baseFigure = new Rook(figure + "." + color + blackRookCount, color, models);
                             return true;
                         }
                         else
@@ -307,7 +341,7 @@ namespace ChessGame
                         if (blackBishopCount <= 1)
                         {
                             blackBishopCount++;
-                            baseFigure = new Bishop(figure + color + blackBishopCount, color, models);
+                            baseFigure = new Bishop(figure + "." + color + blackBishopCount, color, models);
                             return true;
                         }
                         else
@@ -320,7 +354,7 @@ namespace ChessGame
                         if (blackKnightCount <= 1)
                         {
                             blackKnightCount++;
-                            baseFigure = new Knight(figure + color + blackKnightCount, color, models);
+                            baseFigure = new Knight(figure + "." + color + blackKnightCount, color, models);
                             return true;
                         }
                         else
@@ -333,7 +367,7 @@ namespace ChessGame
                         if (blackPawnCount <= 7)
                         {
                             blackPawnCount++;
-                            baseFigure = new Pawn(figure + color + blackPawnCount, color, models);
+                            baseFigure = new Pawn(figure + "." + color + blackPawnCount, color, models);
                             return true;
                         }
                         else
@@ -573,7 +607,7 @@ namespace ChessGame
                     IRandomMove tempFigur = (IRandomMove)baseFigureTemp;
                     if (tempFigur.AvailableMoves().Contains(selectedPoint))
                     {
-                        baseFigureTemp.SetFigurePosition(selectedPoint, Board);
+                        baseFigureTemp.SetFigurePosition(selectedPoint);
                         currentListForBabyGame.Add(selectedPoint);
                         MovesTextBox.Text += $"{InputCoordinatsLetter_Corrent.Text + InputCoordinatsNumber_Corrent.Text} - " +
                                            $"{InputCoordinatsLetter_Selected.Text + InputCoordinatsNumber_Selected.Text}\n{new string('-', 8)}\n";
@@ -697,13 +731,10 @@ namespace ChessGame
         {
             if (GetCoordinateKnight(KnightStartLetter, KnightStartNumber, out CoordinatePoint coordinatPoint))
             {
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri("Resources/Black.Knight.png", UriKind.Relative);
-                bitmap.EndInit();
-                this.knightForeMoves = new Knight("KnightMoves", "Black", models);
-                this.knightForeMoves.Bitmap = bitmap;
-                this.knightForeMoves.SetFigurePosition(coordinatPoint, Board);
+                this.knightForeMoves = new Knight("Knight.Black", "Black", models);
+                this.knightForeMoves.setPicture += SetFigurePicture;
+                this.knightForeMoves.removePicture += RemoveFigurePicture; ;
+                knightForeMoves.SetFigurePosition(coordinatPoint);
                 models.Add(this.knightForeMoves);
             }
         }
@@ -711,15 +742,13 @@ namespace ChessGame
         {
             if (GetCoordinateKnight(KnightTargetLetter, KnightTargetNumber, out CoordinatePoint coordinatPoint))
             {
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri("Resources/Black.Knight.png", UriKind.Relative);
-                bitmap.EndInit();
-                Knight knight = new Knight("KnightMovesTaarget", "Black", models);
-                knight.Bitmap = bitmap;
+                Knight knight = new Knight("Knight.Black.Target", "Black", models);
+                knight.setPicture += SetFigurePicture;
+                knight.removePicture += RemoveFigurePicture;
                 models.Add(knight);
-                knight.SetFigurePosition(coordinatPoint, Board);
-                countForKnightMoves = this.knightForeMoves.MinKnightCount(coordinatPoint);
+                knight.SetFigurePosition(coordinatPoint);
+                MovesKnight movesFKnight = new MovesKnight();
+                countForKnightMoves = movesFKnight.MinKnightCount(coordinatPoint, this.knightForeMoves.Coordinate);
                 KnightMovesMessage.Text = $"For target coordinate your need {countForKnightMoves} moves";
                 countForKnightMoves = 0;
             }
@@ -732,10 +761,10 @@ namespace ChessGame
         /// </summary>
         private void ResetBoard()
         {
-            foreach (var item in models)
-            {
-                Board.Children.Remove(item.FigureImage);
-            }
+            //foreach (var item in models)
+            //{
+            //    Board.Children.Remove(item);
+            //}
             models.Clear();
             whiteKingCount = 0;
             whiteQueenCount = 0;
@@ -755,7 +784,8 @@ namespace ChessGame
         private void Board_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var image = e.Source as Image;
-            if (image != null && image.Name.Contains(currentFigureColor))
+            string imageName = image.Source.ToString();
+            if (image != null && imageName.Contains(currentFigureColor))
             {
                 CoordinatePoint coordinatPoint = new CoordinatePoint(0, 0);
                 this.DragObjectImage = image;
@@ -784,29 +814,29 @@ namespace ChessGame
             {
                 if (GetCurrentKingMoves().Contains(coordinatPoint))
                 {
-                    dragObject.SetFigurePosition(coordinatPoint, Board);
+                    dragObject.SetFigurePosition(coordinatPoint);
                     MovesTextBox.Text += $"{startCoordinate} - " +
                                            $"{coordinatPoint}\n{new string('-', 8)}\n";
-                    Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor, Board, MovesTextBox, MessageHandle);
+                    Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor);
                     manager.Logic();
                 }
                 else
                 {
-                    dragObject.SetFigurePosition(startCoordinate, Board);
+                    dragObject.SetFigurePosition(startCoordinate);
                     return;
                 }
             }
             else if (currentFigur.AvailableMoves().Contains(coordinatPoint))
             {
-                dragObject.SetFigurePosition(coordinatPoint, Board);
+                dragObject.SetFigurePosition(coordinatPoint);
                 MovesTextBox.Text += $"{startCoordinate.X + startCoordinate.Y} - " +
                                            $"{coordinatPoint.X + coordinatPoint.Y}\n{new string('-', 8)}\n";
-                Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor, Board, MovesTextBox, MessageHandle);
+                Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor);
                 manager.Logic();
             }
             else
             {
-                dragObject.SetFigurePosition(startCoordinate, Board);
+                dragObject.SetFigurePosition(startCoordinate);
                 return;
             }
         }
