@@ -4,6 +4,7 @@ using System.Linq;
 namespace Figure
 {
     public delegate void Picture(object sender, CoordinatePoint e);
+    public delegate void Message(object sender, (CoordinatePoint, CoordinatePoint) e);
     public class BaseFigure : ISetPosition
     {
         protected readonly List<BaseFigure> othereFigures;
@@ -11,9 +12,9 @@ namespace Figure
         public string Name { get; set; }
         public string Color { get; set; }
         public CoordinatePoint Coordinate { get; set; }
-
         public event Picture setPicture;
         public event Picture removePicture;
+        public event Message messageForMove;
 
         #endregion
 
@@ -24,11 +25,11 @@ namespace Figure
         public void SetFigurePosition(CoordinatePoint coordinate)
         {
             RemoveFigurePosition();
+            messageForMove(this, (this.Coordinate, coordinate));
             this.Coordinate = coordinate;
             setPicture(this, this.Coordinate);
             DeleteFigur(this);
         }
-
         public void RemoveFigurePosition()
         {
             if (this.Coordinate != null)

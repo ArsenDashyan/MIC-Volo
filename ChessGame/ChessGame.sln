@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Figure", "Figure\Figure.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helper", "Helper\Helper.csproj", "{51744A69-E64A-4FC0-B1AF-25393F346C4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovesFKnight", "MovesFKnight\MovesFKnight.csproj", "{DA9C54D1-6261-49BF-B2C9-3D8B77C53E96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovesFKnight", "MovesFKnight\MovesFKnight.csproj", "{DA9C54D1-6261-49BF-B2C9-3D8B77C53E96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

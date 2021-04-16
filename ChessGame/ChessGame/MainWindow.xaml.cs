@@ -58,6 +58,7 @@ namespace ChessGame
             {
                 temp.setPicture += SetFigurePicture;
                 temp.removePicture += RemoveFigurePicture;
+                temp.messageForMove += MessageMove;
                 if (temp is King king)
                 {
                     if (!DangerPosition(king).Contains(CoordinatPoint))
@@ -115,8 +116,36 @@ namespace ChessGame
             if (GetCurrentFigure())
             {
                 Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor);
+                manager.MateMessage += MessageMate;
                 manager.Logic();
             }
+        }
+        
+        #endregion
+
+        /// <summary>
+        /// Show a figure moves
+        /// </summary>
+        /// <param name="baseFigure">Figure instanste</param>
+        /// <param name="coordinate">Figure old and new coordinate</param>
+        public void MessageMove(object baseFigure, (CoordinatePoint, CoordinatePoint) coordinateTupl)
+        {
+            if (coordinateTupl.Item1 != null)
+            {
+                var tempFigure = (BaseFigure)baseFigure;
+                MovesTextBox.Text += $"{tempFigure.Name} " + $"{coordinateTupl.Item1}-" +
+                    $"{coordinateTupl.Item2}\n{new string('-', 8)}\n";
+            }
+        }
+
+        /// <summary>
+        /// Show a Mate message
+        /// </summary>
+        /// <param name="sender">figure</param>
+        /// <param name="message">Mate</param>
+        public void MessageMate(object sender, string message)
+        {
+            MessageHandle.Text = message;
         }
 
         /// <summary>
@@ -167,14 +196,6 @@ namespace ChessGame
         /// Get a figure image source
         /// </summary>
         /// <param name="name">Figure name</param>
-        /// <returns>Return the instance image source</returns>
-
-
-        #endregion
-
-        /// <summary>
-        /// Get a figure image source
-        /// </summary>
         /// <returns>Return the instance image source</returns>
         private string GetCurrentFigureImage(string name)
         {
@@ -640,8 +661,6 @@ namespace ChessGame
                     {
                         baseFigureTemp.SetFigurePosition(selectedPoint);
                         currentListForBabyGame.Add(selectedPoint);
-                        MovesTextBox.Text += $"{InputCoordinatsLetter_Corrent.Text + InputCoordinatsNumber_Corrent.Text} - " +
-                                           $"{InputCoordinatsLetter_Selected.Text + InputCoordinatsNumber_Selected.Text}\n{new string('-', 8)}\n";
                         return true;
                     }
                     else
@@ -772,7 +791,8 @@ namespace ChessGame
             {
                 this.knightForeMoves = new Knight("Knight.Black", "Black", models);
                 this.knightForeMoves.setPicture += SetFigurePicture;
-                this.knightForeMoves.removePicture += RemoveFigurePicture; ;
+                this.knightForeMoves.removePicture += RemoveFigurePicture;
+                this.knightForeMoves.messageForMove += delegate { KnightMovesMessage.Text = " "; };
                 knightForeMoves.SetFigurePosition(coordinatPoint);
                 models.Add(this.knightForeMoves);
             }
@@ -784,6 +804,7 @@ namespace ChessGame
                 Knight knight = new Knight("Knight.Black.Target", "Black", models);
                 knight.setPicture += SetFigurePicture;
                 knight.removePicture += RemoveFigurePicture;
+                knight.messageForMove += delegate { KnightMovesMessage.Text = " "; };
                 models.Add(knight);
                 knight.SetFigurePosition(coordinatPoint);
                 MovesKnight movesFKnight = new MovesKnight();
@@ -889,39 +910,42 @@ namespace ChessGame
         }
         private void Image_Drop(object sender, DragEventArgs e)
         {
-            var temp = (Border)e.OriginalSource;
-            CoordinatePoint coordinatPoint = new CoordinatePoint(0, 0);
-            coordinatPoint.X = Grid.GetColumn(temp);
-            coordinatPoint.Y = Grid.GetRow(temp);
-            IAvailableMoves currentFigur = (IAvailableMoves)dragObject;
-            if (currentFigur is King)
+            if (e.OriginalSource is Border temp)
             {
-                if (GetCurrentKingMoves().Contains(coordinatPoint))
+                CoordinatePoint coordinatPoint = new CoordinatePoint(0, 0);
+                coordinatPoint.X = Grid.GetColumn(temp);
+                coordinatPoint.Y = Grid.GetRow(temp);
+                if (coordinatPoint != dragObject.Coordinate)
                 {
-                    dragObject.SetFigurePosition(coordinatPoint);
-                    MovesTextBox.Text += $"{startCoordinate} - " +
-                                           $"{coordinatPoint}\n{new string('-', 8)}\n";
-                    Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor);
-                    manager.Logic();
+                    IAvailableMoves currentFigur = (IAvailableMoves)dragObject;
+                    if (currentFigur is King)
+                    {
+                        if (GetCurrentKingMoves().Contains(coordinatPoint))
+                        {
+                            dragObject.SetFigurePosition(coordinatPoint);
+                            Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor);
+                            manager.MateMessage += MessageMate;
+                            manager.Logic();
+                        }
+                        else
+                        {
+                            dragObject.SetFigurePosition(startCoordinate);
+                            return;
+                        }
+                    }
+                    else if (currentFigur.AvailableMoves().Contains(coordinatPoint))
+                    {
+                        dragObject.SetFigurePosition(coordinatPoint);
+                        Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor);
+                        manager.MateMessage += MessageMate;
+                        manager.Logic();
+                    }
+                    else
+                    {
+                        dragObject.SetFigurePosition(startCoordinate);
+                        return;
+                    }
                 }
-                else
-                {
-                    dragObject.SetFigurePosition(startCoordinate);
-                    return;
-                }
-            }
-            else if (currentFigur.AvailableMoves().Contains(coordinatPoint))
-            {
-                dragObject.SetFigurePosition(coordinatPoint);
-                MovesTextBox.Text += $"{startCoordinate.X + startCoordinate.Y} - " +
-                                           $"{coordinatPoint.X + coordinatPoint.Y}\n{new string('-', 8)}\n";
-                Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor);
-                manager.Logic();
-            }
-            else
-            {
-                dragObject.SetFigurePosition(startCoordinate);
-                return;
             }
         }
 

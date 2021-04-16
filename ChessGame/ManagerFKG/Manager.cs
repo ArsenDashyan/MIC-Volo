@@ -6,13 +6,15 @@ using Figure;
 
 namespace ManagerFKG
 {
-   public class Manager
+    public delegate void MessageForMate(object sender, string str);
+    public class Manager
     {
         #region Property and Feld
         private readonly List<BaseFigure> models;
         private readonly List<CoordinatePoint> currentListForBabyGame;
         private readonly BaseFigure CurentKing;
         private readonly string currentFigureColor;
+        public event MessageForMate MateMessage;
         #endregion
 
         public Manager(List<CoordinatePoint> currentListForBabyGame, BaseFigure CurentKing,
@@ -279,6 +281,7 @@ namespace ManagerFKG
             {
                 setFigurLast.SetFigurePosition(maxMoves.Key);
             }
+            MateMessage(this, "Mate");
         }
 
         /// <summary>

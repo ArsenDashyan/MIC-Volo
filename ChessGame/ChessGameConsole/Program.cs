@@ -1,5 +1,4 @@
-﻿using ChessGameLibrary;
-using System;
+﻿using System;
 
 namespace ChessGameConsole
 {
@@ -7,9 +6,7 @@ namespace ChessGameConsole
     {
         static void Main(string[] args)
         {
-            ConsoleBoard board = new ConsoleBoard();
-            var manager = new Manager(board);
-            manager.PlayNewWithShaxAndBox();
+            Console.WriteLine("Hello World!");
         }
     }
 }
