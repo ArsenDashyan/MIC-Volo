@@ -5,6 +5,7 @@ namespace Figure
 {
     public delegate void Picture(object sender, CoordinatePoint e);
     public delegate void Message(object sender, (CoordinatePoint, CoordinatePoint) e);
+
     public class BaseFigure : ISetPosition
     {
         protected readonly List<BaseFigure> othereFigures;

@@ -472,18 +472,17 @@ namespace ManagerFKG
                     }
                     else
                     {
-                        return false;
                         if (name.Split('.')[1] == "White")
                             whiteKingCount = 0;
                         else
                             blackKingCount = 0;
+                        return false;
                     }
                 }
                 return true;
             }
             return false;
         }
-
         public BaseFigure CheckTheBaseFigure(CoordinatePoint coordinatePoint)
         {
             BaseFigure baseFigure = null;

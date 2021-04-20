@@ -42,7 +42,7 @@ namespace Figure
                 }
                 foreach (var item in model.Where(c => c.Color == "Black"))
                 {
-                    if (this.Coordinate.Y - 1 > 0)
+                    if (this.Coordinate.Y - 1 >= 0)
                     {
                         if (this.Coordinate.X + 1 <= 7)
                         {
@@ -87,7 +87,7 @@ namespace Figure
                 }
                 foreach (var item in model.Where(c => c.Color == "White"))
                 {
-                    if (this.Coordinate.Y + 1 > 0)
+                    if (this.Coordinate.Y + 1 >= 0)
                     {
                         if (this.Coordinate.X + 1 <= 7)
                         {

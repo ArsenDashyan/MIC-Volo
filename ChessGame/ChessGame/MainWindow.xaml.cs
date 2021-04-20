@@ -28,6 +28,7 @@ namespace ChessGame
         private CoordinatePoint startCoordinate;
         public bool gameManager = false;
         public Manager manager1;
+        private bool colorPower = false;
         #endregion
 
         public MainWindow()
@@ -421,23 +422,12 @@ namespace ChessGame
         /// </summary>
         private void ResetBoard()
         {
+            GetAllFigures(gameManager);
             foreach (var item in models)
             {
                 item.RemoveFigurePosition();
             }
             models.Clear();
-            //whiteKingCount = 0;
-            //whiteQueenCount = 0;
-            //whiteBishopCount = 0;
-            //whiteRookCount = 0;
-            //whitePawnCount = 0;
-            //whiteKnightCount = 0;
-            //blackKingCount = 0;
-            //blackQueenCount = 0;
-            //blackBishopCount = 0;
-            //blackRookCount = 0;
-            //blackPawnCount = 0;
-            //blackKnightCount = 0;
             MovesTextBox.Text = "";
             MessageHandle.Text = "";
         }
@@ -494,7 +484,7 @@ namespace ChessGame
                 this.DragObjectImage = image;
                 coordinatPoint.X = Grid.GetColumn(image);
                 coordinatPoint.Y = Grid.GetRow(image);
-                dragObject = GameManagerForDrop(gameManager,coordinatPoint);
+                dragObject = GameManagerForDrop(gameManager, coordinatPoint);
                 this.startCoordinate = dragObject.Coordinate;
                 DragDrop.DoDragDrop(image, dragObject, DragDropEffects.Move);
             }
@@ -585,6 +575,19 @@ namespace ChessGame
                 manager.MateMessage += MessageMate;
                 manager.Logic();
             }
+            else
+            {
+                if (colorPower)
+                {
+                    currentFigureColor = "White";
+                    colorPower = false;
+                }
+                else
+                {
+                    currentFigureColor = "Black";
+                    colorPower = true;
+                }
+            }
         }
         private BaseFigure GameManagerForDrop(bool gameSatus, CoordinatePoint coordinatePoint)
         {
@@ -607,7 +610,7 @@ namespace ChessGame
                 item.setPicture += SetFigurePicture;
                 item.removePicture += RemoveFigurePicture;
                 item.messageForMove += MessageMove;
-                currentFigureColor = "Black";
+                currentFigureColor = "White";
                 switch (item.Name)
                 {
                     case "Queen.White.1":
@@ -709,6 +712,18 @@ namespace ChessGame
                     default:
                         break;
                 }
+            }
+        }
+
+        private void GetAllFigures(bool gameSatus)
+        {
+            if (gameSatus)
+            {
+                models = Manager.models;
+            }
+            else
+            {
+                models = Standard.models;
             }
         }
     }
