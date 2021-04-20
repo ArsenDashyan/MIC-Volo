@@ -22,6 +22,7 @@
             <MenuItem Header="File">
                 <MenuItem Header="New King Game" Click="KingGame_Click"/>
                 <MenuItem Header="New Knight Game" Click="KnightGame_Click"/>
+                <MenuItem Header="New Standard Game" Click="StandardGame_Click"/>
             </MenuItem>
             <MenuItem Header="Help" Click="MenuItem_Click"/>
         </Menu>

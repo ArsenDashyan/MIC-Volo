@@ -14,7 +14,7 @@ namespace Figure
         #region Move
         public List<CoordinatePoint> Horizontal()
         {
-            List<CoordinatePoint> result = new List<CoordinatePoint>();
+            var result = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
             if (this.Coordinate.Y + 2 <= 7)
             {
@@ -36,17 +36,7 @@ namespace Figure
                 {
                     if (item.Color == this.Color)
                     {
-                        if (result.IndexOf(this.Coordinate) < result.IndexOf(item.Coordinate))
-                            result = result.Where(c => result.IndexOf(c) < result.IndexOf(item.Coordinate)).ToList();
-                        else
-                            result = result.Where(c => result.IndexOf(c) > result.IndexOf(item.Coordinate)).ToList();
-                    }
-                    else
-                    {
-                        if (result.IndexOf(this.Coordinate) < result.IndexOf(item.Coordinate))
-                            result = result.Where(c => result.IndexOf(c) <= result.IndexOf(item.Coordinate)).ToList();
-                        else
-                            result = result.Where(c => result.IndexOf(c) >= result.IndexOf(item.Coordinate)).ToList();
+                        result.Remove(item.Coordinate);
                     }
                 }
             }
@@ -76,17 +66,7 @@ namespace Figure
                 {
                     if (item.Color == this.Color)
                     {
-                        if (result.IndexOf(this.Coordinate) < result.IndexOf(item.Coordinate))
-                            result = result.Where(c => result.IndexOf(c) < result.IndexOf(item.Coordinate)).ToList();
-                        else
-                            result = result.Where(c => result.IndexOf(c) > result.IndexOf(item.Coordinate)).ToList();
-                    }
-                    else
-                    {
-                        if (result.IndexOf(this.Coordinate) < result.IndexOf(item.Coordinate))
-                            result = result.Where(c => result.IndexOf(c) <= result.IndexOf(item.Coordinate)).ToList();
-                        else
-                            result = result.Where(c => result.IndexOf(c) >= result.IndexOf(item.Coordinate)).ToList();
+                        result.Remove(item.Coordinate);
                     }
                 }
             }

@@ -30,6 +30,7 @@
     <ProjectReference Include="..\Figure\Figure.csproj" />
     <ProjectReference Include="..\ManagerFKG\ManagerFKG.csproj" />
     <ProjectReference Include="..\MovesFKnight\MovesFKnight.csproj" />
+    <ProjectReference Include="..\Standard\StandardGame.csproj" />
     <ProjectReference Include="..\Utility\Utility.csproj" />
   </ItemGroup>
 

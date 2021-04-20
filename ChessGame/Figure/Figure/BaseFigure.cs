@@ -27,8 +27,8 @@ namespace Figure
             RemoveFigurePosition();
             messageForMove(this, (this.Coordinate, coordinate));
             this.Coordinate = coordinate;
-            setPicture(this, this.Coordinate);
             DeleteFigur(this);
+            setPicture(this, this.Coordinate);
         }
         public void RemoveFigurePosition()
         {
@@ -44,7 +44,8 @@ namespace Figure
             {
                 if (model.Coordinate == item.Coordinate)
                 {
-                    ISetPosition tempItem = (ISetPosition)item;
+                    ISetPosition tempItem = item;
+                    removePicture(item, item.Coordinate);
                     othereFigures.Remove(item);
                     break;
                 }
