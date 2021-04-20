@@ -22,6 +22,7 @@
             <MenuItem Header="File">
                 <MenuItem Header="New King Game" Click="KingGame_Click"/>
                 <MenuItem Header="New Knight Game" Click="KnightGame_Click"/>
+                <MenuItem Header="New Standard Game" Click="StandardGame_Click"/>
             </MenuItem>
             <MenuItem Header="Help" Click="MenuItem_Click"/>
         </Menu>
@@ -178,7 +179,7 @@
                     </TextBox.Effect>
                 </TextBox>
                 <Label Content="Target Coordinates" HorizontalAlignment="Left" Margin="132,180,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                <Button Name="InstalB3"  Content="Install" IsEnabled="False" HorizontalAlignment="Left" Margin="265,200,0,0" VerticalAlignment="Top" Width="65" Height="30" FontSize="14" FontWeight="Bold" Click="Button_Click">
+                <Button Name="InstalB3"  Content="Install" IsEnabled="False" HorizontalAlignment="Left" Margin="265,200,0,0" VerticalAlignment="Top" Width="65" Height="30" FontSize="14" FontWeight="Bold" Click="InstallButton">
                     <Button.Effect>
                         <DropShadowEffect/>
                     </Button.Effect>
@@ -186,13 +187,13 @@
                 <Label Content="Select your color" HorizontalAlignment="Left" Margin="6,120,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                 <CheckBox Name="PlayColorWhite" Content="White" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="#FFEEEAEA"/>
                 <CheckBox Name="PlayColorBlack" Content="Black" HorizontalAlignment="Left" Margin="111,150,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                <TextBox Name="MovesTextBox" HorizontalAlignment="Left" Margin="10,260,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="111" Height="277" TextAlignment="Center" FontWeight="Bold">
+                <TextBox Name="MovesTextBox" HorizontalAlignment="Left" Margin="10,260,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="118" Height="277" TextAlignment="Center" FontWeight="Bold">
                     <TextBox.Effect>
                         <DropShadowEffect/>
                     </TextBox.Effect>
                 </TextBox>
                 <Label Content="Moves" HorizontalAlignment="Left" Margin="6,238,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                <TextBox Name="MessageHandle" HorizontalAlignment="Left" Margin="135,260,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" FontWeight="Bold" Height="92" FontSize="14" TextAlignment="Center" Background="#FFE0D1D1" Foreground="#FF8F0720" SelectionBrush="#FF02111D">
+                <TextBox Name="MessageHandle" HorizontalAlignment="Left" Margin="135,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" FontWeight="Bold" Height="33" FontSize="14" TextAlignment="Center" Background="#FFE0D1D1" Foreground="#FF8F0720" SelectionBrush="#FF02111D" FontStyle="Normal">
                     <TextBox.Effect>
                         <DropShadowEffect/>
                     </TextBox.Effect>
@@ -243,7 +244,7 @@
                             <DropShadowEffect/>
                         </TextBox.Effect>
                     </TextBox>
-                    <Button Content="Set" HorizontalAlignment="Left" Margin="203,52,0,0" VerticalAlignment="Top" Width="60" Height="30" FontSize="14" FontWeight="Bold" Click="Button_Click_1"/>
+                    <Button Content="Set" HorizontalAlignment="Left" Margin="203,52,0,0" VerticalAlignment="Top" Width="60" Height="30" FontSize="14" FontWeight="Bold" Click="KnightSetButton"/>
                     <Button Content="Reset" Height="50" Width="64" HorizontalAlignment="Left" Margin="210,234,0,0" VerticalAlignment="Top" Background="#FFC71919" FontSize="14" FontWeight="Bold" Click="Reset_ButtonForKnight">
                         <Button.Effect>
                             <DropShadowEffect/>

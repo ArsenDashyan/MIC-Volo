@@ -1,8 +1,8 @@
-﻿using Coordinates;
+﻿using Figure;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Utility
+namespace Helper
 {
     public static class KnightMove
     {

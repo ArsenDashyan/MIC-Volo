@@ -1,34 +1,38 @@
-﻿using Coordinates;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Controls;
-using Utility;
+using Helper;
+using Figure;
 
-namespace ChessGame
+namespace ManagerFKG
 {
-    class Manager
+    public delegate void MessageForMate(object sender, string str);
+    public class Manager
     {
         #region Property and Feld
-        private readonly List<BaseFigure> models;
-        private readonly List<CoordinatePoint> currentListForBabyGame;
-        private readonly BaseFigure CurentKing;
+        public static List<BaseFigure> models = new List<BaseFigure>();
+        private List<CoordinatePoint> currentListForBabyGame;
+        private BaseFigure CurentKing => (BaseFigure)models.Where(c => c.Color == currentFigureColor && c is King).Single();
         private readonly string currentFigureColor;
-        private readonly Grid Board;
-        private readonly TextBox moveTextBox;
-        private readonly TextBox MessageHandle;
+        public event MessageForMate MateMessage;
+        private int whiteKingCount = 0;
+        private int whiteQueenCount = 0;
+        private int whiteBishopCount = 0;
+        private int whiteRookCount = 0;
+        private int whitePawnCount = 0;
+        private int whiteKnightCount = 0;
+        private int blackKingCount = 0;
+        private int blackQueenCount = 0;
+        private int blackBishopCount = 0;
+        private int blackRookCount = 0;
+        private int blackPawnCount = 0;
+        private int blackKnightCount = 0;
         #endregion
 
-        public Manager(List<CoordinatePoint> currentListForBabyGame, BaseFigure CurentKing, List<BaseFigure> models,
-                                 string currentFigureColor, Grid grid, TextBox moveTextBox, TextBox MessageHandle)
+        public Manager(List<CoordinatePoint> currentListForBabyGame, string currentFigureColor)
         {
             this.currentListForBabyGame = currentListForBabyGame;
-            this.CurentKing = CurentKing;
-            this.models = models;
             this.currentFigureColor = currentFigureColor;
-            this.Board = grid;
-            this.moveTextBox = moveTextBox;
-            this.MessageHandle = MessageHandle;
         }
 
         /// <summary>
@@ -48,8 +52,7 @@ namespace ChessGame
                 else
                     AntiBabyGame();
             }
-            if (GetCurrentKingMoves().Count == 0)
-                MessageHandle.Text = "Mate";
+            //if (GetCurrentKingMoves().Count == 0)
         }
 
         #region Block Methods
@@ -281,18 +284,13 @@ namespace ChessGame
             var randomeMove = (IRandomMove)setFigurFirst;
             if (!randomeMove.IsUnderAttack(minMoves.Key))
             {
-                moveTextBox.Text += $"{setFigurFirst.Coordinate} - " +
-                                   $"{minMoves.Key}\n{new string('-', 8)}\n";
-                MessageHandle.Text = "Check";
-                setFigurFirst.SetFigurePosition(minMoves.Key, Board);
+                setFigurFirst.SetFigurePosition(minMoves.Key);
             }
             else
             {
-                moveTextBox.Text += $"{setFigurLast.Coordinate} - " +
-                                   $"{maxMoves.Key}\n{new string('-', 8)}\n";
-                MessageHandle.Text = "Check";
-                setFigurLast.SetFigurePosition(maxMoves.Key, Board);
+                setFigurLast.SetFigurePosition(maxMoves.Key);
             }
+            MateMessage(this, "Mate");
         }
 
         /// <summary>
@@ -309,15 +307,11 @@ namespace ChessGame
             IRandomMove randomeMove = (IRandomMove)setFigurFirst;
             if (!randomeMove.IsUnderAttack(minMoves.Key))
             {
-                moveTextBox.Text += $"{setFigurFirst.Coordinate} - " +
-                                       $"{minMoves.Key}\n{new string('-', 8)}\n";
-                setFigurFirst.SetFigurePosition(minMoves.Key, Board);
+                setFigurFirst.SetFigurePosition(minMoves.Key);
             }
             else
             {
-                moveTextBox.Text += $"{setFigurLast.Coordinate} - " +
-                                       $"{maxMoves.Key}\n{new string('-', 8)}\n";
-                setFigurLast.SetFigurePosition(maxMoves.Key, Board);
+                setFigurLast.SetFigurePosition(maxMoves.Key);
             }
         }
 
@@ -358,9 +352,7 @@ namespace ChessGame
             (double, BaseFigure) max = destination.OrderBy(k => k.Item1).FirstOrDefault();
             var tempFigur = (IRandomMove)max.Item2;
             var tempCoordinate = tempFigur.RandomMove((King)CurentKing);
-            moveTextBox.Text += $"{max.Item2.Coordinate} - " +
-                                          $"{tempCoordinate}\n{new string('-', 8)}\n";
-            max.Item2.SetFigurePosition(tempCoordinate, Board);
+            max.Item2.SetFigurePosition(tempCoordinate);
             //BaseFigure temp = modelNew[new Random().Next(0, modelNew.Count())];
             //IRandomMove tempFigur = (IRandomMove)temp;
             //var tempCoordinate = tempFigur.RandomMove((King)CurentKing);
@@ -385,9 +377,7 @@ namespace ChessGame
                     if (!tempFigur.IsProtected(figur.Coordinate))
                     {
                         CoordinatePoint CoordinatPoint1 = tempFigur.RandomMove((King)CurentKing);
-                        moveTextBox.Text += $"{figur.Coordinate} - " +
-                                           $"{CoordinatPoint1}\n{new string('-', 8)}\n";
-                        figur.SetFigurePosition(CoordinatPoint1, Board);
+                        figur.SetFigurePosition(CoordinatPoint1);
                         return true;
                     }
                 }
@@ -429,6 +419,281 @@ namespace ChessGame
                 result.AddRange(array);
             }
             return result;
+        }
+
+        public void IsVAlidCoordinate(string current, string target)
+        {
+            BaseFigure baseFigure = null;
+            string[] strCurrent = current.Split('.');
+            var currentCoordinate = new CoordinatePoint(int.Parse(strCurrent[0]), int.Parse(strCurrent[1]));
+            string[] strTarget = target.Split('.');
+            var targetCoordinate = new CoordinatePoint(int.Parse(strTarget[0]), int.Parse(strTarget[1]));
+            foreach (var item in models)
+            {
+                if (item.Coordinate == currentCoordinate)
+                {
+                    if (item.Color == currentFigureColor)
+                    {
+                        baseFigure = item;
+                    }
+                }
+            }
+            IAvailableMoves available = (IAvailableMoves)baseFigure;
+            if (baseFigure is King)
+            {
+                if (GetCurrentKingMoves().Contains(targetCoordinate))
+                {
+                    baseFigure.SetFigurePosition(targetCoordinate);
+                }
+            }
+            else if (available.AvailableMoves().Contains(targetCoordinate))
+            {
+                baseFigure.SetFigurePosition(targetCoordinate);
+            }
+        }
+        public bool IsValidForPleacement(string name, CoordinatePoint coordinatePoint)
+        {
+            BaseFigure baseFigure = null;
+            foreach (var item in models)
+            {
+                if (item.Name.Contains(name))
+                {
+                    baseFigure = item;
+                    break;
+                }
+            }
+            if (!GetPosition().Contains(coordinatePoint))
+            {
+                if (baseFigure is King king)
+                {
+                    if (!DangerPosition(king).Contains(coordinatePoint))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        if (name.Split('.')[1] == "White")
+                            whiteKingCount = 0;
+                        else
+                            blackKingCount = 0;
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+        public BaseFigure CheckTheBaseFigure(CoordinatePoint coordinatePoint)
+        {
+            BaseFigure baseFigure = null;
+            foreach (var item in models)
+            {
+                if (item.Coordinate == coordinatePoint)
+                {
+                    baseFigure = item;
+                    break;
+                }
+            }
+            return baseFigure;
+        }
+
+        /// <summary>
+        /// Check the figure and added the figure instance
+        /// </summary>
+        /// <param name="figure">The figure</param>
+        /// <param name="color">The figure color</param>
+        /// <param name="baseFigure">figure instance type</param>
+        /// <returns>Return figure instance</returns>
+        public bool GetFigure(string figure, string color, out BaseFigure baseFigure)
+        {
+            if (color == "White")
+            {
+                switch (figure)
+                {
+                    case "Queen":
+                        if (whiteQueenCount == 0)
+                        {
+                            whiteQueenCount++;
+                            baseFigure = new Queen(figure + "." + color, color, models);
+                            models.Add(baseFigure);
+                            return true;
+                        }
+                        else
+                        {
+                            baseFigure = null;
+                            return false;
+                        }
+                    case "King":
+                        if (whiteKingCount == 0)
+                        {
+                            whiteKingCount++;
+                            baseFigure = new King(figure + "." + color, color, models);
+                            models.Add(baseFigure);
+                            return true;
+                        }
+                        else
+                        {
+                            baseFigure = null;
+                            return false;
+                        }
+                    case "Rook":
+                        if (whiteRookCount <= 1)
+                        {
+                            whiteRookCount++;
+                            baseFigure = new Rook(figure + "." + color + "." + whiteRookCount, color, models);
+                            models.Add(baseFigure);
+                            return true;
+                        }
+                        else
+                        {
+                            baseFigure = null;
+                            return false;
+                        }
+                    case "Bishop":
+                        if (whiteBishopCount <= 1)
+                        {
+                            whiteBishopCount++;
+                            baseFigure = new Bishop(figure + "." + color + "." + whiteBishopCount, color, models);
+                            models.Add(baseFigure);
+                            return true;
+                        }
+                        else
+                        {
+                            baseFigure = null;
+                            return false;
+                        }
+                    case "Knight":
+                        if (whiteKnightCount <= 1)
+                        {
+                            whiteKnightCount++;
+                            baseFigure = new Knight(figure + "." + color + "." + whiteKnightCount, color, models);
+                            models.Add(baseFigure);
+                            return true;
+                        }
+                        else
+                        {
+                            baseFigure = null;
+                            return false;
+                        }
+                    case "Pawn":
+                        if (whitePawnCount <= 7)
+                        {
+                            whitePawnCount++;
+                            baseFigure = new Pawn(figure + "." + color + "." + whitePawnCount, color, models);
+                            models.Add(baseFigure);
+                            return true;
+                        }
+                        else
+                        {
+                            baseFigure = null;
+                            return false;
+                        }
+                    default:
+                        baseFigure = null;
+                        return false;
+                }
+            }
+            else
+            {
+                switch (figure)
+                {
+                    case "Queen":
+                        if (blackQueenCount == 0)
+                        {
+                            blackQueenCount++;
+                            baseFigure = new Queen(figure + "." + color, color, models);
+                            models.Add(baseFigure);
+                            return true;
+                        }
+                        else
+                        {
+                            baseFigure = null;
+                            return false;
+                        }
+                    case "King":
+                        if (blackKingCount == 0)
+                        {
+                            blackKingCount++;
+                            baseFigure = new King(figure + "." + color, color, models);
+                            models.Add(baseFigure);
+                            return true;
+                        }
+                        else
+                        {
+                            baseFigure = null;
+                            return false;
+                        }
+                    case "Rook":
+                        if (blackRookCount <= 1)
+                        {
+                            blackRookCount++;
+                            baseFigure = new Rook(figure + "." + color + "." + blackRookCount, color, models);
+                            models.Add(baseFigure);
+                            return true;
+                        }
+                        else
+                        {
+                            baseFigure = null;
+                            return false;
+                        }
+                    case "Bishop":
+                        if (blackBishopCount <= 1)
+                        {
+                            blackBishopCount++;
+                            baseFigure = new Bishop(figure + "." + color + "." + blackBishopCount, color, models);
+                            models.Add(baseFigure);
+                            return true;
+                        }
+                        else
+                        {
+                            baseFigure = null;
+                            return false;
+                        }
+                    case "Knight":
+                        if (blackKnightCount <= 1)
+                        {
+                            blackKnightCount++;
+                            baseFigure = new Knight(figure + "." + color + "." + blackKnightCount, color, models);
+                            models.Add(baseFigure);
+                            return true;
+                        }
+                        else
+                        {
+                            baseFigure = null;
+                            return false;
+                        }
+                    case "Pawn":
+                        if (blackPawnCount <= 7)
+                        {
+                            blackPawnCount++;
+                            baseFigure = new Pawn(figure + "." + color + "." + blackPawnCount, color, models);
+                            models.Add(baseFigure);
+                            return true;
+                        }
+                        else
+                        {
+                            baseFigure = null;
+                            return false;
+                        }
+                    default:
+                        baseFigure = null;
+                        return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Check the all figurs position
+        /// </summary>
+        /// <returns>Return the figurs position</returns>
+        private List<CoordinatePoint> GetPosition()
+        {
+            var positions = new List<CoordinatePoint>();
+            foreach (var item in models)
+            {
+                positions.Add(item.Coordinate);
+            }
+            return positions;
         }
     }
 }

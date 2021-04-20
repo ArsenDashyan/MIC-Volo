@@ -10,10 +10,12 @@
 
     <Grid Background="#FFA8857D">
         <Label Content="Chess Game Type" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Foreground="#FF440505"/>
-        <Image Source="Resources/Black.Knight.png" Width="80" HorizontalAlignment="Left" Margin="315,-19,0,-1" />
-        <Image Source="Resources/Black.King.png" Width="80" Margin="43,-20,307,0" />
-        <CheckBox Name="CheckKing" Content="King Play" HorizontalAlignment="Left" Margin="54,130,0,0" VerticalAlignment="Top" FontSize="14"/>
+        <Image Source="Resources/Black.Knight.png" Width="80" HorizontalAlignment="Left" Margin="315,-20,0,0" />
+        <Image Source="Resources/Black.King.png" Margin="172,-20,206,0" />
+        <Image Source="Resources/White.King.png" Margin="47,-20,335,0" />
+        <CheckBox Name="CheckKing" Content="King Play" HorizontalAlignment="Left" Margin="179,130,0,0" VerticalAlignment="Top" FontSize="14"/>
         <CheckBox Name="CheckKnight" Content="Knight Min Count" HorizontalAlignment="Left" Margin="288,130,0,0" VerticalAlignment="Top" FontSize="14"/>
-        <Button Content="Start" HorizontalAlignment="Left" Margin="177,150,0,0" VerticalAlignment="Top" Width="82" Background="#FF876E6E" FontSize="14" FontWeight="Bold" Click="Button_Click" />
+        <Button Content="Start" HorizontalAlignment="Left" Margin="176,152,0,0" VerticalAlignment="Top" Width="82" Background="#FF876E6E" FontSize="14" FontWeight="Bold" Click="Button_Click" />
+        <CheckBox Name="StandardGame" Content="Standard Game" HorizontalAlignment="Left" Margin="50,130,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.406,-0.329"/>
     </Grid>
 </Window>

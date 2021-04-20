@@ -1,13 +1,10 @@
-﻿using Coordinates;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Utility;
 
 namespace Figure
 {
     public class Knight : BaseFigure, ICrosswise, IRandomMove, IDangerMoves
     {
-        private int count = 1;
         public Knight(string name, string color, List<BaseFigure> othereFigures) : base(othereFigures)
         {
             Name = name;
@@ -17,7 +14,7 @@ namespace Figure
         #region Move
         public List<CoordinatePoint> Horizontal()
         {
-            List<CoordinatePoint> result = new List<CoordinatePoint>();
+            var result = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
             if (this.Coordinate.Y + 2 <= 7)
             {
@@ -39,17 +36,7 @@ namespace Figure
                 {
                     if (item.Color == this.Color)
                     {
-                        if (result.IndexOf(this.Coordinate) < result.IndexOf(item.Coordinate))
-                            result = result.Where(c => result.IndexOf(c) < result.IndexOf(item.Coordinate)).ToList();
-                        else
-                            result = result.Where(c => result.IndexOf(c) > result.IndexOf(item.Coordinate)).ToList();
-                    }
-                    else
-                    {
-                        if (result.IndexOf(this.Coordinate) < result.IndexOf(item.Coordinate))
-                            result = result.Where(c => result.IndexOf(c) <= result.IndexOf(item.Coordinate)).ToList();
-                        else
-                            result = result.Where(c => result.IndexOf(c) >= result.IndexOf(item.Coordinate)).ToList();
+                        result.Remove(item.Coordinate);
                     }
                 }
             }
@@ -79,17 +66,7 @@ namespace Figure
                 {
                     if (item.Color == this.Color)
                     {
-                        if (result.IndexOf(this.Coordinate) < result.IndexOf(item.Coordinate))
-                            result = result.Where(c => result.IndexOf(c) < result.IndexOf(item.Coordinate)).ToList();
-                        else
-                            result = result.Where(c => result.IndexOf(c) > result.IndexOf(item.Coordinate)).ToList();
-                    }
-                    else
-                    {
-                        if (result.IndexOf(this.Coordinate) < result.IndexOf(item.Coordinate))
-                            result = result.Where(c => result.IndexOf(c) <= result.IndexOf(item.Coordinate)).ToList();
-                        else
-                            result = result.Where(c => result.IndexOf(c) >= result.IndexOf(item.Coordinate)).ToList();
+                        result.Remove(item.Coordinate);
                     }
                 }
             }
@@ -311,50 +288,6 @@ namespace Figure
             tempForItem = null;
             return false;
         }
-        public int MinKnightCount(CoordinatePoint CoordinatPoint)
-        {
-            var knightMoves = KnightMove.Crosswise(this.Coordinate);
-            var endMoves = KnightMove.Crosswise(CoordinatPoint);
-            if (knightMoves.Contains((CoordinatPoint)))
-            {
-                return count;
-            }
-            else
-            {
-                count++;
-                if (KnightMove.Equals(this.Coordinate, CoordinatPoint))
-                {
-                    return count;
-                }
-                else
-                {
-                    count++;
-                    if (KnightMove.Equals(knightMoves, CoordinatPoint))
-                    {
-                        return count;
-                    }
-                    else
-                    {
-                        count++;
-                        if (KnightMove.Equals(knightMoves, endMoves))
-                        {
-                            return count;
-                        }
-                        else
-                        {
-                            count++;
-                            if (KnightMove.EqualsEnd(knightMoves, endMoves))
-                            {
-                                return count;
-                            }
-                            else
-                            {
-                                return 6;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        
     }
 }

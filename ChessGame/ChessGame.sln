@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coordinates", "Coordinats\Coordinates.csproj", "{A70AE5E5-2250-405E-BA0B-3369AF21D68E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChessGame", "ChessGame\ChessGame.csproj", "{0994B6FB-91F2-4996-B725-843045346073}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility", "Utility\Utility.csproj", "{97BF1B1F-E25A-42E7-A0A6-88A5A112CCD3}"
@@ -13,7 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ManagerFKG", "ManagerFKG\Ma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Figure", "Figure\Figure.csproj", "{3F4709B6-03A2-40F0-B56B-A1F6E7136881}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helper", "Helper\Helper.csproj", "{51744A69-E64A-4FC0-B1AF-25393F346C4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helper", "Helper\Helper.csproj", "{51744A69-E64A-4FC0-B1AF-25393F346C4E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovesFKnight", "MovesFKnight\MovesFKnight.csproj", "{DA9C54D1-6261-49BF-B2C9-3D8B77C53E96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandardGame", "Standard\StandardGame.csproj", "{883E7214-AD80-4ACA-86FE-8CD8E946CAAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +23,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A70AE5E5-2250-405E-BA0B-3369AF21D68E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A70AE5E5-2250-405E-BA0B-3369AF21D68E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A70AE5E5-2250-405E-BA0B-3369AF21D68E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A70AE5E5-2250-405E-BA0B-3369AF21D68E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0994B6FB-91F2-4996-B725-843045346073}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0994B6FB-91F2-4996-B725-843045346073}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0994B6FB-91F2-4996-B725-843045346073}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +43,14 @@ Global
 		{51744A69-E64A-4FC0-B1AF-25393F346C4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51744A69-E64A-4FC0-B1AF-25393F346C4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51744A69-E64A-4FC0-B1AF-25393F346C4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA9C54D1-6261-49BF-B2C9-3D8B77C53E96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA9C54D1-6261-49BF-B2C9-3D8B77C53E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA9C54D1-6261-49BF-B2C9-3D8B77C53E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA9C54D1-6261-49BF-B2C9-3D8B77C53E96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{883E7214-AD80-4ACA-86FE-8CD8E946CAAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{883E7214-AD80-4ACA-86FE-8CD8E946CAAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{883E7214-AD80-4ACA-86FE-8CD8E946CAAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{883E7214-AD80-4ACA-86FE-8CD8E946CAAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,11 +1,11 @@
-﻿using Coordinates;
+﻿using Figure;
+using ManagerFKG;
+using MovesFKnight;
+using StandardGame;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Utility;
 
@@ -17,28 +17,18 @@ namespace ChessGame
     public partial class MainWindow : Window
     {
         #region Property and Feld
-        private List<BaseFigure> models = new();
+        public List<BaseFigure> models = new();
         private List<CoordinatePoint> currentListForBabyGame = new();
-        private BaseFigure CurentKing => (BaseFigure)models.Where(c => c.Color == currentFigureColor && c is King).Single();
         public UIElement DragObjectImage { get => dragObjectImage; set => dragObjectImage = value; }
-        private int whiteKingCount = 0;
-        private int whiteQueenCount = 0;
-        private int whiteBishopCount = 0;
-        private int whiteRookCount = 0;
-        private int whitePawnCount = 0;
-        private int whiteKnightCount = 0;
-        private int blackKingCount = 0;
-        private int blackQueenCount = 0;
-        private int blackBishopCount = 0;
-        private int blackRookCount = 0;
-        private int blackPawnCount = 0;
-        private int blackKnightCount = 0;
-        private string currentFigureColor;
+        public string currentFigureColor;
         private Knight knightForeMoves;
         private int countForKnightMoves = 0;
         private BaseFigure dragObject = null;
         private UIElement dragObjectImage = null;
         private CoordinatePoint startCoordinate;
+        public bool gameManager = false;
+        public Manager manager1;
+        private bool colorPower = false;
         #endregion
 
         public MainWindow()
@@ -47,39 +37,25 @@ namespace ChessGame
         }
 
         #region Game
+
+        #region King game Button
         private void PleacementB1_Click(object sender, RoutedEventArgs e)
         {
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(GetCurrentFigureColor(), UriKind.Relative);
-            bitmap.EndInit();
-            string[] tempFigure = GetCurrentFigureColor().Split('/');
+            string[] tempFigure = GetCurrentFigureImage().Split('/');
             string color = tempFigure[tempFigure.Length - 1].Split('.')[0];
             string figure = tempFigure[tempFigure.Length - 1].Split('.')[1];
-            if (GetCoordinatesForPleacement(out CoordinatePoint CoordinatPoint) && GetFigureBase(figure, color, out BaseFigure temp))
+            manager1 = new Manager(currentListForBabyGame, currentFigureColor);
+            if (manager1.GetFigure(figure, color, out BaseFigure temp))
             {
-                if (temp is King king)
+                if (GetCoordinatesForPleacement(out CoordinatePoint CoordinatPoint))
                 {
-                    if (!DangerPosition(king).Contains(CoordinatPoint))
+                    if (manager1.IsValidForPleacement(temp.Name, CoordinatPoint))
                     {
-                        models.Add(temp);
-                        temp.Bitmap = bitmap;
-                        temp.SetFigurePosition(CoordinatPoint, Board);
+                        temp.setPicture += SetFigurePicture;
+                        temp.removePicture += RemoveFigurePicture;
+                        temp.messageForMove += MessageMove;
+                        temp.SetFigurePosition(CoordinatPoint);
                     }
-                    else
-                    {
-                        MessageBox.Show("King is under a check");
-                        if (color == "White")
-                            whiteKingCount = 0;
-                        else
-                            blackKingCount = 0;
-                    }
-                }
-                else
-                {
-                    models.Add(temp);
-                    temp.Bitmap = bitmap;
-                    temp.SetFigurePosition(CoordinatPoint, Board);
                 }
             }
         }
@@ -111,18 +87,105 @@ namespace ChessGame
                 }
             }
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void InstallButton(object sender, RoutedEventArgs e)
         {
             PlayB2.IsEnabled = false;
-            if (GetCurrentFigure())
+            //if (GetCurrentFigure())
+            //{
+            GetCurrentFigureNew();
+            Manager manager = new(currentListForBabyGame, currentFigureColor);
+            manager.MateMessage += MessageMate;
+            manager.Logic();
+            //}
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Show a figure moves
+        /// </summary>
+        /// <param name="baseFigure">Figure instanste</param>
+        /// <param name="coordinate">Figure old and new coordinate</param>
+        public void MessageMove(object baseFigure, (CoordinatePoint, CoordinatePoint) coordinateTupl)
+        {
+            if (coordinateTupl.Item1 != null)
             {
-                Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor, Board, MovesTextBox, MessageHandle);
-                manager.Logic();
+                var tempFigure = (BaseFigure)baseFigure;
+                MovesTextBox.Text += $"{tempFigure.Name} " + $"{coordinateTupl.Item1}-" +
+                    $"{coordinateTupl.Item2}\n{new string('-', 8)}\n";
+            }
+        }
+
+        /// <summary>
+        /// Show a Mate message
+        /// </summary>
+        /// <param name="sender">figure</param>
+        /// <param name="message">Mate</param>
+        public void MessageMate(object sender, string message)
+        {
+            MessageHandle.Text = message;
+        }
+
+        /// <summary>
+        /// Set the figure image
+        /// </summary>
+        /// <param name="baseFigure">Figure instance</param>
+        /// <param name="coordinate">Figure </param>
+        public void SetFigurePicture(object baseFigure, CoordinatePoint coordinate)
+        {
+            BaseFigure tempFigure = (BaseFigure)baseFigure;
+            string str = tempFigure.Name;
+            Image image = new Image();
+            BitmapImage bitmap = new();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(GetCurrentFigureImage(str), UriKind.Relative);
+            bitmap.EndInit();
+            image.Source = bitmap;
+            image.Tag = tempFigure.Name;
+            Grid.SetColumn(image, coordinate.X);
+            Grid.SetRow(image, coordinate.Y);
+            Board.Children.Add(image);
+        }
+
+        /// <summary>
+        /// Remove the figure image
+        /// </summary>
+        /// <param name="baseFigure">Figure instance</param>
+        /// <param name="coordinate">Figure </param>
+        public void RemoveFigurePicture(object baseFigure, CoordinatePoint coordinate)
+        {
+            BaseFigure tempFigure = (BaseFigure)baseFigure;
+            foreach (var item in Board.Children)
+            {
+                if (item is Image image1)
+                {
+                    if (tempFigure.Name == image1.Tag.ToString())
+                    {
+                        Board.Children.Remove(image1);
+                        break;
+                    }
+                }
             }
 
         }
 
-        private string GetCurrentFigureColor()
+        /// <summary>
+        /// Get a figure image source
+        /// </summary>
+        /// <param name="name">Figure name</param>
+        /// <returns>Return the instance image source</returns>
+        private string GetCurrentFigureImage(string name)
+        {
+            string[] str = name.Split('.');
+            string result = str[1] == "White" ? str[0].WhiteFigurePath() : str[0].BlackFigurePath();
+            return result;
+        }
+
+        /// <summary>
+        /// Get a figure image source
+        /// </summary>
+        /// <returns>Return the instance image source</returns>
+        private string GetCurrentFigureImage()
         {
             string str = SelectFigur.Text;
             string result = string.Empty;
@@ -165,191 +228,6 @@ namespace ChessGame
         }
 
         /// <summary>
-        /// Check the figure and added the figure instance
-        /// </summary>
-        /// <param name="figure">The figure</param>
-        /// <param name="color">The figure color</param>
-        /// <param name="baseFigure">figure instance type</param>
-        /// <returns>Return figure instance</returns>
-        private bool GetFigureBase(string figure, string color, out BaseFigure baseFigure)
-        {
-            if (color == "White")
-            {
-                switch (figure)
-                {
-                    case "Queen":
-                        if (whiteQueenCount == 0)
-                        {
-                            whiteQueenCount++;
-                            baseFigure = new Queen(figure + color, color, models);
-                            return true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("White queen inside board");
-                            baseFigure = null;
-                            return false;
-                        }
-                    case "King":
-                        if (whiteKingCount == 0)
-                        {
-                            whiteKingCount++;
-                            baseFigure = new King(figure + color, color, models);
-                            return true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("White king inside board");
-                            baseFigure = null;
-                            return false;
-                        }
-                    case "Rook":
-                        if (whiteRookCount <= 1)
-                        {
-                            whiteRookCount++;
-                            baseFigure = new Rook(figure + color + whiteRookCount, color, models);
-                            return true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("White rook inside board");
-                            baseFigure = null;
-                            return false;
-                        }
-                    case "Bishop":
-                        if (whiteBishopCount <= 1)
-                        {
-                            whiteBishopCount++;
-                            baseFigure = new Bishop(figure + color + whiteBishopCount, color, models);
-                            return true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("White rook inside board");
-                            baseFigure = null;
-                            return false;
-                        }
-                    case "Knight":
-                        if (whiteKnightCount <= 1)
-                        {
-                            whiteKnightCount++;
-                            baseFigure = new Knight(figure + color + whiteKnightCount, color, models);
-                            return true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("White knight inside board");
-                            baseFigure = null;
-                            return false;
-                        }
-                    case "Pawn":
-                        if (whitePawnCount <= 7)
-                        {
-                            whitePawnCount++;
-                            baseFigure = new Pawn(figure + color + whitePawnCount, color, models);
-                            return true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("White pawn inside board");
-                            baseFigure = null;
-                            return false;
-                        }
-                    default:
-                        baseFigure = null;
-                        return false;
-                }
-            }
-            else
-            {
-                switch (figure)
-                {
-                    case "Queen":
-                        if (blackQueenCount == 0)
-                        {
-                            blackQueenCount++;
-                            baseFigure = new Queen(figure + color, color, models);
-                            return true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("White queen inside board");
-                            baseFigure = null;
-                            return false;
-                        }
-                    case "King":
-                        if (blackKingCount == 0)
-                        {
-                            blackKingCount++;
-                            baseFigure = new King(figure + color, color, models);
-                            return true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("White king inside board");
-                            baseFigure = null;
-                            return false;
-                        }
-                    case "Rook":
-                        if (blackRookCount <= 1)
-                        {
-                            blackRookCount++;
-                            baseFigure = new Rook(figure + color + blackRookCount, color, models);
-                            return true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("White rook inside board");
-                            baseFigure = null;
-                            return false;
-                        }
-                    case "Bishop":
-                        if (blackBishopCount <= 1)
-                        {
-                            blackBishopCount++;
-                            baseFigure = new Bishop(figure + color + blackBishopCount, color, models);
-                            return true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("White rook inside board");
-                            baseFigure = null;
-                            return false;
-                        }
-                    case "Knight":
-                        if (blackKnightCount <= 1)
-                        {
-                            blackKnightCount++;
-                            baseFigure = new Knight(figure + color + blackKnightCount, color, models);
-                            return true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("White knight inside board");
-                            baseFigure = null;
-                            return false;
-                        }
-                    case "Pawn":
-                        if (blackPawnCount <= 7)
-                        {
-                            blackPawnCount++;
-                            baseFigure = new Pawn(figure + color + blackPawnCount, color, models);
-                            return true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("White pawn inside board");
-                            baseFigure = null;
-                            return false;
-                        }
-                    default:
-                        baseFigure = null;
-                        return false;
-                }
-            }
-        }
-
-        /// <summary>
         /// Change the coordinate for current figure
         /// </summary>
         /// <param name="CoordinatPoint">Coordinate with out parametr</param>
@@ -374,16 +252,7 @@ namespace ChessGame
                         if (j <= 8 && j >= 1)
                         {
                             CoordinatPoint = new CoordinatePoint(o - 1, j - 1);
-                            if (!GetPosition().Contains(CoordinatPoint))
-                            {
-                                return true;
-                            }
-                            else
-                            {
-                                MessageBox.Show("There is a figure in that coordinate");
-                                return false;
-                            }
-
+                            return true;
                         }
                         else
                         {
@@ -409,22 +278,12 @@ namespace ChessGame
             }
 
         }
-
-        /// <summary>
-        /// Change the coordinate for current figure
-        /// </summary>
-        /// <param name="CoordinatPoint">Coordinate with out parametr</param>
-        /// <returns>Return the current figure coordinate</returns>
-        private bool GetCurrentCoordinates(out CoordinatePoint CoordinatPoint, out BaseFigure baseFigureTemp)
+        public string GetCurrentFigureCoordinate(TextBox letter, TextBox number)
         {
-            string inputLetter = InputCoordinatsLetter_Corrent.Text;
-            baseFigureTemp = null;
+            string inputLetter = letter.Text;
             if (inputLetter.Length > 1)
             {
                 MessageBox.Show("This letter not found");
-                CoordinatPoint = null;
-                baseFigureTemp = null;
-                return false;
             }
             else
             {
@@ -432,221 +291,53 @@ namespace ChessGame
                 {
                     try
                     {
-                        string inputNumber = InputCoordinatsNumber_Corrent.Text;
+                        string inputNumber = number.Text;
                         int j = Convert.ToInt32(inputNumber.ToString());
                         if (j <= 8 && j >= 1)
                         {
-                            CoordinatPoint = new CoordinatePoint(o - 1, j - 1);
-                            foreach (var item in models)
-                            {
-                                if (item.Coordinate == CoordinatPoint)
-                                {
-                                    if (item.Color == currentFigureColor)
-                                    {
-                                        baseFigureTemp = item;
-                                        return true;
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("The color of the piece is not chosen correctly");
-                                        CoordinatPoint = null;
-                                        baseFigureTemp = null;
-                                        return false;
-                                    }
-                                }
-                            }
-                            MessageBox.Show("There is a figure in not that coordinate");
-                            CoordinatPoint = null;
-                            baseFigureTemp = null;
-                            return false;
+                            return $"{o - 1}.{j - 1}";
                         }
                         else
                         {
                             MessageBox.Show("The number is not found");
-                            CoordinatPoint = null;
-                            baseFigureTemp = null;
-                            return false;
                         }
                     }
                     catch (Exception)
                     {
                         MessageBox.Show("The number is not found");
-                        CoordinatPoint = null;
-                        baseFigureTemp = null;
-                        return false;
                     }
-
                 }
                 else
                 {
-                    CoordinatPoint = null;
-                    baseFigureTemp = null;
-                    return false;
+                    MessageBox.Show("This letter not found");
                 }
             }
-        }
-
-        /// <summary>
-        /// Change the coordinate for selected figure
-        /// </summary>
-        /// <param name="CoordinatPoint">Coordinate for fih=gure</param>
-        /// <param name="figure">Figure instance</param>
-        /// <returns>Return true if figure coordinate is availabe position</returns>
-        private bool GetTargetCoordinates(out CoordinatePoint CoordinatPoint, BaseFigure figure)
-        {
-            string inputLetter = InputCoordinatsLetter_Selected.Text;
-            if (inputLetter.Length > 1)
-            {
-                MessageBox.Show("This letter not found");
-                CoordinatPoint = null;
-                return false;
-            }
-            else
-            {
-                if (Convert.ToChar(inputLetter).CharToInt(out int o))
-                {
-                    try
-                    {
-                        string inputNumber = InputCoordinatsNumber_Selected.Text;
-                        int j = Convert.ToInt32(inputNumber.ToString());
-                        if (j <= 8 && j >= 1)
-                        {
-                            CoordinatPoint = new CoordinatePoint(o - 1, j - 1);
-                            IRandomMove tempFigure = (IRandomMove)figure;
-                            if (figure is King)
-                            {
-                                if (GetCurrentKingMoves().Contains(CoordinatPoint))
-                                {
-                                    return true;
-                                }
-                                else
-                                {
-                                    MessageBox.Show("There is a figure in not that coordinate");
-                                    return false;
-                                }
-                            }
-                            else if (tempFigure.AvailableMoves().Contains(CoordinatPoint))
-                            {
-                                return true;
-                            }
-                            else
-                            {
-                                MessageBox.Show("There is a figure in not that coordinate");
-                                return false;
-                            }
-
-                        }
-                        else
-                        {
-                            MessageBox.Show("The number is not found");
-                            CoordinatPoint = null;
-                            return false;
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("The number is not found");
-                        CoordinatPoint = null;
-                        return false;
-                    }
-
-                }
-                else
-                {
-                    CoordinatPoint = null;
-                    return false;
-                }
-            }
+            return string.Empty;
         }
 
         /// <summary>
         /// Check the selectid figure and change figure position
         /// </summary>
         /// <returns>Return true if figure new coordinate is changed</returns>
-        private bool GetCurrentFigure()
+        private void GetCurrentFigureNew()
         {
-            if (GetCurrentCoordinates(out CoordinatePoint coordinatPoint, out BaseFigure baseFigureTemp)
-                           && GetTargetCoordinates(out CoordinatePoint selectedPoint, baseFigureTemp))
-            {
-                if (baseFigureTemp.Color == currentFigureColor)
-                {
-                    IRandomMove tempFigur = (IRandomMove)baseFigureTemp;
-                    if (tempFigur.AvailableMoves().Contains(selectedPoint))
-                    {
-                        baseFigureTemp.SetFigurePosition(selectedPoint, Board);
-                        currentListForBabyGame.Add(selectedPoint);
-                        MovesTextBox.Text += $"{InputCoordinatsLetter_Corrent.Text + InputCoordinatsNumber_Corrent.Text} - " +
-                                           $"{InputCoordinatsLetter_Selected.Text + InputCoordinatsNumber_Selected.Text}\n{new string('-', 8)}\n";
-                        return true;
-                    }
-                    else
-                    {
-                        MessageBox.Show("This figur can not move this position");
-                        return false;
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("You selected not right color");
-                    return false;
-                }
-            }
-            return false;
+            string current = GetCurrentFigureCoordinate(InputCoordinatsLetter_Corrent, InputCoordinatsNumber_Corrent);
+            string target = GetCurrentFigureCoordinate(InputCoordinatsLetter_Selected, InputCoordinatsNumber_Selected);
+            manager1 = new Manager(currentListForBabyGame, currentFigureColor);
+            manager1.IsVAlidCoordinate(current, target);
         }
 
-        /// <summary>
-        /// Check the available moves for current king 
-        /// </summary>
-        /// <returns>Return the list</returns>
-        private List<CoordinatePoint> GetCurrentKingMoves()
-        {
-            IRandomMove currentKing = (IRandomMove)CurentKing;
-            var result = new List<CoordinatePoint>();
-            foreach (var item in currentKing.AvailableMoves())
-            {
-                if (!DangerPosition(CurentKing).Contains(item))
-                {
-                    result.Add(item);
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Check the danger position for current king
-        /// </summary>
-        /// <param name="model">King instance withe or Black</param>
-        /// <returns>Return danger position List for current king </returns>
-        public List<CoordinatePoint> DangerPosition(BaseFigure model)
-        {
-            var result = new List<CoordinatePoint>();
-            var modelNew = models.Where(c => c.Color != model.Color);
-            foreach (var item in modelNew)
-            {
-                var temp = (IDangerMoves)item;
-                var array = temp.DangerMoves();
-                result.AddRange(array);
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Check the all figurs position
-        /// </summary>
-        /// <returns>Return the figurs position</returns>
-        private List<CoordinatePoint> GetPosition()
-        {
-            var positions = new List<CoordinatePoint>();
-            foreach (var item in models)
-            {
-                positions.Add(item.Coordinate);
-            }
-            return positions;
-        }
         #endregion
 
         #region For Knight Moves
 
+        /// <summary>
+        /// Get a coordinate for knight start position
+        /// </summary>
+        /// <param name="textBoxLetter">Letter coordinate text box name</param>
+        /// <param name="textBoxNumber">Number coordinate text box name</param>
+        /// <param name="CoordinatPoint">Out parametr</param>
+        /// <returns>Return the coordinate for knight start position</returns>
         private bool GetCoordinateKnight(TextBox textBoxLetter, TextBox textBoxNumber, out CoordinatePoint CoordinatPoint)
         {
             string inputLetter = textBoxLetter.Text;
@@ -693,17 +384,15 @@ namespace ChessGame
             }
 
         }
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void KnightSetButton(object sender, RoutedEventArgs e)
         {
             if (GetCoordinateKnight(KnightStartLetter, KnightStartNumber, out CoordinatePoint coordinatPoint))
             {
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri("Resources/Black.Knight.png", UriKind.Relative);
-                bitmap.EndInit();
-                this.knightForeMoves = new Knight("KnightMoves", "Black", models);
-                this.knightForeMoves.Bitmap = bitmap;
-                this.knightForeMoves.SetFigurePosition(coordinatPoint, Board);
+                this.knightForeMoves = new Knight("Knight.Black", "Black", models);
+                this.knightForeMoves.setPicture += SetFigurePicture;
+                this.knightForeMoves.removePicture += RemoveFigurePicture;
+                this.knightForeMoves.messageForMove += delegate { KnightMovesMessage.Text = " "; };
+                knightForeMoves.SetFigurePosition(coordinatPoint);
                 models.Add(this.knightForeMoves);
             }
         }
@@ -711,15 +400,14 @@ namespace ChessGame
         {
             if (GetCoordinateKnight(KnightTargetLetter, KnightTargetNumber, out CoordinatePoint coordinatPoint))
             {
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri("Resources/Black.Knight.png", UriKind.Relative);
-                bitmap.EndInit();
-                Knight knight = new Knight("KnightMovesTaarget", "Black", models);
-                knight.Bitmap = bitmap;
+                Knight knight = new Knight("Knight.Black.Target", "Black", models);
+                knight.setPicture += SetFigurePicture;
+                knight.removePicture += RemoveFigurePicture;
+                knight.messageForMove += delegate { KnightMovesMessage.Text = " "; };
                 models.Add(knight);
-                knight.SetFigurePosition(coordinatPoint, Board);
-                countForKnightMoves = this.knightForeMoves.MinKnightCount(coordinatPoint);
+                knight.SetFigurePosition(coordinatPoint);
+                MovesKnight movesFKnight = new MovesKnight();
+                countForKnightMoves = movesFKnight.MinKnightCount(coordinatPoint, this.knightForeMoves.Coordinate);
                 KnightMovesMessage.Text = $"For target coordinate your need {countForKnightMoves} moves";
                 countForKnightMoves = 0;
             }
@@ -727,88 +415,21 @@ namespace ChessGame
 
         #endregion
 
+        #region Reset Method and buttons
+
         /// <summary>
         /// Reset Board for start game
         /// </summary>
         private void ResetBoard()
         {
+            GetAllFigures(gameManager);
             foreach (var item in models)
             {
-                Board.Children.Remove(item.FigureImage);
+                item.RemoveFigurePosition();
             }
             models.Clear();
-            whiteKingCount = 0;
-            whiteQueenCount = 0;
-            whiteBishopCount = 0;
-            whiteRookCount = 0;
-            whitePawnCount = 0;
-            whiteKnightCount = 0;
-            blackKingCount = 0;
-            blackQueenCount = 0;
-            blackBishopCount = 0;
-            blackRookCount = 0;
-            blackPawnCount = 0;
-            blackKnightCount = 0;
             MovesTextBox.Text = "";
             MessageHandle.Text = "";
-        }
-        private void Board_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            var image = e.Source as Image;
-            if (image != null && image.Name.Contains(currentFigureColor))
-            {
-                CoordinatePoint coordinatPoint = new CoordinatePoint(0, 0);
-                this.DragObjectImage = image;
-                coordinatPoint.X = Grid.GetColumn(image);
-                coordinatPoint.Y = Grid.GetRow(image);
-                foreach (var item in models)
-                {
-                    if (item.Coordinate == coordinatPoint)
-                    {
-                        dragObject = item;
-                        this.startCoordinate = dragObject.Coordinate;
-                        break;
-                    }
-                }
-                DragDrop.DoDragDrop(image, dragObject, DragDropEffects.Move);
-            }
-        }
-        private void Image_Drop(object sender, DragEventArgs e)
-        {
-            var temp = (Border)e.OriginalSource;
-            CoordinatePoint coordinatPoint = new CoordinatePoint(0, 0);
-            coordinatPoint.X = Grid.GetColumn(temp);
-            coordinatPoint.Y = Grid.GetRow(temp);
-            IAvailableMoves currentFigur = (IAvailableMoves)dragObject;
-            if (currentFigur is King)
-            {
-                if (GetCurrentKingMoves().Contains(coordinatPoint))
-                {
-                    dragObject.SetFigurePosition(coordinatPoint, Board);
-                    MovesTextBox.Text += $"{startCoordinate} - " +
-                                           $"{coordinatPoint}\n{new string('-', 8)}\n";
-                    Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor, Board, MovesTextBox, MessageHandle);
-                    manager.Logic();
-                }
-                else
-                {
-                    dragObject.SetFigurePosition(startCoordinate, Board);
-                    return;
-                }
-            }
-            else if (currentFigur.AvailableMoves().Contains(coordinatPoint))
-            {
-                dragObject.SetFigurePosition(coordinatPoint, Board);
-                MovesTextBox.Text += $"{startCoordinate.X + startCoordinate.Y} - " +
-                                           $"{coordinatPoint.X + coordinatPoint.Y}\n{new string('-', 8)}\n";
-                Manager manager = new(currentListForBabyGame, CurentKing, models, currentFigureColor, Board, MovesTextBox, MessageHandle);
-                manager.Logic();
-            }
-            else
-            {
-                dragObject.SetFigurePosition(startCoordinate, Board);
-                return;
-            }
         }
 
         /// <summary>
@@ -834,6 +455,7 @@ namespace ChessGame
             InputCoordinatsNumber_Selected.IsEnabled = false;
             InstalB3.IsEnabled = false;
         }
+
         /// <summary>
         /// Reset button the Board for start Knight game
         /// </summary>
@@ -848,6 +470,48 @@ namespace ChessGame
             KnightTargetLetter.Text = "";
             KnightTargetNumber.Text = "";
         }
+
+        #endregion
+
+        #region Drag and Drop
+        private void Board_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var image = e.Source as Image;
+            string imageName = image.Source.ToString();
+            if (image != null && imageName.Contains(currentFigureColor))
+            {
+                CoordinatePoint coordinatPoint = new CoordinatePoint(0, 0);
+                this.DragObjectImage = image;
+                coordinatPoint.X = Grid.GetColumn(image);
+                coordinatPoint.Y = Grid.GetRow(image);
+                dragObject = GameManagerForDrop(gameManager, coordinatPoint);
+                this.startCoordinate = dragObject.Coordinate;
+                DragDrop.DoDragDrop(image, dragObject, DragDropEffects.Move);
+            }
+        }
+        private void Image_Drop(object sender, DragEventArgs e)
+        {
+            CoordinatePoint coordinatPoint = new CoordinatePoint(0, 0);
+            coordinatPoint.X = Grid.GetColumn((UIElement)e.OriginalSource);
+            coordinatPoint.Y = Grid.GetRow((UIElement)e.OriginalSource);
+            if (coordinatPoint != dragObject.Coordinate)
+            {
+                IAvailableMoves currentFigur = (IAvailableMoves)dragObject;
+                if (currentFigur.AvailableMoves().Contains(coordinatPoint))
+                {
+                    dragObject.SetFigurePosition(coordinatPoint);
+                    GameManager(gameManager);
+                }
+                else
+                {
+                    dragObject.SetFigurePosition(startCoordinate);
+                    return;
+                }
+            }
+
+        }
+
+        #endregion
 
         #region MenuStrip
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -891,6 +555,176 @@ namespace ChessGame
             KnightTargetNumber.Text = "";
             MessageBox.Show("You Change A Knight Game, Good Luck");
         }
+        private void StandardGame_Click(object sender, RoutedEventArgs e)
+        {
+            this.Width = 1348;
+            this.Width = 620;
+            ResetBoard();
+            Standard standard = new Standard(currentFigureColor);
+            models = standard.figures;
+            SetAllFigures(models);
+            MessageBox.Show("You Change A Standard Game, Good Luck");
+        }
         #endregion
+
+        private void GameManager(bool gameSatus)
+        {
+            if (gameSatus)
+            {
+                Manager manager = new(currentListForBabyGame, currentFigureColor);
+                manager.MateMessage += MessageMate;
+                manager.Logic();
+            }
+            else
+            {
+                if (colorPower)
+                {
+                    currentFigureColor = "White";
+                    colorPower = false;
+                }
+                else
+                {
+                    currentFigureColor = "Black";
+                    colorPower = true;
+                }
+            }
+        }
+        private BaseFigure GameManagerForDrop(bool gameSatus, CoordinatePoint coordinatePoint)
+        {
+            BaseFigure baseFigure = null;
+            if (gameSatus)
+            {
+                Manager manager = new(currentListForBabyGame, currentFigureColor);
+                baseFigure = manager.CheckTheBaseFigure(coordinatePoint);
+            }
+            else
+            {
+                baseFigure = Standard.CheckTheBaseFigure(coordinatePoint);
+            }
+            return baseFigure;
+        }
+        public void SetAllFigures(List<BaseFigure> baseFigures)
+        {
+            foreach (var item in baseFigures)
+            {
+                item.setPicture += SetFigurePicture;
+                item.removePicture += RemoveFigurePicture;
+                item.messageForMove += MessageMove;
+                currentFigureColor = "White";
+                switch (item.Name)
+                {
+                    case "Queen.White.1":
+                        item.SetFigurePosition(new CoordinatePoint(3, 7));
+                        continue;
+                    case "Queen.Black.1":
+                        item.SetFigurePosition(new CoordinatePoint(3, 0));
+                        continue;
+                    case "King.White.1":
+                        item.SetFigurePosition(new CoordinatePoint(4, 7));
+                        continue;
+                    case "King.Black.1":
+                        item.SetFigurePosition(new CoordinatePoint(4, 0));
+                        continue;
+                    case "Bishop.Black.1":
+                        item.SetFigurePosition(new CoordinatePoint(2, 0));
+                        continue;
+                    case "Bishop.Black.2":
+                        item.SetFigurePosition(new CoordinatePoint(5, 0));
+                        continue;
+                    case "Bishop.White.1":
+                        item.SetFigurePosition(new CoordinatePoint(2, 7));
+                        continue;
+                    case "Bishop.White.2":
+                        item.SetFigurePosition(new CoordinatePoint(5, 7));
+                        continue;
+                    case "Knight.White.1":
+                        item.SetFigurePosition(new CoordinatePoint(1, 7));
+                        continue;
+                    case "Knight.White.2":
+                        item.SetFigurePosition(new CoordinatePoint(6, 7));
+                        continue;
+                    case "Knight.Black.1":
+                        item.SetFigurePosition(new CoordinatePoint(1, 0));
+                        continue;
+                    case "Knight.Black.2":
+                        item.SetFigurePosition(new CoordinatePoint(6, 0));
+                        continue;
+                    case "Rook.Black.1":
+                        item.SetFigurePosition(new CoordinatePoint(0, 0));
+                        continue;
+                    case "Rook.Black.2":
+                        item.SetFigurePosition(new CoordinatePoint(7, 0));
+                        continue;
+                    case "Rook.White.1":
+                        item.SetFigurePosition(new CoordinatePoint(0, 7));
+                        continue;
+                    case "Rook.White.2":
+                        item.SetFigurePosition(new CoordinatePoint(7, 7));
+                        continue;
+                    case "Pawn.White.1":
+                        item.SetFigurePosition(new CoordinatePoint(0, 6));
+                        continue;
+                    case "Pawn.White.2":
+                        item.SetFigurePosition(new CoordinatePoint(1, 6));
+                        continue;
+                    case "Pawn.White.3":
+                        item.SetFigurePosition(new CoordinatePoint(2, 6));
+                        continue;
+                    case "Pawn.White.4":
+                        item.SetFigurePosition(new CoordinatePoint(3, 6));
+                        continue;
+                    case "Pawn.White.5":
+                        item.SetFigurePosition(new CoordinatePoint(4, 6));
+                        continue;
+                    case "Pawn.White.6":
+                        item.SetFigurePosition(new CoordinatePoint(5, 6));
+                        continue;
+                    case "Pawn.White.7":
+                        item.SetFigurePosition(new CoordinatePoint(6, 6));
+                        continue;
+                    case "Pawn.White.8":
+                        item.SetFigurePosition(new CoordinatePoint(7, 6));
+                        continue;
+                    case "Pawn.Black.1":
+                        item.SetFigurePosition(new CoordinatePoint(0, 1));
+                        continue;
+                    case "Pawn.Black.2":
+                        item.SetFigurePosition(new CoordinatePoint(1, 1));
+                        continue;
+                    case "Pawn.Black.3":
+                        item.SetFigurePosition(new CoordinatePoint(2, 1));
+                        continue;
+                    case "Pawn.Black.4":
+                        item.SetFigurePosition(new CoordinatePoint(3, 1));
+                        continue;
+                    case "Pawn.Black.5":
+                        item.SetFigurePosition(new CoordinatePoint(4, 1));
+                        continue;
+                    case "Pawn.Black.6":
+                        item.SetFigurePosition(new CoordinatePoint(5, 1));
+                        continue;
+                    case "Pawn.Black.7":
+                        item.SetFigurePosition(new CoordinatePoint(6, 1));
+                        continue;
+                    case "Pawn.Black.8":
+                        item.SetFigurePosition(new CoordinatePoint(7, 1));
+                        continue;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void GetAllFigures(bool gameSatus)
+        {
+            if (gameSatus)
+            {
+                models = Manager.models;
+            }
+            else
+            {
+                models = Standard.models;
+            }
+        }
     }
 }
