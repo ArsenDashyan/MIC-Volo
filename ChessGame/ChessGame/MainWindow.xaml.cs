@@ -1,7 +1,5 @@
 ﻿using Figure;
-using ManagerFKG;
-using MovesFKnight;
-using StandardGame;
+using GameManager;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -17,17 +15,15 @@ namespace ChessGame
     public partial class MainWindow : Window
     {
         #region Property and Feld
-        public List<BaseFigure> models = new();
-        private List<CoordinatePoint> currentListForBabyGame = new();
         public UIElement DragObjectImage { get => dragObjectImage; set => dragObjectImage = value; }
-        public string currentFigureColor;
-        private Knight knightForeMoves;
-        private int countForKnightMoves = 0;
-        private BaseFigure dragObject = null;
         private UIElement dragObjectImage = null;
-        private CoordinatePoint startCoordinate;
+        private Manager manager;
+        private MovesKnight movesKnight;
+        public string currentFigureColor;
+        private string startCoordinate;
+        private List<string> models = new();
+        private int countForKnightMoves = 0;
         public bool gameManager = false;
-        public Manager manager1;
         private bool colorPower = false;
         #endregion
 
@@ -36,7 +32,51 @@ namespace ChessGame
             InitializeComponent();
         }
 
-        #region Game
+        /// <summary>
+        /// Set the figure image
+        /// </summary>
+        /// <param name="baseFigure">Figure instance</param>
+        /// <param name="coordinate">Figure </param>
+        public void SetFigurePicture(object sender, string coordinate)
+        {
+            string[] coord = coordinate.Split('.');
+            string str = coord[2] + '.' + coord[3] + '.' + coord[4];
+            Image image = new Image();
+            BitmapImage bitmap = new();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(GetCurrentFigureImage(str), UriKind.Relative);
+            bitmap.EndInit();
+            image.Source = bitmap;
+            image.Tag = str;
+            Grid.SetColumn(image, Convert.ToChar(coord[0]).CharToInt());
+            Grid.SetRow(image, int.Parse(coord[1]) - 1);
+            Board.Children.Add(image);
+        }
+
+        /// <summary>
+        /// Remove the figure image
+        /// </summary>
+        /// <param name="baseFigure">Figure instance</param>
+        /// <param name="coordinate">Figure </param>
+        public void RemoveFigurePicture(object sender, string coordinate)
+        {
+            string[] info = coordinate.Split('.');
+            string tempName = info[2] + '.' + info[3] + '.' + info[4];
+            foreach (var item in Board.Children)
+            {
+                if (item is Image image1)
+                {
+                    if (tempName == image1.Tag.ToString())
+                    {
+                        Board.Children.Remove(image1);
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        #region King Game
 
         #region King game Button
         private void PleacementB1_Click(object sender, RoutedEventArgs e)
@@ -44,20 +84,13 @@ namespace ChessGame
             string[] tempFigure = GetCurrentFigureImage().Split('/');
             string color = tempFigure[tempFigure.Length - 1].Split('.')[0];
             string figure = tempFigure[tempFigure.Length - 1].Split('.')[1];
-            manager1 = new Manager(currentListForBabyGame, currentFigureColor);
-            if (manager1.GetFigure(figure, color, out BaseFigure temp))
-            {
-                if (GetCoordinatesForPleacement(out CoordinatePoint CoordinatPoint))
-                {
-                    if (manager1.IsValidForPleacement(temp.Name, CoordinatPoint))
-                    {
-                        temp.setPicture += SetFigurePicture;
-                        temp.removePicture += RemoveFigurePicture;
-                        temp.messageForMove += MessageMove;
-                        temp.SetFigurePosition(CoordinatPoint);
-                    }
-                }
-            }
+            string inputInfo = figure + '.' + color + '.';
+            manager = new Manager(currentFigureColor);
+            manager.setPicture += SetFigurePicture;
+            manager.removePicture += RemoveFigurePicture;
+            manager.messageForMove += MessageMove;
+            inputInfo += GetCurrentFigureCoordinate(InputCoordinatsLetter, InputCoordinatsNumber);
+            manager.IsValidForPleacement(inputInfo);
         }
         private void PlayB2_Click(object sender, RoutedEventArgs e)
         {
@@ -90,29 +123,30 @@ namespace ChessGame
         private void InstallButton(object sender, RoutedEventArgs e)
         {
             PlayB2.IsEnabled = false;
-            //if (GetCurrentFigure())
-            //{
-            GetCurrentFigureNew();
-            Manager manager = new(currentListForBabyGame, currentFigureColor);
-            manager.MateMessage += MessageMate;
-            manager.Logic();
-            //}
+            var tupl = GetCurrentFigureNew();
+            if (manager.IsVAlidCoordinate(tupl.Item1, tupl.Item2))
+            {
+                manager.MateMessage += MessageMate;
+                manager.Logic();
+            }
         }
 
         #endregion
+
 
         /// <summary>
         /// Show a figure moves
         /// </summary>
         /// <param name="baseFigure">Figure instanste</param>
         /// <param name="coordinate">Figure old and new coordinate</param>
-        public void MessageMove(object baseFigure, (CoordinatePoint, CoordinatePoint) coordinateTupl)
+        public void MessageMove(object sender, (string, string) coordinateTupl)
         {
-            if (coordinateTupl.Item1 != null)
+            if (coordinateTupl.Item1 != string.Empty)
             {
-                var tempFigure = (BaseFigure)baseFigure;
-                MovesTextBox.Text += $"{tempFigure.Name} " + $"{coordinateTupl.Item1}-" +
-                    $"{coordinateTupl.Item2}\n{new string('-', 8)}\n";
+                string[] start = coordinateTupl.Item1.Split('.');
+                string[] target = coordinateTupl.Item2.Split('.');
+                MovesTextBox.Text += $"{start[2]}{start[3]}-"+$"{start[0]}{start[1]}:" +
+                    $"{target[0]}{target[1]}\n{new string('-', 8)}\n";
             }
         }
 
@@ -124,49 +158,6 @@ namespace ChessGame
         public void MessageMate(object sender, string message)
         {
             MessageHandle.Text = message;
-        }
-
-        /// <summary>
-        /// Set the figure image
-        /// </summary>
-        /// <param name="baseFigure">Figure instance</param>
-        /// <param name="coordinate">Figure </param>
-        public void SetFigurePicture(object baseFigure, CoordinatePoint coordinate)
-        {
-            BaseFigure tempFigure = (BaseFigure)baseFigure;
-            string str = tempFigure.Name;
-            Image image = new Image();
-            BitmapImage bitmap = new();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(GetCurrentFigureImage(str), UriKind.Relative);
-            bitmap.EndInit();
-            image.Source = bitmap;
-            image.Tag = tempFigure.Name;
-            Grid.SetColumn(image, coordinate.X);
-            Grid.SetRow(image, coordinate.Y);
-            Board.Children.Add(image);
-        }
-
-        /// <summary>
-        /// Remove the figure image
-        /// </summary>
-        /// <param name="baseFigure">Figure instance</param>
-        /// <param name="coordinate">Figure </param>
-        public void RemoveFigurePicture(object baseFigure, CoordinatePoint coordinate)
-        {
-            BaseFigure tempFigure = (BaseFigure)baseFigure;
-            foreach (var item in Board.Children)
-            {
-                if (item is Image image1)
-                {
-                    if (tempFigure.Name == image1.Tag.ToString())
-                    {
-                        Board.Children.Remove(image1);
-                        break;
-                    }
-                }
-            }
-
         }
 
         /// <summary>
@@ -213,11 +204,13 @@ namespace ChessGame
             if (PlayColorWhite.IsChecked == true)
             {
                 currentFigureColor = "White";
+                manager = new(currentFigureColor);
                 return true;
             }
             else if (PlayColorBlack.IsChecked == true)
             {
                 currentFigureColor = "Black";
+                manager = new(currentFigureColor);
                 return true;
             }
             else
@@ -228,56 +221,18 @@ namespace ChessGame
         }
 
         /// <summary>
-        /// Change the coordinate for current figure
+        /// Check the selectid figure and change figure position
         /// </summary>
-        /// <param name="CoordinatPoint">Coordinate with out parametr</param>
-        /// <returns>Return the current figure coordinate</returns>
-        private bool GetCoordinatesForPleacement(out CoordinatePoint CoordinatPoint)
+        /// <returns>Return true if figure new coordinate is changed</returns>
+        private (string, string) GetCurrentFigureNew()
         {
-            string inputLetter = InputCoordinatsLetter.Text;
-            if (inputLetter.Length > 1)
-            {
-                MessageBox.Show("This letter not found");
-                CoordinatPoint = null;
-                return false;
-            }
-            else
-            {
-                if (Convert.ToChar(inputLetter).CharToInt(out int o))
-                {
-                    try
-                    {
-                        string inputNumber = InputCoordinatsNumber.Text;
-                        int j = Convert.ToInt32(inputNumber.ToString());
-                        if (j <= 8 && j >= 1)
-                        {
-                            CoordinatPoint = new CoordinatePoint(o - 1, j - 1);
-                            return true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("The number is not found");
-                            CoordinatPoint = null;
-                            return false;
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("The number is not found");
-                        CoordinatPoint = null;
-                        return false;
-                    }
-
-                }
-                else
-                {
-                    MessageBox.Show("This letter note found");
-                    CoordinatPoint = null;
-                    return false;
-                }
-            }
-
+            string current = GetCurrentFigureCoordinate(InputCoordinatsLetter_Corrent, InputCoordinatsNumber_Corrent);
+            string target = GetCurrentFigureCoordinate(InputCoordinatsLetter_Selected, InputCoordinatsNumber_Selected);
+            return (current, target);
         }
+
+        #endregion
+
         public string GetCurrentFigureCoordinate(TextBox letter, TextBox number)
         {
             string inputLetter = letter.Text;
@@ -315,102 +270,24 @@ namespace ChessGame
             return string.Empty;
         }
 
-        /// <summary>
-        /// Check the selectid figure and change figure position
-        /// </summary>
-        /// <returns>Return true if figure new coordinate is changed</returns>
-        private void GetCurrentFigureNew()
-        {
-            string current = GetCurrentFigureCoordinate(InputCoordinatsLetter_Corrent, InputCoordinatsNumber_Corrent);
-            string target = GetCurrentFigureCoordinate(InputCoordinatsLetter_Selected, InputCoordinatsNumber_Selected);
-            manager1 = new Manager(currentListForBabyGame, currentFigureColor);
-            manager1.IsVAlidCoordinate(current, target);
-        }
-
-        #endregion
-
         #region For Knight Moves
 
-        /// <summary>
-        /// Get a coordinate for knight start position
-        /// </summary>
-        /// <param name="textBoxLetter">Letter coordinate text box name</param>
-        /// <param name="textBoxNumber">Number coordinate text box name</param>
-        /// <param name="CoordinatPoint">Out parametr</param>
-        /// <returns>Return the coordinate for knight start position</returns>
-        private bool GetCoordinateKnight(TextBox textBoxLetter, TextBox textBoxNumber, out CoordinatePoint CoordinatPoint)
-        {
-            string inputLetter = textBoxLetter.Text;
-            if (inputLetter.Length > 1)
-            {
-                MessageBox.Show("This letter not found");
-                CoordinatPoint = null;
-                return false;
-            }
-            else
-            {
-                if (Convert.ToChar(inputLetter).CharToInt(out int o))
-                {
-                    try
-                    {
-                        string inputNumber = textBoxNumber.Text;
-                        int j = Convert.ToInt32(inputNumber.ToString());
-                        if (j <= 8 && j >= 1)
-                        {
-                            CoordinatPoint = new CoordinatePoint(o - 1, j - 1);
-                            return true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("The number is not found");
-                            CoordinatPoint = null;
-                            return false;
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("The number is not found");
-                        CoordinatPoint = null;
-                        return false;
-                    }
-
-                }
-                else
-                {
-                    MessageBox.Show("This letter note found");
-                    CoordinatPoint = null;
-                    return false;
-                }
-            }
-
-        }
         private void KnightSetButton(object sender, RoutedEventArgs e)
         {
-            if (GetCoordinateKnight(KnightStartLetter, KnightStartNumber, out CoordinatePoint coordinatPoint))
-            {
-                this.knightForeMoves = new Knight("Knight.Black", "Black", models);
-                this.knightForeMoves.setPicture += SetFigurePicture;
-                this.knightForeMoves.removePicture += RemoveFigurePicture;
-                this.knightForeMoves.messageForMove += delegate { KnightMovesMessage.Text = " "; };
-                knightForeMoves.SetFigurePosition(coordinatPoint);
-                models.Add(this.knightForeMoves);
-            }
+            string coordinate = GetCurrentFigureCoordinate(KnightStartLetter, KnightStartNumber);
+            movesKnight = new MovesKnight();
+            movesKnight.setPicture += SetFigurePicture;
+            movesKnight.CreateStartKnight(coordinate);
         }
         private void KnightMoveCheck_Click(object sender, RoutedEventArgs e)
         {
-            if (GetCoordinateKnight(KnightTargetLetter, KnightTargetNumber, out CoordinatePoint coordinatPoint))
-            {
-                Knight knight = new Knight("Knight.Black.Target", "Black", models);
-                knight.setPicture += SetFigurePicture;
-                knight.removePicture += RemoveFigurePicture;
-                knight.messageForMove += delegate { KnightMovesMessage.Text = " "; };
-                models.Add(knight);
-                knight.SetFigurePosition(coordinatPoint);
-                MovesKnight movesFKnight = new MovesKnight();
-                countForKnightMoves = movesFKnight.MinKnightCount(coordinatPoint, this.knightForeMoves.Coordinate);
-                KnightMovesMessage.Text = $"For target coordinate your need {countForKnightMoves} moves";
-                countForKnightMoves = 0;
-            }
+            string coordinate = GetCurrentFigureCoordinate(KnightTargetLetter, KnightTargetNumber);
+            movesKnight = new MovesKnight();
+            movesKnight.setPicture += SetFigurePicture;
+            movesKnight.CreateTargetKnight(coordinate);
+            countForKnightMoves = movesKnight.MinKnightCount();
+            KnightMovesMessage.Text = $"For target coordinate your need {countForKnightMoves} moves";
+            countForKnightMoves = 0;
         }
 
         #endregion
@@ -425,11 +302,25 @@ namespace ChessGame
             GetAllFigures(gameManager);
             foreach (var item in models)
             {
-                item.RemoveFigurePosition();
+                RemovePicture(item);
             }
-            models.Clear();
             MovesTextBox.Text = "";
             MessageHandle.Text = "";
+        }
+        public void RemovePicture(string name)
+        {
+            foreach (var item in Board.Children)
+            {
+                if (item is Image image1)
+                {
+                    if (name == image1.Tag.ToString())
+                    {
+                        Board.Children.Remove(image1);
+                        break;
+                    }
+                }
+            }
+
         }
 
         /// <summary>
@@ -480,35 +371,24 @@ namespace ChessGame
             string imageName = image.Source.ToString();
             if (image != null && imageName.Contains(currentFigureColor))
             {
-                CoordinatePoint coordinatPoint = new CoordinatePoint(0, 0);
                 this.DragObjectImage = image;
-                coordinatPoint.X = Grid.GetColumn(image);
-                coordinatPoint.Y = Grid.GetRow(image);
-                dragObject = GameManagerForDrop(gameManager, coordinatPoint);
-                this.startCoordinate = dragObject.Coordinate;
-                DragDrop.DoDragDrop(image, dragObject, DragDropEffects.Move);
+                int coordX = Grid.GetColumn(image);
+                int coordY = Grid.GetRow(image);
+                string coordinate = $"{coordX}.{coordY}";
+                this.startCoordinate = coordinate;
+                DragDrop.DoDragDrop(image, this.DragObjectImage, DragDropEffects.Move);
             }
         }
         private void Image_Drop(object sender, DragEventArgs e)
         {
-            CoordinatePoint coordinatPoint = new CoordinatePoint(0, 0);
-            coordinatPoint.X = Grid.GetColumn((UIElement)e.OriginalSource);
-            coordinatPoint.Y = Grid.GetRow((UIElement)e.OriginalSource);
-            if (coordinatPoint != dragObject.Coordinate)
-            {
-                IAvailableMoves currentFigur = (IAvailableMoves)dragObject;
-                if (currentFigur.AvailableMoves().Contains(coordinatPoint))
-                {
-                    dragObject.SetFigurePosition(coordinatPoint);
-                    GameManager(gameManager);
-                }
-                else
-                {
-                    dragObject.SetFigurePosition(startCoordinate);
-                    return;
-                }
-            }
 
+            int coordX = Grid.GetColumn((UIElement)e.OriginalSource);
+            int coordY = Grid.GetRow((UIElement)e.OriginalSource);
+            string coordinate = $"{coordX}.{coordY}";
+            if (coordinate != this.startCoordinate)
+            {
+                GameManager(gameManager, (this.startCoordinate, coordinate));
+            }
         }
 
         #endregion
@@ -560,20 +440,22 @@ namespace ChessGame
             this.Width = 1348;
             this.Width = 620;
             ResetBoard();
-            Standard standard = new Standard(currentFigureColor);
-            models = standard.figures;
-            SetAllFigures(models);
+            //Standard standard = new Standard(currentFigureColor);
+            //models = standard.figures;
+            //SetAllFigures(models);
             MessageBox.Show("You Change A Standard Game, Good Luck");
         }
         #endregion
 
-        private void GameManager(bool gameSatus)
+        private void GameManager(bool gameSatus, (string, string) tupl)
         {
             if (gameSatus)
             {
-                Manager manager = new(currentListForBabyGame, currentFigureColor);
-                manager.MateMessage += MessageMate;
-                manager.Logic();
+                if (manager.IsVAlidCoordinate(tupl.Item1, tupl.Item2))
+                {
+                    manager.MateMessage += MessageMate;
+                    manager.Logic();
+                }
             }
             else
             {
@@ -589,27 +471,13 @@ namespace ChessGame
                 }
             }
         }
-        private BaseFigure GameManagerForDrop(bool gameSatus, CoordinatePoint coordinatePoint)
-        {
-            BaseFigure baseFigure = null;
-            if (gameSatus)
-            {
-                Manager manager = new(currentListForBabyGame, currentFigureColor);
-                baseFigure = manager.CheckTheBaseFigure(coordinatePoint);
-            }
-            else
-            {
-                baseFigure = Standard.CheckTheBaseFigure(coordinatePoint);
-            }
-            return baseFigure;
-        }
         public void SetAllFigures(List<BaseFigure> baseFigures)
         {
             foreach (var item in baseFigures)
             {
                 item.setPicture += SetFigurePicture;
-                item.removePicture += RemoveFigurePicture;
-                item.messageForMove += MessageMove;
+                //item.removePicture += RemoveFigurePicture;
+                //item.messageForMove += MessageMove;
                 currentFigureColor = "White";
                 switch (item.Name)
                 {
@@ -714,16 +582,15 @@ namespace ChessGame
                 }
             }
         }
-
         private void GetAllFigures(bool gameSatus)
         {
             if (gameSatus)
             {
-                models = Manager.models;
+                models = manager.GetPositionForReset();
             }
             else
             {
-                models = Standard.models;
+                //models = Standard.models;
             }
         }
     }

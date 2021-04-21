@@ -1,5 +1,4 @@
-﻿using StandardGame;
-using System.Windows;
+﻿using System.Windows;
 
 namespace ChessGame
 {
@@ -37,9 +36,9 @@ namespace ChessGame
                 var mainWindow = new MainWindow();
                 mainWindow.Width = 620;
                 mainWindow.Show();
-                Standard standard = new Standard(mainWindow.currentFigureColor);
-                mainWindow.models = standard.figures;
-                mainWindow.SetAllFigures(mainWindow.models);
+                //Standard standard = new Standard(mainWindow.currentFigureColor);
+                //mainWindow.models = standard.figures;
+                //mainWindow.SetAllFigures(mainWindow.models);
                 this.Close();
             }
         }
