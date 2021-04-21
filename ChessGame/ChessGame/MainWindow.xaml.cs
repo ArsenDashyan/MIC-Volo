@@ -1,11 +1,9 @@
-﻿using Figure;
-using GameManager;
+﻿using GameManager;
 using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using Utility;
 
 namespace ChessGame
 {
@@ -277,6 +275,7 @@ namespace ChessGame
             string coordinate = GetCurrentFigureCoordinate(KnightStartLetter, KnightStartNumber);
             movesKnight = new MovesKnight();
             movesKnight.setPicture += SetFigurePicture;
+            movesKnight.messageForMove += delegate { };
             movesKnight.CreateStartKnight(coordinate);
         }
         private void KnightMoveCheck_Click(object sender, RoutedEventArgs e)
@@ -284,6 +283,7 @@ namespace ChessGame
             string coordinate = GetCurrentFigureCoordinate(KnightTargetLetter, KnightTargetNumber);
             movesKnight = new MovesKnight();
             movesKnight.setPicture += SetFigurePicture;
+            movesKnight.messageForMove += delegate { };
             movesKnight.CreateTargetKnight(coordinate);
             countForKnightMoves = movesKnight.MinKnightCount();
             KnightMovesMessage.Text = $"For target coordinate your need {countForKnightMoves} moves";
@@ -301,6 +301,10 @@ namespace ChessGame
         {
             GetAllFigures(gameManager);
             foreach (var item in models)
+            {
+                RemovePicture(item);
+            }
+            foreach (var item in movesKnight.GetNamesForReset())
             {
                 RemovePicture(item);
             }
@@ -471,122 +475,123 @@ namespace ChessGame
                 }
             }
         }
-        public void SetAllFigures(List<BaseFigure> baseFigures)
-        {
-            foreach (var item in baseFigures)
-            {
-                item.setPicture += SetFigurePicture;
-                //item.removePicture += RemoveFigurePicture;
-                //item.messageForMove += MessageMove;
-                currentFigureColor = "White";
-                switch (item.Name)
-                {
-                    case "Queen.White.1":
-                        item.SetFigurePosition(new CoordinatePoint(3, 7));
-                        continue;
-                    case "Queen.Black.1":
-                        item.SetFigurePosition(new CoordinatePoint(3, 0));
-                        continue;
-                    case "King.White.1":
-                        item.SetFigurePosition(new CoordinatePoint(4, 7));
-                        continue;
-                    case "King.Black.1":
-                        item.SetFigurePosition(new CoordinatePoint(4, 0));
-                        continue;
-                    case "Bishop.Black.1":
-                        item.SetFigurePosition(new CoordinatePoint(2, 0));
-                        continue;
-                    case "Bishop.Black.2":
-                        item.SetFigurePosition(new CoordinatePoint(5, 0));
-                        continue;
-                    case "Bishop.White.1":
-                        item.SetFigurePosition(new CoordinatePoint(2, 7));
-                        continue;
-                    case "Bishop.White.2":
-                        item.SetFigurePosition(new CoordinatePoint(5, 7));
-                        continue;
-                    case "Knight.White.1":
-                        item.SetFigurePosition(new CoordinatePoint(1, 7));
-                        continue;
-                    case "Knight.White.2":
-                        item.SetFigurePosition(new CoordinatePoint(6, 7));
-                        continue;
-                    case "Knight.Black.1":
-                        item.SetFigurePosition(new CoordinatePoint(1, 0));
-                        continue;
-                    case "Knight.Black.2":
-                        item.SetFigurePosition(new CoordinatePoint(6, 0));
-                        continue;
-                    case "Rook.Black.1":
-                        item.SetFigurePosition(new CoordinatePoint(0, 0));
-                        continue;
-                    case "Rook.Black.2":
-                        item.SetFigurePosition(new CoordinatePoint(7, 0));
-                        continue;
-                    case "Rook.White.1":
-                        item.SetFigurePosition(new CoordinatePoint(0, 7));
-                        continue;
-                    case "Rook.White.2":
-                        item.SetFigurePosition(new CoordinatePoint(7, 7));
-                        continue;
-                    case "Pawn.White.1":
-                        item.SetFigurePosition(new CoordinatePoint(0, 6));
-                        continue;
-                    case "Pawn.White.2":
-                        item.SetFigurePosition(new CoordinatePoint(1, 6));
-                        continue;
-                    case "Pawn.White.3":
-                        item.SetFigurePosition(new CoordinatePoint(2, 6));
-                        continue;
-                    case "Pawn.White.4":
-                        item.SetFigurePosition(new CoordinatePoint(3, 6));
-                        continue;
-                    case "Pawn.White.5":
-                        item.SetFigurePosition(new CoordinatePoint(4, 6));
-                        continue;
-                    case "Pawn.White.6":
-                        item.SetFigurePosition(new CoordinatePoint(5, 6));
-                        continue;
-                    case "Pawn.White.7":
-                        item.SetFigurePosition(new CoordinatePoint(6, 6));
-                        continue;
-                    case "Pawn.White.8":
-                        item.SetFigurePosition(new CoordinatePoint(7, 6));
-                        continue;
-                    case "Pawn.Black.1":
-                        item.SetFigurePosition(new CoordinatePoint(0, 1));
-                        continue;
-                    case "Pawn.Black.2":
-                        item.SetFigurePosition(new CoordinatePoint(1, 1));
-                        continue;
-                    case "Pawn.Black.3":
-                        item.SetFigurePosition(new CoordinatePoint(2, 1));
-                        continue;
-                    case "Pawn.Black.4":
-                        item.SetFigurePosition(new CoordinatePoint(3, 1));
-                        continue;
-                    case "Pawn.Black.5":
-                        item.SetFigurePosition(new CoordinatePoint(4, 1));
-                        continue;
-                    case "Pawn.Black.6":
-                        item.SetFigurePosition(new CoordinatePoint(5, 1));
-                        continue;
-                    case "Pawn.Black.7":
-                        item.SetFigurePosition(new CoordinatePoint(6, 1));
-                        continue;
-                    case "Pawn.Black.8":
-                        item.SetFigurePosition(new CoordinatePoint(7, 1));
-                        continue;
-                    default:
-                        break;
-                }
-            }
-        }
+
+        //public void SetAllFigures(List<BaseFigure> baseFigures)
+        //{
+        //    foreach (var item in baseFigures)
+        //    {
+        //        item.setPicture += SetFigurePicture;
+        //        //item.removePicture += RemoveFigurePicture;
+        //        //item.messageForMove += MessageMove;
+        //        currentFigureColor = "White";
+        //        switch (item.Name)
+        //        {
+        //            case "Queen.White.1":
+        //                item.SetFigurePosition(new CoordinatePoint(3, 7));
+        //                continue;
+        //            case "Queen.Black.1":
+        //                item.SetFigurePosition(new CoordinatePoint(3, 0));
+        //                continue;
+        //            case "King.White.1":
+        //                item.SetFigurePosition(new CoordinatePoint(4, 7));
+        //                continue;
+        //            case "King.Black.1":
+        //                item.SetFigurePosition(new CoordinatePoint(4, 0));
+        //                continue;
+        //            case "Bishop.Black.1":
+        //                item.SetFigurePosition(new CoordinatePoint(2, 0));
+        //                continue;
+        //            case "Bishop.Black.2":
+        //                item.SetFigurePosition(new CoordinatePoint(5, 0));
+        //                continue;
+        //            case "Bishop.White.1":
+        //                item.SetFigurePosition(new CoordinatePoint(2, 7));
+        //                continue;
+        //            case "Bishop.White.2":
+        //                item.SetFigurePosition(new CoordinatePoint(5, 7));
+        //                continue;
+        //            case "Knight.White.1":
+        //                item.SetFigurePosition(new CoordinatePoint(1, 7));
+        //                continue;
+        //            case "Knight.White.2":
+        //                item.SetFigurePosition(new CoordinatePoint(6, 7));
+        //                continue;
+        //            case "Knight.Black.1":
+        //                item.SetFigurePosition(new CoordinatePoint(1, 0));
+        //                continue;
+        //            case "Knight.Black.2":
+        //                item.SetFigurePosition(new CoordinatePoint(6, 0));
+        //                continue;
+        //            case "Rook.Black.1":
+        //                item.SetFigurePosition(new CoordinatePoint(0, 0));
+        //                continue;
+        //            case "Rook.Black.2":
+        //                item.SetFigurePosition(new CoordinatePoint(7, 0));
+        //                continue;
+        //            case "Rook.White.1":
+        //                item.SetFigurePosition(new CoordinatePoint(0, 7));
+        //                continue;
+        //            case "Rook.White.2":
+        //                item.SetFigurePosition(new CoordinatePoint(7, 7));
+        //                continue;
+        //            case "Pawn.White.1":
+        //                item.SetFigurePosition(new CoordinatePoint(0, 6));
+        //                continue;
+        //            case "Pawn.White.2":
+        //                item.SetFigurePosition(new CoordinatePoint(1, 6));
+        //                continue;
+        //            case "Pawn.White.3":
+        //                item.SetFigurePosition(new CoordinatePoint(2, 6));
+        //                continue;
+        //            case "Pawn.White.4":
+        //                item.SetFigurePosition(new CoordinatePoint(3, 6));
+        //                continue;
+        //            case "Pawn.White.5":
+        //                item.SetFigurePosition(new CoordinatePoint(4, 6));
+        //                continue;
+        //            case "Pawn.White.6":
+        //                item.SetFigurePosition(new CoordinatePoint(5, 6));
+        //                continue;
+        //            case "Pawn.White.7":
+        //                item.SetFigurePosition(new CoordinatePoint(6, 6));
+        //                continue;
+        //            case "Pawn.White.8":
+        //                item.SetFigurePosition(new CoordinatePoint(7, 6));
+        //                continue;
+        //            case "Pawn.Black.1":
+        //                item.SetFigurePosition(new CoordinatePoint(0, 1));
+        //                continue;
+        //            case "Pawn.Black.2":
+        //                item.SetFigurePosition(new CoordinatePoint(1, 1));
+        //                continue;
+        //            case "Pawn.Black.3":
+        //                item.SetFigurePosition(new CoordinatePoint(2, 1));
+        //                continue;
+        //            case "Pawn.Black.4":
+        //                item.SetFigurePosition(new CoordinatePoint(3, 1));
+        //                continue;
+        //            case "Pawn.Black.5":
+        //                item.SetFigurePosition(new CoordinatePoint(4, 1));
+        //                continue;
+        //            case "Pawn.Black.6":
+        //                item.SetFigurePosition(new CoordinatePoint(5, 1));
+        //                continue;
+        //            case "Pawn.Black.7":
+        //                item.SetFigurePosition(new CoordinatePoint(6, 1));
+        //                continue;
+        //            case "Pawn.Black.8":
+        //                item.SetFigurePosition(new CoordinatePoint(7, 1));
+        //                continue;
+        //            default:
+        //                break;
+        //        }
+        //    }
+        //}
         private void GetAllFigures(bool gameSatus)
         {
             if (gameSatus)
             {
-                models = manager.GetPositionForReset();
+                models = manager.GetNamesForReset();
             }
             else
             {

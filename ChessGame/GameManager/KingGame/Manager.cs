@@ -34,10 +34,6 @@ namespace GameManager
         private int blackKnightCount = 0;
         #endregion
 
-        public Manager()
-        {
-
-        }
         public Manager(string currentFigureColor)
         {
             this.currentFigureColor = currentFigureColor;
@@ -715,7 +711,7 @@ namespace GameManager
             }
             return positions;
         }
-        public List<string> GetPositionForReset()
+        public List<string> GetNamesForReset()
         {
             var positions = new List<string>();
             foreach (var item in models)

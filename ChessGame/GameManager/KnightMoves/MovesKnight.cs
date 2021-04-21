@@ -8,6 +8,7 @@ namespace GameManager
         private int count = 1;
         public static List<BaseFigure> models = new List<BaseFigure>();
         public event Picture setPicture;
+        public event Message messageForMove;
         private static Knight startKnight;
         private static Knight targetKnight;
 
@@ -65,6 +66,7 @@ namespace GameManager
             string[] point = coordinate.Split('.');
             CoordinatePoint coordinatPoint = new CoordinatePoint(int.Parse(point[0]),int.Parse(point[1]));
             startKnight.setPicture += SetFigurePicture;
+            startKnight.messageForMove += MessageForMove;
             startKnight.SetFigurePosition(coordinatPoint);
         }
         public void CreateTargetKnight(string coordinate)
@@ -74,12 +76,26 @@ namespace GameManager
             string[] point = coordinate.Split('.');
             CoordinatePoint coordinatPoint = new CoordinatePoint(int.Parse(point[0]), int.Parse(point[1]));
             targetKnight.setPicture += SetFigurePicture;
+            targetKnight.messageForMove += MessageForMove;
             targetKnight.SetFigurePosition(coordinatPoint);
         }
         public void SetFigurePicture(object sender, string coordinate)
         {
             setPicture(this, coordinate);
         }
-
+        public void MessageForMove(object sender, (string,string) coordinate)
+        {
+            messageForMove(this, coordinate);
+        }
+        public List<string> GetNamesForReset()
+        {
+            var positions = new List<string>();
+            foreach (var item in models)
+            {
+                positions.Add(item.Name);
+            }
+            models.Clear();
+            return positions;
+        }
     }
 }
