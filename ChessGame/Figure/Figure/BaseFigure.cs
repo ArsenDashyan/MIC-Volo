@@ -61,7 +61,7 @@ namespace Figure
                 if (model.Coordinate == item.Coordinate)
                 {
                     ISetPosition tempItem = item;
-                    string itemCoordinate = item.Coordinate.ToString();
+                    string itemCoordinate = item.Coordinate.ToString() + '.' + item.Name; 
                     removePicture(item, itemCoordinate);
                     othereFigures.Remove(item);
                     break;

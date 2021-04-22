@@ -17,17 +17,21 @@ namespace ChessGame
         private UIElement dragObjectImage = null;
         private Manager manager;
         private MovesKnight movesKnight;
+        private Standard standard = new Standard();
+        private List<string> models = new();
+        public static int currentGameStatus;
         public string currentFigureColor;
         private string startCoordinate;
-        private List<string> models = new();
         private int countForKnightMoves = 0;
-        public bool gameManager = false;
         private bool colorPower = false;
         #endregion
 
         public MainWindow()
         {
             InitializeComponent();
+            standard.setPicture += SetFigurePicture;
+            standard.removePicture += RemoveFigurePicture;
+            standard.messageForMove += MessageMove;
         }
 
         /// <summary>
@@ -71,7 +75,6 @@ namespace ChessGame
                     }
                 }
             }
-
         }
 
         #region King Game
@@ -143,7 +146,7 @@ namespace ChessGame
             {
                 string[] start = coordinateTupl.Item1.Split('.');
                 string[] target = coordinateTupl.Item2.Split('.');
-                MovesTextBox.Text += $"{start[2]}{start[3]}-"+$"{start[0]}{start[1]}:" +
+                MovesTextBox.Text += $"{start[2]}{start[3]}-" + $"{start[0]}{start[1]}:" +
                     $"{target[0]}{target[1]}\n{new string('-', 8)}\n";
             }
         }
@@ -299,14 +302,13 @@ namespace ChessGame
         /// </summary>
         private void ResetBoard()
         {
-            GetAllFigures(gameManager);
-            foreach (var item in models)
+            GetAllFiguresForReset();
+            if (models[0] != "0")
             {
-                RemovePicture(item);
-            }
-            foreach (var item in movesKnight.GetNamesForReset())
-            {
-                RemovePicture(item);
+                foreach (var item in models)
+                {
+                    RemovePicture(item);
+                }
             }
             MovesTextBox.Text = "";
             MessageHandle.Text = "";
@@ -385,13 +387,12 @@ namespace ChessGame
         }
         private void Image_Drop(object sender, DragEventArgs e)
         {
-
             int coordX = Grid.GetColumn((UIElement)e.OriginalSource);
             int coordY = Grid.GetRow((UIElement)e.OriginalSource);
             string coordinate = $"{coordX}.{coordY}";
             if (coordinate != this.startCoordinate)
             {
-                GameManager(gameManager, (this.startCoordinate, coordinate));
+                GameManager((this.startCoordinate, coordinate));
             }
         }
 
@@ -423,6 +424,7 @@ namespace ChessGame
             InputCoordinatsLetter_Selected.IsEnabled = false;
             InputCoordinatsNumber_Selected.IsEnabled = false;
             InstalB3.IsEnabled = false;
+            currentGameStatus = 1;
             MessageBox.Show("You Change A King Game, Good Luck");
         }
         private void KnightGame_Click(object sender, RoutedEventArgs e)
@@ -437,6 +439,7 @@ namespace ChessGame
             KnightStartNumber.Text = "";
             KnightTargetLetter.Text = "";
             KnightTargetNumber.Text = "";
+            currentGameStatus = 2;
             MessageBox.Show("You Change A Knight Game, Good Luck");
         }
         private void StandardGame_Click(object sender, RoutedEventArgs e)
@@ -444,158 +447,72 @@ namespace ChessGame
             this.Width = 1348;
             this.Width = 620;
             ResetBoard();
-            //Standard standard = new Standard(currentFigureColor);
-            //models = standard.figures;
-            //SetAllFigures(models);
+            //standard.setPicture += SetFigurePicture;
+            //standard.removePicture += RemoveFigurePicture;
+            //standard.messageForMove += MessageMove;
+            standard.SetAllFigures();
+            currentGameStatus = 3;
             MessageBox.Show("You Change A Standard Game, Good Luck");
         }
         #endregion
 
-        private void GameManager(bool gameSatus, (string, string) tupl)
+        private void GameManager((string, string) tupl)
         {
-            if (gameSatus)
+            switch (currentGameStatus)
             {
-                if (manager.IsVAlidCoordinate(tupl.Item1, tupl.Item2))
-                {
-                    manager.MateMessage += MessageMate;
-                    manager.Logic();
-                }
-            }
-            else
-            {
-                if (colorPower)
-                {
-                    currentFigureColor = "White";
-                    colorPower = false;
-                }
-                else
-                {
-                    currentFigureColor = "Black";
-                    colorPower = true;
-                }
+                case 1:
+                    if (manager.IsVAlidCoordinate(tupl.Item1, tupl.Item2))
+                    {
+                        manager.MateMessage += MessageMate;
+                        manager.Logic();
+                    }
+                    break;
+                case 3:
+                    standard.removePicture += RemoveFigurePicture;
+                    if (standard.IsVAlidCoordinate(tupl.Item1, tupl.Item2))
+                    {
+                        if (colorPower)
+                        {
+                            currentFigureColor = "White";
+                            colorPower = false;
+                        }
+                        else
+                        {
+                            currentFigureColor = "Black";
+                            colorPower = true;
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
-        //public void SetAllFigures(List<BaseFigure> baseFigures)
-        //{
-        //    foreach (var item in baseFigures)
-        //    {
-        //        item.setPicture += SetFigurePicture;
-        //        //item.removePicture += RemoveFigurePicture;
-        //        //item.messageForMove += MessageMove;
-        //        currentFigureColor = "White";
-        //        switch (item.Name)
-        //        {
-        //            case "Queen.White.1":
-        //                item.SetFigurePosition(new CoordinatePoint(3, 7));
-        //                continue;
-        //            case "Queen.Black.1":
-        //                item.SetFigurePosition(new CoordinatePoint(3, 0));
-        //                continue;
-        //            case "King.White.1":
-        //                item.SetFigurePosition(new CoordinatePoint(4, 7));
-        //                continue;
-        //            case "King.Black.1":
-        //                item.SetFigurePosition(new CoordinatePoint(4, 0));
-        //                continue;
-        //            case "Bishop.Black.1":
-        //                item.SetFigurePosition(new CoordinatePoint(2, 0));
-        //                continue;
-        //            case "Bishop.Black.2":
-        //                item.SetFigurePosition(new CoordinatePoint(5, 0));
-        //                continue;
-        //            case "Bishop.White.1":
-        //                item.SetFigurePosition(new CoordinatePoint(2, 7));
-        //                continue;
-        //            case "Bishop.White.2":
-        //                item.SetFigurePosition(new CoordinatePoint(5, 7));
-        //                continue;
-        //            case "Knight.White.1":
-        //                item.SetFigurePosition(new CoordinatePoint(1, 7));
-        //                continue;
-        //            case "Knight.White.2":
-        //                item.SetFigurePosition(new CoordinatePoint(6, 7));
-        //                continue;
-        //            case "Knight.Black.1":
-        //                item.SetFigurePosition(new CoordinatePoint(1, 0));
-        //                continue;
-        //            case "Knight.Black.2":
-        //                item.SetFigurePosition(new CoordinatePoint(6, 0));
-        //                continue;
-        //            case "Rook.Black.1":
-        //                item.SetFigurePosition(new CoordinatePoint(0, 0));
-        //                continue;
-        //            case "Rook.Black.2":
-        //                item.SetFigurePosition(new CoordinatePoint(7, 0));
-        //                continue;
-        //            case "Rook.White.1":
-        //                item.SetFigurePosition(new CoordinatePoint(0, 7));
-        //                continue;
-        //            case "Rook.White.2":
-        //                item.SetFigurePosition(new CoordinatePoint(7, 7));
-        //                continue;
-        //            case "Pawn.White.1":
-        //                item.SetFigurePosition(new CoordinatePoint(0, 6));
-        //                continue;
-        //            case "Pawn.White.2":
-        //                item.SetFigurePosition(new CoordinatePoint(1, 6));
-        //                continue;
-        //            case "Pawn.White.3":
-        //                item.SetFigurePosition(new CoordinatePoint(2, 6));
-        //                continue;
-        //            case "Pawn.White.4":
-        //                item.SetFigurePosition(new CoordinatePoint(3, 6));
-        //                continue;
-        //            case "Pawn.White.5":
-        //                item.SetFigurePosition(new CoordinatePoint(4, 6));
-        //                continue;
-        //            case "Pawn.White.6":
-        //                item.SetFigurePosition(new CoordinatePoint(5, 6));
-        //                continue;
-        //            case "Pawn.White.7":
-        //                item.SetFigurePosition(new CoordinatePoint(6, 6));
-        //                continue;
-        //            case "Pawn.White.8":
-        //                item.SetFigurePosition(new CoordinatePoint(7, 6));
-        //                continue;
-        //            case "Pawn.Black.1":
-        //                item.SetFigurePosition(new CoordinatePoint(0, 1));
-        //                continue;
-        //            case "Pawn.Black.2":
-        //                item.SetFigurePosition(new CoordinatePoint(1, 1));
-        //                continue;
-        //            case "Pawn.Black.3":
-        //                item.SetFigurePosition(new CoordinatePoint(2, 1));
-        //                continue;
-        //            case "Pawn.Black.4":
-        //                item.SetFigurePosition(new CoordinatePoint(3, 1));
-        //                continue;
-        //            case "Pawn.Black.5":
-        //                item.SetFigurePosition(new CoordinatePoint(4, 1));
-        //                continue;
-        //            case "Pawn.Black.6":
-        //                item.SetFigurePosition(new CoordinatePoint(5, 1));
-        //                continue;
-        //            case "Pawn.Black.7":
-        //                item.SetFigurePosition(new CoordinatePoint(6, 1));
-        //                continue;
-        //            case "Pawn.Black.8":
-        //                item.SetFigurePosition(new CoordinatePoint(7, 1));
-        //                continue;
-        //            default:
-        //                break;
-        //        }
-        //    }
-        //}
-        private void GetAllFigures(bool gameSatus)
+        public void SetAllFigures()
         {
-            if (gameSatus)
+            currentFigureColor = "White";
+            //standard.setPicture += SetFigurePicture;
+            //standard.removePicture += RemoveFigurePicture;
+            //standard.messageForMove += MessageMove;
+            standard.SetAllFigures();
+        }
+        private void GetAllFiguresForReset()
+        {
+            switch (currentGameStatus)
             {
-                models = manager.GetNamesForReset();
-            }
-            else
-            {
-                //models = Standard.models;
+                case 1:
+                    manager = new Manager(currentFigureColor);
+                    models = manager.GetNamesForReset();
+                    break;
+                case 2:
+                    movesKnight = new MovesKnight();
+                    models = movesKnight.GetNamesForReset();
+                    break;
+                case 3:
+                    models = standard.GetNamesForReset();
+                    break;
+                default:
+                    break;
             }
         }
     }

@@ -15,7 +15,7 @@ namespace GameManager
         private List<CoordinatePoint> currentListForBabyGame = new();
         private BaseFigure CurentKing => (BaseFigure)models.Where(c => c.Color == currentFigureColor && c is King).Single();
         private readonly string currentFigureColor;
-        BaseFigure baseFigure;
+        private BaseFigure baseFigure;
         public event MessageForMate MateMessage;
         public event Message messageForMove;
         public event Picture setPicture;
@@ -713,25 +713,33 @@ namespace GameManager
         }
         public List<string> GetNamesForReset()
         {
-            var positions = new List<string>();
-            foreach (var item in models)
+            var names = new List<string>();
+            if (models.Count != 0)
             {
-                positions.Add(item.Name);
+                foreach (var item in models)
+                {
+                    names.Add(item.Name);
+                }
+                whiteKingCount = 0;
+                whiteQueenCount = 0;
+                whiteBishopCount = 0;
+                whiteRookCount = 0;
+                whitePawnCount = 0;
+                whiteKnightCount = 0;
+                blackKingCount = 0;
+                blackQueenCount = 0;
+                blackBishopCount = 0;
+                blackRookCount = 0;
+                blackPawnCount = 0;
+                blackKnightCount = 0;
+                models.Clear();
             }
-            whiteKingCount = 0;
-            whiteQueenCount = 0;
-            whiteBishopCount = 0;
-            whiteRookCount = 0;
-            whitePawnCount = 0;
-            whiteKnightCount = 0;
-            blackKingCount = 0;
-            blackQueenCount = 0;
-            blackBishopCount = 0;
-            blackRookCount = 0;
-            blackPawnCount = 0;
-            blackKnightCount = 0;
-            models.Clear();
-            return positions;
+            else
+            {
+                names.Add("0");
+            }
+            return names;
+
         }
 
     }

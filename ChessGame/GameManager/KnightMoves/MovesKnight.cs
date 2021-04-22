@@ -90,11 +90,18 @@ namespace GameManager
         public List<string> GetNamesForReset()
         {
             var positions = new List<string>();
-            foreach (var item in models)
+            if (models.Count != 0)
             {
-                positions.Add(item.Name);
+                foreach (var item in models)
+                {
+                    positions.Add(item.Name);
+                }
+                models.Clear();
             }
-            models.Clear();
+            else
+            {
+                positions.Add("0");
+            }
             return positions;
         }
     }
