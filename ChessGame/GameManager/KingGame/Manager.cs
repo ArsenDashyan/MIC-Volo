@@ -13,7 +13,8 @@ namespace GameManager
         #region Property and Feld
         public static List<BaseFigure> models = new List<BaseFigure>();
         private List<CoordinatePoint> currentListForBabyGame = new();
-        private BaseFigure CurentKing => (BaseFigure)models.Where(c => c.Color == currentFigureColor && c is King).Single();
+        private BaseFigure CurentKing => 
+               (BaseFigure)models.Where(c => c.Color == currentFigureColor && c is King).Single();
         private readonly string currentFigureColor;
         private BaseFigure baseFigure;
         public event MessageForMate MateMessage;
@@ -436,7 +437,6 @@ namespace GameManager
             }
             return result;
         }
-
         public bool IsVAlidCoordinate(string current, string target)
         {
             string[] strCurrent = current.Split('.');
@@ -510,19 +510,6 @@ namespace GameManager
                     }
                 }
             }
-        }
-        public BaseFigure CheckTheBaseFigure(CoordinatePoint coordinatePoint)
-        {
-            BaseFigure baseFigure = null;
-            foreach (var item in models)
-            {
-                if (item.Coordinate == coordinatePoint)
-                {
-                    baseFigure = item;
-                    break;
-                }
-            }
-            return baseFigure;
         }
 
         /// <summary>
@@ -741,6 +728,5 @@ namespace GameManager
             return names;
 
         }
-
     }
 }

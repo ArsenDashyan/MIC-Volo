@@ -5,12 +5,14 @@ namespace GameManager
 {
     public class MovesKnight
     {
+        #region Property and Feld
         private int count = 1;
         public static List<BaseFigure> models = new List<BaseFigure>();
         public event Picture setPicture;
         public event Message messageForMove;
         private static Knight startKnight;
         private static Knight targetKnight;
+        #endregion
 
         public int MinKnightCount()
         {

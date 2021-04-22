@@ -6,13 +6,16 @@ namespace GameManager
 {
     public class Standard
     {
+        #region Property and Feld
         public static List<BaseFigure> models = new();
         private BaseFigure baseFigure;
         public event Message messageForMove;
         public event Picture setPicture;
         public event Picture removePicture;
         private string currentFigureColor;
-        private BaseFigure CurentKing => (BaseFigure)models.Where(c => c.Color == currentFigureColor && c is King).Single();
+        private BaseFigure CurentKing => 
+               (BaseFigure)models.Where(c => c.Color == currentFigureColor && c is King).Single();
+        #endregion
         public void SetFigurePicture(object sender, string coordinate)
         {
             setPicture(this, coordinate);
@@ -136,7 +139,6 @@ namespace GameManager
                 }
             }
         }
-
         public List<string> GetNamesForReset()
         {
             var positions = new List<string>();
@@ -154,7 +156,6 @@ namespace GameManager
             }
             return positions;
         }
-
         public bool IsVAlidCoordinate(string current, string target)
         {
             string[] strCurrent = current.Split('.');
@@ -192,7 +193,6 @@ namespace GameManager
                 return false;
             }
         }
-
         private List<BaseFigure> GetAllmodels()
         {
             Queen queenWhite = new("Queen.White.1", "White", models);

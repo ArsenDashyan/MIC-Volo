@@ -16,7 +16,7 @@ namespace ChessGame
         public UIElement DragObjectImage { get => dragObjectImage; set => dragObjectImage = value; }
         private UIElement dragObjectImage = null;
         private Manager manager;
-        private MovesKnight movesKnight;
+        private MovesKnight movesKnight = new MovesKnight();
         private Standard standard = new Standard();
         private List<string> models = new();
         public static int currentGameStatus;
@@ -29,9 +29,15 @@ namespace ChessGame
         public MainWindow()
         {
             InitializeComponent();
+            manager = new Manager(currentFigureColor);
+            manager.setPicture += SetFigurePicture;
+            manager.removePicture += RemoveFigurePicture;
+            manager.messageForMove += MessageMove;
             standard.setPicture += SetFigurePicture;
             standard.removePicture += RemoveFigurePicture;
             standard.messageForMove += MessageMove;
+            movesKnight.setPicture += SetFigurePicture;
+            movesKnight.messageForMove += delegate { };
         }
 
         /// <summary>
@@ -86,10 +92,6 @@ namespace ChessGame
             string color = tempFigure[tempFigure.Length - 1].Split('.')[0];
             string figure = tempFigure[tempFigure.Length - 1].Split('.')[1];
             string inputInfo = figure + '.' + color + '.';
-            manager = new Manager(currentFigureColor);
-            manager.setPicture += SetFigurePicture;
-            manager.removePicture += RemoveFigurePicture;
-            manager.messageForMove += MessageMove;
             inputInfo += GetCurrentFigureCoordinate(InputCoordinatsLetter, InputCoordinatsNumber);
             manager.IsValidForPleacement(inputInfo);
         }
@@ -276,17 +278,11 @@ namespace ChessGame
         private void KnightSetButton(object sender, RoutedEventArgs e)
         {
             string coordinate = GetCurrentFigureCoordinate(KnightStartLetter, KnightStartNumber);
-            movesKnight = new MovesKnight();
-            movesKnight.setPicture += SetFigurePicture;
-            movesKnight.messageForMove += delegate { };
             movesKnight.CreateStartKnight(coordinate);
         }
         private void KnightMoveCheck_Click(object sender, RoutedEventArgs e)
         {
             string coordinate = GetCurrentFigureCoordinate(KnightTargetLetter, KnightTargetNumber);
-            movesKnight = new MovesKnight();
-            movesKnight.setPicture += SetFigurePicture;
-            movesKnight.messageForMove += delegate { };
             movesKnight.CreateTargetKnight(coordinate);
             countForKnightMoves = movesKnight.MinKnightCount();
             KnightMovesMessage.Text = $"For target coordinate your need {countForKnightMoves} moves";
@@ -312,6 +308,23 @@ namespace ChessGame
             }
             MovesTextBox.Text = "";
             MessageHandle.Text = "";
+        }
+        private void GetAllFiguresForReset()
+        {
+            switch (currentGameStatus)
+            {
+                case 1:
+                    models = manager.GetNamesForReset();
+                    break;
+                case 2:
+                    models = movesKnight.GetNamesForReset();
+                    break;
+                case 3:
+                    models = standard.GetNamesForReset();
+                    break;
+                default:
+                    break;
+            }
         }
         public void RemovePicture(string name)
         {
@@ -447,9 +460,6 @@ namespace ChessGame
             this.Width = 1348;
             this.Width = 620;
             ResetBoard();
-            //standard.setPicture += SetFigurePicture;
-            //standard.removePicture += RemoveFigurePicture;
-            //standard.messageForMove += MessageMove;
             standard.SetAllFigures();
             currentGameStatus = 3;
             MessageBox.Show("You Change A Standard Game, Good Luck");
@@ -487,33 +497,10 @@ namespace ChessGame
                     break;
             }
         }
-
         public void SetAllFigures()
         {
             currentFigureColor = "White";
-            //standard.setPicture += SetFigurePicture;
-            //standard.removePicture += RemoveFigurePicture;
-            //standard.messageForMove += MessageMove;
             standard.SetAllFigures();
-        }
-        private void GetAllFiguresForReset()
-        {
-            switch (currentGameStatus)
-            {
-                case 1:
-                    manager = new Manager(currentFigureColor);
-                    models = manager.GetNamesForReset();
-                    break;
-                case 2:
-                    movesKnight = new MovesKnight();
-                    models = movesKnight.GetNamesForReset();
-                    break;
-                case 3:
-                    models = standard.GetNamesForReset();
-                    break;
-                default:
-                    break;
-            }
         }
     }
 }

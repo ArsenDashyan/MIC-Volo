@@ -1,5 +1,4 @@
-﻿using GameManager;
-using System.Windows;
+﻿using System.Windows;
 
 namespace ChessGame
 {
