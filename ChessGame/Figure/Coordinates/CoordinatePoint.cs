@@ -23,7 +23,7 @@ namespace Figure
         }
         public override string ToString()
         {
-            return $"{IntToChar(X)}{Y + 1}";
+            return $"{IntToChar(X)}.{Y + 1}";
         }
         private char IntToChar(int number)
         {

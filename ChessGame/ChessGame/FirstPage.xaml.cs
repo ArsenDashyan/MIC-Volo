@@ -1,5 +1,4 @@
-﻿using StandardGame;
-using System.Windows;
+﻿using System.Windows;
 
 namespace ChessGame
 {
@@ -17,19 +16,20 @@ namespace ChessGame
         {
             if (CheckKing.IsChecked == true)
             {
-                MainWindow mainWindow = new MainWindow();
+                var mainWindow = new MainWindow();
                 mainWindow.Width = 1000;
                 mainWindow.Show();
-                mainWindow.gameManager = true;
+                MainWindow.currentGameStatus = 1;
                 this.Close();
             }
             if (CheckKnight.IsChecked == true)
             {
-                MainWindow mainWindow = new MainWindow();
+                var mainWindow = new MainWindow();
                 Thickness thickness = new Thickness(0);
                 mainWindow.KnightPage.Margin = thickness;
                 mainWindow.Width = 1000;
                 mainWindow.Show();
+                MainWindow.currentGameStatus = 2;
                 this.Close();
             }
             if (StandardGame.IsChecked == true)
@@ -37,9 +37,8 @@ namespace ChessGame
                 var mainWindow = new MainWindow();
                 mainWindow.Width = 620;
                 mainWindow.Show();
-                Standard standard = new Standard(mainWindow.currentFigureColor);
-                mainWindow.models = standard.figures;
-                mainWindow.SetAllFigures(mainWindow.models);
+                mainWindow.SetAllFigures();
+                MainWindow.currentGameStatus = 3;
                 this.Close();
             }
         }

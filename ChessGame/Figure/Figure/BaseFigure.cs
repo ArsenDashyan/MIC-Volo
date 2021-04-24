@@ -3,8 +3,8 @@ using System.Linq;
 
 namespace Figure
 {
-    public delegate void Picture(object sender, CoordinatePoint e);
-    public delegate void Message(object sender, (CoordinatePoint, CoordinatePoint) e);
+    public delegate void Picture(object sender, string e);
+    public delegate void Message(object sender, (string, string) e);
 
     public class BaseFigure : ISetPosition
     {
@@ -26,16 +26,31 @@ namespace Figure
         public void SetFigurePosition(CoordinatePoint coordinate)
         {
             RemoveFigurePosition();
-            messageForMove(this, (this.Coordinate, coordinate));
-            this.Coordinate = coordinate;
-            DeleteFigur(this);
-            setPicture(this, this.Coordinate);
+            string targetCoordinate = coordinate.ToString() + '.' + this.Name;
+            string currenrCoordinate;
+            if (this.Coordinate == null)
+            {
+                messageForMove(this, (string.Empty, targetCoordinate));
+                this.Coordinate = coordinate;
+                currenrCoordinate = this.Coordinate.ToString() + '.' + this.Name;
+                DeleteFigur(this);
+                setPicture(this, currenrCoordinate);
+            }
+            else
+            {
+                currenrCoordinate = this.Coordinate.ToString() + '.' + this.Name;
+                messageForMove(this, (currenrCoordinate, targetCoordinate));
+                this.Coordinate = coordinate;
+                DeleteFigur(this);
+                setPicture(this, targetCoordinate);
+            }
         }
         public void RemoveFigurePosition()
         {
             if (this.Coordinate != null)
             {
-                removePicture(this, this.Coordinate);
+                string currenrCoordinate = this.Coordinate.ToString() + '.' + this.Name;
+                removePicture(this, currenrCoordinate);
             }
         }
         private void DeleteFigur(BaseFigure model)
@@ -46,7 +61,8 @@ namespace Figure
                 if (model.Coordinate == item.Coordinate)
                 {
                     ISetPosition tempItem = item;
-                    removePicture(item, item.Coordinate);
+                    string itemCoordinate = item.Coordinate.ToString() + '.' + item.Name; 
+                    removePicture(item, itemCoordinate);
                     othereFigures.Remove(item);
                     break;
                 }

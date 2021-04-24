@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Utility
+namespace ChessGame
 {
     public static class Utility
     {
