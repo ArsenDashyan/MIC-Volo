@@ -236,6 +236,12 @@ namespace ChessGame
 
         #endregion
 
+        /// <summary>
+        /// Get coordinates with textBoxs for moved figure
+        /// </summary>
+        /// <param name="letter">Letter coordinate</param>
+        /// <param name="number">Number coordinate</param>
+        /// <returns></returns>
         public string GetCurrentFigureCoordinate(TextBox letter, TextBox number)
         {
             string inputLetter = letter.Text;
@@ -309,6 +315,10 @@ namespace ChessGame
             MovesTextBox.Text = "";
             MessageHandle.Text = "";
         }
+
+        /// <summary>
+        /// Get all figures names for reset board
+        /// </summary>
         private void GetAllFiguresForReset()
         {
             switch (currentGameStatus)
@@ -326,6 +336,11 @@ namespace ChessGame
                     break;
             }
         }
+
+        /// <summary>
+        /// Remove figure picture from board
+        /// </summary>
+        /// <param name="name">Figure name</param>
         public void RemovePicture(string name)
         {
             foreach (var item in Board.Children)
@@ -466,6 +481,10 @@ namespace ChessGame
         }
         #endregion
 
+        /// <summary>
+        /// Manage game with run King or Standard
+        /// </summary>
+        /// <param name="tupl">coordinates current and target</param>
         private void GameManager((string, string) tupl)
         {
             switch (currentGameStatus)
@@ -497,6 +516,10 @@ namespace ChessGame
                     break;
             }
         }
+
+        /// <summary>
+        /// Set all figures for Standard game
+        /// </summary>
         public void SetAllFigures()
         {
             currentFigureColor = "White";

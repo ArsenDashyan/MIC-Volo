@@ -7,35 +7,53 @@ namespace GameManager
     public class Standard
     {
         #region Property and Feld
-        public static List<BaseFigure> models = new();
+        private static List<BaseFigure> models = new();
         private BaseFigure baseFigure;
         public event Message messageForMove;
         public event Picture setPicture;
         public event Picture removePicture;
-        private string currentFigureColor;
-        private BaseFigure CurentKing => 
-               (BaseFigure)models.Where(c => c.Color == currentFigureColor && c is King).Single();
         #endregion
+
+        /// <summary>
+        /// Initialize a setPicture event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="coordinate"></param>
         public void SetFigurePicture(object sender, string coordinate)
         {
             setPicture(this, coordinate);
         }
+
+        /// <summary>
+        /// Initialize a removePicture event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="coordinate"></param>
         public void RemoveFigurePicture(object sender, string coordinate)
         {
             removePicture(this, coordinate);
         }
+
+        /// <summary>
+        /// Initialize a messageForMove event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="coordinate"></param>
         public void MessageMove(object sender, (string, string) coordinate)
         {
             messageForMove(this, coordinate);
         }
+
+        /// <summary>
+        /// Added coordinate and set all figures
+        /// </summary>
         public void SetAllFigures()
         {
-            foreach (var item in GetAllmodels())
+            foreach (var item in GetAllFigures())
             {
                 item.setPicture += SetFigurePicture;
                 item.removePicture += RemoveFigurePicture;
                 item.messageForMove += MessageMove;
-                currentFigureColor = "White";
                 switch (item.Name)
                 {
                     case "Queen.White.1":
@@ -139,6 +157,11 @@ namespace GameManager
                 }
             }
         }
+
+        /// <summary>
+        /// Get all figures names for reset bord
+        /// </summary>
+        /// <returns>Return all figures names</returns>
         public List<string> GetNamesForReset()
         {
             var positions = new List<string>();
@@ -156,6 +179,13 @@ namespace GameManager
             }
             return positions;
         }
+
+        /// <summary>
+        /// Check if coordinate is valid for figure, and set this figure
+        /// </summary>
+        /// <param name="current">Current coordinate with string format</param>
+        /// <param name="target">Target coordinate with string format</param>
+        /// <returns>Return true if target coordinate is valid for figure</returns>
         public bool IsVAlidCoordinate(string current, string target)
         {
             string[] strCurrent = current.Split('.');
@@ -171,9 +201,9 @@ namespace GameManager
                 }
             }
             IAvailableMoves available = (IAvailableMoves)baseFigure;
-            if (baseFigure is King)
+            if (baseFigure is King king)
             {
-                if (GetCurrentKingMoves().Contains(targetCoordinate))
+                if (GetCurrentKingMoves(king).Contains(targetCoordinate))
                 {
                     baseFigure.SetFigurePosition(targetCoordinate);
                     return true;
@@ -193,7 +223,12 @@ namespace GameManager
                 return false;
             }
         }
-        private List<BaseFigure> GetAllmodels()
+
+        /// <summary>
+        /// Create All figures
+        /// </summary>
+        /// <returns>Return all figures</returns>
+        private List<BaseFigure> GetAllFigures()
         {
             Queen queenWhite = new("Queen.White.1", "White", models);
             models.Add(queenWhite);
@@ -268,13 +303,13 @@ namespace GameManager
         /// Check the available moves for current king 
         /// </summary>
         /// <returns>Return the list</returns>
-        private List<CoordinatePoint> GetCurrentKingMoves()
+        private List<CoordinatePoint> GetCurrentKingMoves(King king)
         {
-            IRandomMove currentKing = (IRandomMove)CurentKing;
+            IRandomMove currentKing = (IRandomMove)king;
             var result = new List<CoordinatePoint>();
             foreach (var item in currentKing.AvailableMoves())
             {
-                if (!DangerPosition(CurentKing).Contains(item))
+                if (!DangerPosition(king).Contains(item))
                 {
                     result.Add(item);
                 }

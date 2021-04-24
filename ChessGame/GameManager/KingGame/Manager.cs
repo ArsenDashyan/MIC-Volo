@@ -11,7 +11,7 @@ namespace GameManager
     public class Manager
     {
         #region Property and Feld
-        public static List<BaseFigure> models = new List<BaseFigure>();
+        private static List<BaseFigure> models = new List<BaseFigure>();
         private List<CoordinatePoint> currentListForBabyGame = new();
         private BaseFigure CurentKing => 
                (BaseFigure)models.Where(c => c.Color == currentFigureColor && c is King).Single();
@@ -40,18 +40,39 @@ namespace GameManager
             this.currentFigureColor = currentFigureColor;
         }
 
+        #region Events Method
+
+        /// <summary>
+        /// Initialize a setPicture event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="coordinate"></param>
         public void SetFigurePicture(object sender, string coordinate)
         {
             setPicture(this, coordinate);
         }
+
+        /// <summary>
+        /// Initialize a removePicture event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="coordinate"></param>
         public void RemoveFigurePicture(object sender, string coordinate)
         {
             removePicture(this, coordinate);
         }
+
+        /// <summary>
+        /// Initialize a messageForMove event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="coordinate"></param>
         public void MessageMove(object sender, (string, string) coordinate)
         {
             messageForMove(this, coordinate);
         }
+
+        #endregion
 
         /// <summary>
         /// Base logic for game
@@ -437,6 +458,13 @@ namespace GameManager
             }
             return result;
         }
+
+        /// <summary>
+        /// Check if coordinate is valid for figure, and set this figure
+        /// </summary>
+        /// <param name="current">Current coordinate with string format</param>
+        /// <param name="target">Target coordinate with string format</param>
+        /// <returns>Return true if target coordinate is valid for figure</returns>
         public bool IsVAlidCoordinate(string current, string target)
         {
             string[] strCurrent = current.Split('.');
@@ -478,6 +506,13 @@ namespace GameManager
                 return false;
             }
         }
+
+        /// <summary>
+        /// Check if coordinate is valid for figure for pleacement, and set this figure
+        /// </summary>
+        /// <param name="current">Current coordinate with string format</param>
+        /// <param name="target">Target coordinate with string format</param>
+        /// <returns>Return true if target coordinate is valid for figure</returns>
         public void IsValidForPleacement(string name)
         {
             string[] info = name.Split('.');
@@ -698,6 +733,11 @@ namespace GameManager
             }
             return positions;
         }
+
+        /// <summary>
+        /// Get all figures names for reset bord
+        /// </summary>
+        /// <returns>Return all figures names</returns>
         public List<string> GetNamesForReset()
         {
             var names = new List<string>();

@@ -7,7 +7,7 @@ namespace GameManager
     {
         #region Property and Feld
         private int count = 1;
-        public static List<BaseFigure> models = new List<BaseFigure>();
+        private static List<BaseFigure> models = new();
         public event Picture setPicture;
         public event Message messageForMove;
         private static Knight startKnight;
