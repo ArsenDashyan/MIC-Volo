@@ -12,7 +12,11 @@ namespace GameManager
         public event Message messageForMove;
         public event Picture setPicture;
         public event Picture removePicture;
+        private int whiteKingMovesCount = 0;
+        private int blackKingMovesCount = 0;
         #endregion
+
+        #region Event Methods
 
         /// <summary>
         /// Initialize a setPicture event
@@ -43,6 +47,8 @@ namespace GameManager
         {
             messageForMove(this, coordinate);
         }
+
+        #endregion
 
         /// <summary>
         /// Added coordinate and set all figures
@@ -203,8 +209,30 @@ namespace GameManager
             IAvailableMoves available = (IAvailableMoves)baseFigure;
             if (baseFigure is King king)
             {
-                if (GetCurrentKingMoves(king).Contains(targetCoordinate))
+                if (CheckCastling(king, out CoordinatePoint coordinatePoint))
                 {
+                    if (king.Color == "White")
+                    {
+                        whiteKingMovesCount++;
+                    }
+                    else
+                    {
+                        blackKingMovesCount++;
+                    }
+                    SetRookWhiteCastling(coordinatePoint);
+                    baseFigure.SetFigurePosition(targetCoordinate);
+                    return true;
+                }
+                else if (GetCurrentKingMoves(king).Contains(targetCoordinate))
+                {
+                    if (king.Color == "White")
+                    {
+                        whiteKingMovesCount++;
+                    }
+                    else
+                    {
+                        blackKingMovesCount++;
+                    }
                     baseFigure.SetFigurePosition(targetCoordinate);
                     return true;
                 }
@@ -333,6 +361,117 @@ namespace GameManager
                 result.AddRange(array);
             }
             return result;
+        }
+        private bool CheckRook(King king, out CoordinatePoint coordinatePoint)
+        {
+            var modelNew = models.Where(f => f.Color == king.Color && f is Rook).ToList();
+            foreach (var item in modelNew)
+            {
+                if (CheckEpmtyCells(king, (Rook)item, out CoordinatePoint coordinte))
+                {
+                    coordinatePoint = coordinte;
+                        return true;
+                }
+            }
+            coordinatePoint = null;
+            return false;
+        }
+        private bool CheckEpmtyCells(King king, Rook rook, out CoordinatePoint coordinatePoint)
+        {
+            int count = 0;
+            if (king.Coordinate.X < rook.Coordinate.X)
+            {
+                var coordinatePoint1 = new CoordinatePoint(king.Coordinate.X + 1, king.Coordinate.Y);
+                var coordinatePoint2 = new CoordinatePoint(king.Coordinate.X + 2, king.Coordinate.Y);
+                foreach (var item in models)
+                {
+                    if (item.Coordinate != coordinatePoint1 & item.Coordinate != coordinatePoint2)
+                    {
+                        count++;
+                    }
+                }
+                if (count == models.Count)
+                {
+                    coordinatePoint = rook.Coordinate;
+                    return true;
+                }
+            }
+            else
+            {
+                var coordinatePoint1 = new CoordinatePoint(king.Coordinate.X - 1, king.Coordinate.Y);
+                var coordinatePoint2 = new CoordinatePoint(king.Coordinate.X - 2, king.Coordinate.Y);
+                var coordinatePoint3 = new CoordinatePoint(king.Coordinate.X - 3, king.Coordinate.Y);
+                foreach (var item in models)
+                {
+                    if (item.Coordinate != coordinatePoint1 & item.Coordinate != coordinatePoint2 & item.Coordinate != coordinatePoint3)
+                    {
+                        count++;
+                    }
+                }
+                if (count == models.Count)
+                {
+                    coordinatePoint = rook.Coordinate;
+                    return true;
+                }
+            }
+            coordinatePoint = null;
+            return false;
+        }
+        private bool CheckCastling(King king, out CoordinatePoint coordinatePoint)
+        {
+            if (king.Color == "White")
+            {
+                if (whiteKingMovesCount > 1)
+                {
+                    coordinatePoint = null;
+                    return false;
+                }
+                else
+                {
+                    if (CheckRook(king, out CoordinatePoint coordinate))
+                    {
+                        coordinatePoint = coordinate;
+                        return true;
+                    }
+                    coordinatePoint = null;
+                    return false;
+                }
+            }
+            else
+            {
+                if (blackKingMovesCount > 1)
+                {
+                    coordinatePoint = null;
+                    return false;
+                }
+                else
+                {
+                    if (CheckRook(king, out CoordinatePoint coordinate))
+                    {
+                        coordinatePoint = coordinate;
+                        return true;
+                    }
+                    coordinatePoint = null;
+                    return false;
+                }
+            }
+        }
+        private void SetRookWhiteCastling(CoordinatePoint coordinatePoint)
+        {
+            foreach (var item in models)
+            {
+                if (item.Coordinate == coordinatePoint)
+                {
+                    if (coordinatePoint.X == 7)
+                    {
+                        item.SetFigurePosition(new CoordinatePoint(5,coordinatePoint.Y));
+                    }
+                    else
+                    {
+                        item.SetFigurePosition(new CoordinatePoint(3, coordinatePoint.Y));
+                    }
+                }
+            }
         }
     }
 }
