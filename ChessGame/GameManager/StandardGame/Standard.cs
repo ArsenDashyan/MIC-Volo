@@ -212,7 +212,20 @@ namespace GameManager
             IAvailableMoves available = (IAvailableMoves)baseFigure;
             if (baseFigure is King king)
             {
-                if (CheckCastling(king, out CoordinatePoint coordinatePoint))
+                if (GetCurrentKingMoves(king).Contains(targetCoordinate))
+                {
+                    if (king.Color == "White")
+                    {
+                        whiteKingMovesCount++;
+                    }
+                    else
+                    {
+                        blackKingMovesCount++;
+                    }
+                    baseFigure.SetFigurePosition(targetCoordinate);
+                    return true;
+                }
+                else if (CheckCastling(king, out CoordinatePoint coordinatePoint))
                 {
                     if (king.Color == "White")
                     {
@@ -223,19 +236,6 @@ namespace GameManager
                         blackKingMovesCount++;
                     }
                     SetRookCastling(coordinatePoint);
-                    baseFigure.SetFigurePosition(targetCoordinate);
-                    return true;
-                }
-                else if (GetCurrentKingMoves(king).Contains(targetCoordinate))
-                {
-                    if (king.Color == "White")
-                    {
-                        whiteKingMovesCount++;
-                    }
-                    else
-                    {
-                        blackKingMovesCount++;
-                    }
                     baseFigure.SetFigurePosition(targetCoordinate);
                     return true;
                 }
