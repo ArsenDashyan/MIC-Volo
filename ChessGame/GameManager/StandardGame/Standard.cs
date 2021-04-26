@@ -352,7 +352,7 @@ namespace GameManager
         /// <returns>Return the list</returns>
         private List<CoordinatePoint> GetCurrentKingMoves(King king)
         {
-            IRandomMove currentKing = (IRandomMove)king;
+            var currentKing = (IAvailableMoves)king;
             var result = new List<CoordinatePoint>();
             foreach (var item in currentKing.AvailableMoves())
             {

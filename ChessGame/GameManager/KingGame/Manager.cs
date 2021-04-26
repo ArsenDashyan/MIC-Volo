@@ -13,7 +13,7 @@ namespace GameManager
         #region Property and Feld
         private static List<BaseFigure> models = new List<BaseFigure>();
         private List<CoordinatePoint> currentListForBabyGame = new();
-        private BaseFigure CurentKing => 
+        private BaseFigure CurentKing =>
                (BaseFigure)models.Where(c => c.Color == currentFigureColor && c is King).Single();
         private readonly string currentFigureColor;
         private BaseFigure baseFigure;
@@ -104,14 +104,14 @@ namespace GameManager
         private bool GetMinMovesWithBlockInOneHaalf(BaseFigure figure, out KeyValuePair<CoordinatePoint, (int, BaseFigure)> keyValuePair)
         {
             var countList = new Dictionary<CoordinatePoint, (int, BaseFigure)>();
-            IRandomMove tempFigur = (IRandomMove)figure;
+            var tempFigur = (IAvailableMoves)figure;
             CoordinatePoint temp = figure.Coordinate;
             int targetX = CurentKing.Coordinate.X + 1 == 8 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X + 1;
             int targetY = CurentKing.Coordinate.Y - 1 == -1 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y - 1;
             foreach (var item in tempFigur.AvailableMoves().FiltrFor(c => c.X <= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
             {
                 figure.Coordinate = item;
-                if (!tempFigur.IsUnderAttack(figure.Coordinate))
+                if (!IsUnderAttack(figure, figure.Coordinate))
                 {
                     if (GetCurrentKingMoves().Filtr(c => c.X >= targetX | c.Y <= targetY) && !tempFigur.AvailableMoves().Contains(CurentKing.Coordinate))
                         countList.Add(item, (GetCurrentKingMoves().Count, figure));
@@ -139,14 +139,14 @@ namespace GameManager
         private bool GetMinMovesWithBlockInTwoHaalf(BaseFigure figure, out KeyValuePair<CoordinatePoint, (int, BaseFigure)> keyValuePair)
         {
             var countList = new Dictionary<CoordinatePoint, (int, BaseFigure)>();
-            IRandomMove tempFigur = (IRandomMove)figure;
+            var tempFigur = (IAvailableMoves)figure;
             CoordinatePoint temp = figure.Coordinate;
             int targetX = CurentKing.Coordinate.X - 1 == -1 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X - 1;
             int targetY = CurentKing.Coordinate.Y - 1 == -1 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y - 1;
             foreach (var item in tempFigur.AvailableMoves().FiltrFor(c => c.X >= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
             {
                 figure.Coordinate = item;
-                if (!tempFigur.IsUnderAttack(figure.Coordinate))
+                if (!IsUnderAttack(figure, figure.Coordinate))
                 {
                     if (GetCurrentKingMoves().Filtr(c => c.X <= targetX | c.Y <= targetY) && !tempFigur.AvailableMoves().Contains(CurentKing.Coordinate))
                         countList.Add(item, (GetCurrentKingMoves().Count, figure));
@@ -174,14 +174,14 @@ namespace GameManager
         private bool GetMinMovesWithBlockInThreeHaalf(BaseFigure figure, out KeyValuePair<CoordinatePoint, (int, BaseFigure)> keyValuePair)
         {
             var countList = new Dictionary<CoordinatePoint, (int, BaseFigure)>();
-            IRandomMove tempFigur = (IRandomMove)figure;
+            var tempFigur = (IAvailableMoves)figure;
             CoordinatePoint temp = figure.Coordinate;
             int targetX = CurentKing.Coordinate.X - 1 == -1 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X - 1;
             int targetY = CurentKing.Coordinate.Y + 1 == 8 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y + 1;
             foreach (var item in tempFigur.AvailableMoves().FiltrFor(c => c.X >= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
             {
                 figure.Coordinate = item;
-                if (!tempFigur.IsUnderAttack(figure.Coordinate))
+                if (!IsUnderAttack(figure, figure.Coordinate))
                 {
                     if (GetCurrentKingMoves().Filtr(c => c.X <= targetX | c.Y >= targetY) && !tempFigur.AvailableMoves().Contains(CurentKing.Coordinate))
                         countList.Add(item, (GetCurrentKingMoves().Count, figure));
@@ -209,14 +209,14 @@ namespace GameManager
         private bool GetMinMovesWithBlockInFourHaalf(BaseFigure figure, out KeyValuePair<CoordinatePoint, (int, BaseFigure)> keyValuePair)
         {
             var countList = new Dictionary<CoordinatePoint, (int, BaseFigure)>();
-            IRandomMove tempFigur = (IRandomMove)figure;
+            var tempFigur = (IAvailableMoves)figure;
             CoordinatePoint temp = figure.Coordinate;
             int targetX = CurentKing.Coordinate.X + 1 == 8 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X + 1;
             int targetY = CurentKing.Coordinate.Y + 1 == 8 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y + 1;
             foreach (var item in tempFigur.AvailableMoves().FiltrFor(c => c.X <= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
             {
                 figure.Coordinate = item;
-                if (!tempFigur.IsUnderAttack(figure.Coordinate))
+                if (!IsUnderAttack(figure, figure.Coordinate))
                 {
                     if (GetCurrentKingMoves().Filtr(c => c.X >= targetX | c.Y >= targetY) && !tempFigur.AvailableMoves().Contains(CurentKing.Coordinate))
                         countList.Add(item, (GetCurrentKingMoves().Count, figure));
@@ -279,12 +279,12 @@ namespace GameManager
         private bool GetMinMovesWithShax(BaseFigure figure, out KeyValuePair<CoordinatePoint, (int, BaseFigure)> keyValuePair)
         {
             var countList = new Dictionary<CoordinatePoint, (int, BaseFigure)>();
-            IRandomMove tempFigur = (IRandomMove)figure;
+            var tempFigur = (IAvailableMoves)figure;
             CoordinatePoint temp = figure.Coordinate;
             foreach (var item in tempFigur.AvailableMoves().FiltrFor(c => c - CurentKing.Coordinate >= 2))
             {
                 figure.Coordinate = item;
-                if (!tempFigur.IsUnderAttack(figure.Coordinate))
+                if (!IsUnderAttack(figure, figure.Coordinate))
                 {
                     if (tempFigur.AvailableMoves().Contains(CurentKing.Coordinate))
                         countList.Add(item, (GetCurrentKingMoves().Count, figure));
@@ -319,8 +319,8 @@ namespace GameManager
             var maxMoves = list.OrderBy(c => c.Value.Item1).LastOrDefault();
             BaseFigure setFigurFirst = minMoves.Value.Item2;
             BaseFigure setFigurLast = maxMoves.Value.Item2;
-            var randomeMove = (IRandomMove)setFigurFirst;
-            if (!randomeMove.IsUnderAttack(minMoves.Key))
+            var randomeMove = (IAvailableMoves)setFigurFirst;
+            if (!IsUnderAttack(setFigurFirst, minMoves.Key))
             {
                 setFigurFirst.SetFigurePosition(minMoves.Key);
             }
@@ -342,8 +342,8 @@ namespace GameManager
             var maxMoves = list.OrderBy(c => c.Value.Item1).LastOrDefault();
             BaseFigure setFigurFirst = minMoves.Value.Item2;
             BaseFigure setFigurLast = maxMoves.Value.Item2;
-            IRandomMove randomeMove = (IRandomMove)setFigurFirst;
-            if (!randomeMove.IsUnderAttack(minMoves.Key))
+            var randomeMove = (IAvailableMoves)setFigurFirst;
+            if (!IsUnderAttack(setFigurFirst, minMoves.Key))
             {
                 setFigurFirst.SetFigurePosition(minMoves.Key);
             }
@@ -374,6 +374,143 @@ namespace GameManager
             return false;
         }
 
+        /// <summary>
+        /// Check figure is under attack or no
+        /// </summary>
+        /// <param name="baseFigure">current figure</param>
+        /// <param name="CoordinatPoint">figure coordinate</param>
+        /// <returns>Return true if figure is under attack</returns>
+        public bool IsUnderAttack(BaseFigure baseFigure, CoordinatePoint CoordinatPoint)
+        {
+            var modelNew = models.Where(c => c.Color != baseFigure.Color).ToList();
+            foreach (var item in modelNew)
+            {
+                IAvailableMoves itemFigur = (IAvailableMoves)item;
+                if (itemFigur.AvailableMoves().Contains(CoordinatPoint))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IsProtected(BaseFigure baseFigure, CoordinatePoint CoordinatPoint)
+        {
+            var model = models.Where(c => c != baseFigure && c.Color == baseFigure.Color).ToList();
+            foreach (var item in model)
+            {
+                IAvailableMoves tempfigur = (IAvailableMoves)item;
+                if (tempfigur.AvailableMoves().Contains(CoordinatPoint))
+                    return true;
+            }
+            return false;
+        }
+
+        public CoordinatePoint RandomMove(BaseFigure baseFigure, King king)
+        {
+            CoordinatePoint temp = null;
+            IAvailableMoves tempFigure = (IAvailableMoves)baseFigure;
+            if (ProtectedShax(baseFigure, king, out CoordinatePoint tempForItem))
+            {
+                temp = tempForItem;
+                return temp;
+            }
+            else if (IsUnderAttackShax(baseFigure, king, out CoordinatePoint tempForItem2))
+            {
+                temp = tempForItem2;
+                return temp;
+            }
+            else if (IsUnderAttackMax(baseFigure, king, out CoordinatePoint tempForItem3))
+            {
+                temp = tempForItem3;
+                return temp;
+            }
+            if (temp == null)
+            {
+                foreach (var item in tempFigure.AvailableMoves())
+                {
+                    if (!IsUnderAttack(baseFigure, item))
+                    {
+                        temp = item;
+                        break;
+                    }
+                }
+            }
+            return temp;
+        }
+        private bool ProtectedShax(BaseFigure baseFigure, King king, out CoordinatePoint tempForItem)
+        {
+            CoordinatePoint temp = baseFigure.Coordinate;
+            IAvailableMoves tempFigure = (IAvailableMoves)baseFigure;
+            foreach (var item in tempFigure.AvailableMoves())
+            {
+                baseFigure.Coordinate = item;
+                if (IsProtected(baseFigure, item))
+                {
+                    if (CoordinatePoint.Modul(item, king.Coordinate) >= 2d)
+                    {
+                        if (tempFigure.AvailableMoves().Contains(king.Coordinate))
+                        {
+                            tempForItem = item;
+                            baseFigure.Coordinate = temp;
+                            return true;
+                        }
+                    }
+                }
+            }
+            baseFigure.Coordinate = temp;
+            tempForItem = null;
+            return false;
+        }
+        private bool IsUnderAttackShax(BaseFigure baseFigure, King king, out CoordinatePoint tempForItem)
+        {
+            CoordinatePoint temp = baseFigure.Coordinate;
+            IAvailableMoves tempFigure = (IAvailableMoves)baseFigure;
+            foreach (var item in tempFigure.AvailableMoves())
+            {
+                baseFigure.Coordinate = item;
+                if (!IsUnderAttack(baseFigure, baseFigure.Coordinate))
+                {
+                    if (CoordinatePoint.Modul(item, king.Coordinate) >= 2d)
+                    {
+                        if (tempFigure.AvailableMoves().Contains(king.Coordinate))
+                        {
+                            tempForItem = item;
+                            baseFigure.Coordinate = temp;
+                            return true;
+                        }
+                    }
+                }
+            }
+            baseFigure.Coordinate = temp;
+            tempForItem = null;
+            return false;
+        }
+        private bool IsUnderAttackMax(BaseFigure baseFigure, King king, out CoordinatePoint tempForItem)
+        {
+            CoordinatePoint temp = baseFigure.Coordinate;
+            IAvailableMoves tempFigure = (IAvailableMoves)baseFigure;
+            foreach (var item in tempFigure.AvailableMoves())
+            {
+                baseFigure.Coordinate = item;
+                if (!IsUnderAttack(baseFigure, baseFigure.Coordinate))
+                {
+                    if (CoordinatePoint.Modul(item, king.Coordinate) > 2)
+                    {
+                        if (tempFigure.AvailableMoves().Count == 14)
+                        {
+                            tempForItem = item;
+                            baseFigure.Coordinate = temp;
+                            return true;
+                        }
+                    }
+                }
+            }
+            baseFigure.Coordinate = temp;
+            tempForItem = null;
+            return false;
+        }
+
         [Obsolete("It is still under development, I am thinking of possible cases")]
         /// <summary>
         /// Play anti baby game
@@ -388,8 +525,7 @@ namespace GameManager
                 destination.Add((tempDestination, figur));
             }
             (double, BaseFigure) max = destination.OrderBy(k => k.Item1).FirstOrDefault();
-            var tempFigur = (IRandomMove)max.Item2;
-            var tempCoordinate = tempFigur.RandomMove((King)CurentKing);
+            var tempCoordinate = RandomMove(max.Item2, (King)CurentKing);
             max.Item2.SetFigurePosition(tempCoordinate);
             //BaseFigure temp = modelNew[new Random().Next(0, modelNew.Count())];
             //IRandomMove tempFigur = (IRandomMove)temp;
@@ -409,13 +545,13 @@ namespace GameManager
             var modelNew = models.Where(c => c.Color != currentFigureColor).ToList();
             foreach (var figur in modelNew)
             {
-                var tempFigur = (IRandomMove)figur;
-                if (tempFigur.IsUnderAttack(figur.Coordinate))
+                var tempFigur = (IAvailableMoves)figur;
+                if (IsUnderAttack(figur, figur.Coordinate))
                 {
-                    if (!tempFigur.IsProtected(figur.Coordinate))
+                    if (!IsProtected(figur, figur.Coordinate))
                     {
-                        CoordinatePoint CoordinatPoint1 = tempFigur.RandomMove((King)CurentKing);
-                        figur.SetFigurePosition(CoordinatPoint1);
+                        var coordinatPoint1 = RandomMove(figur, (King)CurentKing);
+                        figur.SetFigurePosition(coordinatPoint1);
                         return true;
                     }
                 }
@@ -429,7 +565,7 @@ namespace GameManager
         /// <returns>Return the list</returns>
         private List<CoordinatePoint> GetCurrentKingMoves()
         {
-            IRandomMove currentKing = (IRandomMove)CurentKing;
+            var currentKing = (IAvailableMoves)CurentKing;
             var result = new List<CoordinatePoint>();
             foreach (var item in currentKing.AvailableMoves())
             {

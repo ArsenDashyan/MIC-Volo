@@ -478,7 +478,7 @@ namespace ChessGame
         public void ShowKingGamePanel()
         {
             ChooseFigureForPawn.Visibility = Visibility.Hidden;
-            ChooseButton.Visibility = Visibility.Visible;
+            ChooseButton.Visibility = Visibility.Hidden;
             PleacementB1.Visibility = Visibility.Visible;
             SelectFigur.Visibility = Visibility.Visible;
             InputCoordinatsLetter.Visibility = Visibility.Visible;

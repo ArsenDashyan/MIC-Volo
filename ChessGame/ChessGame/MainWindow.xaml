@@ -124,7 +124,7 @@
                     </TextBox.Effect>
                 </TextBox>
                 <Label Name="PleacementFigureCoordinate" Content="Letter     Number" HorizontalAlignment="Left" Margin="6,60,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                <Button x:Name="PleacementB1" Background="Gray" HorizontalAlignment="Left" Margin="175,80,0,0" VerticalAlignment="Top" Height="30" Width="155" FontSize="14" Click="PleacementB1_Click">
+                <Button x:Name="PleacementB1" Content="Pleacement" Background="Gray" HorizontalAlignment="Left" Margin="175,80,0,0" VerticalAlignment="Top" Height="30" Width="155" FontSize="14" Click="PleacementB1_Click">
                     <Button.Effect>
                         <DropShadowEffect/>
                     </Button.Effect>

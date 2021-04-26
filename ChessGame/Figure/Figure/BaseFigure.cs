@@ -9,6 +9,7 @@ namespace Figure
     public class BaseFigure : ISetPosition
     {
         protected readonly List<BaseFigure> othereFigures;
+
         #region Property and Feld
         public string Name { get; set; }
         public string Color { get; set; }

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Figure
 {
-    public class Pawn : BaseFigure, IVertical, IRandomMove, IDangerMoves
+    public class Pawn : BaseFigure, IVertical, IAvailableMoves, IDangerMoves
     {
         public Pawn(string name, string color, List<BaseFigure> othereFigures) : base(othereFigures)
         {
@@ -164,132 +164,6 @@ namespace Figure
         }
         #endregion
         #endregion
-        public bool IsUnderAttack(CoordinatePoint CoordinatPoint)
-        {
-            var modelNew = othereFigures.Where(c => c.Color != this.Color).ToList();
-            foreach (var item in modelNew)
-            {
-                IAvailableMoves itemFigur = (IAvailableMoves)item;
-                if (itemFigur.AvailableMoves().Contains(CoordinatPoint))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        public bool IsProtected(CoordinatePoint CoordinatPoint)
-        {
-            var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
-            foreach (var item in model)
-            {
-                IAvailableMoves tempfigur = (IAvailableMoves)item;
-                if (tempfigur.AvailableMoves().Contains(CoordinatPoint))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        public CoordinatePoint RandomMove(King king)
-        {
-            CoordinatePoint temp = null;
-            if (ProtectedShax(king, out CoordinatePoint tempForItem))
-            {
-                temp = tempForItem;
-                return temp;
-            }
-            else if (IsUnderAttackShax(king, out CoordinatePoint tempForItem2))
-            {
-                temp = tempForItem2;
-                return temp;
-            }
-            else if (IsUnderAttackMax(king, out CoordinatePoint tempForItem3))
-            {
-                temp = tempForItem3;
-                return temp;
-            }
-            if (temp == null)
-            {
-                foreach (var item in AvailableMoves())
-                {
-                    if (!IsUnderAttack(item))
-                    {
-                        temp = item;
-                        break;
-                    }
-                }
-            }
-            return temp;
-        }
-        private bool ProtectedShax(King king, out CoordinatePoint tempForItem)
-        {
-            CoordinatePoint temp = this.Coordinate;
-            foreach (var item in AvailableMoves())
-            {
-                this.Coordinate = item;
-                if (IsProtected(item))
-                {
-                    if (CoordinatePoint.Modul(item, king.Coordinate) >= 2d)
-                    {
-                        if (AvailableMoves().Contains(king.Coordinate))
-                        {
-                            tempForItem = item;
-                            this.Coordinate = temp;
-                            return true;
-                        }
-                    }
-                }
-            }
-            this.Coordinate = temp;
-            tempForItem = null;
-            return false;
-        }
-        private bool IsUnderAttackShax(King king, out CoordinatePoint tempForItem)
-        {
-            CoordinatePoint temp = this.Coordinate;
-            foreach (var item in AvailableMoves())
-            {
-                this.Coordinate = item;
-                if (!IsUnderAttack(this.Coordinate))
-                {
-                    if (CoordinatePoint.Modul(item, king.Coordinate) >= 2d)
-                    {
-                        if (AvailableMoves().Contains(king.Coordinate))
-                        {
-                            tempForItem = item;
-                            this.Coordinate = temp;
-                            return true;
-                        }
-                    }
-                }
-            }
-            this.Coordinate = temp;
-            tempForItem = null;
-            return false;
-        }
-        private bool IsUnderAttackMax(King king, out CoordinatePoint tempForItem)
-        {
-            CoordinatePoint temp = this.Coordinate;
-            foreach (var item in AvailableMoves())
-            {
-                this.Coordinate = item;
-                if (!IsUnderAttack(this.Coordinate))
-                {
-                    if (CoordinatePoint.Modul(item, king.Coordinate) >= 2d)
-                    {
-                        if (AvailableMoves().Count == 14)
-                        {
-                            tempForItem = item;
-                            this.Coordinate = temp;
-                            return true;
-                        }
-                    }
-                }
-            }
-            this.Coordinate = temp;
-            tempForItem = null;
-            return false;
-        }
     }
 }
 
