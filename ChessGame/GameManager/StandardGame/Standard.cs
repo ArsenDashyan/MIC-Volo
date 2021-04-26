@@ -10,10 +10,13 @@ namespace GameManager
         private static List<BaseFigure> models = new();
         private BaseFigure baseFigure;
         public event Message messageForMove;
+        public event MessageForMate messageForPawnChange;
         public event Picture setPicture;
         public event Picture removePicture;
+        private static CoordinatePoint coordinate;
         private int whiteKingMovesCount = 0;
         private int blackKingMovesCount = 0;
+        private static int pawnCount = 2;
         #endregion
 
         #region Event Methods
@@ -219,7 +222,7 @@ namespace GameManager
                     {
                         blackKingMovesCount++;
                     }
-                    SetRookWhiteCastling(coordinatePoint);
+                    SetRookCastling(coordinatePoint);
                     baseFigure.SetFigurePosition(targetCoordinate);
                     return true;
                 }
@@ -243,7 +246,23 @@ namespace GameManager
             }
             else if (available.AvailableMoves().Contains(targetCoordinate))
             {
-                baseFigure.SetFigurePosition(targetCoordinate);
+                if (available is Pawn pawn)
+                {
+                    if (CheckPawnChange(targetCoordinate, pawn))
+                    {
+                        coordinate = targetCoordinate;
+                        messageForPawnChange(pawn.Color, "Please enter a new Figure for change");
+                        baseFigure.RemoveFigurePosition();
+                    }
+                    else
+                    {
+                        baseFigure.SetFigurePosition(targetCoordinate);
+                    }
+                }
+                else
+                {
+                    baseFigure.SetFigurePosition(targetCoordinate);
+                }
                 return true;
             }
             else
@@ -362,6 +381,13 @@ namespace GameManager
             }
             return result;
         }
+
+        /// <summary>
+        /// Checked Rook is valid position for castling
+        /// </summary>
+        /// <param name="king">Current king</param>
+        /// <param name="coordinatePoint"></param>
+        /// <returns>Return true if rook position is valid</returns>
         private bool CheckRook(King king, out CoordinatePoint coordinatePoint)
         {
             var modelNew = models.Where(f => f.Color == king.Color && f is Rook).ToList();
@@ -376,6 +402,14 @@ namespace GameManager
             coordinatePoint = null;
             return false;
         }
+
+        /// <summary>
+        /// Check the empty cells for chande king and rook
+        /// </summary>
+        /// <param name="king">Current King</param>
+        /// <param name="rook">Current Rook</param>
+        /// <param name="coordinatePoint">Out parametr, rook coordinate</param>
+        /// <returns></returns>
         private bool CheckEpmtyCells(King king, Rook rook, out CoordinatePoint coordinatePoint)
         {
             int count = 0;
@@ -417,6 +451,13 @@ namespace GameManager
             coordinatePoint = null;
             return false;
         }
+
+        /// <summary>
+        /// Checked if have a castling king and rook
+        /// </summary>
+        /// <param name="king">Current king</param>
+        /// <param name="coordinatePoint"></param>
+        /// <returns>Return true, if castling is valid</returns>
         private bool CheckCastling(King king, out CoordinatePoint coordinatePoint)
         {
             if (king.Color == "White")
@@ -456,7 +497,12 @@ namespace GameManager
                 }
             }
         }
-        private void SetRookWhiteCastling(CoordinatePoint coordinatePoint)
+
+        /// <summary>
+        /// Set the rook change coordinate
+        /// </summary>
+        /// <param name="coordinatePoint"></param>
+        private void SetRookCastling(CoordinatePoint coordinatePoint)
         {
             foreach (var item in models)
             {
@@ -470,6 +516,95 @@ namespace GameManager
                     {
                         item.SetFigurePosition(new CoordinatePoint(3, coordinatePoint.Y));
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Check the pawn figure for change new figure
+        /// </summary>
+        /// <param name="coordinatePoint">Pawn coordinate</param>
+        /// <param name="pawn">Current pawn</param>
+        /// <returns></returns>
+        public bool CheckPawnChange(CoordinatePoint coordinatePoint, Pawn pawn)
+        {
+            if (pawn.Color == "White")
+            {
+                if (coordinatePoint.Y == 0)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (coordinatePoint.Y == 7)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Set new Figure With pawn
+        /// </summary>
+        /// <param name="info">New Figure information</param>
+        public void SetChangeFigureForPawn(string info)
+        {
+            string[] strCurrent = info.Split('.');
+            var currentFigur = strCurrent[0];
+            string currentColor = strCurrent[1];
+            pawnCount++;
+            BaseFigure baseFigure = GetFigure(currentFigur, currentColor);
+            models.Add(baseFigure);
+            baseFigure.setPicture += SetFigurePicture;
+            baseFigure.removePicture += RemoveFigurePicture;
+            baseFigure.messageForMove += MessageMove;
+            baseFigure.SetFigurePosition(coordinate);
+        }
+
+        /// <summary>
+        /// Create new Figure
+        /// </summary>
+        /// <param name="figure">Figure name</param>
+        /// <param name="color">Figure color</param>
+        /// <returns>Return new Figure</returns>
+        public BaseFigure GetFigure(string figure, string color)
+        {
+            if (color == "White")
+            {
+                switch (figure)
+                {
+                    case "Queen":
+                        return  new Queen(figure + "." + color + '.' + pawnCount, color, models);
+                    case "King":
+                        return  new King(figure + "." + color + '.' + pawnCount, color, models);
+                    case "Rook":
+                        return new Rook(figure + "." + color + "." + pawnCount, color, models);
+                    case "Bishop":
+                        return new Bishop(figure + "." + color + "." + pawnCount, color, models);
+                    case "Knight":
+                        return new Knight(figure + "." + color + "." + pawnCount, color, models);
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                switch (figure)
+                {
+                    case "Queen":
+                        return new Queen(figure + "." + color + '.' + pawnCount, color, models);
+                    case "King":
+                        return new King(figure + "." + color + '.' + pawnCount, color, models);
+                    case "Rook":
+                        return new Rook(figure + "." + color + "." + pawnCount, color, models);
+                    case "Bishop":
+                        return new Bishop(figure + "." + color + "." + pawnCount, color, models);
+                    case "Knight":
+                        return new Knight(figure + "." + color + "." + pawnCount, color, models);
+                    default:
+                        return null;
                 }
             }
         }

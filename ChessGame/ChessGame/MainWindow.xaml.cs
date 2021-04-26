@@ -36,9 +36,12 @@ namespace ChessGame
             standard.setPicture += SetFigurePicture;
             standard.removePicture += RemoveFigurePicture;
             standard.messageForMove += MessageMove;
+            standard.messageForPawnChange += MessageForPawnChange;
             movesKnight.setPicture += SetFigurePicture;
             movesKnight.messageForMove += delegate { };
         }
+
+        #region Methods for Events
 
         /// <summary>
         /// Set the figure image
@@ -82,6 +85,36 @@ namespace ChessGame
                 }
             }
         }
+
+        /// <summary>
+        /// Show a figure moves
+        /// </summary>
+        /// <param name="baseFigure">Figure instanste</param>
+        /// <param name="coordinate">Figure old and new coordinate</param>
+        public void MessageMove(object sender, (string, string) coordinateTupl)
+        {
+            if (coordinateTupl.Item1 != string.Empty)
+            {
+                string[] start = coordinateTupl.Item1.Split('.');
+                string[] target = coordinateTupl.Item2.Split('.');
+                MovesTextBox.Text += $"{start[2]}{start[3]}-" + $"{start[0]}{start[1]}:" +
+                    $"{target[0]}{target[1]}\n{new string('-', 8)}\n";
+            }
+        }
+
+        /// <summary>
+        /// Initialize a MessageForPawnChange event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="coordinate"></param>
+        public void MessageForPawnChange(object sender, string message)
+        {
+            ChooseFigureForPawn.IsEnabled = true;
+            ChooseButton.IsEnabled = true;
+            MessageHandle.Text = message;
+        }
+
+        #endregion
 
         #region King Game
 
@@ -127,31 +160,10 @@ namespace ChessGame
         {
             PlayB2.IsEnabled = false;
             var tupl = GetCurrentFigureNew();
-            if (manager.IsVAlidCoordinate(tupl.Item1, tupl.Item2))
-            {
-                manager.MateMessage += MessageMate;
-                manager.Logic();
-            }
+            GameManager(tupl);
         }
 
         #endregion
-
-
-        /// <summary>
-        /// Show a figure moves
-        /// </summary>
-        /// <param name="baseFigure">Figure instanste</param>
-        /// <param name="coordinate">Figure old and new coordinate</param>
-        public void MessageMove(object sender, (string, string) coordinateTupl)
-        {
-            if (coordinateTupl.Item1 != string.Empty)
-            {
-                string[] start = coordinateTupl.Item1.Split('.');
-                string[] target = coordinateTupl.Item2.Split('.');
-                MovesTextBox.Text += $"{start[2]}{start[3]}-" + $"{start[0]}{start[1]}:" +
-                    $"{target[0]}{target[1]}\n{new string('-', 8)}\n";
-            }
-        }
 
         /// <summary>
         /// Show a Mate message
@@ -197,6 +209,20 @@ namespace ChessGame
             }
             return result;
         }
+        private string GetChangeFigureImage(string color)
+        {
+            string str = ChooseFigureForPawn.Text;
+            string result = string.Empty;
+            if (color == "White")
+            {
+                result = str.BlackFigurePath();
+            }
+            else
+            {
+                result = str.WhiteFigurePath();
+            }
+            return result;
+        }
 
         /// <summary>
         /// Select the color with play
@@ -235,49 +261,6 @@ namespace ChessGame
         }
 
         #endregion
-
-        /// <summary>
-        /// Get coordinates with textBoxs for moved figure
-        /// </summary>
-        /// <param name="letter">Letter coordinate</param>
-        /// <param name="number">Number coordinate</param>
-        /// <returns></returns>
-        public string GetCurrentFigureCoordinate(TextBox letter, TextBox number)
-        {
-            string inputLetter = letter.Text;
-            if (inputLetter.Length > 1)
-            {
-                MessageBox.Show("This letter not found");
-            }
-            else
-            {
-                if (Convert.ToChar(inputLetter).CharToInt(out int o))
-                {
-                    try
-                    {
-                        string inputNumber = number.Text;
-                        int j = Convert.ToInt32(inputNumber.ToString());
-                        if (j <= 8 && j >= 1)
-                        {
-                            return $"{o - 1}.{j - 1}";
-                        }
-                        else
-                        {
-                            MessageBox.Show("The number is not found");
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("The number is not found");
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("This letter not found");
-                }
-            }
-            return string.Empty;
-        }
 
         #region For Knight Moves
 
@@ -435,9 +418,78 @@ namespace ChessGame
         {
             this.Width = 1348;
             Thickness thickness = new Thickness(365);
-            this.KnightPage.Margin = thickness;
+            KnightPage.Margin = thickness;
             this.Width = 1000;
             ResetBoard();
+            ShowKingGamePanel();
+            currentGameStatus = 1;
+            MessageBox.Show("You Change A King Game, Good Luck");
+        }
+        private void KnightGame_Click(object sender, RoutedEventArgs e)
+        {
+            this.Width = 1348;
+            Thickness thickness = new Thickness(0);
+            KnightPage.Margin = thickness;
+            this.Width = 1000;
+            ResetBoard();
+            KnightMovesMessage.Text = "";
+            KnightStartLetter.Text = "";
+            KnightStartNumber.Text = "";
+            KnightTargetLetter.Text = "";
+            KnightTargetNumber.Text = "";
+            currentGameStatus = 2;
+            MessageBox.Show("You Change A Knight Game, Good Luck");
+        }
+        private void StandardGame_Click(object sender, RoutedEventArgs e)
+        {
+            this.Width = 1348;
+            Thickness thickness = new Thickness(365);
+            KnightPage.Margin = thickness;
+            this.Width = 1000;
+            ResetBoard();
+            ShowStandardGamePanel();
+            standard.SetAllFigures();
+            currentGameStatus = 3;
+            MessageBox.Show("You Change A Standard Game, Good Luck");
+        }
+        public void ShowStandardGamePanel()
+        {
+            PleacementB1.Visibility = Visibility.Hidden;
+            SelectFigur.Visibility = Visibility.Hidden;
+            InputCoordinatsLetter.Visibility = Visibility.Hidden;
+            InputCoordinatsNumber.Visibility = Visibility.Hidden;
+            CheckWhite.Visibility = Visibility.Hidden;
+            CheckBlack.Visibility = Visibility.Hidden;
+            PleacementFigureCoordinate.Visibility = Visibility.Hidden;
+            PlayB2.Visibility = Visibility.Hidden;
+            PlayColorWhite.Visibility = Visibility.Hidden;
+            PlayColorBlack.Visibility = Visibility.Hidden;
+            PlayColorLabel.Visibility = Visibility.Hidden;
+            ChooseFigureForPawn.Visibility = Visibility.Visible;
+            ChooseButton.Visibility = Visibility.Visible;
+            InputCoordinatsLetter_Corrent.IsEnabled = true;
+            InputCoordinatsNumber_Corrent.IsEnabled = true;
+            InputCoordinatsLetter_Selected.IsEnabled = true;
+            InputCoordinatsNumber_Selected.IsEnabled = true;
+            InstalB3.IsEnabled = true;
+            ChooseFigureForPawn.IsEnabled = false;
+            ChooseButton.IsEnabled = false;
+        }
+        public void ShowKingGamePanel()
+        {
+            ChooseFigureForPawn.Visibility = Visibility.Hidden;
+            ChooseButton.Visibility = Visibility.Visible;
+            PleacementB1.Visibility = Visibility.Visible;
+            SelectFigur.Visibility = Visibility.Visible;
+            InputCoordinatsLetter.Visibility = Visibility.Visible;
+            InputCoordinatsNumber.Visibility = Visibility.Visible;
+            CheckWhite.Visibility = Visibility.Visible;
+            CheckBlack.Visibility = Visibility.Visible;
+            PleacementFigureCoordinate.Visibility = Visibility.Visible;
+            PlayB2.Visibility = Visibility.Visible;
+            PlayColorWhite.Visibility = Visibility.Visible;
+            PlayColorBlack.Visibility = Visibility.Visible;
+            PlayColorLabel.Visibility = Visibility.Visible;
             PlayB2.IsEnabled = true;
             CheckBlack.IsEnabled = true;
             CheckWhite.IsEnabled = true;
@@ -452,34 +504,51 @@ namespace ChessGame
             InputCoordinatsLetter_Selected.IsEnabled = false;
             InputCoordinatsNumber_Selected.IsEnabled = false;
             InstalB3.IsEnabled = false;
-            currentGameStatus = 1;
-            MessageBox.Show("You Change A King Game, Good Luck");
-        }
-        private void KnightGame_Click(object sender, RoutedEventArgs e)
-        {
-            this.Width = 1348;
-            Thickness thickness = new Thickness(0);
-            this.KnightPage.Margin = thickness;
-            this.Width = 1000;
-            ResetBoard();
-            KnightMovesMessage.Text = "";
-            KnightStartLetter.Text = "";
-            KnightStartNumber.Text = "";
-            KnightTargetLetter.Text = "";
-            KnightTargetNumber.Text = "";
-            currentGameStatus = 2;
-            MessageBox.Show("You Change A Knight Game, Good Luck");
-        }
-        private void StandardGame_Click(object sender, RoutedEventArgs e)
-        {
-            this.Width = 1348;
-            this.Width = 620;
-            ResetBoard();
-            standard.SetAllFigures();
-            currentGameStatus = 3;
-            MessageBox.Show("You Change A Standard Game, Good Luck");
         }
         #endregion
+
+        /// <summary>
+        /// Get coordinates with textBoxs for moved figure
+        /// </summary>
+        /// <param name="letter">Letter coordinate</param>
+        /// <param name="number">Number coordinate</param>
+        /// <returns></returns>
+        public string GetCurrentFigureCoordinate(TextBox letter, TextBox number)
+        {
+            string inputLetter = letter.Text;
+            if (inputLetter.Length > 1)
+            {
+                MessageBox.Show("This letter not found");
+            }
+            else
+            {
+                if (Convert.ToChar(inputLetter).CharToInt(out int o))
+                {
+                    try
+                    {
+                        string inputNumber = number.Text;
+                        int j = Convert.ToInt32(inputNumber.ToString());
+                        if (j <= 8 && j >= 1)
+                        {
+                            return $"{o - 1}.{j - 1}";
+                        }
+                        else
+                        {
+                            MessageBox.Show("The number is not found");
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("The number is not found");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("This letter not found");
+                }
+            }
+            return string.Empty;
+        }
 
         /// <summary>
         /// Manage game with run King or Standard
@@ -525,5 +594,23 @@ namespace ChessGame
             currentFigureColor = "White";
             standard.SetAllFigures();
         }
+
+        /// <summary>
+        /// Button for change a pawn and new figure
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ChooseButton_Click(object sender, RoutedEventArgs e)
+        {
+            string[] tempFigure = GetChangeFigureImage(currentFigureColor).Split('/');
+            string color = tempFigure[tempFigure.Length - 1].Split('.')[0];
+            string figure = tempFigure[tempFigure.Length - 1].Split('.')[1];
+            string inputInfo = figure + '.' + color;
+            standard.SetChangeFigureForPawn(inputInfo);
+            ChooseFigureForPawn.IsEnabled = false;
+            ChooseButton.IsEnabled = false;
+            MessageHandle.Text = " ";
+        }
+        
     }
 }

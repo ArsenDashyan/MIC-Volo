@@ -17,6 +17,7 @@ namespace ChessGame
             if (CheckKing.IsChecked == true)
             {
                 var mainWindow = new MainWindow();
+                mainWindow.ShowKingGamePanel();
                 mainWindow.Width = 1000;
                 mainWindow.Show();
                 MainWindow.currentGameStatus = 1;
@@ -35,7 +36,8 @@ namespace ChessGame
             if (StandardGame.IsChecked == true)
             {
                 var mainWindow = new MainWindow();
-                mainWindow.Width = 620;
+                mainWindow.ShowStandardGamePanel();
+                mainWindow.Width = 1000;
                 mainWindow.Show();
                 mainWindow.SetAllFigures();
                 MainWindow.currentGameStatus = 3;

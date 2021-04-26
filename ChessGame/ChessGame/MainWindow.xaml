@@ -24,7 +24,7 @@
                 <MenuItem Header="New Knight Game" Click="KnightGame_Click"/>
                 <MenuItem Header="New Standard Game" Click="StandardGame_Click"/>
             </MenuItem>
-            <MenuItem Header="Help" Click="MenuItem_Click"/>
+            <MenuItem Header="About" Click="MenuItem_Click"/>
         </Menu>
         <Grid x:Name="GamePanel" Background="Black" Margin="18,18,18,18" Grid.RowSpan="2" >
 
@@ -123,12 +123,13 @@
                         <DropShadowEffect/>
                     </TextBox.Effect>
                 </TextBox>
-                <Label Content="Letter     Number" HorizontalAlignment="Left" Margin="6,60,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                <Button x:Name="PleacementB1" Content="Pleacement✓" Background="Gray" HorizontalAlignment="Left" Margin="175,80,0,0" VerticalAlignment="Top" Height="30" Width="155" FontSize="14" Click="PleacementB1_Click">
+                <Label Name="PleacementFigureCoordinate" Content="Letter     Number" HorizontalAlignment="Left" Margin="6,60,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                <Button x:Name="PleacementB1" Background="Gray" HorizontalAlignment="Left" Margin="175,80,0,0" VerticalAlignment="Top" Height="30" Width="155" FontSize="14" Click="PleacementB1_Click">
                     <Button.Effect>
                         <DropShadowEffect/>
                     </Button.Effect>
                 </Button>
+                <Button x:Name="ChooseButton" Content="Choose Figure" Background="Gray" HorizontalAlignment="Left" Margin="175,80,0,0" VerticalAlignment="Top" Height="30" Width="155" FontSize="14" Click="ChooseButton_Click"/>
                 <Button Content="Reset" FontSize="14" FontWeight="Bold" Background="#FFDA1717" HorizontalAlignment="Left" Margin="175,369,0,0" VerticalAlignment="Top" Height="30" Width="155" Click="Reset_Button">
                     <Button.Effect>
                         <DropShadowEffect/>
@@ -149,6 +150,15 @@
                     <ComboBoxItem Content="Knight"/>
                     <ComboBoxItem Content="Rook"/>
                     <ComboBoxItem Content="Pawn"/>
+                </ComboBox>
+                <ComboBox Name="ChooseFigureForPawn" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="320" Height="30" FontSize="16" FontWeight="Bold" FontStyle="Normal">
+                    <ComboBox.Effect>
+                        <DropShadowEffect/>
+                    </ComboBox.Effect>
+                    <ComboBoxItem Content="Queen"/>
+                    <ComboBoxItem Content="Bishop"/>
+                    <ComboBoxItem Content="Knight"/>
+                    <ComboBoxItem Content="Rook"/>
                 </ComboBox>
                 <CheckBox x:Name="CheckWhite" Content="White" HorizontalAlignment="Left" Margin="110,79,0,0" VerticalAlignment="Top" FontWeight="Bold" FontStyle="Normal" RenderTransformOrigin="0.5,0.5" Foreground="#FFF5ECEC"/>
                 <CheckBox x:Name="CheckBlack" Content="Black" HorizontalAlignment="Left" Margin="110,96,0,0" VerticalAlignment="Top" FontWeight="Bold" FontStyle="Normal"/>
@@ -184,7 +194,7 @@
                         <DropShadowEffect/>
                     </Button.Effect>
                 </Button>
-                <Label Content="Select your color" HorizontalAlignment="Left" Margin="6,120,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                <Label Name="PlayColorLabel" Content="Select your color" HorizontalAlignment="Left" Margin="6,120,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                 <CheckBox Name="PlayColorWhite" Content="White" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="#FFEEEAEA"/>
                 <CheckBox Name="PlayColorBlack" Content="Black" HorizontalAlignment="Left" Margin="111,150,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                 <TextBox Name="MovesTextBox" HorizontalAlignment="Left" Margin="10,260,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="118" Height="277" TextAlignment="Center" FontWeight="Bold">
@@ -193,7 +203,7 @@
                     </TextBox.Effect>
                 </TextBox>
                 <Label Content="Moves" HorizontalAlignment="Left" Margin="6,238,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                <TextBox Name="MessageHandle" HorizontalAlignment="Left" Margin="135,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" FontWeight="Bold" Height="33" FontSize="14" TextAlignment="Center" Background="#FFE0D1D1" Foreground="#FF8F0720" SelectionBrush="#FF02111D" FontStyle="Normal">
+                <TextBox Name="MessageHandle" HorizontalAlignment="Left" Margin="135,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="189" FontWeight="Bold" Height="39" FontSize="14" TextAlignment="Center" Background="#FFE0D1D1" Foreground="#FF8F0720" SelectionBrush="#FF02111D" FontStyle="Normal">
                     <TextBox.Effect>
                         <DropShadowEffect/>
                     </TextBox.Effect>
@@ -203,9 +213,8 @@
                     <Grid.Effect>
                         <DropShadowEffect/>
                     </Grid.Effect>
-
-                    <Label Content="Start CoordinateLetter and Number" HorizontalAlignment="Left"  VerticalAlignment="Top" RenderTransformOrigin="0.434,-0.133" FontSize="14" FontWeight="Bold" Margin="2,14,0,0"/>
-                    <TextBox Name="KnightStartLetter" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="60" Height="30" Margin="20,50,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                    <Label Content="Start CoordinateLetter and Number" HorizontalAlignment="Left"  VerticalAlignment="Top" RenderTransformOrigin="0.434,-0.133" FontSize="14" FontWeight="Bold" Margin="5,22,0,0"/>
+                    <TextBox x:Name="KnightStartLetter" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="60" Height="30" Margin="20,50,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
                         <TextBox.Effect>
                             <DropShadowEffect/>
                         </TextBox.Effect>
@@ -213,7 +222,7 @@
                             <Style/>
                         </TextBox.Style>
                     </TextBox>
-                    <TextBox Name="KnightStartNumber" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="104,50,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                    <TextBox x:Name="KnightStartNumber" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="104,50,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
                         <TextBox.Effect>
                             <DropShadowEffect/>
                         </TextBox.Effect>
@@ -221,7 +230,7 @@
                             <Style/>
                         </TextBox.Style>
                     </TextBox>
-                    <TextBox Name="KnightTargetLetter" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="20,130,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                    <TextBox x:Name="KnightTargetLetter" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="20,130,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
                         <TextBox.Effect>
                             <DropShadowEffect/>
                         </TextBox.Effect>
@@ -229,7 +238,7 @@
                             <Style/>
                         </TextBox.Style>
                     </TextBox>
-                    <TextBox Name="KnightTargetNumber" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="104,130,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                    <TextBox x:Name="KnightTargetNumber" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="104,130,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
                         <TextBox.Effect>
                             <DropShadowEffect/>
                         </TextBox.Effect>
@@ -238,8 +247,8 @@
                         </TextBox.Style>
                     </TextBox>
                     <Label Content="Target Coordinate Letter and Number" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" FontWeight="Bold" Margin="-2,98,0,0"/>
-                    <Button Name="KnightMoveCheck" Content="Check" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="130" Height="32" Background="#FF877979" FontSize="14" FontWeight="Bold" Margin="20,178,0,0" Click="KnightMoveCheck_Click"/>
-                    <TextBox Name="KnightMovesMessage"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="152" Height="56" Margin="20,230,0,0" FontSize="14">
+                    <Button x:Name="KnightMoveCheck" Content="Check" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="130" Height="32" Background="#FF877979" FontSize="14" FontWeight="Bold" Margin="20,178,0,0" Click="KnightMoveCheck_Click"/>
+                    <TextBox x:Name="KnightMovesMessage"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="152" Height="56" Margin="20,230,0,0" FontSize="14">
                         <TextBox.Effect>
                             <DropShadowEffect/>
                         </TextBox.Effect>
