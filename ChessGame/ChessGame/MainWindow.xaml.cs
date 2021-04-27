@@ -13,7 +13,7 @@ namespace ChessGame
     public partial class MainWindow : Window
     {
         #region Property and Feld
-        public UIElement DragObjectImage { get => dragObjectImage; set => dragObjectImage = value; }
+        private UIElement DragObjectImage { get => dragObjectImage; set => dragObjectImage = value; }
         private UIElement dragObjectImage = null;
         private Manager manager;
         private MovesKnight movesKnight = new MovesKnight();
@@ -513,7 +513,7 @@ namespace ChessGame
         /// <param name="letter">Letter coordinate</param>
         /// <param name="number">Number coordinate</param>
         /// <returns></returns>
-        public string GetCurrentFigureCoordinate(TextBox letter, TextBox number)
+        private string GetCurrentFigureCoordinate(TextBox letter, TextBox number)
         {
             string inputLetter = letter.Text;
             if (inputLetter.Length > 1)

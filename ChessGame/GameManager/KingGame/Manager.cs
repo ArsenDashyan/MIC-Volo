@@ -380,7 +380,7 @@ namespace GameManager
         /// <param name="baseFigure">current figure</param>
         /// <param name="CoordinatPoint">figure coordinate</param>
         /// <returns>Return true if figure is under attack</returns>
-        public bool IsUnderAttack(BaseFigure baseFigure, CoordinatePoint CoordinatPoint)
+        private bool IsUnderAttack(BaseFigure baseFigure, CoordinatePoint CoordinatPoint)
         {
             var modelNew = models.Where(c => c.Color != baseFigure.Color).ToList();
             foreach (var item in modelNew)
@@ -394,7 +394,13 @@ namespace GameManager
             return false;
         }
 
-        public bool IsProtected(BaseFigure baseFigure, CoordinatePoint CoordinatPoint)
+        /// <summary>
+        /// Check figure is protected or no
+        /// </summary>
+        /// <param name="baseFigure">Current figure</param>
+        /// <param name="CoordinatPoint">Current coordinate</param>
+        /// <returns>Return true if figure is protected</returns>
+        private bool IsProtected(BaseFigure baseFigure, CoordinatePoint CoordinatPoint)
         {
             var model = models.Where(c => c != baseFigure && c.Color == baseFigure.Color).ToList();
             foreach (var item in model)
@@ -406,7 +412,15 @@ namespace GameManager
             return false;
         }
 
-        public CoordinatePoint RandomMove(BaseFigure baseFigure, King king)
+        #region Random Move
+
+        /// <summary>
+        /// Check a randome move for current figure
+        /// </summary>
+        /// <param name="baseFigure">Currnnt Figure</param>
+        /// <param name="king">Current king</param>
+        /// <returns>Return the new coordinate for random move</returns>
+        private CoordinatePoint RandomMove(BaseFigure baseFigure, King king)
         {
             CoordinatePoint temp = null;
             IAvailableMoves tempFigure = (IAvailableMoves)baseFigure;
@@ -510,6 +524,8 @@ namespace GameManager
             tempForItem = null;
             return false;
         }
+
+        #endregion
 
         [Obsolete("It is still under development, I am thinking of possible cases")]
         /// <summary>

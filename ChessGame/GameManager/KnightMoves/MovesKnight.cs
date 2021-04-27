@@ -6,12 +6,12 @@ namespace GameManager
     public class MovesKnight
     {
         #region Property and Feld
-        private int count = 1;
         private static List<BaseFigure> models = new();
         public event Picture setPicture;
         public event Message messageForMove;
         private static Knight startKnight;
         private static Knight targetKnight;
+        private int count = 1;
         #endregion
 
         public int MinKnightCount()
@@ -66,7 +66,7 @@ namespace GameManager
             startKnight = new Knight("Knight.Black.1", "Black", models);
             models.Add(startKnight);
             string[] point = coordinate.Split('.');
-            CoordinatePoint coordinatPoint = new CoordinatePoint(int.Parse(point[0]),int.Parse(point[1]));
+            var coordinatPoint = new CoordinatePoint(int.Parse(point[0]),int.Parse(point[1]));
             startKnight.setPicture += SetFigurePicture;
             startKnight.messageForMove += MessageForMove;
             startKnight.SetFigurePosition(coordinatPoint);
@@ -76,16 +76,16 @@ namespace GameManager
             targetKnight = new Knight("Knight.Black.2", "Black", models);
             models.Add(targetKnight);
             string[] point = coordinate.Split('.');
-            CoordinatePoint coordinatPoint = new CoordinatePoint(int.Parse(point[0]), int.Parse(point[1]));
+            var coordinatPoint = new CoordinatePoint(int.Parse(point[0]), int.Parse(point[1]));
             targetKnight.setPicture += SetFigurePicture;
             targetKnight.messageForMove += MessageForMove;
             targetKnight.SetFigurePosition(coordinatPoint);
         }
-        public void SetFigurePicture(object sender, string coordinate)
+        private void SetFigurePicture(object sender, string coordinate)
         {
             setPicture(this, coordinate);
         }
-        public void MessageForMove(object sender, (string,string) coordinate)
+        private void MessageForMove(object sender, (string,string) coordinate)
         {
             messageForMove(this, coordinate);
         }

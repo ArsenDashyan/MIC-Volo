@@ -212,52 +212,13 @@ namespace GameManager
             IAvailableMoves available = (IAvailableMoves)baseFigure;
             if (baseFigure is King king)
             {
-                if (GetCurrentKingMoves(king).Contains(targetCoordinate))
-                {
-                    if (king.Color == "White")
-                    {
-                        whiteKingMovesCount++;
-                    }
-                    else
-                    {
-                        blackKingMovesCount++;
-                    }
-                    baseFigure.SetFigurePosition(targetCoordinate);
-                    return true;
-                }
-                else if (CheckCastling(king, out CoordinatePoint coordinatePoint))
-                {
-                    if (king.Color == "White")
-                    {
-                        whiteKingMovesCount++;
-                    }
-                    else
-                    {
-                        blackKingMovesCount++;
-                    }
-                    SetRookCastling(coordinatePoint);
-                    baseFigure.SetFigurePosition(targetCoordinate);
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return KingFigureSet(king, targetCoordinate);
             }
             else if (available.AvailableMoves().Contains(targetCoordinate))
             {
                 if (available is Pawn pawn)
                 {
-                    if (CheckPawnChange(targetCoordinate, pawn))
-                    {
-                        coordinate = targetCoordinate;
-                        messageForPawnChange(pawn.Color, "Please enter a new Figure for change");
-                        baseFigure.RemoveFigurePosition();
-                    }
-                    else
-                    {
-                        baseFigure.SetFigurePosition(targetCoordinate);
-                    }
+                    PawnFigureSet(pawn, targetCoordinate);
                 }
                 else
                 {
@@ -268,6 +229,66 @@ namespace GameManager
             else
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Check current king coordinate for move and set
+        /// </summary>
+        /// <param name="king">Current king</param>
+        /// <param name="targetCoordinate">Target coordinate for current king</param>
+        /// <returns>Return true if king is moved</returns>
+        private bool KingFigureSet(King king, CoordinatePoint targetCoordinate)
+        {
+            if (GetCurrentKingMoves(king).Contains(targetCoordinate))
+            {
+                if (king.Color == "White")
+                {
+                    whiteKingMovesCount++;
+                }
+                else
+                {
+                    blackKingMovesCount++;
+                }
+                baseFigure.SetFigurePosition(targetCoordinate);
+                return true;
+            }
+            else if (CheckCastling(king, out CoordinatePoint coordinatePoint))
+            {
+                if (king.Color == "White")
+                {
+                    whiteKingMovesCount++;
+                }
+                else
+                {
+                    blackKingMovesCount++;
+                }
+                SetRookCastling(coordinatePoint);
+                baseFigure.SetFigurePosition(targetCoordinate);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Check pawn have changed a new figure, if no changed pawn swt a target coordinate
+        /// </summary>
+        /// <param name="pawn">Current pawn</param>
+        /// <param name="targetCoordinate">Target coordinate</param>
+        private void PawnFigureSet(Pawn pawn, CoordinatePoint targetCoordinate)
+        {
+            if (CheckPawnChange(targetCoordinate, pawn))
+            {
+                coordinate = targetCoordinate;
+                messageForPawnChange(pawn.Color, "Please enter a new Figure for change");
+                baseFigure.RemoveFigurePosition();
+            }
+            else
+            {
+                pawn.SetFigurePosition(targetCoordinate);
             }
         }
 
@@ -526,7 +547,7 @@ namespace GameManager
         /// <param name="coordinatePoint">Pawn coordinate</param>
         /// <param name="pawn">Current pawn</param>
         /// <returns></returns>
-        public bool CheckPawnChange(CoordinatePoint coordinatePoint, Pawn pawn)
+        private bool CheckPawnChange(CoordinatePoint coordinatePoint, Pawn pawn)
         {
             if (pawn.Color == "White")
             {
@@ -555,7 +576,7 @@ namespace GameManager
             var currentFigur = strCurrent[0];
             string currentColor = strCurrent[1];
             pawnCount++;
-            BaseFigure baseFigure = GetFigure(currentFigur, currentColor);
+            var baseFigure = GetFigure(currentFigur, currentColor);
             models.Add(baseFigure);
             baseFigure.setPicture += SetFigurePicture;
             baseFigure.removePicture += RemoveFigurePicture;
@@ -569,7 +590,7 @@ namespace GameManager
         /// <param name="figure">Figure name</param>
         /// <param name="color">Figure color</param>
         /// <returns>Return new Figure</returns>
-        public BaseFigure GetFigure(string figure, string color)
+        private BaseFigure GetFigure(string figure, string color)
         {
             if (color == "White")
             {
