@@ -417,7 +417,7 @@ namespace GameManager
                 if (CheckEpmtyCells(king, (Rook)item, out CoordinatePoint coordinte))
                 {
                     coordinatePoint = coordinte;
-                        return true;
+                    return true;
                 }
             }
             coordinatePoint = null;
@@ -531,7 +531,7 @@ namespace GameManager
                 {
                     if (coordinatePoint.X == 7)
                     {
-                        item.SetFigurePosition(new CoordinatePoint(5,coordinatePoint.Y));
+                        item.SetFigurePosition(new CoordinatePoint(5, coordinatePoint.Y));
                     }
                     else
                     {
@@ -592,41 +592,20 @@ namespace GameManager
         /// <returns>Return new Figure</returns>
         private BaseFigure GetFigure(string figure, string color)
         {
-            if (color == "White")
+            switch (figure)
             {
-                switch (figure)
-                {
-                    case "Queen":
-                        return  new Queen(figure + "." + color + '.' + pawnCount, color, models);
-                    case "King":
-                        return  new King(figure + "." + color + '.' + pawnCount, color, models);
-                    case "Rook":
-                        return new Rook(figure + "." + color + "." + pawnCount, color, models);
-                    case "Bishop":
-                        return new Bishop(figure + "." + color + "." + pawnCount, color, models);
-                    case "Knight":
-                        return new Knight(figure + "." + color + "." + pawnCount, color, models);
-                    default:
-                        return null;
-                }
-            }
-            else
-            {
-                switch (figure)
-                {
-                    case "Queen":
-                        return new Queen(figure + "." + color + '.' + pawnCount, color, models);
-                    case "King":
-                        return new King(figure + "." + color + '.' + pawnCount, color, models);
-                    case "Rook":
-                        return new Rook(figure + "." + color + "." + pawnCount, color, models);
-                    case "Bishop":
-                        return new Bishop(figure + "." + color + "." + pawnCount, color, models);
-                    case "Knight":
-                        return new Knight(figure + "." + color + "." + pawnCount, color, models);
-                    default:
-                        return null;
-                }
+                case "Queen":
+                    return new Queen(figure + "." + color + '.' + pawnCount, color, models);
+                case "King":
+                    return new King(figure + "." + color + '.' + pawnCount, color, models);
+                case "Rook":
+                    return new Rook(figure + "." + color + "." + pawnCount, color, models);
+                case "Bishop":
+                    return new Bishop(figure + "." + color + "." + pawnCount, color, models);
+                case "Knight":
+                    return new Knight(figure + "." + color + "." + pawnCount, color, models);
+                default:
+                    return null;
             }
         }
     }
