@@ -18,8 +18,8 @@ namespace Figure
             var model = othereFigures.Where(c => c != this).ToList();
             for (int i = 0; i <= 7; i++)
             {
-                CoordinatePoint CoordinatPointTemp = new CoordinatePoint(this.Coordinate.X, i);
-                arr.Add(CoordinatPointTemp);
+                var coordinatPointTemp = new CoordinatePoint(this.Coordinate.X, i);
+                arr.Add(coordinatPointTemp);
             }
             foreach (var item in model)
             {
@@ -27,17 +27,17 @@ namespace Figure
                 {
                     if (item.Color == this.Color)
                     {
-                        if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                            arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
+                        if (this.Coordinate.Y < item.Coordinate.Y)
+                            arr = arr.Where(c => c.Y < item.Coordinate.Y).ToList();
                         else
-                            arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
+                            arr = arr.Where(c => c.Y > item.Coordinate.Y).ToList();
                     }
                     else
                     {
-                        if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                            arr = arr.Where(c => arr.IndexOf(c) <= arr.IndexOf(item.Coordinate)).ToList();
+                        if (this.Coordinate.Y < item.Coordinate.Y)
+                            arr = arr.Where(c => c.Y <= item.Coordinate.Y).ToList();
                         else
-                            arr = arr.Where(c => arr.IndexOf(c) >= arr.IndexOf(item.Coordinate)).ToList();
+                            arr = arr.Where(c => c.Y >= item.Coordinate.Y).ToList();
                     }
                 }
             }
@@ -50,8 +50,8 @@ namespace Figure
             var model = othereFigures.Where(c => c != this).ToList();
             for (int i = 0; i <= 7; i++)
             {
-                CoordinatePoint CoordinatPointTemp = new CoordinatePoint(i, this.Coordinate.Y);
-                arr.Add(CoordinatPointTemp);
+                var coordinatPointTemp = new CoordinatePoint(i, this.Coordinate.Y);
+                arr.Add(coordinatPointTemp);
             }
             foreach (var item in model)
             {
@@ -59,25 +59,17 @@ namespace Figure
                 {
                     if (item.Color == this.Color)
                     {
-                        if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                        {
-                            arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
-                        }
+                        if (this.Coordinate.X < item.Coordinate.X)
+                            arr = arr.Where(c => c.X < item.Coordinate.X).ToList();
                         else
-                        {
-                            arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                        }
+                            arr = arr.Where(c => c.X > item.Coordinate.X).ToList();
                     }
                     else
                     {
-                        if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                        {
-                            arr = arr.Where(c => arr.IndexOf(c) <= arr.IndexOf(item.Coordinate)).ToList();
-                        }
+                        if (this.Coordinate.X < item.Coordinate.X)
+                            arr = arr.Where(c => c.X <= item.Coordinate.X).ToList();
                         else
-                        {
-                            arr = arr.Where(c => arr.IndexOf(c) >= arr.IndexOf(item.Coordinate)).ToList();
-                        }
+                            arr = arr.Where(c => c.X >= item.Coordinate.X).ToList();
                     }
                 }
             }
@@ -102,8 +94,8 @@ namespace Figure
                 {
                     if (i + j == sum)
                     {
-                        CoordinatePoint CoordinatPointTemp = new CoordinatePoint(i, j);
-                        arr.Add(CoordinatPointTemp);
+                        var coordinatPointTemp = new CoordinatePoint(i, j);
+                        arr.Add(coordinatPointTemp);
                     }
                 }
             }
@@ -114,24 +106,16 @@ namespace Figure
                     if (item.Color == this.Color)
                     {
                         if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                        {
                             arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
-                        }
                         else
-                        {
                             arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                        }
                     }
                     else
                     {
                         if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                        {
                             arr = arr.Where(c => arr.IndexOf(c) <= arr.IndexOf(item.Coordinate)).ToList();
-                        }
                         else
-                        {
                             arr = arr.Where(c => arr.IndexOf(c) >= arr.IndexOf(item.Coordinate)).ToList();
-                        }
                     }
                 }
             }
@@ -150,8 +134,8 @@ namespace Figure
                 {
                     if (i - j == sub)
                     {
-                        CoordinatePoint CoordinatPointTemp = new CoordinatePoint(i, j);
-                        arr.Add(CoordinatPointTemp);
+                        var coordinatPointTemp = new CoordinatePoint(i, j);
+                        arr.Add(coordinatPointTemp);
                     }
                 }
             }
@@ -203,8 +187,8 @@ namespace Figure
             var model = othereFigures.Where(c => c != this).ToList();
             for (int i = 0; i <= 7; i++)
             {
-                CoordinatePoint CoordinatPointTemp = new CoordinatePoint(this.Coordinate.X, i);
-                arr.Add(CoordinatPointTemp);
+                var coordinatPointTemp = new CoordinatePoint(this.Coordinate.X, i);
+                arr.Add(coordinatPointTemp);
             }
             foreach (var item in model)
             {
@@ -216,6 +200,13 @@ namespace Figure
                             arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
                         else
                             arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
+                    }
+                    else
+                    {
+                        if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
+                            arr = arr.Where(c => arr.IndexOf(c) <= arr.IndexOf(item.Coordinate)).ToList();
+                        else
+                            arr = arr.Where(c => arr.IndexOf(c) >= arr.IndexOf(item.Coordinate)).ToList();
                     }
                 }
             }
@@ -241,6 +232,13 @@ namespace Figure
                             arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
                         else
                             arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
+                    }
+                    else
+                    {
+                        if (arr.IndexOf(this.Coordinate) <= arr.IndexOf(item.Coordinate))
+                            arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
+                        else
+                            arr = arr.Where(c => arr.IndexOf(c) >= arr.IndexOf(item.Coordinate)).ToList();
                     }
                 }
             }

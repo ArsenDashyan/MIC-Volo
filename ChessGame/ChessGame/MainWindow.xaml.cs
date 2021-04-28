@@ -36,6 +36,7 @@ namespace ChessGame
             standard.setPicture += SetFigurePicture;
             standard.removePicture += RemoveFigurePicture;
             standard.messageForMove += MessageMove;
+            standard.messageCheck += MessageMate;
             standard.messageForPawnChange += MessageForPawnChange;
             movesKnight.setPicture += SetFigurePicture;
             movesKnight.messageForMove += delegate { };
