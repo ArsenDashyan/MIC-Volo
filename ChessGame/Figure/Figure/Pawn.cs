@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Figure
 {
-    public class Pawn : BaseFigure, IVertical, IAvailableMoves, IDangerMoves
+    public class Pawn : BaseFigure, IVertical, IAvailableMoves
     {
         public Pawn(string name, string color, List<BaseFigure> othereFigures) : base(othereFigures)
         {
@@ -123,46 +123,6 @@ namespace Figure
             return result;
         }
 
-        #region Danger Moves
-        private List<CoordinatePoint> VerticalForDanger()
-        {
-            var arr = new List<CoordinatePoint>();
-            var model = othereFigures.Where(c => c != this).ToList();
-            if (this.Color == "Black")
-            {
-                if (this.Coordinate.Y + 1 >= 0)
-                {
-                    if (this.Coordinate.X + 1 <= 7)
-                    {
-                        arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y + 1));
-                    }
-                    if (this.Coordinate.X - 1 >= 0)
-                    {
-                        arr.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y + 1));
-                    }
-                }
-            }
-            else
-            {
-                if (this.Coordinate.Y - 1 >= 0)
-                {
-                    if (this.Coordinate.X + 1 <= 7)
-                    {
-                        arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y - 1));
-                    }
-                    if (this.Coordinate.X - 1 >= 0)
-                    {
-                        arr.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y - 1));
-                    }
-                }
-            }
-            return arr;
-        }
-        public List<CoordinatePoint> DangerMoves()
-        {
-            return this.VerticalForDanger();
-        }
-        #endregion
         #endregion
     }
 }

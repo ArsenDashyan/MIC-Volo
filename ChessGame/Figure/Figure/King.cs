@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Figure
 {
-    public class King : BaseFigure, ICrosswise, IDiagonal, IAvailableMoves, IDangerMoves
+    public class King : BaseFigure, ICrosswise, IDiagonal, IAvailableMoves
     {
         public King(string name, string color, List<BaseFigure> othereFigures) : base(othereFigures)
         {
@@ -151,10 +151,6 @@ namespace Figure
             result.AddRange(Crosswise());
             result.Remove(this.Coordinate);
             return result;
-        }
-        public List<CoordinatePoint> DangerMoves()
-        {
-            return this.AvailableMoves();
         }
         #endregion
     }

@@ -1,6 +1,8 @@
 ﻿using GameManager;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -19,6 +21,8 @@ namespace ChessGame
         private MovesKnight movesKnight = new MovesKnight();
         private Standard standard = new Standard();
         private List<string> models = new();
+        CancellationTokenSource cancellationTokenSource;
+        CancellationToken cancellationToken;
         public static int currentGameStatus;
         public string currentFigureColor;
         private string startCoordinate;
@@ -115,6 +119,33 @@ namespace ChessGame
             MessageHandle.Text = message;
         }
 
+        public async void MessageForProgress(object sender, (string, string) e)
+        {
+            cancellationTokenSource = new CancellationTokenSource();
+            cancellationToken = cancellationTokenSource.Token;
+            int completedPercentage = 0;
+            for (int i = 0; i < 100; i++)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                    break;
+                try
+                {
+                    await Task.Delay(1000, cancellationToken);
+                    completedPercentage = (i + 1);
+                }
+                catch (Exception)
+                {
+                    completedPercentage = i;
+                }
+                Progress.Value = completedPercentage;
+            }
+            string messageForProgress = cancellationToken.IsCancellationRequested ?
+                string.Format($"Process was cancelled at {completedPercentage}%") :
+                "Process completed normally";
+            ProgressTextBox.Text = messageForProgress;
+            Progress.Value = 0;
+        }
+
         #endregion
 
         #region King Game
@@ -153,6 +184,7 @@ namespace ChessGame
                     InputCoordinatsLetter_Selected.IsEnabled = true;
                     InputCoordinatsNumber_Selected.IsEnabled = true;
                     InstalB3.IsEnabled = true;
+                    manager.messageForProgress += MessageForProgress;
                     MessageBox.Show("Good Luck!!!");
                 }
             }
@@ -174,6 +206,7 @@ namespace ChessGame
         public void MessageMate(object sender, string message)
         {
             MessageHandle.Text = message;
+            cancellationTokenSource.Cancel();
         }
 
         /// <summary>
@@ -298,6 +331,7 @@ namespace ChessGame
             }
             MovesTextBox.Text = "";
             MessageHandle.Text = "";
+            ProgressTextBox.Text = "";
         }
 
         /// <summary>
@@ -363,6 +397,11 @@ namespace ChessGame
             InputCoordinatsLetter_Selected.IsEnabled = false;
             InputCoordinatsNumber_Selected.IsEnabled = false;
             InstalB3.IsEnabled = false;
+            cancellationTokenSource.Cancel();
+            Progress.Value = 0;
+            manager.setPicture += SetFigurePicture;
+            manager.removePicture += RemoveFigurePicture;
+            manager.messageForMove += MessageMove;
         }
 
         /// <summary>

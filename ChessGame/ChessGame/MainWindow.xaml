@@ -260,6 +260,8 @@
                         </Button.Effect>
                     </Button>
                 </Grid>
+                <ProgressBar Name="Progress" HorizontalAlignment="Left" Height="16" Margin="135,520,0,0" VerticalAlignment="Top" Width="141"/>
+                <TextBox x:Name="ProgressTextBox" HorizontalAlignment="Left" Margin="135,463,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.487,-0.315" Height="36"/>
 
             </Grid>
         </Grid>

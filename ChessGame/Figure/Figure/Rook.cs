@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Figure
 {
-    public class Rook : BaseFigure, ICrosswise, IAvailableMoves, IDangerMoves
+    public class Rook : BaseFigure, ICrosswise, IAvailableMoves
     {
         public Rook(string name, string color, List<BaseFigure> othereFigures) : base(othereFigures)
         {
@@ -14,12 +14,12 @@ namespace Figure
         #region Move
         public List<CoordinatePoint> Vertical()
         {
-            List<CoordinatePoint> arr = new List<CoordinatePoint>();
+            var arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
             for (int i = 0; i <= 7; i++)
             {
-                CoordinatePoint CoordinatPointTemp = new CoordinatePoint(this.Coordinate.X, i);
-                arr.Add(CoordinatPointTemp);
+                var coordinatPointTemp = new CoordinatePoint(this.Coordinate.X, i);
+                arr.Add(coordinatPointTemp);
             }
             foreach (var item in model)
             {
@@ -27,17 +27,21 @@ namespace Figure
                 {
                     if (item.Color == this.Color)
                     {
-                        if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                            arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
+                        if (this.Coordinate.Y < item.Coordinate.Y)
+                            arr = arr.Where(c => c.Y < item.Coordinate.Y).ToList();
                         else
-                            arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
+                            arr = arr.Where(c => c.Y > item.Coordinate.Y).ToList();
                     }
                     else
                     {
-                        if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                            arr = arr.Where(c => arr.IndexOf(c) <= arr.IndexOf(item.Coordinate)).ToList();
+                        if (item is King)
+                        {
+                            continue;
+                        }
+                        if (this.Coordinate.Y < item.Coordinate.Y)
+                            arr = arr.Where(c => c.Y <= item.Coordinate.Y).ToList();
                         else
-                            arr = arr.Where(c => arr.IndexOf(c) >= arr.IndexOf(item.Coordinate)).ToList();
+                            arr = arr.Where(c => c.Y >= item.Coordinate.Y).ToList();
                     }
                 }
             }
@@ -46,12 +50,12 @@ namespace Figure
         }
         public List<CoordinatePoint> Horizontal()
         {
-            List<CoordinatePoint> arr = new List<CoordinatePoint>();
+            var arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
             for (int i = 0; i <= 7; i++)
             {
-                CoordinatePoint CoordinatPointTemp = new CoordinatePoint(i, this.Coordinate.Y);
-                arr.Add(CoordinatPointTemp);
+                var coordinatPointTemp = new CoordinatePoint(i, this.Coordinate.Y);
+                arr.Add(coordinatPointTemp);
             }
             foreach (var item in model)
             {
@@ -59,17 +63,21 @@ namespace Figure
                 {
                     if (item.Color == this.Color)
                     {
-                        if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                            arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
+                        if (this.Coordinate.X < item.Coordinate.X)
+                            arr = arr.Where(c => c.X < item.Coordinate.X).ToList();
                         else
-                            arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
+                            arr = arr.Where(c => c.X > item.Coordinate.X).ToList();
                     }
                     else
                     {
-                        if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                            arr = arr.Where(c => arr.IndexOf(c) <= arr.IndexOf(item.Coordinate)).ToList();
+                        if (item is King)
+                        {
+                            continue;
+                        }
+                        if (this.Coordinate.X < item.Coordinate.X)
+                            arr = arr.Where(c => c.X <= item.Coordinate.X).ToList();
                         else
-                            arr = arr.Where(c => arr.IndexOf(c) >= arr.IndexOf(item.Coordinate)).ToList();
+                            arr = arr.Where(c => c.X >= item.Coordinate.X).ToList();
                     }
                 }
             }
@@ -88,67 +96,6 @@ namespace Figure
         {
             return this.Crosswise();
         }
-
-        #region Danger Moves
-        private List<CoordinatePoint> VerticalForDanger()
-        {
-            List<CoordinatePoint> arr = new List<CoordinatePoint>();
-            var model = othereFigures.Where(c => c != this).ToList();
-            for (int i = 0; i <= 7; i++)
-            {
-                CoordinatePoint CoordinatPointTemp = new CoordinatePoint(this.Coordinate.X, i);
-                arr.Add(CoordinatPointTemp);
-            }
-            foreach (var item in model)
-            {
-                if (arr.Contains(item.Coordinate))
-                {
-                    if (item.Color == this.Color)
-                    {
-                        if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                            arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
-                        else
-                            arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                    }
-                }
-            }
-            arr.Remove(this.Coordinate);
-            return arr;
-        }
-        private List<CoordinatePoint> HorizontalForDanger()
-        {
-            List<CoordinatePoint> arr = new List<CoordinatePoint>();
-            var model = othereFigures.Where(c => c != this).ToList();
-            for (int i = 0; i <= 7; i++)
-            {
-                CoordinatePoint CoordinatPointTemp = new CoordinatePoint(i, this.Coordinate.Y);
-                arr.Add(CoordinatPointTemp);
-            }
-            foreach (var item in model)
-            {
-                if (arr.Contains(item.Coordinate))
-                {
-                    if (item.Color == this.Color)
-                    {
-                        if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                            arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
-                        else
-                            arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                    }
-                }
-            }
-            arr.Remove(this.Coordinate);
-            return arr;
-        }
-        public List<CoordinatePoint> DangerMoves()
-        {
-            var vertivalList = VerticalForDanger();
-            vertivalList.AddRange(HorizontalForDanger());
-            return vertivalList;
-        }
-
-        #endregion
-
         #endregion
     }
 }

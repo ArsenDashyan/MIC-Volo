@@ -19,6 +19,7 @@ namespace GameManager
         private BaseFigure baseFigure;
         public event MessageForMate MateMessage;
         public event Message messageForMove;
+        public event Message messageForProgress;
         public event Picture setPicture;
         public event Picture removePicture;
         private int whiteKingCount = 0;
@@ -33,6 +34,7 @@ namespace GameManager
         private int blackRookCount = 0;
         private int blackPawnCount = 0;
         private int blackKnightCount = 0;
+        private int countForProgressStart = 0;
         #endregion
 
         public Manager(string currentFigureColor)
@@ -71,6 +73,14 @@ namespace GameManager
         {
             messageForMove(this, coordinate);
         }
+        private void MessageForProgress()
+        {
+            if (countForProgressStart == 0)
+            {
+                messageForProgress(this, ("", ""));
+                countForProgressStart++;
+            }
+        }
 
         #endregion
 
@@ -79,6 +89,7 @@ namespace GameManager
         /// </summary>
         public void Logic()
         {
+            MessageForProgress();
             if (!UnderAttack())
             {
                 if (!currentListForBabyGame.BabyGame())
@@ -604,8 +615,8 @@ namespace GameManager
             var result = new List<CoordinatePoint>();
             foreach (var item in modelNew)
             {
-                var temp = (IDangerMoves)item;
-                var array = temp.DangerMoves();
+                var temp = (IAvailableMoves)item;
+                var array = temp.AvailableMoves();
                 result.AddRange(array);
             }
             return result;
@@ -668,7 +679,7 @@ namespace GameManager
         public void IsValidForPleacement(string name)
         {
             string[] info = name.Split('.');
-            CoordinatePoint coordinatePoint = new CoordinatePoint(int.Parse(info[2]), int.Parse(info[3]));
+            var coordinatePoint = new CoordinatePoint(int.Parse(info[2]), int.Parse(info[3]));
             if (GetFigure(info[0], info[1], out baseFigure))
             {
                 baseFigure.setPicture += SetFigurePicture;
@@ -911,6 +922,7 @@ namespace GameManager
                 blackRookCount = 0;
                 blackPawnCount = 0;
                 blackKnightCount = 0;
+                countForProgressStart = 0;
                 models.Clear();
             }
             else
@@ -918,7 +930,6 @@ namespace GameManager
                 names.Add("0");
             }
             return names;
-
         }
     }
 }
