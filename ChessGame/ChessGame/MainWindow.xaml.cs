@@ -40,7 +40,7 @@ namespace ChessGame
             standard.setPicture += SetFigurePicture;
             standard.removePicture += RemoveFigurePicture;
             standard.messageForMove += MessageMove;
-            standard.messageCheck += MessageMate;
+            standard.messageCheck += MessageCheck;
             standard.messageForPawnChange += MessageForPawnChange;
             movesKnight.setPicture += SetFigurePicture;
             movesKnight.messageForMove += delegate { };
@@ -207,6 +207,10 @@ namespace ChessGame
         {
             MessageHandle.Text = message;
             cancellationTokenSource.Cancel();
+        }
+        public void MessageCheck(object sender, string message)
+        {
+            MessageHandle.Text = message;
         }
 
         /// <summary>
@@ -496,6 +500,8 @@ namespace ChessGame
         {
             PleacementB1.Visibility = Visibility.Hidden;
             SelectFigur.Visibility = Visibility.Hidden;
+            ProgressTextBox.Visibility = Visibility.Hidden;
+            Progress.Visibility = Visibility.Hidden;
             InputCoordinatsLetter.Visibility = Visibility.Hidden;
             InputCoordinatsNumber.Visibility = Visibility.Hidden;
             CheckWhite.Visibility = Visibility.Hidden;
@@ -518,6 +524,8 @@ namespace ChessGame
         public void ShowKingGamePanel()
         {
             ChooseFigureForPawn.Visibility = Visibility.Hidden;
+            ProgressTextBox.Visibility = Visibility.Visible;
+            Progress.Visibility = Visibility.Visible;
             ChooseButton.Visibility = Visibility.Hidden;
             PleacementB1.Visibility = Visibility.Visible;
             SelectFigur.Visibility = Visibility.Visible;

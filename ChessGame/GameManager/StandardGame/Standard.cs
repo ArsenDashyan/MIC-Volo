@@ -205,81 +205,96 @@ namespace GameManager
             var currentCoordinate = new CoordinatePoint(int.Parse(strCurrent[0]), int.Parse(strCurrent[1]));
             string[] strTarget = target.Split('.');
             var targetCoordinate = new CoordinatePoint(int.Parse(strTarget[0]), int.Parse(strTarget[1]));
-            foreach (var item in models)
+            baseFigure = CheckedCurrentFigure(currentCoordinate);
+            if (baseFigure != null)
             {
-                if (item.Coordinate == currentCoordinate)
+                if (IsCheckedThisKing(baseFigure, targetCoordinate))
                 {
-                    baseFigure = item;
-                    break;
-                }
-            }
-            var available = (IAvailableMoves)baseFigure;
-            if (isChecked)
-            {
-                if (baseFigure is King king)
-                {
-                    return KingFigureSet(king, targetCoordinate);
-                }
-                else if (available.AvailableMoves().Contains(targetCoordinate))
-                {
-                    if (available is Pawn pawn)
+                    var available = (IAvailableMoves)baseFigure;
+                    if (isChecked)
                     {
-                        PawnFigureSet(pawn, targetCoordinate);
-                    }
-                    else
-                    {
-                        baseFigure.SetFigurePosition(targetCoordinate);
-                        IsCheckedKing(baseFigure);
-                    }
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                if (GetAntiCheckFigure().Contains(baseFigure))
-                {
-                    if (baseFigure is King king)
-                    {
-                        return KingFigureSet(king, targetCoordinate);
-                    }
-                    else
-                    {
-                        var targetMoves = GetTargetCoordinateForAntiCheck();
-                        foreach (var item in targetMoves)
+                        if (baseFigure is King king)
                         {
-                            if (targetCoordinate == item)
+                            return KingFigureSet(king, targetCoordinate);
+                        }
+                        else if (available.AvailableMoves().Contains(targetCoordinate))
+                        {
+                            if (available is Pawn pawn)
                             {
-                                if (available.AvailableMoves().Contains(targetCoordinate))
+                                PawnFigureSet(pawn, targetCoordinate);
+                            }
+                            else
+                            {
+                                baseFigure.SetFigurePosition(targetCoordinate);
+                                IsCheckedKing(baseFigure);
+                            }
+                            return true;
+                        }
+                        return false;
+                    }
+                    else
+                    {
+                        if (GetAntiCheckFigure().Contains(baseFigure))
+                        {
+                            if (baseFigure is King king)
+                            {
+                                return KingFigureSet(king, targetCoordinate);
+                            }
+                            else
+                            {
+                                var targetMoves = GetTargetCoordinateForAntiCheck();
+                                foreach (var item in targetMoves)
                                 {
-                                    if (available is Pawn pawn)
+                                    if (targetCoordinate == item)
                                     {
-                                        PawnFigureSet(pawn, targetCoordinate);
+                                        if (available.AvailableMoves().Contains(targetCoordinate))
+                                        {
+                                            if (available is Pawn pawn)
+                                            {
+                                                PawnFigureSet(pawn, targetCoordinate);
+                                            }
+                                            else
+                                            {
+                                                baseFigure.SetFigurePosition(targetCoordinate);
+                                                IsCheckedKing(baseFigure);
+                                            }
+                                            return true;
+                                        }
+                                        return false;
                                     }
-                                    else
-                                    {
-                                        baseFigure.SetFigurePosition(targetCoordinate);
-                                        IsCheckedKing(baseFigure);
-                                    }
-                                    return true;
-                                }
-                                else
-                                {
-                                    return false;
                                 }
                             }
+
                         }
+                        return false;
                     }
-                    
                 }
                 return false;
             }
-
+            return false;
         }
 
+        /// <summary>
+        /// Check a current figure with a coordinate
+        /// </summary>
+        /// <param name="coordinatePoint">Current coordinate</param>
+        /// <returns>Return a current figure</returns>
+        private BaseFigure CheckedCurrentFigure(CoordinatePoint coordinatePoint)
+        {
+            foreach (var item in models)
+            {
+                if (item.Coordinate == coordinatePoint)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Check a figure for anti check game
+        /// </summary>
+        /// <returns>Return target figurs list</returns>
         private List<BaseFigure> GetAntiCheckFigure()
         {
             var modelNew = models.Where(c => c.Color != CheckedFigure.Color).ToList();
@@ -312,6 +327,10 @@ namespace GameManager
             return figureList;
         }
 
+        /// <summary>
+        /// To count a target coordinates for anti check game
+        /// </summary>
+        /// <returns>Return target coordinates list</returns>
         private List<CoordinatePoint> GetTargetCoordinateForAntiCheck()
         {
             var targetMoves = new List<CoordinatePoint>();
@@ -392,54 +411,16 @@ namespace GameManager
                     }
                 }
             }
+            else if (CheckedFigure is Knight knight)
+            {
+                targetMoves.AddRange(GetCurrentKingMoves((King)CurentKing));
+                targetMoves.Add(knight.Coordinate);
+            }
             return targetMoves;
         }
 
         /// <summary>
-        /// Check current king coordinate for move and set
-        /// </summary>
-        /// <param name="king">Current king</param>
-        /// <param name="targetCoordinate">Target coordinate for current king</param>
-        /// <returns>Return true if king is moved</returns>
-        private bool KingFigureSet(King king, CoordinatePoint targetCoordinate)
-        {
-            if (GetCurrentKingMoves(king).Contains(targetCoordinate))
-            {
-                if (king.Color == "White")
-                {
-                    whiteKingMovesCount++;
-                }
-                else
-                {
-                    blackKingMovesCount++;
-                }
-                baseFigure.SetFigurePosition(targetCoordinate);
-                IsCheckedKing(baseFigure);
-                return true;
-            }
-            else if (CheckCastling(king, out CoordinatePoint coordinatePoint))
-            {
-                if (king.Color == "White")
-                {
-                    whiteKingMovesCount++;
-                }
-                else
-                {
-                    blackKingMovesCount++;
-                }
-                SetRookCastling(coordinatePoint);
-                baseFigure.SetFigurePosition(targetCoordinate);
-                IsCheckedKing(baseFigure);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Check pawn have changed a new figure, if no changed pawn swt a target coordinate
+        /// Check pawn have changed a new figure, if no changed pawn set a target coordinate
         /// </summary>
         /// <param name="pawn">Current pawn</param>
         /// <param name="targetCoordinate">Target coordinate</param>
@@ -534,6 +515,51 @@ namespace GameManager
             return models;
         }
 
+        #region King perfomance
+
+        /// <summary>
+        /// Check current king coordinate for move and set
+        /// </summary>
+        /// <param name="king">Current king</param>
+        /// <param name="targetCoordinate">Target coordinate for current king</param>
+        /// <returns>Return true if king is moved</returns>
+        private bool KingFigureSet(King king, CoordinatePoint targetCoordinate)
+        {
+            if (GetCurrentKingMoves(king).Contains(targetCoordinate))
+            {
+                if (king.Color == "White")
+                {
+                    whiteKingMovesCount++;
+                }
+                else
+                {
+                    blackKingMovesCount++;
+                }
+                baseFigure.SetFigurePosition(targetCoordinate);
+                IsCheckedKing(baseFigure);
+                return true;
+            }
+            else if (CheckCastling(king, out CoordinatePoint coordinatePoint))
+            {
+                if (king.Color == "White")
+                {
+                    whiteKingMovesCount++;
+                }
+                else
+                {
+                    blackKingMovesCount++;
+                }
+                SetRookCastling(coordinatePoint);
+                baseFigure.SetFigurePosition(targetCoordinate);
+                IsCheckedKing(baseFigure);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// Check the available moves for current king 
         /// </summary>
@@ -571,7 +597,7 @@ namespace GameManager
                 isChecked = true;
                 messageCheck(this, " ");
             }
-                
+
         }
 
         /// <summary>
@@ -591,6 +617,32 @@ namespace GameManager
             }
             return result;
         }
+
+        private bool IsCheckedThisKing(BaseFigure baseFigure, CoordinatePoint coordinatePoint)
+        {
+            var thisKing = (BaseFigure)models.Where(c => c.Color == baseFigure.Color && c is King).Single();
+            var temp = baseFigure.Coordinate;
+            baseFigure.Coordinate = coordinatePoint;
+            if (!DangerPosition(thisKing).Contains(thisKing.Coordinate))
+            {
+                baseFigure.Coordinate = temp;
+                return true;
+            }
+            else if(coordinatePoint == CheckedFigure.Coordinate)
+            {
+                baseFigure.Coordinate = temp;
+                return true;
+            }
+            else
+            {
+                baseFigure.Coordinate = temp;
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region Castling
 
         /// <summary>
         /// Checked Rook is valid position for castling
@@ -730,6 +782,10 @@ namespace GameManager
             }
         }
 
+        #endregion
+
+        #region Check Pawn
+
         /// <summary>
         /// Check the pawn figure for change new figure
         /// </summary>
@@ -797,6 +853,8 @@ namespace GameManager
                     return null;
             }
         }
+
+        #endregion
 
     }
 }
