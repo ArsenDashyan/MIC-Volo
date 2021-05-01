@@ -5,7 +5,7 @@ namespace Figure
 {
     public class Rook : BaseFigure, ICrosswise, IAvailableMoves
     {
-        public Rook(string name, string color, List<BaseFigure> othereFigures) : base(othereFigures)
+        public Rook(string name, FColor color, List<BaseFigure> othereFigures) : base(othereFigures)
         {
             Name = name;
             Color = color;

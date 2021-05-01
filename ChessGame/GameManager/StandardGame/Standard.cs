@@ -13,12 +13,11 @@ namespace GameManager
         private BaseFigure CheckedFigure;
         public event Message messageForMove;
         public event MessageForMate messageForPawnChange;
+        public event MessageForMate MateMessage;
         public event MessageForMate messageCheck;
         public event Picture setPicture;
         public event Picture removePicture;
         private static CoordinatePoint coordinate;
-        private int whiteKingMovesCount = 0;
-        private int blackKingMovesCount = 0;
         private static int pawnCount = 2;
         private bool isChecked = true;
         #endregion
@@ -243,6 +242,10 @@ namespace GameManager
                             else
                             {
                                 var targetMoves = GetTargetCoordinateForAntiCheck();
+                                if (targetMoves.Count == 0)
+                                {
+                                    MateMessage(this, "Mate");
+                                }
                                 foreach (var item in targetMoves)
                                 {
                                     if (targetCoordinate == item)
@@ -264,7 +267,6 @@ namespace GameManager
                                     }
                                 }
                             }
-
                         }
                         return false;
                     }
@@ -416,6 +418,7 @@ namespace GameManager
                 targetMoves.AddRange(GetCurrentKingMoves((King)CurentKing));
                 targetMoves.Add(knight.Coordinate);
             }
+            
             return targetMoves;
         }
 
@@ -446,70 +449,70 @@ namespace GameManager
         /// <returns>Return all figures</returns>
         private List<BaseFigure> GetAllFigures()
         {
-            Queen queenWhite = new("Queen.White.1", "White", models);
+            Queen queenWhite = new("Queen.White.1", FColor.White, models);
             models.Add(queenWhite);
-            King kingWhite = new("King.White.1", "White", models);
+            King kingWhite = new("King.White.1", FColor.White, models);
             models.Add(kingWhite);
-            Knight knightWhite1 = new("Knight.White.1", "White", models);
+            Knight knightWhite1 = new("Knight.White.1", FColor.White, models);
             models.Add(knightWhite1);
-            Knight knightWhite2 = new("Knight.White.2", "White", models);
+            Knight knightWhite2 = new("Knight.White.2", FColor.White, models);
             models.Add(knightWhite2);
-            Bishop bishopWhite1 = new("Bishop.White.1", "White", models);
+            Bishop bishopWhite1 = new("Bishop.White.1", FColor.White, models);
             models.Add(bishopWhite1);
-            Bishop bishopWhite2 = new("Bishop.White.2", "White", models);
+            Bishop bishopWhite2 = new("Bishop.White.2", FColor.White, models);
             models.Add(bishopWhite2);
-            Rook rookWhite1 = new("Rook.White.1", "White", models);
+            Rook rookWhite1 = new("Rook.White.1", FColor.White, models);
             models.Add(rookWhite1);
-            Rook rookWhite2 = new("Rook.White.2", "White", models);
+            Rook rookWhite2 = new("Rook.White.2", FColor.White, models);
             models.Add(rookWhite2);
-            Pawn pawnWhite1 = new("Pawn.White.1", "White", models);
+            Pawn pawnWhite1 = new("Pawn.White.1", FColor.White, models);
             models.Add(pawnWhite1);
-            Pawn pawnWhite2 = new("Pawn.White.2", "White", models);
+            Pawn pawnWhite2 = new("Pawn.White.2", FColor.White, models);
             models.Add(pawnWhite2);
-            Pawn pawnWhite3 = new("Pawn.White.3", "White", models);
+            Pawn pawnWhite3 = new("Pawn.White.3", FColor.White, models);
             models.Add(pawnWhite3);
-            Pawn pawnWhite4 = new("Pawn.White.4", "White", models);
+            Pawn pawnWhite4 = new("Pawn.White.4", FColor.White, models);
             models.Add(pawnWhite4);
-            Pawn pawnWhite5 = new("Pawn.White.5", "White", models);
+            Pawn pawnWhite5 = new("Pawn.White.5", FColor.White, models);
             models.Add(pawnWhite5);
-            Pawn pawnWhite6 = new("Pawn.White.6", "White", models);
+            Pawn pawnWhite6 = new("Pawn.White.6", FColor.White, models);
             models.Add(pawnWhite6);
-            Pawn pawnWhite7 = new("Pawn.White.7", "White", models);
+            Pawn pawnWhite7 = new("Pawn.White.7", FColor.White, models);
             models.Add(pawnWhite7);
-            Pawn pawnWhite8 = new("Pawn.White.8", "White", models);
+            Pawn pawnWhite8 = new("Pawn.White.8", FColor.White, models);
             models.Add(pawnWhite8);
 
-            Queen queenBlack = new("Queen.Black.1", "Black", models);
+            Queen queenBlack = new("Queen.Black.1", FColor.Black, models);
             models.Add(queenBlack);
-            King kingBlack = new("King.Black.1", "Black", models);
+            King kingBlack = new("King.Black.1", FColor.Black, models);
             models.Add(kingBlack);
-            Knight knightBlack1 = new("Knight.Black.1", "Black", models);
+            Knight knightBlack1 = new("Knight.Black.1", FColor.Black, models);
             models.Add(knightBlack1);
-            Knight knightBlack2 = new("Knight.Black.2", "Black", models);
+            Knight knightBlack2 = new("Knight.Black.2", FColor.Black, models);
             models.Add(knightBlack2);
-            Bishop bishopBlack1 = new("Bishop.Black.1", "Black", models);
+            Bishop bishopBlack1 = new("Bishop.Black.1", FColor.Black, models);
             models.Add(bishopBlack1);
-            Bishop bishopBlack2 = new("Bishop.Black.2", "Black", models);
+            Bishop bishopBlack2 = new("Bishop.Black.2", FColor.Black, models);
             models.Add(bishopBlack2);
-            Rook rookBlack1 = new("Rook.Black.1", "Black", models);
+            Rook rookBlack1 = new("Rook.Black.1", FColor.Black, models);
             models.Add(rookBlack1);
-            Rook rookBlack2 = new("Rook.Black.2", "Black", models);
+            Rook rookBlack2 = new("Rook.Black.2", FColor.Black, models);
             models.Add(rookBlack2);
-            Pawn pawnBlack1 = new("Pawn.Black.1", "Black", models);
+            Pawn pawnBlack1 = new("Pawn.Black.1", FColor.Black, models);
             models.Add(pawnBlack1);
-            Pawn pawnBlack2 = new("Pawn.Black.2", "Black", models);
+            Pawn pawnBlack2 = new("Pawn.Black.2", FColor.Black, models);
             models.Add(pawnBlack2);
-            Pawn pawnBlack3 = new("Pawn.Black.3", "Black", models);
+            Pawn pawnBlack3 = new("Pawn.Black.3", FColor.Black, models);
             models.Add(pawnBlack3);
-            Pawn pawnBlack4 = new("Pawn.Black.4", "Black", models);
+            Pawn pawnBlack4 = new("Pawn.Black.4", FColor.Black, models);
             models.Add(pawnBlack4);
-            Pawn pawnBlack5 = new("Pawn.Black.5", "Black", models);
+            Pawn pawnBlack5 = new("Pawn.Black.5", FColor.Black, models);
             models.Add(pawnBlack5);
-            Pawn pawnBlack6 = new("Pawn.Black.6", "Black", models);
+            Pawn pawnBlack6 = new("Pawn.Black.6", FColor.Black, models);
             models.Add(pawnBlack6);
-            Pawn pawnBlack7 = new("Pawn.Black.7", "Black", models);
+            Pawn pawnBlack7 = new("Pawn.Black.7", FColor.Black, models);
             models.Add(pawnBlack7);
-            Pawn pawnBlack8 = new("Pawn.Black.8", "Black", models);
+            Pawn pawnBlack8 = new("Pawn.Black.8", FColor.Black, models);
             models.Add(pawnBlack8);
 
             return models;
@@ -527,37 +530,18 @@ namespace GameManager
         {
             if (GetCurrentKingMoves(king).Contains(targetCoordinate))
             {
-                if (king.Color == "White")
-                {
-                    whiteKingMovesCount++;
-                }
-                else
-                {
-                    blackKingMovesCount++;
-                }
                 baseFigure.SetFigurePosition(targetCoordinate);
                 IsCheckedKing(baseFigure);
                 return true;
             }
             else if (CheckCastling(king, out CoordinatePoint coordinatePoint))
             {
-                if (king.Color == "White")
-                {
-                    whiteKingMovesCount++;
-                }
-                else
-                {
-                    blackKingMovesCount++;
-                }
                 SetRookCastling(coordinatePoint);
                 baseFigure.SetFigurePosition(targetCoordinate);
                 IsCheckedKing(baseFigure);
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         /// <summary>
@@ -628,7 +612,7 @@ namespace GameManager
                 baseFigure.Coordinate = temp;
                 return true;
             }
-            else if(coordinatePoint == CheckedFigure.Coordinate)
+            else if (coordinatePoint == CheckedFigure.Coordinate)
             {
                 baseFigure.Coordinate = temp;
                 return true;
@@ -652,7 +636,7 @@ namespace GameManager
         /// <returns>Return true if rook position is valid</returns>
         private bool CheckRook(King king, out CoordinatePoint coordinatePoint)
         {
-            var modelNew = models.Where(f => f.Color == king.Color && f is Rook).ToList();
+            var modelNew = models.Where(f => f.Color == king.Color && f is Rook && !f.isMoved).ToList();
             foreach (var item in modelNew)
             {
                 if (CheckEpmtyCells(king, (Rook)item, out CoordinatePoint coordinte))
@@ -722,41 +706,20 @@ namespace GameManager
         /// <returns>Return true, if castling is valid</returns>
         private bool CheckCastling(King king, out CoordinatePoint coordinatePoint)
         {
-            if (king.Color == "White")
+            if (king.isMoved)
             {
-                if (whiteKingMovesCount > 1)
-                {
-                    coordinatePoint = null;
-                    return false;
-                }
-                else
-                {
-                    if (CheckRook(king, out CoordinatePoint coordinate))
-                    {
-                        coordinatePoint = coordinate;
-                        return true;
-                    }
-                    coordinatePoint = null;
-                    return false;
-                }
+                coordinatePoint = null;
+                return false;
             }
             else
             {
-                if (blackKingMovesCount > 1)
+                if (CheckRook(king, out CoordinatePoint coordinate))
                 {
-                    coordinatePoint = null;
-                    return false;
+                    coordinatePoint = coordinate;
+                    return true;
                 }
-                else
-                {
-                    if (CheckRook(king, out CoordinatePoint coordinate))
-                    {
-                        coordinatePoint = coordinate;
-                        return true;
-                    }
-                    coordinatePoint = null;
-                    return false;
-                }
+                coordinatePoint = null;
+                return false;
             }
         }
 
@@ -794,19 +757,15 @@ namespace GameManager
         /// <returns></returns>
         private bool CheckPawnChange(CoordinatePoint coordinatePoint, Pawn pawn)
         {
-            if (pawn.Color == "White")
+            if (pawn.Color == FColor.White)
             {
                 if (coordinatePoint.Y == 0)
-                {
                     return true;
-                }
             }
             else
             {
                 if (coordinatePoint.Y == 7)
-                {
                     return true;
-                }
             }
             return false;
         }
@@ -837,18 +796,27 @@ namespace GameManager
         /// <returns>Return new Figure</returns>
         private BaseFigure GetFigure(string figure, string color)
         {
+            var fColor = FColor.White;
+            if (color == "White")
+            {
+                fColor = FColor.White;
+            }
+            else
+            {
+                fColor = FColor.Black;
+            }
             switch (figure)
             {
                 case "Queen":
-                    return new Queen(figure + "." + color + '.' + pawnCount, color, models);
+                    return new Queen(figure + "." + color + '.' + pawnCount, fColor, models);
                 case "King":
-                    return new King(figure + "." + color + '.' + pawnCount, color, models);
+                    return new King(figure + "." + color + '.' + pawnCount, fColor, models);
                 case "Rook":
-                    return new Rook(figure + "." + color + "." + pawnCount, color, models);
+                    return new Rook(figure + "." + color + "." + pawnCount, fColor, models);
                 case "Bishop":
-                    return new Bishop(figure + "." + color + "." + pawnCount, color, models);
+                    return new Bishop(figure + "." + color + "." + pawnCount, fColor, models);
                 case "Knight":
-                    return new Knight(figure + "." + color + "." + pawnCount, color, models);
+                    return new Knight(figure + "." + color + "." + pawnCount, fColor, models);
                 default:
                     return null;
             }

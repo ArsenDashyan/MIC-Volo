@@ -5,7 +5,7 @@ namespace Figure
 {
     public class Pawn : BaseFigure, IVertical, IAvailableMoves
     {
-        public Pawn(string name, string color, List<BaseFigure> othereFigures) : base(othereFigures)
+        public Pawn(string name, FColor color, List<BaseFigure> othereFigures) : base(othereFigures)
         {
             Name = name;
             Color = color;
@@ -16,7 +16,7 @@ namespace Figure
         {
             List<CoordinatePoint> arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
-            if (this.Color == "White")
+            if (this.Color == FColor.White)
             {
                 if (this.Coordinate.Y == 6)
                 {
@@ -40,7 +40,7 @@ namespace Figure
                             arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
                     }
                 }
-                foreach (var item in model.Where(c => c.Color == "Black"))
+                foreach (var item in model.Where(c => c.Color == FColor.Black))
                 {
                     if (this.Coordinate.Y - 1 >= 0)
                     {
@@ -85,7 +85,7 @@ namespace Figure
                             arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
                     }
                 }
-                foreach (var item in model.Where(c => c.Color == "White"))
+                foreach (var item in model.Where(c => c.Color == FColor.White))
                 {
                     if (this.Coordinate.Y + 1 >= 0)
                     {

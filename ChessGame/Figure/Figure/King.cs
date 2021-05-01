@@ -5,7 +5,7 @@ namespace Figure
 {
     public class King : BaseFigure, ICrosswise, IDiagonal, IAvailableMoves
     {
-        public King(string name, string color, List<BaseFigure> othereFigures) : base(othereFigures)
+        public King(string name, FColor color, List<BaseFigure> othereFigures) : base(othereFigures)
         {
             Name = name;
             Color = color;

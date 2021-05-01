@@ -15,7 +15,7 @@ namespace GameManager
         private List<CoordinatePoint> currentListForBabyGame = new();
         private BaseFigure CurentKing =>
                (BaseFigure)models.Where(c => c.Color == currentFigureColor && c is King).Single();
-        private readonly string currentFigureColor;
+        private readonly FColor currentFigureColor;
         private BaseFigure baseFigure;
         public event MessageForMate MateMessage;
         public event Message messageForMove;
@@ -39,7 +39,7 @@ namespace GameManager
 
         public Manager(string currentFigureColor)
         {
-            this.currentFigureColor = currentFigureColor;
+            this.currentFigureColor = currentFigureColor == "White" ? FColor.White : FColor.Black;
         }
 
         #region Events Method
@@ -727,7 +727,7 @@ namespace GameManager
                         if (whiteQueenCount == 0)
                         {
                             whiteQueenCount++;
-                            baseFigure = new Queen(figure + "." + color + '.' + whiteQueenCount, color, models);
+                            baseFigure = new Queen(figure + "." + color + '.' + whiteQueenCount, FColor.White, models);
                             return true;
                         }
                         else
@@ -739,7 +739,7 @@ namespace GameManager
                         if (whiteKingCount == 0)
                         {
                             whiteKingCount++;
-                            baseFigure = new King(figure + "." + color + '.' + whiteKingCount, color, models);
+                            baseFigure = new King(figure + "." + color + '.' + whiteKingCount, FColor.White, models);
                             return true;
                         }
                         else
@@ -751,7 +751,7 @@ namespace GameManager
                         if (whiteRookCount <= 1)
                         {
                             whiteRookCount++;
-                            baseFigure = new Rook(figure + "." + color + "." + whiteRookCount, color, models);
+                            baseFigure = new Rook(figure + "." + color + "." + whiteRookCount, FColor.White, models);
                             return true;
                         }
                         else
@@ -763,7 +763,7 @@ namespace GameManager
                         if (whiteBishopCount <= 1)
                         {
                             whiteBishopCount++;
-                            baseFigure = new Bishop(figure + "." + color + "." + whiteBishopCount, color, models);
+                            baseFigure = new Bishop(figure + "." + color + "." + whiteBishopCount, FColor.White, models);
                             return true;
                         }
                         else
@@ -775,7 +775,7 @@ namespace GameManager
                         if (whiteKnightCount <= 1)
                         {
                             whiteKnightCount++;
-                            baseFigure = new Knight(figure + "." + color + "." + whiteKnightCount, color, models);
+                            baseFigure = new Knight(figure + "." + color + "." + whiteKnightCount, FColor.White, models);
                             return true;
                         }
                         else
@@ -787,7 +787,7 @@ namespace GameManager
                         if (whitePawnCount <= 7)
                         {
                             whitePawnCount++;
-                            baseFigure = new Pawn(figure + "." + color + "." + whitePawnCount, color, models);
+                            baseFigure = new Pawn(figure + "." + color + "." + whitePawnCount, FColor.White, models);
                             return true;
                         }
                         else
@@ -808,7 +808,7 @@ namespace GameManager
                         if (blackQueenCount == 0)
                         {
                             blackQueenCount++;
-                            baseFigure = new Queen(figure + "." + color + '.' + blackQueenCount, color, models);
+                            baseFigure = new Queen(figure + "." + color + '.' + blackQueenCount, FColor.Black, models);
                             return true;
                         }
                         else
@@ -820,7 +820,7 @@ namespace GameManager
                         if (blackKingCount == 0)
                         {
                             blackKingCount++;
-                            baseFigure = new King(figure + "." + color + '.' + blackKingCount, color, models);
+                            baseFigure = new King(figure + "." + color + '.' + blackKingCount, FColor.Black, models);
                             return true;
                         }
                         else
@@ -832,7 +832,7 @@ namespace GameManager
                         if (blackRookCount <= 1)
                         {
                             blackRookCount++;
-                            baseFigure = new Rook(figure + "." + color + "." + blackRookCount, color, models);
+                            baseFigure = new Rook(figure + "." + color + "." + blackRookCount, FColor.Black, models);
                             return true;
                         }
                         else
@@ -844,7 +844,7 @@ namespace GameManager
                         if (blackBishopCount <= 1)
                         {
                             blackBishopCount++;
-                            baseFigure = new Bishop(figure + "." + color + "." + blackBishopCount, color, models);
+                            baseFigure = new Bishop(figure + "." + color + "." + blackBishopCount, FColor.Black, models);
                             return true;
                         }
                         else
@@ -856,7 +856,7 @@ namespace GameManager
                         if (blackKnightCount <= 1)
                         {
                             blackKnightCount++;
-                            baseFigure = new Knight(figure + "." + color + "." + blackKnightCount, color, models);
+                            baseFigure = new Knight(figure + "." + color + "." + blackKnightCount, FColor.Black, models);
                             return true;
                         }
                         else
@@ -868,7 +868,7 @@ namespace GameManager
                         if (blackPawnCount <= 7)
                         {
                             blackPawnCount++;
-                            baseFigure = new Pawn(figure + "." + color + "." + blackPawnCount, color, models);
+                            baseFigure = new Pawn(figure + "." + color + "." + blackPawnCount, FColor.Black, models);
                             return true;
                         }
                         else

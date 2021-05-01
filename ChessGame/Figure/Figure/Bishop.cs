@@ -5,7 +5,7 @@ namespace Figure
 {
     public class Bishop : BaseFigure, IDiagonal, IAvailableMoves
     {
-        public Bishop(string name, string color, List<BaseFigure> othereFigures) : base(othereFigures)
+        public Bishop(string name, FColor color, List<BaseFigure> othereFigures) : base(othereFigures)
         {
             Name = name;
             Color = color;

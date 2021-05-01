@@ -5,7 +5,7 @@ namespace Figure
 {
     public class Queen : BaseFigure, IDiagonal, ICrosswise, IAvailableMoves
     {
-        public Queen(string name, string color, List<BaseFigure> othereFigures) : base(othereFigures)
+        public Queen(string name, FColor color, List<BaseFigure> othereFigures) : base(othereFigures)
         {
             Name = name;
             Color = color;

@@ -5,14 +5,20 @@ namespace Figure
 {
     public delegate void Picture(object sender, string e);
     public delegate void Message(object sender, (string, string) e);
-
+    public enum FColor
+    {
+        White,
+        Black
+    }
     public class BaseFigure : ISetPosition
     {
         protected readonly List<BaseFigure> othereFigures;
 
         #region Property and Feld
         public string Name { get; set; }
-        public string Color { get; set; }
+        public FColor Color { get; set; }
+
+        public bool isMoved = false;
         public CoordinatePoint Coordinate { get; set; }
         public event Picture setPicture;
         public event Picture removePicture;
@@ -50,6 +56,7 @@ namespace Figure
         {
             if (this.Coordinate != null)
             {
+                this.isMoved = true;
                 string currenrCoordinate = this.Coordinate.ToString() + '.' + this.Name;
                 removePicture(this, currenrCoordinate);
             }

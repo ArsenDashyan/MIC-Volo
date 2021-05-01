@@ -118,6 +118,8 @@
         </Grid>
         <Grid x:Name="FigurPanel" Background="Black" Grid.Column="2" Margin="30,2,2,2" Grid.RowSpan="2">
             <Grid Background="LightSlateGray" Margin="2,2,2,2">
+                <ProgressBar Name="Progress" HorizontalAlignment="Left" Height="16" Margin="135,520,0,0" VerticalAlignment="Top" Width="141"/>
+                <TextBox x:Name="ProgressTextBox" HorizontalAlignment="Left" Margin="135,463,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.487,-0.315" Height="36"/>
                 <TextBox x:Name="InputCoordinatsLetter" HorizontalAlignment="Left" Margin="10,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
                     <TextBox.Effect>
                         <DropShadowEffect/>
@@ -135,11 +137,12 @@
                         <DropShadowEffect/>
                     </Button.Effect>
                 </Button>
-                <Button x:Name="PlayB2" Content="Play➤" Background="LightGray" HorizontalAlignment="Left" Margin="240,130,0,0" VerticalAlignment="Top" Height="30" Width="90" FontSize="16" Click="PlayB2_Click">
+                <Button x:Name="PlayB2" Background="LightGray" HorizontalAlignment="Left" Margin="240,130,0,0" VerticalAlignment="Top" Height="30" Width="90" FontSize="16" Click="PlayB2_Click">
                     <Button.Effect>
                         <DropShadowEffect/>
                     </Button.Effect>
                 </Button>
+                <Button Name="PlayForStandard" Content="Play" Background="LightGray" HorizontalAlignment="Left" Margin="240,130,0,0" VerticalAlignment="Top" Height="30" Width="90" FontSize="16" Click="PlayForStandard_Click"/>
                 <ComboBox x:Name="SelectFigur" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="320" Height="30" FontSize="16" FontWeight="Bold" FontStyle="Normal">
                     <ComboBox.Effect>
                         <DropShadowEffect/>
@@ -260,8 +263,7 @@
                         </Button.Effect>
                     </Button>
                 </Grid>
-                <ProgressBar Name="Progress" HorizontalAlignment="Left" Height="16" Margin="135,520,0,0" VerticalAlignment="Top" Width="141"/>
-                <TextBox x:Name="ProgressTextBox" HorizontalAlignment="Left" Margin="135,463,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.487,-0.315" Height="36"/>
+                
 
             </Grid>
         </Grid>

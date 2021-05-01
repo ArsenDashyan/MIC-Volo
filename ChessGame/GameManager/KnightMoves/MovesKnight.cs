@@ -63,7 +63,7 @@ namespace GameManager
         }
         public void CreateStartKnight(string coordinate)
         {
-            startKnight = new Knight("Knight.Black.1", "Black", models);
+            startKnight = new Knight("Knight.Black.1", FColor.Black, models);
             models.Add(startKnight);
             string[] point = coordinate.Split('.');
             var coordinatPoint = new CoordinatePoint(int.Parse(point[0]),int.Parse(point[1]));
@@ -73,7 +73,7 @@ namespace GameManager
         }
         public void CreateTargetKnight(string coordinate)
         {
-            targetKnight = new Knight("Knight.Black.2", "Black", models);
+            targetKnight = new Knight("Knight.Black.2", FColor.White, models);
             models.Add(targetKnight);
             string[] point = coordinate.Split('.');
             var coordinatPoint = new CoordinatePoint(int.Parse(point[0]), int.Parse(point[1]));

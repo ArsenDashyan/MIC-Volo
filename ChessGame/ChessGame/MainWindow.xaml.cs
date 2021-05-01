@@ -18,8 +18,8 @@ namespace ChessGame
         private UIElement DragObjectImage { get => dragObjectImage; set => dragObjectImage = value; }
         private UIElement dragObjectImage = null;
         private Manager manager;
-        private MovesKnight movesKnight = new MovesKnight();
-        private Standard standard = new Standard();
+        private MovesKnight movesKnight;
+        private Standard standard;
         private List<string> models = new();
         CancellationTokenSource cancellationTokenSource;
         CancellationToken cancellationToken;
@@ -33,20 +33,36 @@ namespace ChessGame
         public MainWindow()
         {
             InitializeComponent();
-            manager = new Manager(currentFigureColor);
-            manager.setPicture += SetFigurePicture;
-            manager.removePicture += RemoveFigurePicture;
-            manager.messageForMove += MessageMove;
+            InitializeStandard();
+            InitializeKingGame();
+            InitializeKnightGame();
+        }
+
+        #region Methods for Events
+
+        private void InitializeStandard()
+        {
+            standard = new Standard();
             standard.setPicture += SetFigurePicture;
             standard.removePicture += RemoveFigurePicture;
             standard.messageForMove += MessageMove;
             standard.messageCheck += MessageCheck;
+            standard.MateMessage += MessageMateForStandard;
             standard.messageForPawnChange += MessageForPawnChange;
+        }
+        private void InitializeKingGame()
+        {
+            manager = new Manager(currentFigureColor);
+            manager.setPicture += SetFigurePicture;
+            manager.removePicture += RemoveFigurePicture;
+            manager.messageForMove += MessageMove;
+        }
+        private void InitializeKnightGame()
+        {
+            movesKnight = new MovesKnight();
             movesKnight.setPicture += SetFigurePicture;
             movesKnight.messageForMove += delegate { };
         }
-
-        #region Methods for Events
 
         /// <summary>
         /// Set the figure image
@@ -116,6 +132,11 @@ namespace ChessGame
         {
             ChooseFigureForPawn.IsEnabled = true;
             ChooseButton.IsEnabled = true;
+            MessageHandle.Text = message;
+        }
+
+        public void MessageMateForStandard(object sender, string message)
+        {
             MessageHandle.Text = message;
         }
 
@@ -352,6 +373,7 @@ namespace ChessGame
                     models = movesKnight.GetNamesForReset();
                     break;
                 case 3:
+                    InitializeStandard();
                     models = standard.GetNamesForReset();
                     break;
                 default:
@@ -428,17 +450,25 @@ namespace ChessGame
         #region Drag and Drop
         private void Board_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            var image = e.Source as Image;
-            string imageName = image.Source.ToString();
-            if (image != null && imageName.Contains(currentFigureColor))
+            try
             {
-                this.DragObjectImage = image;
-                int coordX = Grid.GetColumn(image);
-                int coordY = Grid.GetRow(image);
-                string coordinate = $"{coordX}.{coordY}";
-                this.startCoordinate = coordinate;
-                DragDrop.DoDragDrop(image, this.DragObjectImage, DragDropEffects.Move);
+                var image = e.Source as Image;
+                string imageName = image.Source.ToString();
+                if (image != null && imageName.Contains(currentFigureColor))
+                {
+                    this.DragObjectImage = image;
+                    int coordX = Grid.GetColumn(image);
+                    int coordY = Grid.GetRow(image);
+                    string coordinate = $"{coordX}.{coordY}";
+                    this.startCoordinate = coordinate;
+                    DragDrop.DoDragDrop(image, this.DragObjectImage, DragDropEffects.Move);
+                }
             }
+            catch (Exception)
+            {
+                MessageBox.Show("You did not choose the color for game");
+            }
+            
         }
         private void Image_Drop(object sender, DragEventArgs e)
         {
@@ -492,6 +522,7 @@ namespace ChessGame
             this.Width = 1000;
             ResetBoard();
             ShowStandardGamePanel();
+            InitializeStandard();
             standard.SetAllFigures();
             currentGameStatus = 3;
             MessageBox.Show("You Change A Standard Game, Good Luck");
@@ -508,8 +539,9 @@ namespace ChessGame
             CheckBlack.Visibility = Visibility.Hidden;
             PleacementFigureCoordinate.Visibility = Visibility.Hidden;
             PlayB2.Visibility = Visibility.Hidden;
-            PlayColorWhite.Visibility = Visibility.Hidden;
-            PlayColorBlack.Visibility = Visibility.Hidden;
+            PlayForStandard.Visibility = Visibility.Visible;
+            PlayColorWhite.Visibility = Visibility.Visible;
+            PlayColorBlack.Visibility = Visibility.Visible;
             PlayColorLabel.Visibility = Visibility.Hidden;
             ChooseFigureForPawn.Visibility = Visibility.Visible;
             ChooseButton.Visibility = Visibility.Visible;
@@ -535,6 +567,7 @@ namespace ChessGame
             CheckBlack.Visibility = Visibility.Visible;
             PleacementFigureCoordinate.Visibility = Visibility.Visible;
             PlayB2.Visibility = Visibility.Visible;
+            PlayForStandard.Visibility = Visibility.Hidden;
             PlayColorWhite.Visibility = Visibility.Visible;
             PlayColorBlack.Visibility = Visibility.Visible;
             PlayColorLabel.Visibility = Visibility.Visible;
@@ -639,7 +672,6 @@ namespace ChessGame
         /// </summary>
         public void SetAllFigures()
         {
-            currentFigureColor = "White";
             standard.SetAllFigures();
         }
 
@@ -659,6 +691,33 @@ namespace ChessGame
             ChooseButton.IsEnabled = false;
             MessageHandle.Text = " ";
         }
-        
+        private void PlayForStandard_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (PlayColorWhite.IsChecked == true)
+                {
+                    currentFigureColor = "White";
+                    colorPower = false;
+                    InitializeStandard();
+                }
+                else if (PlayColorBlack.IsChecked == true)
+                {
+                    currentFigureColor = "Black";
+                    colorPower = true;
+                    InitializeStandard();
+                }
+                PlayColorWhite.IsEnabled = false;
+                PlayColorBlack.IsEnabled = false;
+                PlayForStandard.IsEnabled = false;
+                MessageBox.Show("Good Luck!!!");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("You did not choose the color for game");
+                throw;
+            }
+            
+        }
     }
 }
