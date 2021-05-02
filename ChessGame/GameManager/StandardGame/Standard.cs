@@ -13,7 +13,6 @@ namespace GameManager
         private BaseFigure CheckedFigure;
         public event Message messageForMove;
         public event MessageForMate messageForPawnChange;
-        public event MessageForMate MateMessage;
         public event MessageForMate messageCheck;
         public event Picture setPicture;
         public event Picture removePicture;
@@ -55,6 +54,43 @@ namespace GameManager
         }
 
         #endregion
+
+        /// <summary>
+        /// Check if coordinate is valid for figure, and set this figure
+        /// </summary>
+        /// <param name="current">Current coordinate with string format</param>
+        /// <param name="target">Target coordinate with string format</param>
+        /// <returns>Return true if target coordinate is valid for figure</returns>
+        public bool IsVAlidCoordinate(string current, string target)
+        {
+            string[] strCurrent = current.Split('.');
+            var currentCoordinate = new CoordinatePoint(int.Parse(strCurrent[0]), int.Parse(strCurrent[1]));
+            string[] strTarget = target.Split('.');
+            var targetCoordinate = new CoordinatePoint(int.Parse(strTarget[0]), int.Parse(strTarget[1]));
+            baseFigure = CheckedCurrentFigure(currentCoordinate);
+            var available = (IAvailableMoves)baseFigure;
+            if (IsCheckedThisKing(baseFigure, targetCoordinate))
+            {
+                if (isChecked)
+                {
+                    if (baseFigure is King king)
+                        return KingFigureSet(king, targetCoordinate);
+                    else if (available.AvailableMoves().Contains(targetCoordinate))
+                    {
+                        if (available is Pawn pawn)
+                            PawnFigureSet(pawn, targetCoordinate);
+                        else
+                        {
+                            baseFigure.SetFigurePosition(targetCoordinate);
+                            IsCheckedKing(baseFigure);
+                        }
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            return false;
+        }
 
         /// <summary>
         /// Added coordinate and set all figures
@@ -193,90 +229,6 @@ namespace GameManager
         }
 
         /// <summary>
-        /// Check if coordinate is valid for figure, and set this figure
-        /// </summary>
-        /// <param name="current">Current coordinate with string format</param>
-        /// <param name="target">Target coordinate with string format</param>
-        /// <returns>Return true if target coordinate is valid for figure</returns>
-        public bool IsVAlidCoordinate(string current, string target)
-        {
-            string[] strCurrent = current.Split('.');
-            var currentCoordinate = new CoordinatePoint(int.Parse(strCurrent[0]), int.Parse(strCurrent[1]));
-            string[] strTarget = target.Split('.');
-            var targetCoordinate = new CoordinatePoint(int.Parse(strTarget[0]), int.Parse(strTarget[1]));
-            baseFigure = CheckedCurrentFigure(currentCoordinate);
-            if (baseFigure != null)
-            {
-                if (IsCheckedThisKing(baseFigure, targetCoordinate))
-                {
-                    var available = (IAvailableMoves)baseFigure;
-                    if (isChecked)
-                    {
-                        if (baseFigure is King king)
-                        {
-                            return KingFigureSet(king, targetCoordinate);
-                        }
-                        else if (available.AvailableMoves().Contains(targetCoordinate))
-                        {
-                            if (available is Pawn pawn)
-                            {
-                                PawnFigureSet(pawn, targetCoordinate);
-                            }
-                            else
-                            {
-                                baseFigure.SetFigurePosition(targetCoordinate);
-                                IsCheckedKing(baseFigure);
-                            }
-                            return true;
-                        }
-                        return false;
-                    }
-                    else
-                    {
-                        if (GetAntiCheckFigure().Contains(baseFigure))
-                        {
-                            if (baseFigure is King king)
-                            {
-                                return KingFigureSet(king, targetCoordinate);
-                            }
-                            else
-                            {
-                                var targetMoves = GetTargetCoordinateForAntiCheck();
-                                if (targetMoves.Count == 0)
-                                {
-                                    MateMessage(this, "Mate");
-                                }
-                                foreach (var item in targetMoves)
-                                {
-                                    if (targetCoordinate == item)
-                                    {
-                                        if (available.AvailableMoves().Contains(targetCoordinate))
-                                        {
-                                            if (available is Pawn pawn)
-                                            {
-                                                PawnFigureSet(pawn, targetCoordinate);
-                                            }
-                                            else
-                                            {
-                                                baseFigure.SetFigurePosition(targetCoordinate);
-                                                IsCheckedKing(baseFigure);
-                                            }
-                                            return true;
-                                        }
-                                        return false;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
-                return false;
-            }
-            return false;
-        }
-
-        /// <summary>
         /// Check a current figure with a coordinate
         /// </summary>
         /// <param name="coordinatePoint">Current coordinate</param>
@@ -286,140 +238,9 @@ namespace GameManager
             foreach (var item in models)
             {
                 if (item.Coordinate == coordinatePoint)
-                {
                     return item;
-                }
             }
             return null;
-        }
-
-        /// <summary>
-        /// Check a figure for anti check game
-        /// </summary>
-        /// <returns>Return target figurs list</returns>
-        private List<BaseFigure> GetAntiCheckFigure()
-        {
-            var modelNew = models.Where(c => c.Color != CheckedFigure.Color).ToList();
-            var targetMoves = GetTargetCoordinateForAntiCheck();
-            var figureList = new List<BaseFigure>();
-            foreach (var item in modelNew)
-            {
-                if (item is King king)
-                {
-                    foreach (var targetCoordinate in targetMoves)
-                    {
-                        if (!GetCurrentKingMoves(king).Contains(targetCoordinate))
-                        {
-                            figureList.Add(king);
-                        }
-                    }
-                }
-                else
-                {
-                    var tempItem = (IAvailableMoves)item;
-                    foreach (var targetCoordinate in targetMoves)
-                    {
-                        if (tempItem.AvailableMoves().Contains(targetCoordinate))
-                        {
-                            figureList.Add(item);
-                        }
-                    }
-                }
-            }
-            return figureList;
-        }
-
-        /// <summary>
-        /// To count a target coordinates for anti check game
-        /// </summary>
-        /// <returns>Return target coordinates list</returns>
-        private List<CoordinatePoint> GetTargetCoordinateForAntiCheck()
-        {
-            var targetMoves = new List<CoordinatePoint>();
-            if (CheckedFigure.Coordinate.X == CurentKing.Coordinate.X)
-            {
-                if (CheckedFigure.Coordinate.Y > CurentKing.Coordinate.Y)
-                {
-                    for (int i = 1; i <= CheckedFigure.Coordinate.Y - CurentKing.Coordinate.Y; i++)
-                    {
-                        var target = new CoordinatePoint(CheckedFigure.Coordinate.X, CurentKing.Coordinate.Y + i);
-                        targetMoves.Add(target);
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < CurentKing.Coordinate.Y - CheckedFigure.Coordinate.Y; i++)
-                    {
-                        var target = new CoordinatePoint(CheckedFigure.Coordinate.X, CurentKing.Coordinate.Y + i);
-                        targetMoves.Add(target);
-                    }
-                }
-
-            }
-            else if (CheckedFigure.Coordinate.Y == CurentKing.Coordinate.Y)
-            {
-                if (CheckedFigure.Coordinate.X > CurentKing.Coordinate.X)
-                {
-                    for (int i = 1; i <= CheckedFigure.Coordinate.X - CurentKing.Coordinate.X; i++)
-                    {
-                        var target = new CoordinatePoint(CurentKing.Coordinate.X + i, CheckedFigure.Coordinate.Y);
-                        targetMoves.Add(target);
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < CurentKing.Coordinate.X - CheckedFigure.Coordinate.X; i++)
-                    {
-                        var target = new CoordinatePoint(CheckedFigure.Coordinate.X + i, CheckedFigure.Coordinate.Y);
-                        targetMoves.Add(target);
-                    }
-                }
-            }
-            else if (CurentKing.Coordinate.X - CurentKing.Coordinate.Y == CheckedFigure.Coordinate.X - CheckedFigure.Coordinate.Y)
-            {
-                if (CheckedFigure.Coordinate.X > CurentKing.Coordinate.X)
-                {
-                    for (int i = 1; i <= CheckedFigure.Coordinate.X - CurentKing.Coordinate.X; i++)
-                    {
-                        var target = new CoordinatePoint(CurentKing.Coordinate.X + i, CurentKing.Coordinate.Y + i);
-                        targetMoves.Add(target);
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < CurentKing.Coordinate.X - CheckedFigure.Coordinate.X; i++)
-                    {
-                        var target = new CoordinatePoint(CheckedFigure.Coordinate.X + i, CheckedFigure.Coordinate.Y + i);
-                        targetMoves.Add(target);
-                    }
-                }
-            }
-            else if (CurentKing.Coordinate.X + CurentKing.Coordinate.Y == CheckedFigure.Coordinate.X + CheckedFigure.Coordinate.Y)
-            {
-                if (CheckedFigure.Coordinate.X > CurentKing.Coordinate.X)
-                {
-                    for (int i = 1; i <= CheckedFigure.Coordinate.X - CurentKing.Coordinate.X; i++)
-                    {
-                        var target = new CoordinatePoint(CurentKing.Coordinate.X + i, CurentKing.Coordinate.Y - i);
-                        targetMoves.Add(target);
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < CurentKing.Coordinate.X - CheckedFigure.Coordinate.X; i++)
-                    {
-                        var target = new CoordinatePoint(CheckedFigure.Coordinate.X - i, CheckedFigure.Coordinate.Y + i);
-                        targetMoves.Add(target);
-                    }
-                }
-            }
-            else if (CheckedFigure is Knight knight)
-            {
-                targetMoves.AddRange(GetCurrentKingMoves((King)CurentKing));
-                targetMoves.Add(knight.Coordinate);
-            }
-            
-            return targetMoves;
         }
 
         /// <summary>
@@ -601,7 +422,6 @@ namespace GameManager
             }
             return result;
         }
-
         private bool IsCheckedThisKing(BaseFigure baseFigure, CoordinatePoint coordinatePoint)
         {
             var thisKing = (BaseFigure)models.Where(c => c.Color == baseFigure.Color && c is King).Single();
@@ -610,11 +430,13 @@ namespace GameManager
             if (!DangerPosition(thisKing).Contains(thisKing.Coordinate))
             {
                 baseFigure.Coordinate = temp;
+                isChecked = true;
                 return true;
             }
-            else if (coordinatePoint == CheckedFigure.Coordinate)
+            else if (coordinatePoint == CheckedFigure?.Coordinate)
             {
                 baseFigure.Coordinate = temp;
+                isChecked = true;
                 return true;
             }
             else

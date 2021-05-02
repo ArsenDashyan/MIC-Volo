@@ -47,7 +47,7 @@ namespace ChessGame
             standard.removePicture += RemoveFigurePicture;
             standard.messageForMove += MessageMove;
             standard.messageCheck += MessageCheck;
-            standard.MateMessage += MessageMateForStandard;
+            //standard.MateMessage += MessageMateForStandard;
             standard.messageForPawnChange += MessageForPawnChange;
         }
         private void InitializeKingGame()

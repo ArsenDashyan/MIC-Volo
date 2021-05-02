@@ -14,11 +14,11 @@ namespace Figure
         #region Move
         public List<CoordinatePoint> Vertical()
         {
-            List<CoordinatePoint> arr = new List<CoordinatePoint>();
+            var arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
             if (this.Color == FColor.White)
             {
-                if (this.Coordinate.Y == 6)
+                if (!this.isMoved)
                 {
                     arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y - 1));
                     arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y - 2));
@@ -63,7 +63,7 @@ namespace Figure
             }
             else
             {
-                if (this.Coordinate.Y == 1)
+                if (!this.isMoved)
                 {
                     arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y + 1));
                     arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y + 2));
@@ -106,8 +106,6 @@ namespace Figure
                     }
                 }
             }
-
-
             arr.Remove(this.Coordinate);
             return arr;
         }
