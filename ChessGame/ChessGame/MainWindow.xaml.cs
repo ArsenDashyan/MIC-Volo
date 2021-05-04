@@ -47,7 +47,6 @@ namespace ChessGame
             standard.removePicture += RemoveFigurePicture;
             standard.messageForMove += MessageMove;
             standard.messageCheck += MessageCheck;
-            //standard.MateMessage += MessageMateForStandard;
             standard.messageForPawnChange += MessageForPawnChange;
         }
         private void InitializeKingGame()
@@ -354,9 +353,9 @@ namespace ChessGame
                     RemovePicture(item);
                 }
             }
-            MovesTextBox.Text = "";
-            MessageHandle.Text = "";
-            ProgressTextBox.Text = "";
+            MovesTextBox.Text = " ";
+            MessageHandle.Text = " ";
+            ProgressTextBox.Text = " ";
         }
 
         /// <summary>
@@ -468,7 +467,6 @@ namespace ChessGame
             {
                 MessageBox.Show("You did not choose the color for game");
             }
-            
         }
         private void Image_Drop(object sender, DragEventArgs e)
         {
@@ -662,8 +660,6 @@ namespace ChessGame
                         }
                     }
                     break;
-                default:
-                    break;
             }
         }
 
@@ -717,7 +713,7 @@ namespace ChessGame
                 MessageBox.Show("You did not choose the color for game");
                 throw;
             }
-            
+
         }
     }
 }

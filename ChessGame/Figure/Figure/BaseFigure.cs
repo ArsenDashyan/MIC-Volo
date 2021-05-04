@@ -40,17 +40,15 @@ namespace Figure
                 messageForMove(this, (string.Empty, targetCoordinate));
                 this.Coordinate = coordinate;
                 currenrCoordinate = this.Coordinate.ToString() + '.' + this.Name;
-                DeleteFigur(this);
-                setPicture(this, currenrCoordinate);
             }
             else
             {
                 currenrCoordinate = this.Coordinate.ToString() + '.' + this.Name;
                 messageForMove(this, (currenrCoordinate, targetCoordinate));
                 this.Coordinate = coordinate;
-                DeleteFigur(this);
-                setPicture(this, targetCoordinate);
             }
+            DeleteFigur(this);
+            setPicture(this, targetCoordinate);
         }
         public void RemoveFigurePosition()
         {
@@ -68,8 +66,8 @@ namespace Figure
             {
                 if (model.Coordinate == item.Coordinate)
                 {
-                    ISetPosition tempItem = item;
-                    string itemCoordinate = item.Coordinate.ToString() + '.' + item.Name; 
+                    var tempItem = item;
+                    string itemCoordinate = item.Coordinate.ToString() + '.' + item.Name;
                     removePicture(item, itemCoordinate);
                     othereFigures.Remove(item);
                     break;

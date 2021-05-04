@@ -9,6 +9,7 @@ namespace GameManager
         #region Property and Feld
         private static List<BaseFigure> models = new();
         private BaseFigure baseFigure;
+        private BaseFigure chengedPawn;
         private BaseFigure CurentKing;
         private BaseFigure CheckedFigure;
         public event Message messageForMove;
@@ -253,8 +254,9 @@ namespace GameManager
             if (CheckPawnChange(targetCoordinate, pawn))
             {
                 coordinate = targetCoordinate;
+                pawn.SetFigurePosition(targetCoordinate);
+                chengedPawn = pawn;
                 messageForPawnChange(pawn.Color, "Please enter a new Figure for change");
-                baseFigure.RemoveFigurePosition();
                 IsCheckedKing(baseFigure);
             }
             else
@@ -603,11 +605,14 @@ namespace GameManager
             string currentColor = strCurrent[1];
             pawnCount++;
             var baseFigure = GetFigure(currentFigur, currentColor);
+            baseFigure.Coordinate = coordinate;
             models.Add(baseFigure);
             baseFigure.setPicture += SetFigurePicture;
             baseFigure.removePicture += RemoveFigurePicture;
             baseFigure.messageForMove += MessageMove;
             baseFigure.SetFigurePosition(coordinate);
+            chengedPawn.RemoveFigurePosition();
+            models.Remove(chengedPawn);
         }
 
         /// <summary>
