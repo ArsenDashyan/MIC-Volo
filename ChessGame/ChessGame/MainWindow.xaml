@@ -233,7 +233,7 @@
                             <Style/>
                         </TextBox.Style>
                     </TextBox>
-                    <TextBox x:Name="KnightTargetLetter" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="20,130,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                    <TextBox Name="KnightTargetLetter" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="20,130,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
                         <TextBox.Effect>
                             <DropShadowEffect/>
                         </TextBox.Effect>
@@ -241,7 +241,7 @@
                             <Style/>
                         </TextBox.Style>
                     </TextBox>
-                    <TextBox x:Name="KnightTargetNumber" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="104,130,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                    <TextBox Name="KnightTargetNumber" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="104,130,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
                         <TextBox.Effect>
                             <DropShadowEffect/>
                         </TextBox.Effect>
@@ -256,7 +256,7 @@
                             <DropShadowEffect/>
                         </TextBox.Effect>
                     </TextBox>
-                    <Button Content="Set" HorizontalAlignment="Left" Margin="203,52,0,0" VerticalAlignment="Top" Width="60" Height="30" FontSize="14" FontWeight="Bold" Click="KnightSetButton"/>
+                    <Button x:Name="KnightSetBtn" Content="Set" HorizontalAlignment="Left" Margin="203,52,0,0" VerticalAlignment="Top" Width="60" Height="30" FontSize="14" FontWeight="Bold" Click="KnightSetButton"/>
                     <Button Content="Reset" Height="50" Width="64" HorizontalAlignment="Left" Margin="210,234,0,0" VerticalAlignment="Top" Background="#FFC71919" FontSize="14" FontWeight="Bold" Click="Reset_ButtonForKnight">
                         <Button.Effect>
                             <DropShadowEffect/>

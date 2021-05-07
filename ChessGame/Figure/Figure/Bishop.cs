@@ -42,9 +42,7 @@ namespace Figure
                     else
                     {
                         if (item is King)
-                        {
                             continue;
-                        }
                         if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
                             arr = arr.Where(c => arr.IndexOf(c) <= arr.IndexOf(item.Coordinate)).ToList();
                         else

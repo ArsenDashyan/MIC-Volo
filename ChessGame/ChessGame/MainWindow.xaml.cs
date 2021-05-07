@@ -177,8 +177,11 @@ namespace ChessGame
             string color = tempFigure[tempFigure.Length - 1].Split('.')[0];
             string figure = tempFigure[tempFigure.Length - 1].Split('.')[1];
             string inputInfo = figure + '.' + color + '.';
-            inputInfo += GetCurrentFigureCoordinate(InputCoordinatsLetter, InputCoordinatsNumber);
-            manager.IsValidForPleacement(inputInfo);
+            if (GetCurrentFigureCoordinate(InputCoordinatsLetter, InputCoordinatsNumber, out string coord))
+            {
+                inputInfo += coord;
+                manager.IsValidForPleacement(inputInfo);
+            }
         }
         private void PlayB2_Click(object sender, RoutedEventArgs e)
         {
@@ -212,8 +215,11 @@ namespace ChessGame
         private void InstallButton(object sender, RoutedEventArgs e)
         {
             PlayB2.IsEnabled = false;
-            var tupl = GetCurrentFigureNew();
-            GameManager(tupl);
+            if (GetCurrentFigureNew(out (string, string) tempCoord))
+            {
+                var tupl = tempCoord;
+                GameManager(tupl);
+            }
         }
 
         #endregion
@@ -311,11 +317,18 @@ namespace ChessGame
         /// Check the selectid figure and change figure position
         /// </summary>
         /// <returns>Return true if figure new coordinate is changed</returns>
-        private (string, string) GetCurrentFigureNew()
+        private bool GetCurrentFigureNew(out (string, string) tuplCoord)
         {
-            string current = GetCurrentFigureCoordinate(InputCoordinatsLetter_Corrent, InputCoordinatsNumber_Corrent);
-            string target = GetCurrentFigureCoordinate(InputCoordinatsLetter_Selected, InputCoordinatsNumber_Selected);
-            return (current, target);
+            if (GetCurrentFigureCoordinate(InputCoordinatsLetter_Corrent, InputCoordinatsNumber_Corrent, out string currentCoord)
+                            && GetCurrentFigureCoordinate(InputCoordinatsLetter_Selected, InputCoordinatsNumber_Selected, out string targetCoord))
+            {
+                string current = currentCoord;
+                string target = targetCoord;
+                tuplCoord = (current, target);
+                return true;
+            }
+            tuplCoord = ("", "");
+            return false;
         }
 
         #endregion
@@ -324,16 +337,22 @@ namespace ChessGame
 
         private void KnightSetButton(object sender, RoutedEventArgs e)
         {
-            string coordinate = GetCurrentFigureCoordinate(KnightStartLetter, KnightStartNumber);
-            movesKnight.CreateStartKnight(coordinate);
+            if (GetCurrentFigureCoordinate(KnightStartLetter, KnightStartNumber, out string currentCoord))
+            {
+                movesKnight.CreateStartKnight(currentCoord);
+                KnightSetBtn.IsEnabled = false;
+            }
         }
         private void KnightMoveCheck_Click(object sender, RoutedEventArgs e)
         {
-            string coordinate = GetCurrentFigureCoordinate(KnightTargetLetter, KnightTargetNumber);
-            movesKnight.CreateTargetKnight(coordinate);
-            countForKnightMoves = movesKnight.MinKnightCount();
-            KnightMovesMessage.Text = $"For target coordinate your need {countForKnightMoves} moves";
-            countForKnightMoves = 0;
+            if (GetCurrentFigureCoordinate(KnightTargetLetter, KnightTargetNumber, out string currentCoord))
+            {
+                movesKnight.CreateTargetKnight(currentCoord);
+                countForKnightMoves = movesKnight.MinKnightCount();
+                KnightMovesMessage.Text = $"For target coordinate your need {countForKnightMoves} moves";
+                countForKnightMoves = 0;
+                KnightSetBtn.IsEnabled = true;
+            }
         }
 
         #endregion
@@ -373,7 +392,7 @@ namespace ChessGame
                     break;
                 case 3:
                     InitializeStandard();
-                    models = standard.GetNamesForReset();
+                    models = Standard.GetNamesForReset();
                     break;
                 default:
                     break;
@@ -437,6 +456,7 @@ namespace ChessGame
         private void Reset_ButtonForKnight(object sender, RoutedEventArgs e)
         {
             ResetBoard();
+            KnightSetBtn.IsEnabled = true;
             KnightMovesMessage.Text = "";
             KnightStartLetter.Text = "";
             KnightStartNumber.Text = "";
@@ -592,7 +612,7 @@ namespace ChessGame
         /// <param name="letter">Letter coordinate</param>
         /// <param name="number">Number coordinate</param>
         /// <returns></returns>
-        private string GetCurrentFigureCoordinate(TextBox letter, TextBox number)
+        private bool GetCurrentFigureCoordinate(TextBox letter, TextBox number, out string coordInfo)
         {
             string inputLetter = letter.Text;
             if (inputLetter.Length > 1)
@@ -609,7 +629,8 @@ namespace ChessGame
                         int j = Convert.ToInt32(inputNumber.ToString());
                         if (j <= 8 && j >= 1)
                         {
-                            return $"{o - 1}.{j - 1}";
+                            coordInfo = $"{o - 1}.{j - 1}";
+                            return true;
                         }
                         else
                         {
@@ -626,7 +647,8 @@ namespace ChessGame
                     MessageBox.Show("This letter not found");
                 }
             }
-            return string.Empty;
+            coordInfo = string.Empty;
+            return false;
         }
 
         /// <summary>

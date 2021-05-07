@@ -5,11 +5,6 @@ namespace Figure
 {
     public delegate void Picture(object sender, string e);
     public delegate void Message(object sender, (string, string) e);
-    public enum FColor
-    {
-        White,
-        Black
-    }
     public class BaseFigure : ISetPosition
     {
         protected readonly List<BaseFigure> othereFigures;

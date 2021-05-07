@@ -201,8 +201,6 @@ namespace GameManager
                     case "Pawn.Black.8":
                         item.SetFigurePosition(new CoordinatePoint(7, 1));
                         continue;
-                    default:
-                        break;
                 }
             }
         }
@@ -211,7 +209,7 @@ namespace GameManager
         /// Get all figures names for reset bord
         /// </summary>
         /// <returns>Return all figures names</returns>
-        public List<string> GetNamesForReset()
+        public static List<string> GetNamesForReset()
         {
             var positions = new List<string>();
             if (models.Count != 0)
@@ -234,7 +232,7 @@ namespace GameManager
         /// </summary>
         /// <param name="coordinatePoint">Current coordinate</param>
         /// <returns>Return a current figure</returns>
-        private BaseFigure CheckedCurrentFigure(CoordinatePoint coordinatePoint)
+        private static BaseFigure CheckedCurrentFigure(CoordinatePoint coordinatePoint)
         {
             foreach (var item in models)
             {
@@ -270,7 +268,7 @@ namespace GameManager
         /// Create All figures
         /// </summary>
         /// <returns>Return all figures</returns>
-        private List<BaseFigure> GetAllFigures()
+        private static List<BaseFigure> GetAllFigures()
         {
             Queen queenWhite = new("Queen.White.1", FColor.White, models);
             models.Add(queenWhite);
@@ -371,7 +369,7 @@ namespace GameManager
         /// Check the available moves for current king 
         /// </summary>
         /// <returns>Return the list</returns>
-        private List<CoordinatePoint> GetCurrentKingMoves(King king)
+        private static List<CoordinatePoint> GetCurrentKingMoves(King king)
         {
             var currentKing = (IAvailableMoves)king;
             var result = new List<CoordinatePoint>();
@@ -412,7 +410,7 @@ namespace GameManager
         /// </summary>
         /// <param name="model">King instance withe or Black</param>
         /// <returns>Return danger position List for current king </returns>
-        private List<CoordinatePoint> DangerPosition(BaseFigure model)
+        private static List<CoordinatePoint> DangerPosition(BaseFigure model)
         {
             var modelNew = models.Where(c => c.Color != model.Color);
             var result = new List<CoordinatePoint>();
@@ -494,11 +492,6 @@ namespace GameManager
                         count++;
                     }
                 }
-                if (count == models.Count)
-                {
-                    coordinatePoint = rook.Coordinate;
-                    return true;
-                }
             }
             else
             {
@@ -507,16 +500,15 @@ namespace GameManager
                 var coordinatePoint3 = new CoordinatePoint(king.Coordinate.X - 3, king.Coordinate.Y);
                 foreach (var item in models)
                 {
-                    if (item.Coordinate != coordinatePoint1 & item.Coordinate != coordinatePoint2 & item.Coordinate != coordinatePoint3)
-                    {
+                    if (item.Coordinate != coordinatePoint1 & item.Coordinate != coordinatePoint2 
+                                                            & item.Coordinate != coordinatePoint3)
                         count++;
-                    }
                 }
-                if (count == models.Count)
-                {
-                    coordinatePoint = rook.Coordinate;
-                    return true;
-                }
+            }
+            if (count == models.Count)
+            {
+                coordinatePoint = rook.Coordinate;
+                return true;
             }
             coordinatePoint = null;
             return false;
@@ -553,18 +545,14 @@ namespace GameManager
         /// <param name="coordinatePoint"></param>
         private void SetRookCastling(CoordinatePoint coordinatePoint)
         {
-            foreach (var item in models)
+            foreach (var item in models.Where(c => c is Rook))
             {
                 if (item.Coordinate == coordinatePoint)
                 {
                     if (coordinatePoint.X == 7)
-                    {
                         item.SetFigurePosition(new CoordinatePoint(5, coordinatePoint.Y));
-                    }
                     else
-                    {
                         item.SetFigurePosition(new CoordinatePoint(3, coordinatePoint.Y));
-                    }
                 }
             }
         }
@@ -579,7 +567,7 @@ namespace GameManager
         /// <param name="coordinatePoint">Pawn coordinate</param>
         /// <param name="pawn">Current pawn</param>
         /// <returns></returns>
-        private bool CheckPawnChange(CoordinatePoint coordinatePoint, Pawn pawn)
+        private static bool CheckPawnChange(CoordinatePoint coordinatePoint, Pawn pawn)
         {
             if (pawn.Color == FColor.White)
             {
@@ -621,35 +609,20 @@ namespace GameManager
         /// <param name="figure">Figure name</param>
         /// <param name="color">Figure color</param>
         /// <returns>Return new Figure</returns>
-        private BaseFigure GetFigure(string figure, string color)
+        private static BaseFigure GetFigure(string figure, string color)
         {
-            var fColor = FColor.White;
-            if (color == "White")
+            var fColor = color == "White" ? FColor.White : FColor.Black;
+            return figure switch
             {
-                fColor = FColor.White;
-            }
-            else
-            {
-                fColor = FColor.Black;
-            }
-            switch (figure)
-            {
-                case "Queen":
-                    return new Queen(figure + "." + color + '.' + pawnCount, fColor, models);
-                case "King":
-                    return new King(figure + "." + color + '.' + pawnCount, fColor, models);
-                case "Rook":
-                    return new Rook(figure + "." + color + "." + pawnCount, fColor, models);
-                case "Bishop":
-                    return new Bishop(figure + "." + color + "." + pawnCount, fColor, models);
-                case "Knight":
-                    return new Knight(figure + "." + color + "." + pawnCount, fColor, models);
-                default:
-                    return null;
-            }
+                "Queen" => new Queen(figure + "." + color + '.' + pawnCount, fColor, models),
+                "King" => new King(figure + "." + color + '.' + pawnCount, fColor, models),
+                "Rook" => new Rook(figure + "." + color + "." + pawnCount, fColor, models),
+                "Bishop" => new Bishop(figure + "." + color + "." + pawnCount, fColor, models),
+                "Knight" => new Knight(figure + "." + color + "." + pawnCount, fColor, models),
+                _ => null,
+            };
         }
 
         #endregion
-
     }
 }
