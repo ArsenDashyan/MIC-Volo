@@ -349,7 +349,7 @@ namespace GameManager
         /// <returns>Return true if king is moved</returns>
         private bool KingFigureSet(King king, CoordinatePoint targetCoordinate)
         {
-            if (GetCurrentKingMoves(king).Contains(targetCoordinate))
+            if (ValidMoves.GetCurrentKingMoves(king).Contains(targetCoordinate))
             {
                 baseFigure.SetFigurePosition(targetCoordinate);
                 IsCheckedKing(baseFigure);
@@ -363,24 +363,6 @@ namespace GameManager
                 return true;
             }
             return false;
-        }
-
-        /// <summary>
-        /// Check the available moves for current king 
-        /// </summary>
-        /// <returns>Return the list</returns>
-        private static List<CoordinatePoint> GetCurrentKingMoves(King king)
-        {
-            var currentKing = (IAvailableMoves)king;
-            var result = new List<CoordinatePoint>();
-            foreach (var item in currentKing.AvailableMoves())
-            {
-                if (!DangerPosition(king).Contains(item))
-                {
-                    result.Add(item);
-                }
-            }
-            return result;
         }
 
         /// <summary>

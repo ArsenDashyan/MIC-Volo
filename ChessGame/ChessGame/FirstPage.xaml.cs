@@ -18,7 +18,6 @@ namespace ChessGame
             {
                 var mainWindow = new MainWindow();
                 mainWindow.ShowKingGamePanel();
-                mainWindow.Width = 1000;
                 mainWindow.Show();
                 MainWindow.currentGameStatus = 1;
                 this.Close();
@@ -26,9 +25,7 @@ namespace ChessGame
             if (CheckKnight.IsChecked == true)
             {
                 var mainWindow = new MainWindow();
-                Thickness thickness = new Thickness(0);
-                mainWindow.KnightPage.Margin = thickness;
-                mainWindow.Width = 1000;
+                mainWindow.ShowKnightGamePanel();
                 mainWindow.Show();
                 MainWindow.currentGameStatus = 2;
                 this.Close();
@@ -37,7 +34,6 @@ namespace ChessGame
             {
                 var mainWindow = new MainWindow();
                 mainWindow.ShowStandardGamePanel();
-                mainWindow.Width = 1000;
                 mainWindow.Show();
                 mainWindow.SetAllFigures();
                 MainWindow.currentGameStatus = 3;

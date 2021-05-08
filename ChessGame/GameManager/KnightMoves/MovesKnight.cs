@@ -89,7 +89,7 @@ namespace GameManager
         {
             messageForMove(this, coordinate);
         }
-        public List<string> GetNamesForReset()
+        public static List<string> GetNamesForReset()
         {
             var positions = new List<string>();
             if (models.Count != 0)

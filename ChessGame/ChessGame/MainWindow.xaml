@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ChessGame"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="ChessGame" Height="600" Width="1348" Background="Gray">
+        Title="ChessGame" Height="600" Width="1000" Background="#FFA8857D">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="600"/>
@@ -18,7 +18,7 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Menu HorizontalAlignment="Left" Margin="0,0,0,16" Width="79" Background="Gray">
+        <Menu HorizontalAlignment="Left" Margin="0,0,0,16" Width="79" Background="#FFA8857D">
             <MenuItem Header="File">
                 <MenuItem Header="New King Game" Click="KingGame_Click"/>
                 <MenuItem Header="New Knight Game" Click="KnightGame_Click"/>
@@ -49,223 +49,279 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="0"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="0"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="0"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="0"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="0"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="0"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="0"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="0"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="1"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="1"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="1"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="1"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="1"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="1"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="1"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="1"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="2"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="2"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="2"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="2"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="2"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="2"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="2"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="2"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="3"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="3"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="3"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="3"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="3"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="3"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="3"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="3"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="4"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="4"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="4"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="4"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="4"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="4"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="4"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="4"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="5"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="5"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="5"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="5"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="5"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="5"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="5"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="5"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="6"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="6"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="6"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="6"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="6"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="6"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="6"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="6"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="7"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="7"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="7"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="7"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="7"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="7"/>
-                <Border Background="White" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="7"/>
-                <Border Background="SlateGray" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="7"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="0"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="0"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="0"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="0"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="0"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="0"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="0"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="0"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="1"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="1"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="1"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="1"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="1"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="1"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="1"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="1"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="2"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="2"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="2"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="2"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="2"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="2"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="2"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="2"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="3"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="3"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="3"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="3"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="3"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="3"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="3"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="3"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="4"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="4"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="4"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="4"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="4"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="4"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="4"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="4"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="5"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="5"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="5"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="5"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="5"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="5"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="5"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="5"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="6"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="6"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="6"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="6"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="6"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="6"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="6"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="6"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="0" Grid.Row="7"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="1" Grid.Row="7"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="2" Grid.Row="7"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="3" Grid.Row="7"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="4" Grid.Row="7"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="5" Grid.Row="7"/>
+                <Border Background="#FFA8857D" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="6" Grid.Row="7"/>
+                <Border Background="Bisque" BorderThickness="1" BorderBrush="LightSlateGray" Grid.Column="7" Grid.Row="7"/>
             </Grid>
 
         </Grid>
-        <Grid x:Name="FigurPanel" Background="Black" Grid.Column="2" Margin="30,2,2,2" Grid.RowSpan="2">
-            <Grid Background="LightSlateGray" Margin="2,2,2,2">
-                <ProgressBar Name="Progress" HorizontalAlignment="Left" Height="16" Margin="135,520,0,0" VerticalAlignment="Top" Width="141"/>
-                <TextBox x:Name="ProgressTextBox" HorizontalAlignment="Left" Margin="135,463,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.487,-0.315" Height="36"/>
-                <TextBox x:Name="InputCoordinatsLetter" HorizontalAlignment="Left" Margin="10,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
-                    <TextBox.Effect>
-                        <DropShadowEffect/>
-                    </TextBox.Effect>
-                </TextBox>
-                <Label Name="PleacementFigureCoordinate" Content="Letter     Number" HorizontalAlignment="Left" Margin="6,60,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                <Button x:Name="PleacementB1" Content="Pleacement" Background="Gray" HorizontalAlignment="Left" Margin="175,80,0,0" VerticalAlignment="Top" Height="30" Width="155" FontSize="14" Click="PleacementB1_Click">
-                    <Button.Effect>
-                        <DropShadowEffect/>
-                    </Button.Effect>
-                </Button>
-                <Button x:Name="ChooseButton" Content="Choose Figure" Background="Gray" HorizontalAlignment="Left" Margin="175,80,0,0" VerticalAlignment="Top" Height="30" Width="155" FontSize="14" Click="ChooseButton_Click"/>
-                <Button Content="Reset" FontSize="14" FontWeight="Bold" Background="#FFDA1717" HorizontalAlignment="Left" Margin="175,369,0,0" VerticalAlignment="Top" Height="30" Width="155" Click="Reset_Button">
-                    <Button.Effect>
-                        <DropShadowEffect/>
-                    </Button.Effect>
-                </Button>
-                <Button x:Name="PlayB2" Background="LightGray" HorizontalAlignment="Left" Margin="240,130,0,0" VerticalAlignment="Top" Height="30" Width="90" FontSize="16" Click="PlayB2_Click">
-                    <Button.Effect>
-                        <DropShadowEffect/>
-                    </Button.Effect>
-                </Button>
-                <Button Name="PlayForStandard" Content="Play" Background="LightGray" HorizontalAlignment="Left" Margin="240,130,0,0" VerticalAlignment="Top" Height="30" Width="90" FontSize="16" Click="PlayForStandard_Click"/>
-                <ComboBox x:Name="SelectFigur" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="320" Height="30" FontSize="16" FontWeight="Bold" FontStyle="Normal">
-                    <ComboBox.Effect>
-                        <DropShadowEffect/>
-                    </ComboBox.Effect>
-                    <ComboBoxItem Content="King"/>
-                    <ComboBoxItem Content="Queen"/>
-                    <ComboBoxItem Content="Bishop"/>
-                    <ComboBoxItem Content="Knight"/>
-                    <ComboBoxItem Content="Rook"/>
-                    <ComboBoxItem Content="Pawn"/>
-                </ComboBox>
-                <ComboBox Name="ChooseFigureForPawn" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="320" Height="30" FontSize="16" FontWeight="Bold" FontStyle="Normal">
-                    <ComboBox.Effect>
-                        <DropShadowEffect/>
-                    </ComboBox.Effect>
-                    <ComboBoxItem Content="Queen"/>
-                    <ComboBoxItem Content="Bishop"/>
-                    <ComboBoxItem Content="Knight"/>
-                    <ComboBoxItem Content="Rook"/>
-                </ComboBox>
-                <CheckBox x:Name="CheckWhite" Content="White" HorizontalAlignment="Left" Margin="110,79,0,0" VerticalAlignment="Top" FontWeight="Bold" FontStyle="Normal" RenderTransformOrigin="0.5,0.5" Foreground="#FFF5ECEC"/>
-                <CheckBox x:Name="CheckBlack" Content="Black" HorizontalAlignment="Left" Margin="110,96,0,0" VerticalAlignment="Top" FontWeight="Bold" FontStyle="Normal"/>
-                <TextBox x:Name="InputCoordinatsNumber" HorizontalAlignment="Left" Margin="60,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" RenderTransformOrigin="0.458,1.747" TextAlignment="Center">
-                    <TextBox.Effect>
-                        <DropShadowEffect/>
-                    </TextBox.Effect>
-                </TextBox>
-                <TextBox x:Name="InputCoordinatsLetter_Corrent" IsEnabled="False" HorizontalAlignment="Left" Margin="10,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
-                    <TextBox.Effect>
-                        <DropShadowEffect/>
-                    </TextBox.Effect>
-                </TextBox>
-                <TextBox x:Name="InputCoordinatsNumber_Corrent" IsEnabled="False" HorizontalAlignment="Left" Margin="75,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
-                    <TextBox.Effect>
-                        <DropShadowEffect/>
-                    </TextBox.Effect>
-                </TextBox>
-                <Label Content="Current Coordinates" HorizontalAlignment="Left" Margin="6,180,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                <TextBox x:Name="InputCoordinatsLetter_Selected" IsEnabled="False" HorizontalAlignment="Left" Margin="135,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
-                    <TextBox.Effect>
-                        <DropShadowEffect/>
-                    </TextBox.Effect>
-                </TextBox>
-                <TextBox x:Name="InputCoordinatsNumber_Selected" IsEnabled="False" HorizontalAlignment="Left" Margin="200,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
-                    <TextBox.Effect>
-                        <DropShadowEffect/>
-                    </TextBox.Effect>
-                </TextBox>
-                <Label Content="Target Coordinates" HorizontalAlignment="Left" Margin="132,180,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                <Button Name="InstalB3"  Content="Install" IsEnabled="False" HorizontalAlignment="Left" Margin="265,200,0,0" VerticalAlignment="Top" Width="65" Height="30" FontSize="14" FontWeight="Bold" Click="InstallButton">
-                    <Button.Effect>
-                        <DropShadowEffect/>
-                    </Button.Effect>
-                </Button>
-                <Label Name="PlayColorLabel" Content="Select your color" HorizontalAlignment="Left" Margin="6,120,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                <CheckBox Name="PlayColorWhite" Content="White" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="#FFEEEAEA"/>
-                <CheckBox Name="PlayColorBlack" Content="Black" HorizontalAlignment="Left" Margin="111,150,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                <TextBox Name="MovesTextBox" HorizontalAlignment="Left" Margin="10,260,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="118" Height="277" TextAlignment="Center" FontWeight="Bold">
-                    <TextBox.Effect>
-                        <DropShadowEffect/>
-                    </TextBox.Effect>
-                </TextBox>
-                <Label Content="Moves" HorizontalAlignment="Left" Margin="6,238,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                <TextBox Name="MessageHandle" HorizontalAlignment="Left" Margin="135,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="189" FontWeight="Bold" Height="39" FontSize="14" TextAlignment="Center" Background="#FFE0D1D1" Foreground="#FF8F0720" SelectionBrush="#FF02111D" FontStyle="Normal">
-                    <TextBox.Effect>
-                        <DropShadowEffect/>
-                    </TextBox.Effect>
-                </TextBox>
-                <Label Content="Message" HorizontalAlignment="Left" Margin="132,238,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.184,0.233" FontWeight="Bold"/>
-                <Grid Name="KnightPage" Margin="365,0,0,0" Background="LightSlateGray" >
-                    <Grid.Effect>
-                        <DropShadowEffect/>
-                    </Grid.Effect>
-                    <Label Content="Start CoordinateLetter and Number" HorizontalAlignment="Left"  VerticalAlignment="Top" RenderTransformOrigin="0.434,-0.133" FontSize="14" FontWeight="Bold" Margin="5,22,0,0"/>
-                    <TextBox x:Name="KnightStartLetter" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="60" Height="30" Margin="20,50,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
-                        <TextBox.Effect>
-                            <DropShadowEffect/>
-                        </TextBox.Effect>
-                        <TextBox.Style>
-                            <Style/>
-                        </TextBox.Style>
-                    </TextBox>
-                    <TextBox x:Name="KnightStartNumber" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="104,50,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
-                        <TextBox.Effect>
-                            <DropShadowEffect/>
-                        </TextBox.Effect>
-                        <TextBox.Style>
-                            <Style/>
-                        </TextBox.Style>
-                    </TextBox>
-                    <TextBox Name="KnightTargetLetter" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="20,130,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
-                        <TextBox.Effect>
-                            <DropShadowEffect/>
-                        </TextBox.Effect>
-                        <TextBox.Style>
-                            <Style/>
-                        </TextBox.Style>
-                    </TextBox>
-                    <TextBox Name="KnightTargetNumber" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="104,130,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
-                        <TextBox.Effect>
-                            <DropShadowEffect/>
-                        </TextBox.Effect>
-                        <TextBox.Style>
-                            <Style/>
-                        </TextBox.Style>
-                    </TextBox>
-                    <Label Content="Target Coordinate Letter and Number" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" FontWeight="Bold" Margin="-2,98,0,0"/>
-                    <Button x:Name="KnightMoveCheck" Content="Check" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="130" Height="32" Background="#FF877979" FontSize="14" FontWeight="Bold" Margin="20,178,0,0" Click="KnightMoveCheck_Click"/>
-                    <TextBox x:Name="KnightMovesMessage"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="152" Height="56" Margin="20,230,0,0" FontSize="14">
-                        <TextBox.Effect>
-                            <DropShadowEffect/>
-                        </TextBox.Effect>
-                    </TextBox>
-                    <Button x:Name="KnightSetBtn" Content="Set" HorizontalAlignment="Left" Margin="203,52,0,0" VerticalAlignment="Top" Width="60" Height="30" FontSize="14" FontWeight="Bold" Click="KnightSetButton"/>
-                    <Button Content="Reset" Height="50" Width="64" HorizontalAlignment="Left" Margin="210,234,0,0" VerticalAlignment="Top" Background="#FFC71919" FontSize="14" FontWeight="Bold" Click="Reset_ButtonForKnight">
-                        <Button.Effect>
-                            <DropShadowEffect/>
-                        </Button.Effect>
-                    </Button>
-                </Grid>
-                
+        <Grid x:Name="FigurPanel" Background="#FFA8857D" Grid.Column="2" Margin="30,5,5,5" Grid.RowSpan="2">
+            <TabControl Grid.Column="2">
+                <TabItem Header="   King  Game   " Name="KingGamePanel">
+                    <Grid Background="#FFA8857D" Margin="2,2,2,2">
+                        <ProgressBar Name="Progress" Margin="192,519,22,7"/>
+                        <TextBox x:Name="ProgressTextBox" Margin="216,461,19,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.487,-0.315" Height="36"/>
+                        <TextBox x:Name="InputCoordinatsLetter" HorizontalAlignment="Left" Margin="10,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                        </TextBox>
+                        <Label Name="PleacementFigureCoordinate" Content="Letter     Number" HorizontalAlignment="Left" Margin="6,60,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                        <Button x:Name="PleacementB1" Content="Pleacement" Background="Gray" HorizontalAlignment="Left" Margin="175,80,0,0" VerticalAlignment="Top" Height="30" Width="155" FontSize="14" Click="PleacementB1_Click">
+                            <Button.Effect>
+                                <DropShadowEffect/>
+                            </Button.Effect>
+                        </Button>
+                        <Button Content="Reset" FontSize="14" FontWeight="Bold" Background="#FFDA1717" HorizontalAlignment="Left" Margin="175,369,0,0" VerticalAlignment="Top" Height="30" Width="155" Click="Reset_Button">
+                            <Button.Effect>
+                                <DropShadowEffect/>
+                            </Button.Effect>
+                        </Button>
+                        <Button x:Name="PlayB2" Content="Play" Background="LightGray" HorizontalAlignment="Left" Margin="240,130,0,0" VerticalAlignment="Top" Height="30" Width="90" FontSize="16" Click="PlayB2_Click">
+                            <Button.Effect>
+                                <DropShadowEffect/>
+                            </Button.Effect>
+                        </Button>
+                        <ComboBox x:Name="SelectFigur" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="320" Height="30" FontSize="16" FontWeight="Bold" FontStyle="Normal">
+                            <ComboBox.Effect>
+                                <DropShadowEffect/>
+                            </ComboBox.Effect>
+                            <ComboBoxItem Content="King"/>
+                            <ComboBoxItem Content="Queen"/>
+                            <ComboBoxItem Content="Bishop"/>
+                            <ComboBoxItem Content="Knight"/>
+                            <ComboBoxItem Content="Rook"/>
+                            <ComboBoxItem Content="Pawn"/>
+                        </ComboBox>
+                        <CheckBox x:Name="CheckWhite" Content="White" HorizontalAlignment="Left" Margin="110,79,0,0" VerticalAlignment="Top" FontWeight="Bold" FontStyle="Normal" RenderTransformOrigin="0.5,0.5" Foreground="#FFF5ECEC"/>
+                        <CheckBox x:Name="CheckBlack" Content="Black" HorizontalAlignment="Left" Margin="110,96,0,0" VerticalAlignment="Top" FontWeight="Bold" FontStyle="Normal"/>
+                        <TextBox x:Name="InputCoordinatsNumber" HorizontalAlignment="Left" Margin="60,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" RenderTransformOrigin="0.458,1.747" TextAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                        </TextBox>
+                        <TextBox x:Name="InputCoordinatsLetter_Corrent" IsEnabled="False" HorizontalAlignment="Left" Margin="10,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                        </TextBox>
+                        <TextBox x:Name="InputCoordinatsNumber_Corrent" IsEnabled="False" HorizontalAlignment="Left" Margin="75,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                        </TextBox>
+                        <Label Content="Current Coordinates" HorizontalAlignment="Left" Margin="6,180,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                        <TextBox x:Name="InputCoordinatsLetter_Selected" IsEnabled="False" HorizontalAlignment="Left" Margin="135,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                        </TextBox>
+                        <TextBox x:Name="InputCoordinatsNumber_Selected" IsEnabled="False" HorizontalAlignment="Left" Margin="200,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                        </TextBox>
+                        <Label Content="Target Coordinates" HorizontalAlignment="Left" Margin="132,180,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                        <Button Name="InstalB3"  Content="Install" IsEnabled="False" HorizontalAlignment="Left" Margin="265,200,0,0" VerticalAlignment="Top" Width="65" Height="30" FontSize="14" FontWeight="Bold" Click="InstallButton">
+                            <Button.Effect>
+                                <DropShadowEffect/>
+                            </Button.Effect>
+                        </Button>
+                        <Label Name="PlayColorLabel" Content="Select your color" HorizontalAlignment="Left" Margin="6,120,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                        <CheckBox Name="PlayColorWhite" Content="White" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="#FFEEEAEA"/>
+                        <CheckBox Name="PlayColorBlack" Content="Black" HorizontalAlignment="Left" Margin="111,150,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                        <TextBox Name="MovesTextBox" HorizontalAlignment="Left" Margin="10,260,0,11" TextWrapping="Wrap" Width="145" TextAlignment="Center" FontWeight="Bold">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                        </TextBox>
+                        <Label Content="Moves" HorizontalAlignment="Left" Margin="6,238,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                        <TextBox Name="MessageHandle" HorizontalAlignment="Left" Margin="177,282,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontWeight="Bold" Height="39" FontSize="14" TextAlignment="Center" Background="#FFE0D1D1" Foreground="#FF8F0720" SelectionBrush="#FF02111D" FontStyle="Normal">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                        </TextBox>
+                        <Label Content="Message" HorizontalAlignment="Left" Margin="174,0,0,0" VerticalAlignment="Center" RenderTransformOrigin="-0.184,0.233" FontWeight="Bold"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Name="KnightMovesPanel" Header="   Knight  Moves   ">
+                    <Grid Name="KnightPage" Background="#FFA8857D" Margin="2,2,2,2">
+                        <Label Content="Start CoordinateLetter and Number" HorizontalAlignment="Left"  VerticalAlignment="Top" RenderTransformOrigin="0.434,-0.133" FontSize="14" FontWeight="Bold" Margin="5,22,0,0"/>
+                        <TextBox x:Name="KnightStartLetter" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="60" Height="30" Margin="20,50,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                            <TextBox.Style>
+                                <Style/>
+                            </TextBox.Style>
+                        </TextBox>
+                        <TextBox x:Name="KnightStartNumber" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="104,50,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                            <TextBox.Style>
+                                <Style/>
+                            </TextBox.Style>
+                        </TextBox>
+                        <TextBox Name="KnightTargetLetter" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="20,130,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                            <TextBox.Style>
+                                <Style/>
+                            </TextBox.Style>
+                        </TextBox>
+                        <TextBox Name="KnightTargetNumber" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top"  Width="60" Height="30" Margin="104,130,0,0" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                            <TextBox.Style>
+                                <Style/>
+                            </TextBox.Style>
+                        </TextBox>
+                        <Label Content="Target Coordinate Letter and Number" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" FontWeight="Bold" Margin="-2,98,0,0"/>
+                        <Button x:Name="KnightMoveCheck" Content="Check" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="130" Height="32" Background="#FF877979" FontSize="14" FontWeight="Bold" Margin="20,178,0,0" Click="KnightMoveCheck_Click"/>
+                        <TextBox x:Name="KnightMovesMessage"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="152" Height="56" Margin="20,230,0,0" FontSize="14">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                        </TextBox>
+                        <Button x:Name="KnightSetBtn" Content="Set" HorizontalAlignment="Left" Margin="203,52,0,0" VerticalAlignment="Top" Width="60" Height="30" FontSize="14" FontWeight="Bold" Click="KnightSetButton"/>
+                        <Button Content="Reset" Height="50" Width="64" HorizontalAlignment="Left" Margin="210,234,0,0" VerticalAlignment="Top" Background="#FFC71919" FontSize="14" FontWeight="Bold" Click="Reset_ButtonForKnight">
+                            <Button.Effect>
+                                <DropShadowEffect/>
+                            </Button.Effect>
+                        </Button>
+                    </Grid>
+                </TabItem>
+                <TabItem Name="StandardGamePanel" Header="   Standard  Game   ">
+                    <Grid Background="#FFA8857D" Margin="2,2,2,2">
+                        <Grid Name="PawnChengesPanel" Margin="2,2,2,396">
+                            <Label Content="        Please select a figure for changed" Margin="0,3,-9,0" FontWeight="Bold" FontSize="16" Height="41" VerticalAlignment="Top" HorizontalAlignment="Right" Width="347"/>
+                            <Button x:Name="ChangeQueenBtn" HorizontalAlignment="Left" Margin="20,40,0,0" VerticalAlignment="Top" Width="65" Height="47" Click="ChangeQueenBtn_Click">
+                                <Image Source="Resources/White.Queen.png" Width="65"/>
+                            </Button>
+                            <Button x:Name="ChangeRookBtn" HorizontalAlignment="Left" Margin="100,40,0,0" VerticalAlignment="Top" Width="65" Height="47" Click="ChangeRookBtn_Click">
+                                <Image Source="Resources/White.Rook.png" Width="65"/>
+                            </Button>
+                            <Button x:Name="ChangeBishopBtn" HorizontalAlignment="Left" Margin="180,40,0,0" VerticalAlignment="Top" Width="65" Height="47" Click="ChangeBishopBtn_Click">
+                                <Image Source="Resources/White.Bishop.png" Width="65"/>
+                            </Button>
+                            <Button x:Name="ChangeKnightBtn" HorizontalAlignment="Left" Margin="260,40,0,0" VerticalAlignment="Top" Width="65" Height="47" Click="ChangeKnightBtn_Click">
+                                <Image Source="Resources/White.Knight.png" Width="65"/>
+                            </Button>
+                            <Button Content="Choose" HorizontalAlignment="Center" Margin="0,101,0,0" Width="153" Click="ChooseButton_Click" Height="24" VerticalAlignment="Top"/>
+                        </Grid>
+                        <Button Content="Reset" FontSize="14" FontWeight="Bold" Background="#FFDA1717" HorizontalAlignment="Left" Margin="187,369,0,0" VerticalAlignment="Top" Height="30" Width="155" Click="Reset_Button">
+                            <Button.Effect>
+                                <DropShadowEffect/>
+                            </Button.Effect>
+                        </Button>
 
-            </Grid>
+                        <Button Name="PlayForStandard" Content="Play" Background="LightGray" HorizontalAlignment="Left" Margin="241,156,0,0" VerticalAlignment="Top" Height="30" Width="90" FontSize="16" Click="PlayForStandard_Click"/>
+
+                        <TextBox x:Name="InputCoordinatsLetterCurrentStandard"  HorizontalAlignment="Left" Margin="10,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                        </TextBox>
+                        <TextBox x:Name="InputCoordinatsNumberCurrentStandard"  HorizontalAlignment="Left" Margin="75,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                        </TextBox>
+                        <Label Content="Current Coordinates" HorizontalAlignment="Left" Margin="6,180,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                        <TextBox x:Name="InputCoordinatsLetterSelectedStandard" HorizontalAlignment="Left" Margin="135,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                        </TextBox>
+                        <TextBox x:Name="InputCoordinatsNumberSelectedStandard" HorizontalAlignment="Left" Margin="200,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                        </TextBox>
+                        <Label Content="Target Coordinates" HorizontalAlignment="Left" Margin="132,180,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                        <CheckBox Name="PlayColorWhiteStandard" Content="White" HorizontalAlignment="Left" Margin="115,166,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="#FFEEEAEA"/>
+                        <CheckBox Name="PlayColorBlackStandard" Content="Black" HorizontalAlignment="Left" Margin="179,166,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                        <TextBox Name="MovesTextBoxStandard" Margin="6,258,0,6" TextWrapping="Wrap" TextAlignment="Center" FontWeight="Bold" HorizontalAlignment="Left" Width="160">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                        </TextBox>
+                        <Label Content="Moves" HorizontalAlignment="Left" Margin="6,238,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                        <TextBox Name="MessageHandleStandard" Margin="189,262,13,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" Height="86" FontSize="14" TextAlignment="Center" Background="#FFE0D1D1" Foreground="#FF8F0720" SelectionBrush="#FF02111D" FontStyle="Normal">
+                            <TextBox.Effect>
+                                <DropShadowEffect/>
+                            </TextBox.Effect>
+                        </TextBox>
+                        <Label Content="Message" HorizontalAlignment="Left" Margin="183,239,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.184,0.233" FontWeight="Bold"/>
+
+                    </Grid>
+                </TabItem>
+            </TabControl>
+
         </Grid>
         <Label Content="A" HorizontalAlignment="Left" Margin="60,480,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FFAE0A0A" Height="29" Width="20"/>
         <Label Content="B" HorizontalAlignment="Left" Margin="126,480,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FFAE0A0A" Height="29" Width="20"/>
@@ -283,5 +339,6 @@
         <Label Content="3" HorizontalAlignment="Left" Margin="19,130,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FFAE0A0A" Height="29" Width="20"/>
         <Label Content="2" HorizontalAlignment="Left" Margin="19,75,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FFAE0A0A" Height="29" Width="20"/>
         <Label Content="1" HorizontalAlignment="Left" Margin="19,15,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FFAE0A0A" Height="29" Width="20"/>
+
     </Grid>
 </Window>

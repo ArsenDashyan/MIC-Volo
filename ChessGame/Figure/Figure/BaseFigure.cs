@@ -7,7 +7,7 @@ namespace Figure
     public delegate void Message(object sender, (string, string) e);
     public class BaseFigure : ISetPosition
     {
-        protected readonly List<BaseFigure> othereFigures;
+        public readonly List<BaseFigure> othereFigures;
 
         #region Property and Feld
         public string Name { get; set; }
