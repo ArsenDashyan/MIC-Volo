@@ -57,6 +57,8 @@ namespace GameManager
 
         #endregion
 
+        #region Other Methods
+
         /// <summary>
         /// Check if coordinate is valid for figure, and set this figure
         /// </summary>
@@ -65,10 +67,8 @@ namespace GameManager
         /// <returns>Return true if target coordinate is valid for figure</returns>
         public bool IsVAlidCoordinate(string current, string target)
         {
-            string[] strCurrent = current.Split('.');
-            var currentCoordinate = new CoordinatePoint(int.Parse(strCurrent[0]), int.Parse(strCurrent[1]));
-            string[] strTarget = target.Split('.');
-            var targetCoordinate = new CoordinatePoint(int.Parse(strTarget[0]), int.Parse(strTarget[1]));
+            var currentCoordinate = GetCoordinateByString(current);
+            var targetCoordinate = GetCoordinateByString(target);
             var baseFigure = CheckedCurrentFigure(currentCoordinate);
             var CurentKing = (King)models.Where(c => c.Color != baseFigure.Color && c is King).Single();
             var antiCheck = (IAntiCheck)baseFigure;
@@ -82,14 +82,18 @@ namespace GameManager
                     if (baseFigure is Pawn pawn)
                         PawnFigureSet(pawn, targetCoordinate);
                     else
-                    {
                         baseFigure.SetFigurePosition(targetCoordinate);
                         CurentKing.IsCheked();
-                    }
                     return true;
                 }
             }
             return false;
+        }
+
+        private static CoordinatePoint GetCoordinateByString(string path)
+        {
+            string[] strCurrent = path.Split('.');
+            return  new CoordinatePoint(int.Parse(strCurrent[0]), int.Parse(strCurrent[1]));
         }
 
         /// <summary>
@@ -320,6 +324,8 @@ namespace GameManager
             return models;
         }
 
+        #endregion
+
         #region Castling & King Perpomance
 
         /// <summary>
@@ -474,10 +480,7 @@ namespace GameManager
                 MessageForPawnChange(pawn.Color, "Please enter a new Figure for change");
             }
             else
-            {
                 pawn.SetFigurePosition(targetCoordinate);
-            }
-            CurentKing.IsCheked();
         }
 
         /// <summary>

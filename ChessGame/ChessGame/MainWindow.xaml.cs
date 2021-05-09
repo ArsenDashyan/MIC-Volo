@@ -20,6 +20,7 @@ namespace ChessGame
         private Manager manager;
         private MovesKnight movesKnight;
         private Standard standard;
+        private PawnChengesPage pawnChengesPage = new PawnChengesPage();
         private List<string> models = new();
         CancellationTokenSource cancellationTokenSource;
         CancellationToken cancellationToken;
@@ -28,7 +29,6 @@ namespace ChessGame
         private string startCoordinate;
         private int countForKnightMoves = 0;
         private bool colorPower = false;
-        private string changedFigureType;
         #endregion
 
         public MainWindow()
@@ -146,8 +146,8 @@ namespace ChessGame
         /// <param name="coordinate"></param>
         public void MessageForPawnChange(object sender, string message)
         {
-            MessageBox.Show(message);
-            PawnChengesPanel.Visibility = Visibility.Visible;
+            pawnChengesPage.Show();
+            pawnChengesPage.MessageCloseAndChange += ChooseButton_Click;
         }
         public async void MessageForProgress(object sender, (string, string) e)
         {
@@ -287,7 +287,6 @@ namespace ChessGame
             }
             return result;
         }
-       
 
         /// <summary>
         /// Select the color with play
@@ -551,7 +550,6 @@ namespace ChessGame
             PanelForGame.SelectedIndex = 2;
             KingGamePanel.Visibility = Visibility.Collapsed;
             KnightMovesPanel.Visibility = Visibility.Collapsed;
-            PawnChengesPanel.Visibility = Visibility.Hidden;
             PlayForStandard.Visibility = Visibility.Visible;
             PlayColorBlackStandard.Visibility = Visibility.Visible;
             PlayColorWhiteStandard.Visibility = Visibility.Visible;
@@ -572,7 +570,6 @@ namespace ChessGame
             InputCoordinatsLetter_Selected.IsEnabled = true;
             InputCoordinatsNumber_Selected.IsEnabled = true;
             InstalB3.IsEnabled = true;
-            PawnChengesPanel.Visibility = Visibility.Hidden;
         }
         public void ShowKingGamePanel()
         {
@@ -708,10 +705,7 @@ namespace ChessGame
                 MessageBox.Show("You did not choose the color for game");
                 throw;
             }
-
         }
-
-        #region Pawn Changed Figure
 
         /// <summary>
         /// Button for change a pawn and new figure
@@ -720,47 +714,14 @@ namespace ChessGame
         /// <param name="e"></param>
         private void ChooseButton_Click(object sender, RoutedEventArgs e)
         {
-            string[] tempFigure = GetChangeFigureImage(currentFigureColor).Split('/');
-            string color = tempFigure[tempFigure.Length - 1].Split('.')[0];
-            string figure = tempFigure[tempFigure.Length - 1].Split('.')[1];
+            string path = currentFigureColor == "White" ? pawnChengesPage.result.BlackFigurePath()
+                                                        : pawnChengesPage.result.WhiteFigurePath();
+            string[] tempFigure = path.Split('/');
+            string color = tempFigure[^1].Split('.')[0];
+            string figure = tempFigure[^1].Split('.')[1];
             string inputInfo = figure + '.' + color;
             standard.SetChangeFigureForPawn(inputInfo);
-            PawnChengesPanel.Visibility = Visibility.Hidden;
-            MessageHandle.Text = " ";
-        }
-        private string GetChangeFigureImage(string color)
-        {
-            string result = string.Empty;
-            if (color == "White")
-            {
-                result = changedFigureType.BlackFigurePath();
-            }
-            else
-            {
-                result = changedFigureType.WhiteFigurePath();
-            }
-            return result;
-        }
-        private void ChangeQueenBtn_Click(object sender, RoutedEventArgs e)
-        {
-            changedFigureType = "Queen";
         }
 
-        private void ChangeRookBtn_Click(object sender, RoutedEventArgs e)
-        {
-            changedFigureType = "Rook";
-        }
-
-        private void ChangeBishopBtn_Click(object sender, RoutedEventArgs e)
-        {
-            changedFigureType = "Bishop";
-        }
-
-        private void ChangeKnightBtn_Click(object sender, RoutedEventArgs e)
-        {
-            changedFigureType = "Knight";
-        }
-
-        #endregion
     }
 }

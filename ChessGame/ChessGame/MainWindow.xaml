@@ -257,22 +257,7 @@
                 </TabItem>
                 <TabItem Name="StandardGamePanel" Header="   Standard  Game   ">
                     <Grid Background="#FFA8857D" Margin="2,2,2,2">
-                        <Grid Name="PawnChengesPanel" Margin="2,2,2,396">
-                            <Label Content="        Please select a figure for changed" Margin="0,3,-9,0" FontWeight="Bold" FontSize="16" Height="41" VerticalAlignment="Top" HorizontalAlignment="Right" Width="347"/>
-                            <Button x:Name="ChangeQueenBtn" HorizontalAlignment="Left" Margin="20,40,0,0" VerticalAlignment="Top" Width="65" Height="47" Click="ChangeQueenBtn_Click">
-                                <Image Source="Resources/White.Queen.png" Width="65"/>
-                            </Button>
-                            <Button x:Name="ChangeRookBtn" HorizontalAlignment="Left" Margin="100,40,0,0" VerticalAlignment="Top" Width="65" Height="47" Click="ChangeRookBtn_Click">
-                                <Image Source="Resources/White.Rook.png" Width="65"/>
-                            </Button>
-                            <Button x:Name="ChangeBishopBtn" HorizontalAlignment="Left" Margin="180,40,0,0" VerticalAlignment="Top" Width="65" Height="47" Click="ChangeBishopBtn_Click">
-                                <Image Source="Resources/White.Bishop.png" Width="65"/>
-                            </Button>
-                            <Button x:Name="ChangeKnightBtn" HorizontalAlignment="Left" Margin="260,40,0,0" VerticalAlignment="Top" Width="65" Height="47" Click="ChangeKnightBtn_Click">
-                                <Image Source="Resources/White.Knight.png" Width="65"/>
-                            </Button>
-                            <Button Content="Choose" HorizontalAlignment="Center" Margin="0,101,0,0" Width="153" Click="ChooseButton_Click" Height="24" VerticalAlignment="Top"/>
-                        </Grid>
+                        
                         <Button Name="ResetStandardGame" Content="Reset" FontSize="14" FontWeight="Bold" Background="#FFDA1717" Margin="180,492,0,0" Click="ResetStandardGame_Click" HorizontalAlignment="Left" Width="145" Height="23" VerticalAlignment="Top">
                             <Button.Effect>
                                 <DropShadowEffect/>
