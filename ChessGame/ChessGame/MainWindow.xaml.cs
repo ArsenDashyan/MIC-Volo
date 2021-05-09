@@ -44,11 +44,11 @@ namespace ChessGame
         private void InitializeStandard()
         {
             standard = new Standard();
-            standard.setPicture += SetFigurePicture;
-            standard.removePicture += RemoveFigurePicture;
-            standard.messageForMove += MessageMoveForStandardGame;
-            standard.messageCheck += MessageCheck;
-            standard.messageForPawnChange += MessageForPawnChange;
+            standard.SetPicture += SetFigurePicture;
+            standard.RemovePicture += RemoveFigurePicture;
+            standard.MessageForMove += MessageMoveForStandardGame;
+            standard.MessageCheck += MessageCheckStandard;
+            standard.MessageForPawnChange += MessageForPawnChange;
         }
         private void InitializeKingGame()
         {
@@ -122,6 +122,7 @@ namespace ChessGame
                     $"{target[0]}{target[1]}\n";
             }
         }
+
         /// <summary>
         /// Show a figure moves
         /// </summary>
@@ -145,8 +146,8 @@ namespace ChessGame
         /// <param name="coordinate"></param>
         public void MessageForPawnChange(object sender, string message)
         {
+            MessageBox.Show(message);
             PawnChengesPanel.Visibility = Visibility.Visible;
-            MessageHandleStandard.Text = message;
         }
         public async void MessageForProgress(object sender, (string, string) e)
         {
@@ -227,7 +228,11 @@ namespace ChessGame
             if (GetCurrentFigureNew(out (string, string) tempCoord))
             {
                 var tupl = tempCoord;
-                GameManager(tupl);
+                if (manager.IsVAlidCoordinate(tupl.Item1, tupl.Item2))
+                {
+                    manager.MateMessage += MessageMate;
+                    manager.Logic();
+                }
             }
         }
 
@@ -243,9 +248,8 @@ namespace ChessGame
             MessageHandle.Text = message;
             cancellationTokenSource.Cancel();
         }
-        public void MessageCheck(object sender, string message)
+        public void MessageCheckStandard(object sender, string message)
         {
-            MessageHandle.Text = message;
             MessageHandleStandard.Text = message;
         }
 
@@ -331,7 +335,6 @@ namespace ChessGame
         #endregion
 
         #region For Knight Moves
-
         private void KnightSetButton(object sender, RoutedEventArgs e)
         {
             if (GetCurrentFigureCoordinate(KnightStartLetter, KnightStartNumber, out string currentCoord))
@@ -445,6 +448,17 @@ namespace ChessGame
             manager.messageForMove += MessageMoveForKingGame;
         }
 
+        private void ResetStandardGame_Click(object sender, RoutedEventArgs e)
+        {
+            ResetBoard();
+            ShowStandardGamePanel();
+            InitializeStandard();
+            standard.SetAllFigures();
+            currentGameStatus = 3;
+            MessageBox.Show("You Change A Standard Game, Good Luck");
+
+        }
+
         /// <summary>
         /// Reset button the Board for start Knight game
         /// </summary>
@@ -534,9 +548,13 @@ namespace ChessGame
         public void ShowStandardGamePanel()
         {
             StandardGamePanel.Visibility = Visibility.Visible;
+            PanelForGame.SelectedIndex = 2;
             KingGamePanel.Visibility = Visibility.Collapsed;
             KnightMovesPanel.Visibility = Visibility.Collapsed;
             PawnChengesPanel.Visibility = Visibility.Hidden;
+            PlayForStandard.Visibility = Visibility.Visible;
+            PlayColorBlackStandard.Visibility = Visibility.Visible;
+            PlayColorWhiteStandard.Visibility = Visibility.Visible;
             InputCoordinatsLetter_Corrent.IsEnabled = true;
             InputCoordinatsNumber_Corrent.IsEnabled = true;
             InputCoordinatsLetter_Selected.IsEnabled = true;
@@ -546,6 +564,7 @@ namespace ChessGame
         public void ShowKnightGamePanel()
         {
             KnightMovesPanel.Visibility = Visibility.Visible;
+            PanelForGame.SelectedIndex = 1;
             StandardGamePanel.Visibility = Visibility.Collapsed;
             KingGamePanel.Visibility = Visibility.Collapsed;
             InputCoordinatsLetter_Corrent.IsEnabled = true;
@@ -558,6 +577,7 @@ namespace ChessGame
         public void ShowKingGamePanel()
         {
             KingGamePanel.Visibility = Visibility.Visible;
+            PanelForGame.SelectedIndex = 0;
             StandardGamePanel.Visibility = Visibility.Collapsed;
             KnightMovesPanel.Visibility = Visibility.Collapsed;
             PlayB2.IsEnabled = true;
@@ -638,7 +658,7 @@ namespace ChessGame
                     }
                     break;
                 case 3:
-                    standard.removePicture += RemoveFigurePicture;
+                    standard.RemovePicture += RemoveFigurePicture;
                     if (standard.IsVAlidCoordinate(tupl.Item1, tupl.Item2))
                     {
                         if (colorPower)
@@ -678,9 +698,9 @@ namespace ChessGame
                     colorPower = true;
                 }
                 InitializeStandard();
-                PlayColorWhite.IsEnabled = false;
-                PlayColorBlack.IsEnabled = false;
-                PlayForStandard.IsEnabled = false;
+                PlayForStandard.Visibility = Visibility.Hidden;
+                PlayColorBlackStandard.Visibility = Visibility.Hidden;
+                PlayColorWhiteStandard.Visibility = Visibility.Hidden;
                 MessageBox.Show("Good Luck!!!");
             }
             catch (Exception)

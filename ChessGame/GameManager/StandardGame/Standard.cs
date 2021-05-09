@@ -7,19 +7,15 @@ namespace GameManager
     public class Standard
     {
         #region Property and Feld
-        private static List<BaseFigure> models = new();
-        private BaseFigure baseFigure;
+        private static readonly List<BaseFigure> models = new();
         private BaseFigure chengedPawn;
-        private BaseFigure CurentKing;
-        private BaseFigure CheckedFigure;
-        public event Message messageForMove;
-        public event MessageForMate messageForPawnChange;
-        public event MessageForMate messageCheck;
-        public event Picture setPicture;
-        public event Picture removePicture;
+        public event Message MessageForMove;
+        public event MessageForMate MessageForPawnChange;
+        public event MessageForMate MessageCheck;
+        public event Picture SetPicture;
+        public event Picture RemovePicture;
         private static CoordinatePoint coordinate;
         private static int pawnCount = 2;
-        private bool isChecked = true;
         #endregion
 
         #region Event Methods
@@ -31,7 +27,7 @@ namespace GameManager
         /// <param name="coordinate"></param>
         public void SetFigurePicture(object sender, string coordinate)
         {
-            setPicture(this, coordinate);
+            SetPicture(this, coordinate);
         }
 
         /// <summary>
@@ -41,7 +37,7 @@ namespace GameManager
         /// <param name="coordinate"></param>
         public void RemoveFigurePicture(object sender, string coordinate)
         {
-            removePicture(this, coordinate);
+            RemovePicture(this, coordinate);
         }
 
         /// <summary>
@@ -51,7 +47,12 @@ namespace GameManager
         /// <param name="coordinate"></param>
         public void MessageMove(object sender, (string, string) coordinate)
         {
-            messageForMove(this, coordinate);
+            MessageForMove(this, coordinate);
+        }
+
+        public void MessageChek(object sender, string message)
+        {
+            MessageCheck(this, message);
         }
 
         #endregion
@@ -68,26 +69,24 @@ namespace GameManager
             var currentCoordinate = new CoordinatePoint(int.Parse(strCurrent[0]), int.Parse(strCurrent[1]));
             string[] strTarget = target.Split('.');
             var targetCoordinate = new CoordinatePoint(int.Parse(strTarget[0]), int.Parse(strTarget[1]));
-            baseFigure = CheckedCurrentFigure(currentCoordinate);
-            var available = (IAvailableMoves)baseFigure;
-            if (IsCheckedThisKing(baseFigure, targetCoordinate))
+            var baseFigure = CheckedCurrentFigure(currentCoordinate);
+            var CurentKing = (King)models.Where(c => c.Color != baseFigure.Color && c is King).Single();
+            var antiCheck = (IAntiCheck)baseFigure;
+            var movesList = antiCheck.MovesWithKingIsNotUnderCheck();
+            if (movesList.Contains(targetCoordinate))
             {
-                if (isChecked)
+                if (baseFigure is King king)
+                    return KingFigureSet(king, targetCoordinate);
+                else
                 {
-                    if (baseFigure is King king)
-                        return KingFigureSet(king, targetCoordinate);
-                    else if (available.AvailableMoves().Contains(targetCoordinate))
+                    if (baseFigure is Pawn pawn)
+                        PawnFigureSet(pawn, targetCoordinate);
+                    else
                     {
-                        if (available is Pawn pawn)
-                            PawnFigureSet(pawn, targetCoordinate);
-                        else
-                        {
-                            baseFigure.SetFigurePosition(targetCoordinate);
-                            IsCheckedKing(baseFigure);
-                        }
-                        return true;
+                        baseFigure.SetFigurePosition(targetCoordinate);
+                        CurentKing.IsCheked();
                     }
-                    return false;
+                    return true;
                 }
             }
             return false;
@@ -103,6 +102,10 @@ namespace GameManager
                 item.setPicture += SetFigurePicture;
                 item.removePicture += RemoveFigurePicture;
                 item.messageForMove += MessageMove;
+                if (item is King king)
+                {
+                    king.messageCheck += MessageChek;
+                }
                 switch (item.Name)
                 {
                     case "Queen.White.1":
@@ -243,28 +246,6 @@ namespace GameManager
         }
 
         /// <summary>
-        /// Check pawn have changed a new figure, if no changed pawn set a target coordinate
-        /// </summary>
-        /// <param name="pawn">Current pawn</param>
-        /// <param name="targetCoordinate">Target coordinate</param>
-        private void PawnFigureSet(Pawn pawn, CoordinatePoint targetCoordinate)
-        {
-            if (CheckPawnChange(targetCoordinate, pawn))
-            {
-                coordinate = targetCoordinate;
-                pawn.SetFigurePosition(targetCoordinate);
-                chengedPawn = pawn;
-                messageForPawnChange(pawn.Color, "Please enter a new Figure for change");
-                IsCheckedKing(baseFigure);
-            }
-            else
-            {
-                pawn.SetFigurePosition(targetCoordinate);
-                IsCheckedKing(baseFigure);
-            }
-        }
-
-        /// <summary>
         /// Create All figures
         /// </summary>
         /// <returns>Return all figures</returns>
@@ -339,7 +320,7 @@ namespace GameManager
             return models;
         }
 
-        #region King perfomance
+        #region Castling & King Perpomance
 
         /// <summary>
         /// Check current king coordinate for move and set
@@ -349,88 +330,22 @@ namespace GameManager
         /// <returns>Return true if king is moved</returns>
         private bool KingFigureSet(King king, CoordinatePoint targetCoordinate)
         {
+            var CurentKing = (King)models.Where(c => c.Color != king.Color && c is King).Single();
             if (ValidMoves.GetCurrentKingMoves(king).Contains(targetCoordinate))
             {
-                baseFigure.SetFigurePosition(targetCoordinate);
-                IsCheckedKing(baseFigure);
+                king.SetFigurePosition(targetCoordinate);
+                CurentKing.IsCheked();
                 return true;
             }
             else if (CheckCastling(king, out CoordinatePoint coordinatePoint))
             {
                 SetRookCastling(coordinatePoint);
-                baseFigure.SetFigurePosition(targetCoordinate);
-                IsCheckedKing(baseFigure);
+                king.SetFigurePosition(targetCoordinate);
+                CurentKing.IsCheked();
                 return true;
             }
             return false;
         }
-
-        /// <summary>
-        /// Checked Current king is check or no
-        /// </summary>
-        /// <param name="baseFigure">Current figure with moved</param>
-        /// <returns>Return true if king is under check</returns>
-        private void IsCheckedKing(BaseFigure baseFigure)
-        {
-            CurentKing = (BaseFigure)models.Where(c => c.Color != baseFigure.Color && c is King).Single();
-            if (DangerPosition(CurentKing).Contains(CurentKing.Coordinate))
-            {
-                CheckedFigure = baseFigure;
-                messageCheck(this, "Check");
-                isChecked = false;
-            }
-            else
-            {
-                isChecked = true;
-                messageCheck(this, " ");
-            }
-
-        }
-
-        /// <summary>
-        /// Check the danger position for current king
-        /// </summary>
-        /// <param name="model">King instance withe or Black</param>
-        /// <returns>Return danger position List for current king </returns>
-        private static List<CoordinatePoint> DangerPosition(BaseFigure model)
-        {
-            var modelNew = models.Where(c => c.Color != model.Color);
-            var result = new List<CoordinatePoint>();
-            foreach (var item in modelNew)
-            {
-                var temp = (IAvailableMoves)item;
-                var array = temp.AvailableMoves();
-                result.AddRange(array);
-            }
-            return result;
-        }
-        private bool IsCheckedThisKing(BaseFigure baseFigure, CoordinatePoint coordinatePoint)
-        {
-            var thisKing = (BaseFigure)models.Where(c => c.Color == baseFigure.Color && c is King).Single();
-            var temp = baseFigure.Coordinate;
-            baseFigure.Coordinate = coordinatePoint;
-            if (!DangerPosition(thisKing).Contains(thisKing.Coordinate))
-            {
-                baseFigure.Coordinate = temp;
-                isChecked = true;
-                return true;
-            }
-            else if (coordinatePoint == CheckedFigure?.Coordinate)
-            {
-                baseFigure.Coordinate = temp;
-                isChecked = true;
-                return true;
-            }
-            else
-            {
-                baseFigure.Coordinate = temp;
-                return false;
-            }
-        }
-
-        #endregion
-
-        #region Castling
 
         /// <summary>
         /// Checked Rook is valid position for castling
@@ -438,7 +353,7 @@ namespace GameManager
         /// <param name="king">Current king</param>
         /// <param name="coordinatePoint"></param>
         /// <returns>Return true if rook position is valid</returns>
-        private bool CheckRook(King king, out CoordinatePoint coordinatePoint)
+        private static bool CheckRook(King king, out CoordinatePoint coordinatePoint)
         {
             var modelNew = models.Where(f => f.Color == king.Color && f is Rook && !f.isMoved).ToList();
             foreach (var item in modelNew)
@@ -460,7 +375,7 @@ namespace GameManager
         /// <param name="rook">Current Rook</param>
         /// <param name="coordinatePoint">Out parametr, rook coordinate</param>
         /// <returns></returns>
-        private bool CheckEpmtyCells(King king, Rook rook, out CoordinatePoint coordinatePoint)
+        private static bool CheckEpmtyCells(King king, Rook rook, out CoordinatePoint coordinatePoint)
         {
             int count = 0;
             if (king.Coordinate.X < rook.Coordinate.X)
@@ -482,7 +397,7 @@ namespace GameManager
                 var coordinatePoint3 = new CoordinatePoint(king.Coordinate.X - 3, king.Coordinate.Y);
                 foreach (var item in models)
                 {
-                    if (item.Coordinate != coordinatePoint1 & item.Coordinate != coordinatePoint2 
+                    if (item.Coordinate != coordinatePoint1 & item.Coordinate != coordinatePoint2
                                                             & item.Coordinate != coordinatePoint3)
                         count++;
                 }
@@ -525,7 +440,7 @@ namespace GameManager
         /// Set the rook change coordinate
         /// </summary>
         /// <param name="coordinatePoint"></param>
-        private void SetRookCastling(CoordinatePoint coordinatePoint)
+        private static void SetRookCastling(CoordinatePoint coordinatePoint)
         {
             foreach (var item in models.Where(c => c is Rook))
             {
@@ -542,6 +457,28 @@ namespace GameManager
         #endregion
 
         #region Check Pawn
+
+        /// <summary>
+        /// Check pawn have changed a new figure, if no changed pawn set a target coordinate
+        /// </summary>
+        /// <param name="pawn">Current pawn</param>
+        /// <param name="targetCoordinate">Target coordinate</param>
+        private void PawnFigureSet(Pawn pawn, CoordinatePoint targetCoordinate)
+        {
+            var CurentKing = (King)models.Where(c => c.Color != pawn.Color && c is King).Single();
+            if (CheckPawnChange(targetCoordinate, pawn))
+            {
+                coordinate = targetCoordinate;
+                pawn.SetFigurePosition(targetCoordinate);
+                chengedPawn = pawn;
+                MessageForPawnChange(pawn.Color, "Please enter a new Figure for change");
+            }
+            else
+            {
+                pawn.SetFigurePosition(targetCoordinate);
+            }
+            CurentKing.IsCheked();
+        }
 
         /// <summary>
         /// Check the pawn figure for change new figure

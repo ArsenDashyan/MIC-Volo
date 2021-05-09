@@ -117,11 +117,11 @@
 
         </Grid>
         <Grid x:Name="FigurPanel" Background="#FFA8857D" Grid.Column="2" Margin="30,5,5,5" Grid.RowSpan="2">
-            <TabControl Grid.Column="2">
+            <TabControl x:Name="PanelForGame" Grid.Column="2">
                 <TabItem Header="   King  Game   " Name="KingGamePanel">
                     <Grid Background="#FFA8857D" Margin="2,2,2,2">
-                        <ProgressBar Name="Progress" Margin="192,519,22,7"/>
-                        <TextBox x:Name="ProgressTextBox" Margin="216,461,19,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.487,-0.315" Height="36"/>
+                        <ProgressBar Name="Progress" Margin="175,519,0,7" HorizontalAlignment="Left" Width="157"/>
+                        <TextBox x:Name="ProgressTextBox" Margin="175,461,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.487,-0.315" Height="36" HorizontalAlignment="Left" Width="157"/>
                         <TextBox x:Name="InputCoordinatsLetter" HorizontalAlignment="Left" Margin="10,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
                             <TextBox.Effect>
                                 <DropShadowEffect/>
@@ -133,7 +133,7 @@
                                 <DropShadowEffect/>
                             </Button.Effect>
                         </Button>
-                        <Button Content="Reset" FontSize="14" FontWeight="Bold" Background="#FFDA1717" HorizontalAlignment="Left" Margin="175,369,0,0" VerticalAlignment="Top" Height="30" Width="155" Click="Reset_Button">
+                        <Button Content="Reset" FontSize="14" FontWeight="Bold" Background="#FFDA1717" Margin="175,369,0,0" VerticalAlignment="Top" Height="30" Click="Reset_Button" HorizontalAlignment="Left" Width="157">
                             <Button.Effect>
                                 <DropShadowEffect/>
                             </Button.Effect>
@@ -197,7 +197,7 @@
                             </TextBox.Effect>
                         </TextBox>
                         <Label Content="Moves" HorizontalAlignment="Left" Margin="6,238,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                        <TextBox Name="MessageHandle" HorizontalAlignment="Left" Margin="177,282,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontWeight="Bold" Height="39" FontSize="14" TextAlignment="Center" Background="#FFE0D1D1" Foreground="#FF8F0720" SelectionBrush="#FF02111D" FontStyle="Normal">
+                        <TextBox Name="MessageHandle" Margin="175,282,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" Height="39" FontSize="14" TextAlignment="Center" Background="#FFE0D1D1" Foreground="#FF8F0720" SelectionBrush="#FF02111D" FontStyle="Normal" HorizontalAlignment="Left" Width="157">
                             <TextBox.Effect>
                                 <DropShadowEffect/>
                             </TextBox.Effect>
@@ -273,50 +273,27 @@
                             </Button>
                             <Button Content="Choose" HorizontalAlignment="Center" Margin="0,101,0,0" Width="153" Click="ChooseButton_Click" Height="24" VerticalAlignment="Top"/>
                         </Grid>
-                        <Button Content="Reset" FontSize="14" FontWeight="Bold" Background="#FFDA1717" HorizontalAlignment="Left" Margin="187,369,0,0" VerticalAlignment="Top" Height="30" Width="155" Click="Reset_Button">
+                        <Button Name="ResetStandardGame" Content="Reset" FontSize="14" FontWeight="Bold" Background="#FFDA1717" Margin="180,492,0,0" Click="ResetStandardGame_Click" HorizontalAlignment="Left" Width="145" Height="23" VerticalAlignment="Top">
                             <Button.Effect>
                                 <DropShadowEffect/>
                             </Button.Effect>
                         </Button>
 
-                        <Button Name="PlayForStandard" Content="Play" Background="LightGray" HorizontalAlignment="Left" Margin="241,156,0,0" VerticalAlignment="Top" Height="30" Width="90" FontSize="16" Click="PlayForStandard_Click"/>
-
-                        <TextBox x:Name="InputCoordinatsLetterCurrentStandard"  HorizontalAlignment="Left" Margin="10,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
-                            <TextBox.Effect>
-                                <DropShadowEffect/>
-                            </TextBox.Effect>
-                        </TextBox>
-                        <TextBox x:Name="InputCoordinatsNumberCurrentStandard"  HorizontalAlignment="Left" Margin="75,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
-                            <TextBox.Effect>
-                                <DropShadowEffect/>
-                            </TextBox.Effect>
-                        </TextBox>
-                        <Label Content="Current Coordinates" HorizontalAlignment="Left" Margin="6,180,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                        <TextBox x:Name="InputCoordinatsLetterSelectedStandard" HorizontalAlignment="Left" Margin="135,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
-                            <TextBox.Effect>
-                                <DropShadowEffect/>
-                            </TextBox.Effect>
-                        </TextBox>
-                        <TextBox x:Name="InputCoordinatsNumberSelectedStandard" HorizontalAlignment="Left" Margin="200,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="44" Height="30" FontSize="14" FontWeight="Bold" TextAlignment="Center">
-                            <TextBox.Effect>
-                                <DropShadowEffect/>
-                            </TextBox.Effect>
-                        </TextBox>
-                        <Label Content="Target Coordinates" HorizontalAlignment="Left" Margin="132,180,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                        <CheckBox Name="PlayColorWhiteStandard" Content="White" HorizontalAlignment="Left" Margin="115,166,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="#FFEEEAEA"/>
-                        <CheckBox Name="PlayColorBlackStandard" Content="Black" HorizontalAlignment="Left" Margin="179,166,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                        <Button Name="PlayForStandard" Content="Play" Background="LightGray" Margin="6,198,259,0" VerticalAlignment="Top" Height="28" FontSize="16" Click="PlayForStandard_Click"/>
+                        <CheckBox Name="PlayColorWhiteStandard" Content="White" HorizontalAlignment="Left" Margin="6,174,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="#FFEEEAEA"/>
+                        <CheckBox Name="PlayColorBlackStandard" Content="Black" HorizontalAlignment="Left" Margin="6,150,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                         <TextBox Name="MovesTextBoxStandard" Margin="6,258,0,6" TextWrapping="Wrap" TextAlignment="Center" FontWeight="Bold" HorizontalAlignment="Left" Width="160">
                             <TextBox.Effect>
                                 <DropShadowEffect/>
                             </TextBox.Effect>
                         </TextBox>
-                        <Label Content="Moves" HorizontalAlignment="Left" Margin="6,238,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                        <TextBox Name="MessageHandleStandard" Margin="189,262,13,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" Height="86" FontSize="14" TextAlignment="Center" Background="#FFE0D1D1" Foreground="#FF8F0720" SelectionBrush="#FF02111D" FontStyle="Normal">
+                        <Label Content="Moves" HorizontalAlignment="Left" Margin="6,235,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                        <TextBox Name="MessageHandleStandard" Margin="180,400,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" Height="86" FontSize="14" TextAlignment="Center" Background="#FFE0D1D1" Foreground="#FF8F0720" SelectionBrush="#FF02111D" FontStyle="Normal" HorizontalAlignment="Left" Width="142">
                             <TextBox.Effect>
                                 <DropShadowEffect/>
                             </TextBox.Effect>
                         </TextBox>
-                        <Label Content="Message" HorizontalAlignment="Left" Margin="183,239,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.184,0.233" FontWeight="Bold"/>
+                        <Label Content="Message" HorizontalAlignment="Left" Margin="175,378,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.184,0.233" FontWeight="Bold"/>
 
                     </Grid>
                 </TabItem>

@@ -3,8 +3,11 @@ using System.Linq;
 
 namespace Figure
 {
-    public class King : BaseFigure, ICrosswise, IDiagonal, IAvailableMoves
+    public delegate void MessageForMate(object sender, string str);
+    public class King : BaseFigure, ICrosswise, IDiagonal, IAvailableMoves, IAntiCheck
     {
+        public BaseFigure chekedFigure;
+        public event MessageForMate messageCheck;
         public King(string name, FColor color, List<BaseFigure> othereFigures) : base(othereFigures)
         {
             Name = name;
@@ -152,6 +155,68 @@ namespace Figure
             result.Remove(this.Coordinate);
             return result;
         }
+
+        /// <summary>
+        /// Check the danger position for current king
+        /// </summary>
+        /// <param name="model">King instance withe or Black</param>
+        /// <returns>Return danger position List for current king </returns>
+        private static List<CoordinatePoint> DangerPosition(BaseFigure model)
+        {
+            var modelNew = model.othereFigures.Where(c => c.Color != model.Color);
+            var result = new List<CoordinatePoint>();
+            foreach (var item in modelNew)
+            {
+                var temp = (IAvailableMoves)item;
+                var array = temp.AvailableMoves();
+                result.AddRange(array);
+            }
+            return result;
+        }
+        public List<CoordinatePoint> MovesWithKingIsNotUnderCheck()
+        {
+            var thisKing = (BaseFigure)othereFigures.Where(c => c.Color == this.Color && c is King).Single();
+            var king = (King)thisKing;
+            var temp = this.Coordinate;
+            var goodMoves = new List<CoordinatePoint>();
+            foreach (var item in this.AvailableMoves())
+            {
+                this.Coordinate = item;
+                if (!DangerPosition(thisKing).Contains(thisKing.Coordinate))
+                {
+                    goodMoves.Add(item);
+                }
+                if (king.chekedFigure != null)
+                {
+                    if (item == king.chekedFigure.Coordinate)
+                    {
+                        goodMoves.Add(item);
+                    }
+                }
+            }
+            this.Coordinate = temp;
+            return goodMoves;
+        }
         #endregion
+
+        /// <summary>
+        /// Checked Current king is check or no
+        /// </summary>
+        public void IsCheked()
+        {
+            var modelNew = othereFigures.Where(f => f.Color != this.Color).ToList();
+            foreach (var item in modelNew)
+            {
+                var temp = (IAvailableMoves)item;
+                if (temp.AvailableMoves().Contains(this.Coordinate))
+                {
+                    this.chekedFigure = item;
+                    messageCheck(this, "Check");
+                    break;
+                }
+                else
+                    messageCheck(this, " ");
+            }
+        }
     }
 }
