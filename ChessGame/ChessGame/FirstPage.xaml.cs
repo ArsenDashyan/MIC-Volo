@@ -19,7 +19,7 @@ namespace ChessGame
                 var mainWindow = new MainWindow();
                 mainWindow.ShowKingGamePanel();
                 mainWindow.Show();
-                MainWindow.currentGameStatus = 1;
+                MainWindow.CurrentGameStatus = 1;
                 this.Close();
             }
             if (CheckKnight.IsChecked == true)
@@ -27,7 +27,7 @@ namespace ChessGame
                 var mainWindow = new MainWindow();
                 mainWindow.ShowKnightGamePanel();
                 mainWindow.Show();
-                MainWindow.currentGameStatus = 2;
+                MainWindow.CurrentGameStatus = 2;
                 this.Close();
             }
             if (StandardGame.IsChecked == true)
@@ -36,7 +36,7 @@ namespace ChessGame
                 mainWindow.ShowStandardGamePanel();
                 mainWindow.Show();
                 mainWindow.SetAllFigures();
-                MainWindow.currentGameStatus = 3;
+                MainWindow.CurrentGameStatus = 3;
                 this.Close();
             }
         }

@@ -89,7 +89,7 @@ namespace GameManager
                         PawnFigureSet(pawn, targetCoordinate);
                     else
                         baseFigure.SetFigurePosition(targetCoordinate);
-                        CurentKing.IsCheked();
+                    CurentKing.IsCheked();
                     return true;
                 }
             }
@@ -99,7 +99,7 @@ namespace GameManager
         private static CoordinatePoint GetCoordinateByString(string path)
         {
             string[] strCurrent = path.Split('.');
-            return  new CoordinatePoint(int.Parse(strCurrent[0]), int.Parse(strCurrent[1]));
+            return new CoordinatePoint(int.Parse(strCurrent[0]), int.Parse(strCurrent[1]));
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace GameManager
                 item.messageForMove += MessageMove;
                 if (item is King king)
                 {
-                    king.messageCheck += MessageChek;
+                    king.MessageCheck += MessageChek;
                 }
                 switch (item.Name)
                 {
@@ -344,15 +344,16 @@ namespace GameManager
         private bool KingFigureSet(King king, CoordinatePoint targetCoordinate)
         {
             var CurentKing = (King)models.Where(c => c.Color != king.Color && c is King).Single();
-            if (ValidMoves.GetCurrentKingMoves(king).Contains(targetCoordinate))
+
+            if (CheckCastling(king, out CoordinatePoint coordinatePoint))
             {
+                SetRookCastling(coordinatePoint);
                 king.SetFigurePosition(targetCoordinate);
                 CurentKing.IsCheked();
                 return true;
             }
-            else if (CheckCastling(king, out CoordinatePoint coordinatePoint))
+            else if (ValidMoves.GetCurrentKingMoves(king).Contains(targetCoordinate))
             {
-                SetRookCastling(coordinatePoint);
                 king.SetFigurePosition(targetCoordinate);
                 CurentKing.IsCheked();
                 return true;

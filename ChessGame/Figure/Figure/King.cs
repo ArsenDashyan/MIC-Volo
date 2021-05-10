@@ -7,7 +7,7 @@ namespace Figure
     public class King : BaseFigure, ICrosswise, IDiagonal, IAvailableMoves, IAntiCheck
     {
         public BaseFigure chekedFigure;
-        public event MessageForMate messageCheck;
+        public event MessageForMate MessageCheck;
         public King(string name, FColor color, List<BaseFigure> othereFigures) : base(othereFigures)
         {
             Name = name;
@@ -17,8 +17,8 @@ namespace Figure
         #region Move
         public List<CoordinatePoint> Horizontal()
         {
-            List<CoordinatePoint> arr = new List<CoordinatePoint>();
-            List<CoordinatePoint> newArr = new List<CoordinatePoint>();
+            var arr = new List<CoordinatePoint>();
+            var newArr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
             if (this.Coordinate.X - 1 >= 0)
             {
@@ -29,6 +29,11 @@ namespace Figure
             {
                 arr.Add(this.Coordinate);
                 arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y));
+            }
+            if (!this.isMoved)
+            {
+                arr.Add(new CoordinatePoint(this.Coordinate.X + 2, this.Coordinate.Y));
+                arr.Add(new CoordinatePoint(this.Coordinate.X - 2, this.Coordinate.Y));
             }
             foreach (var item in model)
             {
@@ -50,8 +55,8 @@ namespace Figure
         }
         public List<CoordinatePoint> Vertical()
         {
-            List<CoordinatePoint> arr = new List<CoordinatePoint>();
-            List<CoordinatePoint> newArr = new List<CoordinatePoint>();
+            var arr = new List<CoordinatePoint>();
+            var newArr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
             if (this.Coordinate.Y - 1 >= 0)
             {
@@ -90,7 +95,7 @@ namespace Figure
         }
         public List<CoordinatePoint> RightIndex()
         {
-            List<CoordinatePoint> arr = new List<CoordinatePoint>();
+            var arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
             if (this.Coordinate.X + 1 <= 7 && this.Coordinate.Y - 1 >= 0)
             {
@@ -119,7 +124,7 @@ namespace Figure
         }
         public List<CoordinatePoint> LeftIndex()
         {
-            List<CoordinatePoint> arr = new List<CoordinatePoint>();
+            var arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
             if (this.Coordinate.X - 1 >= 0 && this.Coordinate.Y - 1 >= 0)
             {
@@ -211,11 +216,11 @@ namespace Figure
                 if (temp.AvailableMoves().Contains(this.Coordinate))
                 {
                     this.chekedFigure = item;
-                    messageCheck(this, "Check");
+                    MessageCheck(this, "Check");
                     break;
                 }
                 else
-                    messageCheck(this, " ");
+                    MessageCheck(this, " ");
             }
         }
     }

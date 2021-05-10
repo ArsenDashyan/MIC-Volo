@@ -1,6 +1,7 @@
 ﻿using GameManager;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,21 +17,29 @@ namespace ChessGame
     {
         #region Property and Feld
         private UIElement DragObjectImage { get => dragObjectImage; set => dragObjectImage = value; }
+        public static int CurrentGameStatus { get => currentGameStatus; set => currentGameStatus = value; }
+
         private UIElement dragObjectImage = null;
         private Manager manager;
         private MovesKnight movesKnight;
         private Standard standard;
-        private PawnChengesPage pawnChengesPage = new PawnChengesPage();
+        private readonly PawnChengesPage pawnChengesPage = new();
         private List<string> models = new();
+        private readonly List<string> modelsForDeleteid = new();
         CancellationTokenSource cancellationTokenSource;
         CancellationToken cancellationToken;
-        public static int currentGameStatus;
+        private static int currentGameStatus;
         public string currentFigureColor;
         private string startCoordinate;
         private int countForKnightMoves = 0;
         private bool colorPower = false;
-        int i = 0;
-        int j = 0;
+        private int iBlack = 0;
+        private int jBlack = 0;
+        private int iWhite = 0;
+        private int jWhite = 0;
+        private static readonly string filepath = "C:\\Users\\arsen\\OneDrive\\Desktop\\Notes\\";
+        private static string gameStory;
+        private static string names;
         #endregion
 
         public MainWindow()
@@ -39,6 +48,21 @@ namespace ChessGame
             InitializeStandard();
             InitializeKingGame();
             InitializeKnightGame();
+        }
+
+        public static void AddWithNote(string name)
+        {
+            DateTime dateTime = DateTime.Now;
+            string details = string.Format("{0}:{1}", name, dateTime);
+            string info = details + "\n\n" + gameStory;
+            bool flag = !File.Exists(filepath + name + ".txt");
+            if (flag)
+            {
+                File.Create(filepath + name + ".txt").Close();
+                File.WriteAllText(filepath + name + ".txt", info);
+            }
+            else
+                File.AppendAllText(filepath + name + ".txt", "\n" + info);
         }
 
         #region Methods for Events
@@ -63,8 +87,8 @@ namespace ChessGame
         private void InitializeKnightGame()
         {
             movesKnight = new MovesKnight();
-            movesKnight.setPicture += SetFigurePicture;
-            movesKnight.messageForMove += delegate { };
+            movesKnight.SetPicture += SetFigurePicture;
+            movesKnight.MessageForMoveKnight += delegate { };
         }
 
         /// <summary>
@@ -99,12 +123,29 @@ namespace ChessGame
             bitmap.EndInit();
             image.Source = bitmap;
             image.Tag = str;
-            Grid.SetColumn(image, i++);
-            Grid.SetRow(image, j++);
+            modelsForDeleteid.Add(str);
             if (str.Contains("White"))
+            {
+                if (iBlack == 4)
+                {
+                    iBlack = 0;
+                    jBlack++;
+                }
+                Grid.SetColumn(image, iBlack++);
+                Grid.SetRow(image, jBlack);
                 WhiteDeleteFigure.Children.Add(image);
+            }
             else
+            {
+                if (jWhite == 4)
+                {
+                    iWhite = 0;
+                    jWhite++;
+                }
+                Grid.SetColumn(image, iWhite++);
+                Grid.SetRow(image, jWhite);
                 BlackDeleteFigure.Children.Add(image);
+            }
         }
 
         /// <summary>
@@ -206,8 +247,8 @@ namespace ChessGame
         private void PleacementB1_Click(object sender, RoutedEventArgs e)
         {
             string[] tempFigure = GetCurrentFigureImage().Split('/');
-            string color = tempFigure[tempFigure.Length - 1].Split('.')[0];
-            string figure = tempFigure[tempFigure.Length - 1].Split('.')[1];
+            string color = tempFigure[^1].Split('.')[0];
+            string figure = tempFigure[^1].Split('.')[1];
             string inputInfo = figure + '.' + color + '.';
             if (GetCurrentFigureCoordinate(InputCoordinatsLetter, InputCoordinatsNumber, out string coord))
             {
@@ -397,13 +438,48 @@ namespace ChessGame
             MessageHandle.Text = " ";
             ProgressTextBox.Text = " ";
         }
+        private void ResetDeleteBoard()
+        {
+            foreach (var item in modelsForDeleteid)
+            {
+                if (item.Contains("White"))
+                {
+                    foreach (var figure in WhiteDeleteFigure.Children)
+                    {
+                        if (figure is Image image1)
+                        {
+                            if (item == image1.Tag.ToString())
+                            {
+                                WhiteDeleteFigure.Children.Remove(image1);
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var figure in BlackDeleteFigure.Children)
+                    {
+                        if (figure is Image image1)
+                        {
+                            if (item == image1.Tag.ToString())
+                            {
+                                BlackDeleteFigure.Children.Remove(image1);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
 
         /// <summary>
         /// Get all figures names for reset board
         /// </summary>
         private void GetAllFiguresForReset()
         {
-            switch (currentGameStatus)
+            switch (CurrentGameStatus)
             {
                 case 1:
                     models = manager.GetNamesForReset();
@@ -437,7 +513,6 @@ namespace ChessGame
                     }
                 }
             }
-
         }
 
         /// <summary>
@@ -471,13 +546,17 @@ namespace ChessGame
 
         private void ResetStandardGame_Click(object sender, RoutedEventArgs e)
         {
+            gameStory = MovesTextBoxStandard.Text;
+            AddWithNote(names);
+            names = string.Empty;
+            gameStory = string.Empty;
             ResetBoard();
+            ResetDeleteBoard();
             ShowStandardGamePanel();
             InitializeStandard();
             standard.SetAllFigures();
-            currentGameStatus = 3;
+            CurrentGameStatus = 3;
             MessageBox.Show("You Change A Standard Game, Good Luck");
-
         }
 
         /// <summary>
@@ -542,7 +621,7 @@ namespace ChessGame
         {
             ResetBoard();
             ShowKingGamePanel();
-            currentGameStatus = 1;
+            CurrentGameStatus = 1;
             MessageBox.Show("You Change A King Game, Good Luck");
         }
         private void KnightGame_Click(object sender, RoutedEventArgs e)
@@ -554,7 +633,7 @@ namespace ChessGame
             KnightStartNumber.Text = "";
             KnightTargetLetter.Text = "";
             KnightTargetNumber.Text = "";
-            currentGameStatus = 2;
+            CurrentGameStatus = 2;
             MessageBox.Show("You Change A Knight Game, Good Luck");
         }
         private void StandardGame_Click(object sender, RoutedEventArgs e)
@@ -563,7 +642,7 @@ namespace ChessGame
             ShowStandardGamePanel();
             InitializeStandard();
             standard.SetAllFigures();
-            currentGameStatus = 3;
+            CurrentGameStatus = 3;
             MessageBox.Show("You Change A Standard Game, Good Luck");
         }
         public void ShowStandardGamePanel()
@@ -575,12 +654,16 @@ namespace ChessGame
             PlayForStandard.Visibility = Visibility.Visible;
             PlayColorBlackStandard.Visibility = Visibility.Visible;
             PlayColorWhiteStandard.Visibility = Visibility.Visible;
+            FirstUserName.Visibility = Visibility.Visible;
+            SecondUserName.Visibility = Visibility.Visible;
             InputCoordinatsLetter_Corrent.IsEnabled = true;
             InputCoordinatsNumber_Corrent.IsEnabled = true;
             InputCoordinatsLetter_Selected.IsEnabled = true;
             InputCoordinatsNumber_Selected.IsEnabled = true;
             InstalB3.IsEnabled = true;
             MovesTextBoxStandard.Text = " ";
+            FirstUserName.Text = " ";
+            SecondUserName.Text = " ";
         }
         public void ShowKnightGamePanel()
         {
@@ -668,7 +751,7 @@ namespace ChessGame
         /// <param name="tupl">coordinates current and target</param>
         private void GameManager((string, string) tupl)
         {
-            switch (currentGameStatus)
+            switch (CurrentGameStatus)
             {
                 case 1:
                     if (manager.IsVAlidCoordinate(tupl.Item1, tupl.Item2))
@@ -719,9 +802,12 @@ namespace ChessGame
                     colorPower = true;
                 }
                 InitializeStandard();
+                names = FirstUserName.Text + " " + SecondUserName.Text;
                 PlayForStandard.Visibility = Visibility.Hidden;
                 PlayColorBlackStandard.Visibility = Visibility.Hidden;
                 PlayColorWhiteStandard.Visibility = Visibility.Hidden;
+                FirstUserName.Visibility = Visibility.Hidden;
+                SecondUserName.Visibility = Visibility.Hidden;
                 MessageBox.Show("Good Luck!!!");
             }
             catch (Exception)

@@ -6,9 +6,9 @@ namespace GameManager
     public class MovesKnight
     {
         #region Property and Feld
-        private static List<BaseFigure> models = new();
-        public event Picture setPicture;
-        public event Message messageForMove;
+        private static readonly List<BaseFigure> models = new();
+        public event Picture SetPicture;
+        public event Message MessageForMoveKnight;
         private static Knight startKnight;
         private static Knight targetKnight;
         private int count = 1;
@@ -83,11 +83,11 @@ namespace GameManager
         }
         private void SetFigurePicture(object sender, string coordinate)
         {
-            setPicture(this, coordinate);
+            SetPicture(this, coordinate);
         }
         private void MessageForMove(object sender, (string,string) coordinate)
         {
-            messageForMove(this, coordinate);
+            MessageForMoveKnight(this, coordinate);
         }
         public static List<string> GetNamesForReset()
         {

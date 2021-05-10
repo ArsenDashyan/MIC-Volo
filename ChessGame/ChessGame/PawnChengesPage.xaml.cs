@@ -3,6 +3,7 @@
 namespace ChessGame
 {
     public delegate void MessageForClosed(object sender, RoutedEventArgs e);
+
     /// <summary>
     /// Interaction logic for PawnChengesPage.xaml
     /// </summary>
