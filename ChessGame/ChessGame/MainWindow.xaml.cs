@@ -50,21 +50,6 @@ namespace ChessGame
             InitializeKnightGame();
         }
 
-        public static void AddWithNote(string name)
-        {
-            DateTime dateTime = DateTime.Now;
-            string details = string.Format("{0}:{1}", name, dateTime);
-            string info = details + "\n\n" + gameStory;
-            bool flag = !File.Exists(filepath + name + ".txt");
-            if (flag)
-            {
-                File.Create(filepath + name + ".txt").Close();
-                File.WriteAllText(filepath + name + ".txt", info);
-            }
-            else
-                File.AppendAllText(filepath + name + ".txt", "\n" + info);
-        }
-
         #region Methods for Events
 
         private void InitializeStandard()
@@ -237,6 +222,51 @@ namespace ChessGame
                 "Process completed normally";
             ProgressTextBox.Text = messageForProgress;
             Progress.Value = 0;
+        }
+
+        /// <summary>
+        /// Get coordinates with textBoxs for moved figure
+        /// </summary>
+        /// <param name="letter">Letter coordinate</param>
+        /// <param name="number">Number coordinate</param>
+        /// <returns></returns>
+        private static bool GetCurrentFigureCoordinate(TextBox letter, TextBox number, out string coordInfo)
+        {
+            string inputLetter = letter.Text;
+            if (inputLetter.Length > 1)
+            {
+                MessageBox.Show("This letter not found");
+            }
+            else
+            {
+                if (Convert.ToChar(inputLetter).CharToInt(out int o))
+                {
+                    try
+                    {
+                        string inputNumber = number.Text;
+                        int j = Convert.ToInt32(inputNumber.ToString());
+                        if (j <= 8 && j >= 1)
+                        {
+                            coordInfo = $"{o - 1}.{j - 1}";
+                            return true;
+                        }
+                        else
+                        {
+                            MessageBox.Show("The number is not found");
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("The number is not found");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("This letter not found");
+                }
+            }
+            coordInfo = string.Empty;
+            return false;
         }
 
         #endregion
@@ -431,7 +461,7 @@ namespace ChessGame
             {
                 foreach (var item in models)
                 {
-                    RemovePicture(item);
+                    RemovePicture(item, Board);
                 }
             }
             MovesTextBox.Text = " ";
@@ -443,34 +473,9 @@ namespace ChessGame
             foreach (var item in modelsForDeleteid)
             {
                 if (item.Contains("White"))
-                {
-                    foreach (var figure in WhiteDeleteFigure.Children)
-                    {
-                        if (figure is Image image1)
-                        {
-                            if (item == image1.Tag.ToString())
-                            {
-                                WhiteDeleteFigure.Children.Remove(image1);
-                                break;
-                            }
-                        }
-                    }
-                }
+                    RemovePicture(item, WhiteDeleteFigure);
                 else
-                {
-                    foreach (var figure in BlackDeleteFigure.Children)
-                    {
-                        if (figure is Image image1)
-                        {
-                            if (item == image1.Tag.ToString())
-                            {
-                                BlackDeleteFigure.Children.Remove(image1);
-                                break;
-                            }
-                        }
-                    }
-                }
-
+                    RemovePicture(item, BlackDeleteFigure);
             }
         }
 
@@ -500,7 +505,7 @@ namespace ChessGame
         /// Remove figure picture from board
         /// </summary>
         /// <param name="name">Figure name</param>
-        public void RemovePicture(string name)
+        public void RemovePicture(string name, Grid grid)
         {
             foreach (var item in Board.Children)
             {
@@ -508,7 +513,7 @@ namespace ChessGame
                 {
                     if (name == image1.Tag.ToString())
                     {
-                        Board.Children.Remove(image1);
+                        grid.Children.Remove(image1);
                         break;
                     }
                 }
@@ -547,7 +552,7 @@ namespace ChessGame
         private void ResetStandardGame_Click(object sender, RoutedEventArgs e)
         {
             gameStory = MovesTextBoxStandard.Text;
-            AddWithNote(names);
+            AddGameStoryWithNote(names);
             names = string.Empty;
             gameStory = string.Empty;
             ResetBoard();
@@ -700,50 +705,7 @@ namespace ChessGame
         }
         #endregion
 
-        /// <summary>
-        /// Get coordinates with textBoxs for moved figure
-        /// </summary>
-        /// <param name="letter">Letter coordinate</param>
-        /// <param name="number">Number coordinate</param>
-        /// <returns></returns>
-        private static bool GetCurrentFigureCoordinate(TextBox letter, TextBox number, out string coordInfo)
-        {
-            string inputLetter = letter.Text;
-            if (inputLetter.Length > 1)
-            {
-                MessageBox.Show("This letter not found");
-            }
-            else
-            {
-                if (Convert.ToChar(inputLetter).CharToInt(out int o))
-                {
-                    try
-                    {
-                        string inputNumber = number.Text;
-                        int j = Convert.ToInt32(inputNumber.ToString());
-                        if (j <= 8 && j >= 1)
-                        {
-                            coordInfo = $"{o - 1}.{j - 1}";
-                            return true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("The number is not found");
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("The number is not found");
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("This letter not found");
-                }
-            }
-            coordInfo = string.Empty;
-            return false;
-        }
+        #region Standard Game
 
         /// <summary>
         /// Manage game with run King or Standard
@@ -802,7 +764,7 @@ namespace ChessGame
                     colorPower = true;
                 }
                 InitializeStandard();
-                names = FirstUserName.Text + " " + SecondUserName.Text;
+                names = FirstUserName.Text + SecondUserName.Text;
                 PlayForStandard.Visibility = Visibility.Hidden;
                 PlayColorBlackStandard.Visibility = Visibility.Hidden;
                 PlayColorWhiteStandard.Visibility = Visibility.Hidden;
@@ -833,5 +795,21 @@ namespace ChessGame
             standard.SetChangeFigureForPawn(inputInfo);
         }
 
+        public static void AddGameStoryWithNote(string name)
+        {
+            DateTime dateTime = DateTime.Now;
+            string details = string.Format("{0}:{1}", name, dateTime);
+            string info = details + "\n\n" + gameStory;
+            bool flag = !File.Exists(filepath + name + ".txt");
+            if (flag)
+            {
+                File.Create(filepath + name + ".txt").Close();
+                File.WriteAllText(filepath + name + ".txt", info);
+            }
+            else
+                File.AppendAllText(filepath + name + ".txt", "\n" + info);
+        }
+
+        #endregion
     }
 }
