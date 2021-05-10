@@ -684,6 +684,7 @@ namespace GameManager
             {
                 baseFigure.setPicture += SetFigurePicture;
                 baseFigure.removePicture += RemoveFigurePicture;
+                baseFigure.DeletePicture += delegate {};
                 baseFigure.messageForMove += MessageMove;
                 models.Add(baseFigure);
                 if (!GetPosition().Contains(coordinatePoint))

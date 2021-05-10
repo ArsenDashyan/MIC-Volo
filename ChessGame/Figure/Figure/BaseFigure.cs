@@ -17,6 +17,7 @@ namespace Figure
         public CoordinatePoint Coordinate { get; set; }
         public event Picture setPicture;
         public event Picture removePicture;
+        public event Picture DeletePicture;
         public event Message messageForMove;
 
         #endregion
@@ -64,6 +65,7 @@ namespace Figure
                     var tempItem = item;
                     string itemCoordinate = item.Coordinate.ToString() + '.' + item.Name;
                     removePicture(item, itemCoordinate);
+                    DeletePicture(item, itemCoordinate);
                     othereFigures.Remove(item);
                     break;
                 }

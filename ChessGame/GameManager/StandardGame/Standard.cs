@@ -14,6 +14,7 @@ namespace GameManager
         public event MessageForMate MessageCheck;
         public event Picture SetPicture;
         public event Picture RemovePicture;
+        public event Picture DeletePicture;
         private static CoordinatePoint coordinate;
         private static int pawnCount = 2;
         #endregion
@@ -38,6 +39,11 @@ namespace GameManager
         public void RemoveFigurePicture(object sender, string coordinate)
         {
             RemovePicture(this, coordinate);
+        }
+
+        public void DeleteFigurePicture(object sender, string coordinate)
+        {
+            DeletePicture(this, coordinate);
         }
 
         /// <summary>
@@ -105,6 +111,7 @@ namespace GameManager
             {
                 item.setPicture += SetFigurePicture;
                 item.removePicture += RemoveFigurePicture;
+                item.DeletePicture += DeleteFigurePicture;
                 item.messageForMove += MessageMove;
                 if (item is King king)
                 {
@@ -519,6 +526,7 @@ namespace GameManager
             models.Add(baseFigure);
             baseFigure.setPicture += SetFigurePicture;
             baseFigure.removePicture += RemoveFigurePicture;
+            baseFigure.DeletePicture += DeleteFigurePicture;
             baseFigure.messageForMove += MessageMove;
             baseFigure.SetFigurePosition(coordinate);
             chengedPawn.RemoveFigurePosition();

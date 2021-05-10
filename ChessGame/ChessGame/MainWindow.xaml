@@ -257,29 +257,87 @@
                 </TabItem>
                 <TabItem Name="StandardGamePanel" Header="   Standard  Game   ">
                     <Grid Background="#FFA8857D" Margin="2,2,2,2">
-                        
+
                         <Button Name="ResetStandardGame" Content="Reset" FontSize="14" FontWeight="Bold" Background="#FFDA1717" Margin="180,492,0,0" Click="ResetStandardGame_Click" HorizontalAlignment="Left" Width="145" Height="23" VerticalAlignment="Top">
                             <Button.Effect>
                                 <DropShadowEffect/>
                             </Button.Effect>
                         </Button>
 
-                        <Button Name="PlayForStandard" Content="Play" Background="LightGray" Margin="6,198,259,0" VerticalAlignment="Top" Height="28" FontSize="16" Click="PlayForStandard_Click"/>
-                        <CheckBox Name="PlayColorWhiteStandard" Content="White" HorizontalAlignment="Left" Margin="6,174,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="#FFEEEAEA"/>
-                        <CheckBox Name="PlayColorBlackStandard" Content="Black" HorizontalAlignment="Left" Margin="6,150,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                        <TextBox Name="MovesTextBoxStandard" Margin="6,258,0,6" TextWrapping="Wrap" TextAlignment="Center" FontWeight="Bold" HorizontalAlignment="Left" Width="160">
+                        <Button Name="PlayForStandard" Content="Play" Background="LightGray" Margin="180,353,85,0" VerticalAlignment="Top" Height="28" FontSize="16" Click="PlayForStandard_Click"/>
+                        <CheckBox Name="PlayColorWhiteStandard" Content="White" HorizontalAlignment="Left" Margin="180,332,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="#FFEEEAEA"/>
+                        <CheckBox Name="PlayColorBlackStandard" Content="Black" HorizontalAlignment="Left" Margin="180,314,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                        <TextBox Name="MovesTextBoxStandard" Margin="6,314,0,6" TextWrapping="Wrap" TextAlignment="Center" FontWeight="Bold" HorizontalAlignment="Left" Width="160">
                             <TextBox.Effect>
                                 <DropShadowEffect/>
                             </TextBox.Effect>
                         </TextBox>
-                        <Label Content="Moves" HorizontalAlignment="Left" Margin="6,235,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                        <Label Content="Moves" HorizontalAlignment="Left" Margin="6,286,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                         <TextBox Name="MessageHandleStandard" Margin="180,400,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" Height="86" FontSize="14" TextAlignment="Center" Background="#FFE0D1D1" Foreground="#FF8F0720" SelectionBrush="#FF02111D" FontStyle="Normal" HorizontalAlignment="Left" Width="142">
                             <TextBox.Effect>
                                 <DropShadowEffect/>
                             </TextBox.Effect>
                         </TextBox>
                         <Label Content="Message" HorizontalAlignment="Left" Margin="175,378,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.184,0.233" FontWeight="Bold"/>
+                        <Grid x:Name="BlackDeleteFigure" Margin="0,0,0,400">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="0" Grid.Row="0"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="1" Grid.Row="0"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="2" Grid.Row="0"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="3" Grid.Row="0"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="4" Grid.Row="0"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="0" Grid.Row="1"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="1" Grid.Row="1"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="2" Grid.Row="1"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="3" Grid.Row="1"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="4" Grid.Row="1"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="0" Grid.Row="2"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="1" Grid.Row="2"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="2" Grid.Row="2"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="3" Grid.Row="2"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="4" Grid.Row="2"/>
+                        </Grid>
+                        <Grid x:Name="WhiteDeleteFigure" Margin="0,154,0,250" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="0" Grid.Row="0"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="1" Grid.Row="0"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="2" Grid.Row="0"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="3" Grid.Row="0"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="4" Grid.Row="0"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="0" Grid.Row="1"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="1" Grid.Row="1"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="2" Grid.Row="1"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="3" Grid.Row="1"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="4" Grid.Row="1"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="0" Grid.Row="2"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="1" Grid.Row="2"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="2" Grid.Row="2"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="3" Grid.Row="2"/>
+                            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="4" Grid.Row="2"/>
 
+                        </Grid>
                     </Grid>
                 </TabItem>
             </TabControl>

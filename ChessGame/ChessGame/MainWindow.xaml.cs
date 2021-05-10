@@ -29,6 +29,8 @@ namespace ChessGame
         private string startCoordinate;
         private int countForKnightMoves = 0;
         private bool colorPower = false;
+        int i = 0;
+        int j = 0;
         #endregion
 
         public MainWindow()
@@ -46,6 +48,7 @@ namespace ChessGame
             standard = new Standard();
             standard.SetPicture += SetFigurePicture;
             standard.RemovePicture += RemoveFigurePicture;
+            standard.DeletePicture += SetDeleteFigurePicture;
             standard.MessageForMove += MessageMoveForStandardGame;
             standard.MessageCheck += MessageCheckStandard;
             standard.MessageForPawnChange += MessageForPawnChange;
@@ -73,7 +76,7 @@ namespace ChessGame
         {
             string[] coord = coordinate.Split('.');
             string str = coord[2] + '.' + coord[3] + '.' + coord[4];
-            Image image = new Image();
+            Image image = new();
             BitmapImage bitmap = new();
             bitmap.BeginInit();
             bitmap.UriSource = new Uri(GetCurrentFigureImage(str), UriKind.Relative);
@@ -83,6 +86,25 @@ namespace ChessGame
             Grid.SetColumn(image, Convert.ToChar(coord[0]).CharToInt());
             Grid.SetRow(image, int.Parse(coord[1]) - 1);
             Board.Children.Add(image);
+        }
+
+        public void SetDeleteFigurePicture(object sender, string coordinate)
+        {
+            string[] coord = coordinate.Split('.');
+            string str = coord[2] + '.' + coord[3] + '.' + coord[4];
+            Image image = new();
+            BitmapImage bitmap = new();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(GetCurrentFigureImage(str), UriKind.Relative);
+            bitmap.EndInit();
+            image.Source = bitmap;
+            image.Tag = str;
+            Grid.SetColumn(image, i++);
+            Grid.SetRow(image, j++);
+            if (str.Contains("White"))
+                WhiteDeleteFigure.Children.Add(image);
+            else
+                BlackDeleteFigure.Children.Add(image);
         }
 
         /// <summary>
@@ -558,6 +580,7 @@ namespace ChessGame
             InputCoordinatsLetter_Selected.IsEnabled = true;
             InputCoordinatsNumber_Selected.IsEnabled = true;
             InstalB3.IsEnabled = true;
+            MovesTextBoxStandard.Text = " ";
         }
         public void ShowKnightGamePanel()
         {
@@ -656,6 +679,7 @@ namespace ChessGame
                     break;
                 case 3:
                     standard.RemovePicture += RemoveFigurePicture;
+                    standard.DeletePicture += SetDeleteFigurePicture;
                     if (standard.IsVAlidCoordinate(tupl.Item1, tupl.Item2))
                     {
                         if (colorPower)
