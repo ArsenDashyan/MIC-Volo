@@ -31,6 +31,7 @@ namespace Figure
                             arr = arr.Where(c => c.Y < item.Coordinate.Y).ToList();
                         else
                             arr = arr.Where(c => c.Y > item.Coordinate.Y).ToList();
+                        item.isProtected = true;
                     }
                     else
                     {
@@ -45,7 +46,6 @@ namespace Figure
                     }
                 }
             }
-            arr.Remove(this.Coordinate);
             return arr;
         }
         public List<CoordinatePoint> Horizontal()
@@ -67,6 +67,7 @@ namespace Figure
                             arr = arr.Where(c => c.X < item.Coordinate.X).ToList();
                         else
                             arr = arr.Where(c => c.X > item.Coordinate.X).ToList();
+                        item.isProtected = true;
                     }
                     else
                     {
@@ -81,7 +82,6 @@ namespace Figure
                     }
                 }
             }
-            arr.Remove(this.Coordinate);
             return arr;
         }
         public List<CoordinatePoint> Crosswise()
@@ -117,6 +117,7 @@ namespace Figure
                             arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
                         else
                             arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
+                        item.isProtected = true;
                     }
                     else
                     {
@@ -131,7 +132,6 @@ namespace Figure
                     }
                 }
             }
-            arr.Remove(this.Coordinate);
             return arr;
         }
         public List<CoordinatePoint> LeftIndex()
@@ -157,13 +157,10 @@ namespace Figure
                     if (item.Color == this.Color)
                     {
                         if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                        {
                             arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
-                        }
                         else
-                        {
                             arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                        }
+                        item.isProtected = true;
                     }
                     else
                     {
@@ -172,17 +169,12 @@ namespace Figure
                             continue;
                         }
                         if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                        {
                             arr = arr.Where(c => arr.IndexOf(c) <= arr.IndexOf(item.Coordinate)).ToList();
-                        }
                         else
-                        {
                             arr = arr.Where(c => arr.IndexOf(c) >= arr.IndexOf(item.Coordinate)).ToList();
-                        }
                     }
                 }
             }
-            arr.Remove(this.Coordinate);
             return arr;
         }
         public List<CoordinatePoint> AvailableMoves()
@@ -191,7 +183,6 @@ namespace Figure
             result.AddRange(RightIndex());
             result.AddRange(LeftIndex());
             result.AddRange(Crosswise());
-            result.Remove(this.Coordinate);
             return result;
         }
 

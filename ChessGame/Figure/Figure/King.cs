@@ -195,7 +195,8 @@ namespace Figure
                 {
                     if (item == king.chekedFigure.Coordinate)
                     {
-                        goodMoves.Add(item);
+                        if (!king.chekedFigure.isProtected)
+                            goodMoves.Add(item);
                     }
                 }
             }
@@ -217,11 +218,28 @@ namespace Figure
                 {
                     this.chekedFigure = item;
                     MessageCheck(this, "Check");
+                    IsMate();
                     break;
                 }
                 else
                     MessageCheck(this, " ");
             }
+        }
+        private void IsMate()
+        {
+            var modelNew = othereFigures.Where(f => f.Color == this.Color).ToList();
+            var moves = new List<CoordinatePoint>();
+            foreach (var item in modelNew)
+            {
+                var temp = (IAntiCheck)item;
+                moves.AddRange(temp.MovesWithKingIsNotUnderCheck());
+            }
+            if (moves.Count == 0)
+            {
+                MessageCheck(this, "Mate");
+            }
+            else
+                MessageCheck(this, " ");
         }
     }
 }

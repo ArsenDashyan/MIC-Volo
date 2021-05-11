@@ -36,6 +36,7 @@ namespace Figure
                 {
                     if (item.Color == this.Color)
                     {
+                        item.isProtected = true;
                         result.Remove(item.Coordinate);
                     }
                 }
@@ -66,6 +67,7 @@ namespace Figure
                 {
                     if (item.Color == this.Color)
                     {
+                        item.isProtected = true;
                         result.Remove(item.Coordinate);
                     }
                 }

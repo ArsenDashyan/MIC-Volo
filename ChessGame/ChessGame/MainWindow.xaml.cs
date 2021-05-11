@@ -111,7 +111,7 @@ namespace ChessGame
             modelsForDeleteid.Add(str);
             if (str.Contains("White"))
             {
-                if (iBlack == 4)
+                if (iBlack == 5)
                 {
                     iBlack = 0;
                     jBlack++;
@@ -122,7 +122,7 @@ namespace ChessGame
             }
             else
             {
-                if (jWhite == 4)
+                if (iWhite == 5)
                 {
                     iWhite = 0;
                     jWhite++;
@@ -466,6 +466,7 @@ namespace ChessGame
             }
             MovesTextBox.Text = " ";
             MessageHandle.Text = " ";
+            MessageHandleStandard.Text = " ";
             ProgressTextBox.Text = " ";
         }
         private void ResetDeleteBoard()
@@ -507,7 +508,7 @@ namespace ChessGame
         /// <param name="name">Figure name</param>
         public void RemovePicture(string name, Grid grid)
         {
-            foreach (var item in Board.Children)
+            foreach (var item in grid.Children)
             {
                 if (item is Image image1)
                 {

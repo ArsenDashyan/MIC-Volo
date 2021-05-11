@@ -14,6 +14,8 @@ namespace Figure
         public FColor Color { get; set; }
 
         public bool isMoved = false;
+
+        public bool isProtected = false;
         public CoordinatePoint Coordinate { get; set; }
         public event Picture setPicture;
         public event Picture removePicture;

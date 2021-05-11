@@ -23,13 +23,8 @@ namespace Figure
                     arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y - 1));
                     arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y - 2));
                 }
-                else
-                {
-                    if (this.Coordinate.Y - 1 >= 0)
-                    {
-                        arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y - 1));
-                    }
-                }
+                else if (this.Coordinate.Y - 1 >= 0)
+                    arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y - 1));
                 foreach (var item in othereFigures)
                 {
                     if (arr.Contains(item.Coordinate))
@@ -47,16 +42,18 @@ namespace Figure
                         if (this.Coordinate.X + 1 <= 7)
                         {
                             if (item.Coordinate == new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y - 1))
-                            {
-                                arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y - 1));
-                            }
+                                if (item.Color == FColor.Black)
+                                    arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y - 1));
+                                else
+                                    item.isProtected = true;
                         }
                         if (this.Coordinate.X - 1 >= 0)
                         {
                             if (item.Coordinate == new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y - 1))
-                            {
-                                arr.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y - 1));
-                            }
+                                if (item.Color == FColor.Black)
+                                    arr.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y - 1));
+                                else
+                                    item.isProtected = true;
                         }
                     }
                 }
@@ -68,13 +65,8 @@ namespace Figure
                     arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y + 1));
                     arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y + 2));
                 }
-                else
-                {
-                    if (this.Coordinate.Y + 1 <= 7)
-                    {
-                        arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y + 1));
-                    }
-                }
+                else if (this.Coordinate.Y + 1 <= 7)
+                    arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y + 1));
                 foreach (var item in othereFigures)
                 {
                     if (arr.Contains(item.Coordinate))
@@ -85,28 +77,29 @@ namespace Figure
                             arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
                     }
                 }
-                foreach (var item in model.Where(c => c.Color == FColor.White))
+                foreach (var item in othereFigures)
                 {
                     if (this.Coordinate.Y + 1 >= 0)
                     {
                         if (this.Coordinate.X + 1 <= 7)
                         {
                             if (item.Coordinate == new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y + 1))
-                            {
-                                arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y + 1));
-                            }
+                                if (item.Color == FColor.White)
+                                    arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y + 1));
+                                else
+                                    item.isProtected = true;
                         }
                         if (this.Coordinate.X - 1 >= 0)
                         {
                             if (item.Coordinate == new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y + 1))
-                            {
-                                arr.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y + 1));
-                            }
+                                if (item.Color == FColor.White)
+                                    arr.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y + 1));
+                                else
+                                    item.isProtected = true;
                         }
                     }
                 }
             }
-            arr.Remove(this.Coordinate);
             return arr;
         }
         public List<CoordinatePoint> Crosswise()
@@ -115,10 +108,7 @@ namespace Figure
         }
         public List<CoordinatePoint> AvailableMoves()
         {
-            var result = new List<CoordinatePoint>();
-            result.AddRange(Crosswise());
-            result.Remove(this.Coordinate);
-            return result;
+            return this.Crosswise();
         }
 
         /// <summary>

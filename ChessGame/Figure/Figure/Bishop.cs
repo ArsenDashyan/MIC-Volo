@@ -38,6 +38,7 @@ namespace Figure
                             arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
                         else
                             arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
+                        item.isProtected = true;
                     }
                     else
                     {
@@ -50,7 +51,6 @@ namespace Figure
                     }
                 }
             }
-            arr.Remove(this.Coordinate);
             return arr;
         }
         public List<CoordinatePoint> LeftIndex()
@@ -76,13 +76,10 @@ namespace Figure
                     if (item.Color == this.Color)
                     {
                         if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                        {
                             arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
-                        }
                         else
-                        {
                             arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                        }
+                        item.isProtected = true;
                     }
                     else
                     {
@@ -91,17 +88,12 @@ namespace Figure
                             continue;
                         }
                         if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                        {
                             arr = arr.Where(c => arr.IndexOf(c) <= arr.IndexOf(item.Coordinate)).ToList();
-                        }
                         else
-                        {
                             arr = arr.Where(c => arr.IndexOf(c) >= arr.IndexOf(item.Coordinate)).ToList();
-                        }
                     }
                 }
             }
-            arr.Remove(this.Coordinate);
             return arr;
         }
         public List<CoordinatePoint> AvailableMoves()
@@ -109,7 +101,6 @@ namespace Figure
             var result = new List<CoordinatePoint>();
             result.AddRange(RightIndex());
             result.AddRange(LeftIndex());
-            result.Remove(this.Coordinate);
             return result;
         }
 
@@ -146,9 +137,7 @@ namespace Figure
                 if (king.chekedFigure != null)
                 {
                     if (item == king.chekedFigure.Coordinate)
-                    {
                         goodMoves.Add(item);
-                    }
                 }
             }
             this.Coordinate = temp;
