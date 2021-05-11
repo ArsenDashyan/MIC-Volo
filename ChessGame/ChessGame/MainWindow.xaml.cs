@@ -51,7 +51,6 @@ namespace ChessGame
         }
 
         #region Methods for Events
-
         private void InitializeStandard()
         {
             standard = new Standard();
@@ -796,6 +795,11 @@ namespace ChessGame
             standard.SetChangeFigureForPawn(inputInfo);
         }
 
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            pawnChengesPage.Close();
+        }
         public static void AddGameStoryWithNote(string name)
         {
             DateTime dateTime = DateTime.Now;
