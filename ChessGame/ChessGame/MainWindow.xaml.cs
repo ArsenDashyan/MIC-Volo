@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace ChessGame
@@ -342,7 +344,8 @@ namespace ChessGame
         }
         public void MessageCheckStandard(object sender, string message)
         {
-            MessageHandleStandard.Text = message;
+            if (message != " ")
+                MessageBox.Show(message);
         }
 
         /// <summary>
@@ -596,6 +599,9 @@ namespace ChessGame
                     int coordY = Grid.GetRow(image);
                     string coordinate = $"{coordX}.{coordY}";
                     this.startCoordinate = coordinate;
+                    var colorsForFigure = GameManagerForColors(coordinate);
+                    if (colorsForFigure != null)
+                        GetColoredCells(colorsForFigure);
                     DragDrop.DoDragDrop(image, this.DragObjectImage, DragDropEffects.Move);
                 }
             }
@@ -611,6 +617,7 @@ namespace ChessGame
             string coordinate = $"{coordX}.{coordY}";
             if (coordinate != this.startCoordinate)
             {
+                RemoveColoredCells();
                 GameManager((this.startCoordinate, coordinate));
             }
         }
@@ -742,6 +749,17 @@ namespace ChessGame
             }
         }
 
+        private List<string> GameManagerForColors(string coordinate)
+        {
+            switch (CurrentGameStatus)
+            {
+                case 3:
+                    return Standard.GetAvalibleMoves(coordinate);
+                default:
+                    return null;
+            }
+        }
+
         /// <summary>
         /// Set all figures for Standard game
         /// </summary>
@@ -815,6 +833,45 @@ namespace ChessGame
                 File.AppendAllText(filepath + name + ".txt", "\n" + info);
         }
 
+        readonly List<(Brush, Border)> colors = new();
+        private void GetColoredCells(List<string> list)
+        {
+            var coordinateList = GetCoordinateList(list);
+            foreach (var item in Board.Children)
+            {
+                if (item is Border border)
+                {
+                    foreach (var coord in coordinateList)
+                    {
+                        if (Grid.GetColumn(border) == coord.Item1 && Grid.GetRow(border) == coord.Item2)
+                        {
+                            colors.Add((border.Background, border));
+                            border.Background = Brushes.LightGoldenrodYellow;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void RemoveColoredCells()
+        {
+            foreach (var item in colors)
+            {
+                item.Item2.Background = item.Item1;
+            }
+        }
+
+        private List<(int,int)> GetCoordinateList(List<string> listColors)
+        {
+            var list = new List<(int, int)>();
+            foreach (var item in listColors)
+            {
+                var temp = item.Split('.');
+                list.Add((int.Parse(temp[0]), int.Parse(temp[1])));
+            }
+            var temp2 = this.startCoordinate.Split('.');
+            return list.Where(c=>c!= (int.Parse(temp2[0]), int.Parse(temp2[1]))).ToList();
+        }
         #endregion
     }
 }

@@ -331,6 +331,19 @@ namespace GameManager
             return models;
         }
 
+        public static List<string> GetAvalibleMoves(string coordinate)
+        {
+            var result = new List<string>();
+            var currentCoordinate = GetCoordinateByString(coordinate);
+            var baseFigure = CheckedCurrentFigure(currentCoordinate);
+            var antiCheck = (IAntiCheck)baseFigure;
+            var movesList = antiCheck.MovesWithKingIsNotUnderCheck();
+            foreach (var item in movesList)
+            {
+                result.Add($"{item.X}.{item.Y}");
+            }
+            return result;
+        }
         #endregion
 
         #region Castling & King Perpomance
