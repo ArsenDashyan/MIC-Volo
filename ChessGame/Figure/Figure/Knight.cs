@@ -45,7 +45,7 @@ namespace Figure
         }
         public List<CoordinatePoint> Vertical()
         {
-            List<CoordinatePoint> result = new List<CoordinatePoint>();
+            var result = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
             if (this.Coordinate.Y + 1 <= 7)
             {

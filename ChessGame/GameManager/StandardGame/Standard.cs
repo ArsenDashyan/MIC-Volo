@@ -10,7 +10,7 @@ namespace GameManager
         private static readonly List<BaseFigure> models = new();
         private BaseFigure chengedPawn;
         public event Message MessageForMove;
-        public event MessageForMate MessageForPawnChange;
+        public event MessageForMate MessagePawnChange;
         public event MessageForMate MessageCheck;
         public event Picture SetPicture;
         public event Picture RemovePicture;
@@ -109,10 +109,10 @@ namespace GameManager
         {
             foreach (var item in GetAllFigures())
             {
-                item.setPicture += SetFigurePicture;
-                item.removePicture += RemoveFigurePicture;
+                item.SetPicture += SetFigurePicture;
+                item.RemovePicture += RemoveFigurePicture;
                 item.DeletePicture += DeleteFigurePicture;
-                item.messageForMove += MessageMove;
+                item.MessageForMove += MessageMove;
                 if (item is King king)
                 {
                     king.MessageCheck += MessageChek;
@@ -444,7 +444,7 @@ namespace GameManager
         /// <param name="king">Current king</param>
         /// <param name="coordinatePoint"></param>
         /// <returns>Return true, if castling is valid</returns>
-        private bool CheckCastling(King king, out CoordinatePoint coordinatePoint)
+        private static bool CheckCastling(King king, out CoordinatePoint coordinatePoint)
         {
             if (king.isMoved)
             {
@@ -498,7 +498,7 @@ namespace GameManager
                 coordinate = targetCoordinate;
                 pawn.SetFigurePosition(targetCoordinate);
                 chengedPawn = pawn;
-                MessageForPawnChange(pawn.Color, "Please enter a new Figure for change");
+                MessagePawnChange(pawn.Color, "Please enter a new Figure for change");
             }
             else
                 pawn.SetFigurePosition(targetCoordinate);
@@ -538,10 +538,10 @@ namespace GameManager
             var baseFigure = GetFigure(currentFigur, currentColor);
             baseFigure.Coordinate = coordinate;
             models.Add(baseFigure);
-            baseFigure.setPicture += SetFigurePicture;
-            baseFigure.removePicture += RemoveFigurePicture;
+            baseFigure.SetPicture += SetFigurePicture;
+            baseFigure.RemovePicture += RemoveFigurePicture;
             baseFigure.DeletePicture += DeleteFigurePicture;
-            baseFigure.messageForMove += MessageMove;
+            baseFigure.MessageForMove += MessageMove;
             baseFigure.SetFigurePosition(coordinate);
             chengedPawn.RemoveFigurePosition();
             models.Remove(chengedPawn);

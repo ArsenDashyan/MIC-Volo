@@ -67,8 +67,8 @@ namespace GameManager
             models.Add(startKnight);
             string[] point = coordinate.Split('.');
             var coordinatPoint = new CoordinatePoint(int.Parse(point[0]),int.Parse(point[1]));
-            startKnight.setPicture += SetFigurePicture;
-            startKnight.messageForMove += MessageForMove;
+            startKnight.SetPicture += SetFigurePicture;
+            startKnight.MessageForMove += MessageForMove;
             startKnight.SetFigurePosition(coordinatPoint);
         }
         public void CreateTargetKnight(string coordinate)
@@ -77,8 +77,8 @@ namespace GameManager
             models.Add(targetKnight);
             string[] point = coordinate.Split('.');
             var coordinatPoint = new CoordinatePoint(int.Parse(point[0]), int.Parse(point[1]));
-            targetKnight.setPicture += SetFigurePicture;
-            targetKnight.messageForMove += MessageForMove;
+            targetKnight.SetPicture += SetFigurePicture;
+            targetKnight.MessageForMove += MessageForMove;
             targetKnight.SetFigurePosition(coordinatPoint);
         }
         private void SetFigurePicture(object sender, string coordinate)

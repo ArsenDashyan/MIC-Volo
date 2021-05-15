@@ -35,7 +35,7 @@ namespace ChessGame
                 var mainWindow = new MainWindow();
                 mainWindow.ShowStandardGamePanel();
                 mainWindow.Show();
-                mainWindow.SetAllFigures();
+                mainWindow.gameManagment.SetAllFigures();
                 MainWindow.CurrentGameStatus = 3;
                 this.Close();
             }

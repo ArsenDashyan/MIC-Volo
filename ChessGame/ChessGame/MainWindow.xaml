@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChessGame"
         mc:Ignorable="d"
-        ResizeMode="NoResize"
+        ResizeMode="CanMinimize"
         Title="ChessGame" Height="600" Width="1000" Background="#FFA8857D">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -197,12 +197,6 @@
                             </TextBox.Effect>
                         </TextBox>
                         <Label Content="Moves" HorizontalAlignment="Left" Margin="6,238,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                        <TextBox Name="MessageHandle" Margin="175,282,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" Height="39" FontSize="14" TextAlignment="Center" Background="#FFE0D1D1" Foreground="#FF8F0720" SelectionBrush="#FF02111D" FontStyle="Normal" HorizontalAlignment="Left" Width="157">
-                            <TextBox.Effect>
-                                <DropShadowEffect/>
-                            </TextBox.Effect>
-                        </TextBox>
-                        <Label Content="Message" HorizontalAlignment="Left" Margin="174,0,0,0" VerticalAlignment="Center" RenderTransformOrigin="-0.184,0.233" FontWeight="Bold"/>
                     </Grid>
                 </TabItem>
                 <TabItem Name="KnightMovesPanel" Header="   Knight  Moves   ">
@@ -273,12 +267,6 @@
                             </TextBox.Effect>
                         </TextBox>
                         <Label Content="Moves" HorizontalAlignment="Left" Margin="6,286,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                        <TextBox Name="MessageHandleStandard" Margin="180,400,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" Height="86" FontSize="14" TextAlignment="Center" Background="#FFE0D1D1" Foreground="#FF8F0720" SelectionBrush="#FF02111D" FontStyle="Normal" HorizontalAlignment="Left" Width="142">
-                            <TextBox.Effect>
-                                <DropShadowEffect/>
-                            </TextBox.Effect>
-                        </TextBox>
-                        <Label Content="Message" HorizontalAlignment="Left" Margin="175,378,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.184,0.233" FontWeight="Bold"/>
                         <Grid x:Name="BlackDeleteFigure" Margin="0,0,0,400">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>

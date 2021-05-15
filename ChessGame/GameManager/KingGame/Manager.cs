@@ -11,17 +11,17 @@ namespace GameManager
     public class Manager
     {
         #region Property and Feld
-        private static List<BaseFigure> models = new List<BaseFigure>();
-        private List<CoordinatePoint> currentListForBabyGame = new();
+        private static readonly List<BaseFigure> models = new();
+        private readonly List<CoordinatePoint> currentListForBabyGame = new();
         private BaseFigure CurentKing =>
                (BaseFigure)models.Where(c => c.Color == currentFigureColor && c is King).Single();
         private readonly FColor currentFigureColor;
         private BaseFigure baseFigure;
         public event MessageForMate MateMessage;
-        public event Message messageForMove;
-        public event Message messageForProgress;
-        public event Picture setPicture;
-        public event Picture removePicture;
+        public event Message MessageForMove;
+        public event Message MessageProgress;
+        public event Picture SetPicture;
+        public event Picture RemovePicture;
         private int whiteKingCount = 0;
         private int whiteQueenCount = 0;
         private int whiteBishopCount = 0;
@@ -51,7 +51,7 @@ namespace GameManager
         /// <param name="coordinate"></param>
         public void SetFigurePicture(object sender, string coordinate)
         {
-            setPicture(this, coordinate);
+            SetPicture(this, coordinate);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace GameManager
         /// <param name="coordinate"></param>
         public void RemoveFigurePicture(object sender, string coordinate)
         {
-            removePicture(this, coordinate);
+            RemovePicture(this, coordinate);
         }
 
         /// <summary>
@@ -71,13 +71,13 @@ namespace GameManager
         /// <param name="coordinate"></param>
         public void MessageMove(object sender, (string, string) coordinate)
         {
-            messageForMove(this, coordinate);
+            MessageForMove(this, coordinate);
         }
         private void MessageForProgress()
         {
             if (countForProgressStart == 0)
             {
-                messageForProgress(this, ("", ""));
+                MessageProgress(this, ("", ""));
                 countForProgressStart++;
             }
         }
@@ -119,7 +119,7 @@ namespace GameManager
             CoordinatePoint temp = figure.Coordinate;
             int targetX = CurentKing.Coordinate.X + 1 == 8 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X + 1;
             int targetY = CurentKing.Coordinate.Y - 1 == -1 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y - 1;
-            foreach (var item in tempFigur.AvailableMoves().FiltrFor(c => c.X <= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
+            foreach (var item in tempFigur.AvailableMoves().Where(c => c != temp).ToList().FiltrFor(c => c.X <= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
             {
                 figure.Coordinate = item;
                 if (!IsUnderAttack(figure, figure.Coordinate))
@@ -154,7 +154,7 @@ namespace GameManager
             CoordinatePoint temp = figure.Coordinate;
             int targetX = CurentKing.Coordinate.X - 1 == -1 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X - 1;
             int targetY = CurentKing.Coordinate.Y - 1 == -1 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y - 1;
-            foreach (var item in tempFigur.AvailableMoves().FiltrFor(c => c.X >= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
+            foreach (var item in tempFigur.AvailableMoves().Where(c => c!=temp).ToList().FiltrFor(c => c.X >= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
             {
                 figure.Coordinate = item;
                 if (!IsUnderAttack(figure, figure.Coordinate))
@@ -189,7 +189,7 @@ namespace GameManager
             CoordinatePoint temp = figure.Coordinate;
             int targetX = CurentKing.Coordinate.X - 1 == -1 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X - 1;
             int targetY = CurentKing.Coordinate.Y + 1 == 8 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y + 1;
-            foreach (var item in tempFigur.AvailableMoves().FiltrFor(c => c.X >= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
+            foreach (var item in tempFigur.AvailableMoves().Where(c => c != temp).ToList().FiltrFor(c => c.X >= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
             {
                 figure.Coordinate = item;
                 if (!IsUnderAttack(figure, figure.Coordinate))
@@ -224,7 +224,7 @@ namespace GameManager
             CoordinatePoint temp = figure.Coordinate;
             int targetX = CurentKing.Coordinate.X + 1 == 8 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X + 1;
             int targetY = CurentKing.Coordinate.Y + 1 == 8 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y + 1;
-            foreach (var item in tempFigur.AvailableMoves().FiltrFor(c => c.X <= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
+            foreach (var item in tempFigur.AvailableMoves().Where(c => c != temp).ToList().FiltrFor(c => c.X <= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
             {
                 figure.Coordinate = item;
                 if (!IsUnderAttack(figure, figure.Coordinate))
@@ -391,7 +391,7 @@ namespace GameManager
         /// <param name="baseFigure">current figure</param>
         /// <param name="CoordinatPoint">figure coordinate</param>
         /// <returns>Return true if figure is under attack</returns>
-        private bool IsUnderAttack(BaseFigure baseFigure, CoordinatePoint CoordinatPoint)
+        private static bool IsUnderAttack(BaseFigure baseFigure, CoordinatePoint CoordinatPoint)
         {
             var modelNew = models.Where(c => c.Color != baseFigure.Color).ToList();
             foreach (var item in modelNew)
@@ -411,7 +411,7 @@ namespace GameManager
         /// <param name="baseFigure">Current figure</param>
         /// <param name="CoordinatPoint">Current coordinate</param>
         /// <returns>Return true if figure is protected</returns>
-        private bool IsProtected(BaseFigure baseFigure, CoordinatePoint CoordinatPoint)
+        private static bool IsProtected(BaseFigure baseFigure, CoordinatePoint CoordinatPoint)
         {
             var model = models.Where(c => c != baseFigure && c.Color == baseFigure.Color).ToList();
             foreach (var item in model)
@@ -431,7 +431,7 @@ namespace GameManager
         /// <param name="baseFigure">Currnnt Figure</param>
         /// <param name="king">Current king</param>
         /// <returns>Return the new coordinate for random move</returns>
-        private CoordinatePoint RandomMove(BaseFigure baseFigure, King king)
+        private static CoordinatePoint RandomMove(BaseFigure baseFigure, King king)
         {
             CoordinatePoint temp = null;
             IAvailableMoves tempFigure = (IAvailableMoves)baseFigure;
@@ -463,7 +463,7 @@ namespace GameManager
             }
             return temp;
         }
-        private bool ProtectedShax(BaseFigure baseFigure, King king, out CoordinatePoint tempForItem)
+        private static bool ProtectedShax(BaseFigure baseFigure, King king, out CoordinatePoint tempForItem)
         {
             CoordinatePoint temp = baseFigure.Coordinate;
             IAvailableMoves tempFigure = (IAvailableMoves)baseFigure;
@@ -487,7 +487,7 @@ namespace GameManager
             tempForItem = null;
             return false;
         }
-        private bool IsUnderAttackShax(BaseFigure baseFigure, King king, out CoordinatePoint tempForItem)
+        private static bool IsUnderAttackShax(BaseFigure baseFigure, King king, out CoordinatePoint tempForItem)
         {
             CoordinatePoint temp = baseFigure.Coordinate;
             IAvailableMoves tempFigure = (IAvailableMoves)baseFigure;
@@ -511,7 +511,7 @@ namespace GameManager
             tempForItem = null;
             return false;
         }
-        private bool IsUnderAttackMax(BaseFigure baseFigure, King king, out CoordinatePoint tempForItem)
+        private static bool IsUnderAttackMax(BaseFigure baseFigure, King king, out CoordinatePoint tempForItem)
         {
             CoordinatePoint temp = baseFigure.Coordinate;
             IAvailableMoves tempFigure = (IAvailableMoves)baseFigure;
@@ -609,7 +609,7 @@ namespace GameManager
         /// </summary>
         /// <param name="model">King instance withe or Black</param>
         /// <returns>Return danger position List for current king </returns>
-        private List<CoordinatePoint> DangerPosition(BaseFigure model)
+        private static List<CoordinatePoint> DangerPosition(BaseFigure model)
         {
             var modelNew = models.Where(c => c.Color != model.Color);
             var result = new List<CoordinatePoint>();
@@ -682,10 +682,10 @@ namespace GameManager
             var coordinatePoint = new CoordinatePoint(int.Parse(info[2]), int.Parse(info[3]));
             if (GetFigure(info[0], info[1], out baseFigure))
             {
-                baseFigure.setPicture += SetFigurePicture;
-                baseFigure.removePicture += RemoveFigurePicture;
+                baseFigure.SetPicture += SetFigurePicture;
+                baseFigure.RemovePicture += RemoveFigurePicture;
                 baseFigure.DeletePicture += delegate {};
-                baseFigure.messageForMove += MessageMove;
+                baseFigure.MessageForMove += MessageMove;
                 models.Add(baseFigure);
                 if (!GetPosition().Contains(coordinatePoint))
                 {
@@ -888,7 +888,7 @@ namespace GameManager
         /// Check the all figurs position
         /// </summary>
         /// <returns>Return the figurs position</returns>
-        private List<CoordinatePoint> GetPosition()
+        private static List<CoordinatePoint> GetPosition()
         {
             var positions = new List<CoordinatePoint>();
             foreach (var item in models)
@@ -931,6 +931,40 @@ namespace GameManager
                 names.Add("0");
             }
             return names;
+        }
+
+        private static CoordinatePoint GetCoordinateByString(string path)
+        {
+            string[] strCurrent = path.Split('.');
+            return new CoordinatePoint(int.Parse(strCurrent[0]), int.Parse(strCurrent[1]));
+        }
+
+        /// <summary>
+        /// Check a current figure with a coordinate
+        /// </summary>
+        /// <param name="coordinatePoint">Current coordinate</param>
+        /// <returns>Return a current figure</returns>
+        private static BaseFigure CheckedCurrentFigure(CoordinatePoint coordinatePoint)
+        {
+            foreach (var item in models)
+            {
+                if (item.Coordinate == coordinatePoint)
+                    return item;
+            }
+            return null;
+        }
+        public static List<string> GetAvalibleMoves(string coordinate)
+        {
+            var result = new List<string>();
+            var currentCoordinate = GetCoordinateByString(coordinate);
+            var baseFigure = CheckedCurrentFigure(currentCoordinate);
+            var antiCheck = (IAntiCheck)baseFigure;
+            var movesList = antiCheck.MovesWithKingIsNotUnderCheck();
+            foreach (var item in movesList)
+            {
+                result.Add($"{item.X}.{item.Y}");
+            }
+            return result;
         }
     }
 }

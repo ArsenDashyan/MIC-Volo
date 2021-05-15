@@ -17,10 +17,10 @@ namespace Figure
 
         public bool isProtected = false;
         public CoordinatePoint Coordinate { get; set; }
-        public event Picture setPicture;
-        public event Picture removePicture;
+        public event Picture SetPicture;
+        public event Picture RemovePicture;
         public event Picture DeletePicture;
-        public event Message messageForMove;
+        public event Message MessageForMove;
 
         #endregion
 
@@ -35,18 +35,18 @@ namespace Figure
             string currenrCoordinate;
             if (this.Coordinate == null)
             {
-                messageForMove(this, (string.Empty, targetCoordinate));
+                MessageForMove(this, (string.Empty, targetCoordinate));
                 this.Coordinate = coordinate;
                 currenrCoordinate = this.Coordinate.ToString() + '.' + this.Name;
             }
             else
             {
                 currenrCoordinate = this.Coordinate.ToString() + '.' + this.Name;
-                messageForMove(this, (currenrCoordinate, targetCoordinate));
+                MessageForMove(this, (currenrCoordinate, targetCoordinate));
                 this.Coordinate = coordinate;
             }
             DeleteFigur(this);
-            setPicture(this, targetCoordinate);
+            SetPicture(this, targetCoordinate);
         }
         public void RemoveFigurePosition()
         {
@@ -54,7 +54,7 @@ namespace Figure
             {
                 this.isMoved = true;
                 string currenrCoordinate = this.Coordinate.ToString() + '.' + this.Name;
-                removePicture(this, currenrCoordinate);
+                RemovePicture(this, currenrCoordinate);
             }
         }
         private void DeleteFigur(BaseFigure model)
@@ -66,7 +66,7 @@ namespace Figure
                 {
                     var tempItem = item;
                     string itemCoordinate = item.Coordinate.ToString() + '.' + item.Name;
-                    removePicture(item, itemCoordinate);
+                    RemovePicture(item, itemCoordinate);
                     DeletePicture(item, itemCoordinate);
                     othereFigures.Remove(item);
                     break;
