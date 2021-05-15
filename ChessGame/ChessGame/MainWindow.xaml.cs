@@ -28,6 +28,7 @@ namespace ChessGame
         private readonly PawnChengesPage pawnChengesPage = new();
         private List<string> models = new();
         private readonly List<string> modelsForDeleteid = new();
+        private readonly List<(Brush, Border)> colorsBorder = new();
         CancellationTokenSource cancellationTokenSource;
         CancellationToken cancellationToken;
         private static int currentGameStatus;
@@ -748,7 +749,6 @@ namespace ChessGame
                     break;
             }
         }
-
         private List<string> GameManagerForColors(string coordinate)
         {
             switch (CurrentGameStatus)
@@ -812,7 +812,6 @@ namespace ChessGame
             string inputInfo = figure + '.' + color;
             standard.SetChangeFigureForPawn(inputInfo);
         }
-
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
@@ -832,8 +831,6 @@ namespace ChessGame
             else
                 File.AppendAllText(filepath + name + ".txt", "\n" + info);
         }
-
-        readonly List<(Brush, Border)> colors = new();
         private void GetColoredCells(List<string> list)
         {
             var coordinateList = GetCoordinateList(list);
@@ -841,27 +838,25 @@ namespace ChessGame
             {
                 if (item is Border border)
                 {
+                    colorsBorder.Add((border.Background, border));
                     foreach (var coord in coordinateList)
                     {
                         if (Grid.GetColumn(border) == coord.Item1 && Grid.GetRow(border) == coord.Item2)
                         {
-                            colors.Add((border.Background, border));
                             border.Background = Brushes.LightGoldenrodYellow;
                         }
                     }
                 }
             }
         }
-
         private void RemoveColoredCells()
         {
-            foreach (var item in colors)
+            foreach (var item in colorsBorder)
             {
                 item.Item2.Background = item.Item1;
             }
         }
-
-        private List<(int,int)> GetCoordinateList(List<string> listColors)
+        private List<(int, int)> GetCoordinateList(List<string> listColors)
         {
             var list = new List<(int, int)>();
             foreach (var item in listColors)
@@ -870,7 +865,7 @@ namespace ChessGame
                 list.Add((int.Parse(temp[0]), int.Parse(temp[1])));
             }
             var temp2 = this.startCoordinate.Split('.');
-            return list.Where(c=>c!= (int.Parse(temp2[0]), int.Parse(temp2[1]))).ToList();
+            return list.Where(c => c != (int.Parse(temp2[0]), int.Parse(temp2[1]))).ToList();
         }
         #endregion
     }
