@@ -1,4 +1,5 @@
 ﻿using Figure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,6 +30,27 @@ namespace GameManager
         public void SetFigurePicture(object sender, string coordinate)
         {
             SetPicture(this, coordinate);
+            DeleteFigur(coordinate);
+        }
+        private void DeleteFigur(string coordinate)
+        {
+            string[] strCurrent = coordinate.Split('.');
+            var firstCoordinate = Convert.ToChar(strCurrent[0]);
+            var currentCoordinate = new CoordinatePoint(firstCoordinate.CharToInt(), int.Parse(strCurrent[1]) - 1);
+            var baseFigure = CheckedCurrentFigure(currentCoordinate, coordinate);
+            var modelTemp = _models.Where(c => c.Color != baseFigure.Color);
+            foreach (var item in modelTemp)
+            {
+                if (currentCoordinate == item.Coordinate)
+                {
+                    var tempItem = item;
+                    string itemCoordinate = item.Coordinate.ToString() + '.' + item.Name;
+                    RemovePicture(item, itemCoordinate);
+                    DeletePicture(item, itemCoordinate);
+                    _models.Remove(item);
+                    break;
+                }
+            }
         }
 
         /// <summary>
@@ -39,11 +61,6 @@ namespace GameManager
         public void RemoveFigurePicture(object sender, string coordinate)
         {
             RemovePicture(this, coordinate);
-        }
-
-        public void DeleteFigurePicture(object sender, string coordinate)
-        {
-            DeletePicture(this, coordinate);
         }
 
         /// <summary>
@@ -71,31 +88,32 @@ namespace GameManager
         /// <param name="current">Current coordinate with string format</param>
         /// <param name="target">Target coordinate with string format</param>
         /// <returns>Return true if target coordinate is valid for figure</returns>
-        public bool IsVAlidCoordinate(string current, string target)
+        public static bool IsVAlidCoordinate(string current, string target)
+        {
+            var currentCoordinate = GetCoordinateByString(current);
+            var targetCoordinate = GetCoordinateByString(target);
+            var baseFigure = CheckedCurrentFigure(currentCoordinate);
+            var antiCheck = (IAntiCheck)baseFigure;
+            return antiCheck.MovesWithKingIsNotUnderCheck().Contains(targetCoordinate);
+        }
+
+        public void GetLogic(string current, string target)
         {
             var currentCoordinate = GetCoordinateByString(current);
             var targetCoordinate = GetCoordinateByString(target);
             var baseFigure = CheckedCurrentFigure(currentCoordinate);
             var CurentKing = (King)_models.Where(c => c.Color != baseFigure.Color && c is King).Single();
-            var antiCheck = (IAntiCheck)baseFigure;
-            var movesList = antiCheck.MovesWithKingIsNotUnderCheck();
-            if (movesList.Contains(targetCoordinate))
+            if (baseFigure is King king)
+                KingFigureSet(king, targetCoordinate);
+            else
             {
-                if (baseFigure is King king)
-                    return KingFigureSet(king, targetCoordinate);
+                if (baseFigure is Pawn pawn)
+                    PawnFigureSet(pawn, targetCoordinate);
                 else
-                {
-                    if (baseFigure is Pawn pawn)
-                        PawnFigureSet(pawn, targetCoordinate);
-                    else
-                        baseFigure.SetFigurePosition(targetCoordinate);
-                    CurentKing.IsCheked();
-                    return true;
-                }
+                    baseFigure.SetFigurePosition(targetCoordinate);
+                CurentKing.IsCheked();
             }
-            return false;
         }
-
         private static CoordinatePoint GetCoordinateByString(string path)
         {
             string[] strCurrent = path.Split('.');
@@ -111,7 +129,6 @@ namespace GameManager
             {
                 item.SetPicture += SetFigurePicture;
                 item.RemovePicture += RemoveFigurePicture;
-                item.DeletePicture += DeleteFigurePicture;
                 item.MessageForMove += MessageMove;
                 if (item is King king)
                 {
@@ -253,6 +270,16 @@ namespace GameManager
             }
             return null;
         }
+        private static BaseFigure CheckedCurrentFigure(CoordinatePoint coordinatePoint, string info)
+        {
+            string[] strCurrent = info.Split('.');
+            foreach (var item in _models.Where(c => c.Color.ToString() == strCurrent[3]))
+            {
+                if (item.Coordinate == coordinatePoint)
+                    return item;
+            }
+            return null;
+        }
 
         /// <summary>
         /// Create All figures
@@ -352,7 +379,7 @@ namespace GameManager
         /// <param name="king">Current king</param>
         /// <param name="targetCoordinate">Target coordinate for current king</param>
         /// <returns>Return true if king is moved</returns>
-        private bool KingFigureSet(King king, CoordinatePoint targetCoordinate)
+        private static void KingFigureSet(King king, CoordinatePoint targetCoordinate)
         {
             var CurentKing = (King)_models.Where(c => c.Color != king.Color && c is King).Single();
 
@@ -361,15 +388,48 @@ namespace GameManager
                 SetRookCastling(coordinatePoint);
                 king.SetFigurePosition(targetCoordinate);
                 CurentKing.IsCheked();
-                return true;
             }
-            else if (ValidMoves.GetCurrentKingMoves(king).Contains(targetCoordinate))
+            else if (GetCurrentKingMoves(king).Contains(targetCoordinate))
             {
                 king.SetFigurePosition(targetCoordinate);
                 CurentKing.IsCheked();
-                return true;
             }
-            return false;
+        }
+
+        /// <summary>
+        /// Check the danger position for current king
+        /// </summary>
+        /// <param name="model">King instance withe or Black</param>
+        /// <returns>Return danger position List for current king </returns>
+        private static List<CoordinatePoint> DangerPosition(King king)
+        {
+            var modelNew = _models.Where(c => c.Color != king.Color);
+            var result = new List<CoordinatePoint>();
+            foreach (var item in modelNew)
+            {
+                var temp = (IAvailableMoves)item;
+                var array = temp.AvailableMoves();
+                result.AddRange(array);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Check the available moves for current king 
+        /// </summary>
+        /// <returns>Return the list</returns>
+        public static List<CoordinatePoint> GetCurrentKingMoves(King king)
+        {
+            var currentKing = (IAvailableMoves)king;
+            var result = new List<CoordinatePoint>();
+            foreach (var item in currentKing.AvailableMoves())
+            {
+                if (!DangerPosition(king).Contains(item))
+                {
+                    result.Add(item);
+                }
+            }
+            return result;
         }
 
         /// <summary>
@@ -538,7 +598,6 @@ namespace GameManager
             _models.Add(baseFigure);
             baseFigure.SetPicture += SetFigurePicture;
             baseFigure.RemovePicture += RemoveFigurePicture;
-            baseFigure.DeletePicture += DeleteFigurePicture;
             baseFigure.MessageForMove += MessageMove;
             baseFigure.SetFigurePosition(_coordinate);
             _chengedPawn.RemoveFigurePosition();

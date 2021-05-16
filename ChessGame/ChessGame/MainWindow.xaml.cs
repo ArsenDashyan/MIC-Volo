@@ -53,8 +53,7 @@ namespace ChessGame
             gameManagment.DeletePicture += SetDeleteFigurePicture;
             gameManagment.MateMessage += MessageMateForKingHame;
             gameManagment.MessageCheck += MessageCheckStandard;
-            gameManagment.MessageForMove += MessageMoveForStandardGame;
-            gameManagment.MessageForMove += MessageMoveForKingGame;
+            gameManagment.MessageForMove += MessageMoveForAllGame;
             gameManagment.MessagePawnChange += MessageForPawnChange;
             gameManagment.MessageProgress += MessageForProgress;
             gameManagment.RemovePicture += RemoveFigurePicture;
@@ -145,29 +144,18 @@ namespace ChessGame
         /// </summary>
         /// <param name="baseFigure">Figure instanste</param>
         /// <param name="coordinate">Figure old and new coordinate</param>
-        public void MessageMoveForKingGame(object sender, (string, string) coordinateTupl)
+        public void MessageMoveForAllGame(object sender, (string, string) coordinateTupl)
         {
             if (coordinateTupl.Item1 != string.Empty)
             {
+                TextBox textBox;
+                if (CurrentGameStatus == 3)
+                    textBox = MovesTextBoxStandard;
+                else
+                    textBox = MovesTextBox;
                 string[] start = coordinateTupl.Item1.Split('.');
                 string[] target = coordinateTupl.Item2.Split('.');
-                MovesTextBox.Text += $"{start[2]} {start[3]} -" + $"{start[0]}{start[1]} : " +
-                    $"{target[0]}{target[1]}\n";
-            }
-        }
-
-        /// <summary>
-        /// Show a figure moves
-        /// </summary>
-        /// <param name="baseFigure">Figure instanste</param>
-        /// <param name="coordinate">Figure old and new coordinate</param>
-        public void MessageMoveForStandardGame(object sender, (string, string) coordinateTupl)
-        {
-            if (coordinateTupl.Item1 != string.Empty)
-            {
-                string[] start = coordinateTupl.Item1.Split('.');
-                string[] target = coordinateTupl.Item2.Split('.');
-                MovesTextBoxStandard.Text += $"{start[2]} {start[3]} - " + $"{start[0]}{start[1]} : " +
+                textBox.Text += $"{start[2]} {start[3]} - " + $"{start[0]}{start[1]} : " +
                     $"{target[0]}{target[1]}\n";
             }
         }
@@ -416,7 +404,7 @@ namespace ChessGame
             {
                 gameManagment.CreateTargetKnight(currentCoord);
                 KnightMovesMessage.Text = $"For target coordinate your need " +
-                                     $"{gameManagment.MinKnightCount()} moves";
+                                     $"{GameManagment.MinKnightCount()} moves";
                 KnightSetBtn.IsEnabled = true;
             }
         }
@@ -562,8 +550,8 @@ namespace ChessGame
             {
                 RemoveColoredCells();
                 InitializeGameManagment();
-                gameManagment.Managment((this._startCoordinate, coordinate));
-                CurrentColorManager();
+                bool action =  gameManagment.Managment((this._startCoordinate, coordinate));
+                CurrentColorManager(action);
             }
         }
 
@@ -661,21 +649,25 @@ namespace ChessGame
         /// <summary>
         /// Manage current color with Black or White
         /// </summary>
-        private void CurrentColorManager()
+        private void CurrentColorManager(bool action)
         {
-            if (CurrentGameStatus == 3)
+            if (action)
             {
-                if (_colorPower)
+                if (CurrentGameStatus == 3)
                 {
-                    currentFigureColor = "White";
-                    _colorPower = false;
-                }
-                else
-                {
-                    currentFigureColor = "Black";
-                    _colorPower = true;
+                    if (_colorPower)
+                    {
+                        currentFigureColor = "White";
+                        _colorPower = false;
+                    }
+                    else
+                    {
+                        currentFigureColor = "Black";
+                        _colorPower = true;
+                    }
                 }
             }
+            
         }
         private void PlayForStandard_Click(object sender, RoutedEventArgs e)
         {

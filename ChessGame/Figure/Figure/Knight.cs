@@ -5,10 +5,12 @@ namespace Figure
 {
     public class Knight : BaseFigure, ICrosswise, IAvailableMoves, IAntiCheck
     {
-        public Knight(string name, FColor color, List<BaseFigure> othereFigures) : base(othereFigures)
+        public readonly List<BaseFigure> othereFigures;
+        public Knight(string name, FColor color, List<BaseFigure> allFigures) : base(color)
         {
             Name = name;
             Color = color;
+            othereFigures = allFigures;
         }
 
         #region Move
@@ -91,9 +93,9 @@ namespace Figure
         /// </summary>
         /// <param name="model">King instance withe or Black</param>
         /// <returns>Return danger position List for current king </returns>
-        private static List<CoordinatePoint> DangerPosition(BaseFigure model)
+        private List<CoordinatePoint> DangerPosition()
         {
-            var modelNew = model.othereFigures.Where(c => c.Color != model.Color);
+            var modelNew = othereFigures.Where(c => c.Color != this.Color);
             var result = new List<CoordinatePoint>();
             foreach (var item in modelNew)
             {
@@ -112,7 +114,7 @@ namespace Figure
             foreach (var item in this.AvailableMoves())
             {
                 this.Coordinate = item;
-                if (!DangerPosition(thisKing).Contains(thisKing.Coordinate))
+                if (!DangerPosition().Contains(thisKing.Coordinate))
                 {
                     goodMoves.Add(item);
                 }

@@ -50,6 +50,26 @@ namespace GameManager
         public void SetFigurePicture(object sender, string coordinate)
         {
             SetPicture(this, coordinate);
+            DeleteFigur(coordinate);
+        }
+        private void DeleteFigur(string coordinate)
+        {
+            string[] strCurrent = coordinate.Split('.');
+            var firstCoordinate = Convert.ToChar(strCurrent[0]);
+            var currentCoordinate  = new CoordinatePoint(firstCoordinate.CharToInt(), int.Parse(strCurrent[1])-1);
+            var baseFigure = CheckedCurrentFigure(currentCoordinate);
+            var modelTemp = _models.Where(c => c.Color != baseFigure.Color);
+            foreach (var item in modelTemp)
+            {
+                if (currentCoordinate == item.Coordinate)
+                {
+                    var tempItem = item;
+                    string itemCoordinate = item.Coordinate.ToString() + '.' + item.Name;
+                    RemovePicture(item, itemCoordinate);
+                    _models.Remove(item);
+                    break;
+                }
+            }
         }
 
         /// <summary>
@@ -682,7 +702,6 @@ namespace GameManager
             {
                 _baseFigure.SetPicture += SetFigurePicture;
                 _baseFigure.RemovePicture += RemoveFigurePicture;
-                _baseFigure.DeletePicture += delegate {};
                 _baseFigure.MessageForMove += MessageMove;
                 _models.Add(_baseFigure);
                 if (!GetPosition().Contains(coordinatePoint))
@@ -690,9 +709,7 @@ namespace GameManager
                     if (_baseFigure is King king)
                     {
                         if (!DangerPosition(king).Contains(coordinatePoint))
-                        {
                             _baseFigure.SetFigurePosition(coordinatePoint);
-                        }
                         else
                         {
                             if (name.Split('.')[1] == "White")
@@ -702,9 +719,7 @@ namespace GameManager
                         }
                     }
                     else
-                    {
                         _baseFigure.SetFigurePosition(coordinatePoint);
-                    }
                 }
             }
         }
@@ -902,7 +917,6 @@ namespace GameManager
                 names = null;
             return names;
         }
-
         private static CoordinatePoint GetCoordinateByString(string path)
         {
             string[] strCurrent = path.Split('.');

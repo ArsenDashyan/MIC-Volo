@@ -1,5 +1,6 @@
 ﻿using Figure;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GameManager
 {
@@ -13,7 +14,7 @@ namespace GameManager
         private static Knight _targetKnight;
         #endregion
 
-        public int MinKnightCount()
+        public static int MinKnightCount()
         {
             int count = 1;
             CoordinatePoint coordinatPoint = _startKnight.Coordinate;

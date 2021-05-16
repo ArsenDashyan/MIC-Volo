@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace GameManager
 {
@@ -63,7 +59,7 @@ namespace GameManager
             _movesKnight.SetPicture += SetFigurePicture;
             _movesKnight.MessageForMoveKnight += delegate { };
         }
-        public void Managment((string, string) tupl)
+        public bool Managment((string, string) tupl)
         {
             switch (CurrentGameStatus)
             {
@@ -71,12 +67,18 @@ namespace GameManager
                     InitializeKingGame();
                     if (_kingGame.IsVAlidCoordinate(tupl.Item1, tupl.Item2))
                         _kingGame.Logic();
-                    break;
+                    return false;
                 case 3:
                     InitializeStandard();
-                    _standard.IsVAlidCoordinate(tupl.Item1, tupl.Item2);
-                    break;
+                    if (Standard.IsVAlidCoordinate(tupl.Item1, tupl.Item2))
+                    {
+                        _standard.GetLogic(tupl.Item1, tupl.Item2);
+                        return true;
+                    }
+                    else
+                        return false;
             }
+            return false;
         }
         public void SetAllFigures()
         {
@@ -131,8 +133,8 @@ namespace GameManager
         public void SetFigurePicture(object sender, string coordinate)
         {
             SetPicture(this, coordinate);
+            
         }
-
         public void SetDeleteFigurePicture(object sender, string coordinate)
         {
             DeletePicture(this, coordinate);
@@ -191,9 +193,9 @@ namespace GameManager
         {
             _movesKnight.CreateTargetKnight(coordinate);
         }
-        public int MinKnightCount()
+        public static int MinKnightCount()
         {
-            return _movesKnight.MinKnightCount();
+            return MovesKnight.MinKnightCount();
         }
 
         #endregion
