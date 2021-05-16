@@ -9,11 +9,11 @@ namespace GameManager
     public class GameManagment
     {
         #region Property and Feld
-        public static int CurrentGameStatus { get => currentGameStatus; set => currentGameStatus = value; }
-        private static int currentGameStatus;
-        private Manager manager;
-        private MovesKnight movesKnight;
-        private Standard standard;
+        public static int CurrentGameStatus { get => _currentGameStatus; set => _currentGameStatus = value; }
+        private static int _currentGameStatus;
+        private KingGame _kingGame;
+        private MovesKnight _movesKnight;
+        private Standard _standard;
         public event MessageForMate MateMessage;
         public event Message MessageForMove;
         public event Message MessageProgress;
@@ -23,44 +23,45 @@ namespace GameManager
         public event MessageForMate MessageCheck;
         public event Picture DeletePicture;
         public string currentFigureColor;
-        private readonly bool colorPower = false;
-        public List<string> models = new();
+
 
         #endregion
         public GameManagment(string currentFigureColor, int currentGameStatus)
         {
             this.currentFigureColor = currentFigureColor;
             CurrentGameStatus = currentGameStatus;
-
+            InitializeKnightGame();
+            InitializeStandard();
         }
         private void InitializeStandard()
         {
-            standard = new Standard();
-            standard.SetPicture += SetFigurePicture;
-            standard.RemovePicture += RemoveFigurePicture;
-            standard.DeletePicture += SetDeleteFigurePicture;
-            standard.MessageForMove += MessageMoveForStandardGame;
-            standard.MessageCheck += MessageCheckStandard;
-            standard.MessagePawnChange += MessageForPawnChange;
+            _standard = new Standard();
+            _standard.SetPicture += SetFigurePicture;
+            _standard.RemovePicture += RemoveFigurePicture;
+            _standard.DeletePicture += SetDeleteFigurePicture;
+            _standard.MessageForMove += MessageMoveForStandardGame;
+            _standard.MessageCheck += MessageCheckStandard;
+            _standard.MessagePawnChange += MessageForPawnChange;
         }
         public void IsValidForPleacement(string inputInfo)
         {
             InitializeKingGame();
-            manager.IsValidForPleacement(inputInfo);
+            _kingGame.IsValidForPleacement(inputInfo);
         }
         private void InitializeKingGame()
         {
-            manager = new Manager(currentFigureColor);
-            manager.SetPicture += SetFigurePicture;
-            manager.RemovePicture += RemoveFigurePicture;
-            manager.MessageForMove += MessageMoveForKingGame;
-            manager.MessageProgress += MessageForProgress;
+            _kingGame = new KingGame(currentFigureColor);
+            _kingGame.SetPicture += SetFigurePicture;
+            _kingGame.RemovePicture += RemoveFigurePicture;
+            _kingGame.MessageForMove += MessageMoveForKingGame;
+            _kingGame.MessageProgress += MessageForProgress;
+            _kingGame.MateMessage += MessageMate;
         }
         private void InitializeKnightGame()
         {
-            movesKnight = new MovesKnight();
-            movesKnight.SetPicture += SetFigurePicture;
-            movesKnight.MessageForMoveKnight += delegate { };
+            _movesKnight = new MovesKnight();
+            _movesKnight.SetPicture += SetFigurePicture;
+            _movesKnight.MessageForMoveKnight += delegate { };
         }
         public void Managment((string, string) tupl)
         {
@@ -68,45 +69,41 @@ namespace GameManager
             {
                 case 1:
                     InitializeKingGame();
-                    if (manager.IsVAlidCoordinate(tupl.Item1, tupl.Item2))
-                    {
-                        manager.MateMessage += MessageMate;
-                        manager.MessageProgress += MessageForProgress;
-                        manager.Logic();
-                    }
+                    if (_kingGame.IsVAlidCoordinate(tupl.Item1, tupl.Item2))
+                        _kingGame.Logic();
                     break;
                 case 3:
                     InitializeStandard();
-                    standard.RemovePicture += RemoveFigurePicture;
-                    standard.DeletePicture += SetDeleteFigurePicture;
-                    standard.IsVAlidCoordinate(tupl.Item1, tupl.Item2);
+                    _standard.IsVAlidCoordinate(tupl.Item1, tupl.Item2);
                     break;
             }
         }
         public void SetAllFigures()
         {
             InitializeStandard();
-            standard.SetAllFigures();
+            _standard.SetAllFigures();
         }
         public static List<string> GetAvalibleMoves(string coordinate)
         {
             return CurrentGameStatus switch
             {
-                1 => Manager.GetAvalibleMoves(coordinate),
+                1 => KingGame.GetAvalibleMoves(coordinate),
                 3 => Standard.GetAvalibleMoves(coordinate),
                 _ => null,
             };
         }
         public void SetChangeFigureForPawn(string inputInfo)
         {
-            standard.SetChangeFigureForPawn(inputInfo);
+            InitializeStandard();
+            _standard.SetChangeFigureForPawn(inputInfo);
         }
-        public List<string> GetAllFiguresForReset()
+        public static List<string> GetAllFiguresForReset(int status)
         {
-            switch (CurrentGameStatus)
+            var models = new List<string>();
+            switch (status)
             {
                 case 1:
-                    models = manager.GetNamesForReset();
+                    models = KingGame.GetNamesForReset();
                     break;
                 case 2:
                     models = MovesKnight.GetNamesForReset();
@@ -184,5 +181,21 @@ namespace GameManager
         {
             MessageProgress(this, ("", ""));
         }
+
+        #region Knight Game
+        public void CreateStartKnight(string coordinate)
+        {
+            _movesKnight.CreateStartKnight(coordinate);
+        }
+        public void CreateTargetKnight(string coordinate)
+        {
+            _movesKnight.CreateTargetKnight(coordinate);
+        }
+        public int MinKnightCount()
+        {
+            return _movesKnight.MinKnightCount();
+        }
+
+        #endregion
     }
 }

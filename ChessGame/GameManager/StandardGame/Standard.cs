@@ -7,16 +7,16 @@ namespace GameManager
     public class Standard
     {
         #region Property and Feld
-        private static readonly List<BaseFigure> models = new();
-        private BaseFigure chengedPawn;
+        private static readonly List<BaseFigure> _models = new();
+        private static BaseFigure _chengedPawn;
         public event Message MessageForMove;
         public event MessageForMate MessagePawnChange;
         public event MessageForMate MessageCheck;
         public event Picture SetPicture;
         public event Picture RemovePicture;
         public event Picture DeletePicture;
-        private static CoordinatePoint coordinate;
-        private static int pawnCount = 2;
+        private static CoordinatePoint _coordinate;
+        private static int _pawnCount = 2;
         #endregion
 
         #region Event Methods
@@ -76,7 +76,7 @@ namespace GameManager
             var currentCoordinate = GetCoordinateByString(current);
             var targetCoordinate = GetCoordinateByString(target);
             var baseFigure = CheckedCurrentFigure(currentCoordinate);
-            var CurentKing = (King)models.Where(c => c.Color != baseFigure.Color && c is King).Single();
+            var CurentKing = (King)_models.Where(c => c.Color != baseFigure.Color && c is King).Single();
             var antiCheck = (IAntiCheck)baseFigure;
             var movesList = antiCheck.MovesWithKingIsNotUnderCheck();
             if (movesList.Contains(targetCoordinate))
@@ -226,18 +226,16 @@ namespace GameManager
         public static List<string> GetNamesForReset()
         {
             var positions = new List<string>();
-            if (models.Count != 0)
+            if (_models.Count != 0)
             {
-                foreach (var item in models)
+                foreach (var item in _models)
                 {
                     positions.Add(item.Name);
                 }
-                models.Clear();
+                _models.Clear();
             }
             else
-            {
-                positions.Add("0");
-            }
+                positions = null;
             return positions;
         }
 
@@ -248,7 +246,7 @@ namespace GameManager
         /// <returns>Return a current figure</returns>
         private static BaseFigure CheckedCurrentFigure(CoordinatePoint coordinatePoint)
         {
-            foreach (var item in models)
+            foreach (var item in _models)
             {
                 if (item.Coordinate == coordinatePoint)
                     return item;
@@ -262,73 +260,73 @@ namespace GameManager
         /// <returns>Return all figures</returns>
         private static List<BaseFigure> GetAllFigures()
         {
-            Queen queenWhite = new("Queen.White.1", FColor.White, models);
-            models.Add(queenWhite);
-            King kingWhite = new("King.White.1", FColor.White, models);
-            models.Add(kingWhite);
-            Knight knightWhite1 = new("Knight.White.1", FColor.White, models);
-            models.Add(knightWhite1);
-            Knight knightWhite2 = new("Knight.White.2", FColor.White, models);
-            models.Add(knightWhite2);
-            Bishop bishopWhite1 = new("Bishop.White.1", FColor.White, models);
-            models.Add(bishopWhite1);
-            Bishop bishopWhite2 = new("Bishop.White.2", FColor.White, models);
-            models.Add(bishopWhite2);
-            Rook rookWhite1 = new("Rook.White.1", FColor.White, models);
-            models.Add(rookWhite1);
-            Rook rookWhite2 = new("Rook.White.2", FColor.White, models);
-            models.Add(rookWhite2);
-            Pawn pawnWhite1 = new("Pawn.White.1", FColor.White, models);
-            models.Add(pawnWhite1);
-            Pawn pawnWhite2 = new("Pawn.White.2", FColor.White, models);
-            models.Add(pawnWhite2);
-            Pawn pawnWhite3 = new("Pawn.White.3", FColor.White, models);
-            models.Add(pawnWhite3);
-            Pawn pawnWhite4 = new("Pawn.White.4", FColor.White, models);
-            models.Add(pawnWhite4);
-            Pawn pawnWhite5 = new("Pawn.White.5", FColor.White, models);
-            models.Add(pawnWhite5);
-            Pawn pawnWhite6 = new("Pawn.White.6", FColor.White, models);
-            models.Add(pawnWhite6);
-            Pawn pawnWhite7 = new("Pawn.White.7", FColor.White, models);
-            models.Add(pawnWhite7);
-            Pawn pawnWhite8 = new("Pawn.White.8", FColor.White, models);
-            models.Add(pawnWhite8);
+            Queen queenWhite = new("Queen.White.1", FColor.White, _models);
+            _models.Add(queenWhite);
+            King kingWhite = new("King.White.1", FColor.White, _models);
+            _models.Add(kingWhite);
+            Knight knightWhite1 = new("Knight.White.1", FColor.White, _models);
+            _models.Add(knightWhite1);
+            Knight knightWhite2 = new("Knight.White.2", FColor.White, _models);
+            _models.Add(knightWhite2);
+            Bishop bishopWhite1 = new("Bishop.White.1", FColor.White, _models);
+            _models.Add(bishopWhite1);
+            Bishop bishopWhite2 = new("Bishop.White.2", FColor.White, _models);
+            _models.Add(bishopWhite2);
+            Rook rookWhite1 = new("Rook.White.1", FColor.White, _models);
+            _models.Add(rookWhite1);
+            Rook rookWhite2 = new("Rook.White.2", FColor.White, _models);
+            _models.Add(rookWhite2);
+            Pawn pawnWhite1 = new("Pawn.White.1", FColor.White, _models);
+            _models.Add(pawnWhite1);
+            Pawn pawnWhite2 = new("Pawn.White.2", FColor.White, _models);
+            _models.Add(pawnWhite2);
+            Pawn pawnWhite3 = new("Pawn.White.3", FColor.White, _models);
+            _models.Add(pawnWhite3);
+            Pawn pawnWhite4 = new("Pawn.White.4", FColor.White, _models);
+            _models.Add(pawnWhite4);
+            Pawn pawnWhite5 = new("Pawn.White.5", FColor.White, _models);
+            _models.Add(pawnWhite5);
+            Pawn pawnWhite6 = new("Pawn.White.6", FColor.White, _models);
+            _models.Add(pawnWhite6);
+            Pawn pawnWhite7 = new("Pawn.White.7", FColor.White, _models);
+            _models.Add(pawnWhite7);
+            Pawn pawnWhite8 = new("Pawn.White.8", FColor.White, _models);
+            _models.Add(pawnWhite8);
 
-            Queen queenBlack = new("Queen.Black.1", FColor.Black, models);
-            models.Add(queenBlack);
-            King kingBlack = new("King.Black.1", FColor.Black, models);
-            models.Add(kingBlack);
-            Knight knightBlack1 = new("Knight.Black.1", FColor.Black, models);
-            models.Add(knightBlack1);
-            Knight knightBlack2 = new("Knight.Black.2", FColor.Black, models);
-            models.Add(knightBlack2);
-            Bishop bishopBlack1 = new("Bishop.Black.1", FColor.Black, models);
-            models.Add(bishopBlack1);
-            Bishop bishopBlack2 = new("Bishop.Black.2", FColor.Black, models);
-            models.Add(bishopBlack2);
-            Rook rookBlack1 = new("Rook.Black.1", FColor.Black, models);
-            models.Add(rookBlack1);
-            Rook rookBlack2 = new("Rook.Black.2", FColor.Black, models);
-            models.Add(rookBlack2);
-            Pawn pawnBlack1 = new("Pawn.Black.1", FColor.Black, models);
-            models.Add(pawnBlack1);
-            Pawn pawnBlack2 = new("Pawn.Black.2", FColor.Black, models);
-            models.Add(pawnBlack2);
-            Pawn pawnBlack3 = new("Pawn.Black.3", FColor.Black, models);
-            models.Add(pawnBlack3);
-            Pawn pawnBlack4 = new("Pawn.Black.4", FColor.Black, models);
-            models.Add(pawnBlack4);
-            Pawn pawnBlack5 = new("Pawn.Black.5", FColor.Black, models);
-            models.Add(pawnBlack5);
-            Pawn pawnBlack6 = new("Pawn.Black.6", FColor.Black, models);
-            models.Add(pawnBlack6);
-            Pawn pawnBlack7 = new("Pawn.Black.7", FColor.Black, models);
-            models.Add(pawnBlack7);
-            Pawn pawnBlack8 = new("Pawn.Black.8", FColor.Black, models);
-            models.Add(pawnBlack8);
+            Queen queenBlack = new("Queen.Black.1", FColor.Black, _models);
+            _models.Add(queenBlack);
+            King kingBlack = new("King.Black.1", FColor.Black, _models);
+            _models.Add(kingBlack);
+            Knight knightBlack1 = new("Knight.Black.1", FColor.Black, _models);
+            _models.Add(knightBlack1);
+            Knight knightBlack2 = new("Knight.Black.2", FColor.Black, _models);
+            _models.Add(knightBlack2);
+            Bishop bishopBlack1 = new("Bishop.Black.1", FColor.Black, _models);
+            _models.Add(bishopBlack1);
+            Bishop bishopBlack2 = new("Bishop.Black.2", FColor.Black, _models);
+            _models.Add(bishopBlack2);
+            Rook rookBlack1 = new("Rook.Black.1", FColor.Black, _models);
+            _models.Add(rookBlack1);
+            Rook rookBlack2 = new("Rook.Black.2", FColor.Black, _models);
+            _models.Add(rookBlack2);
+            Pawn pawnBlack1 = new("Pawn.Black.1", FColor.Black, _models);
+            _models.Add(pawnBlack1);
+            Pawn pawnBlack2 = new("Pawn.Black.2", FColor.Black, _models);
+            _models.Add(pawnBlack2);
+            Pawn pawnBlack3 = new("Pawn.Black.3", FColor.Black, _models);
+            _models.Add(pawnBlack3);
+            Pawn pawnBlack4 = new("Pawn.Black.4", FColor.Black, _models);
+            _models.Add(pawnBlack4);
+            Pawn pawnBlack5 = new("Pawn.Black.5", FColor.Black, _models);
+            _models.Add(pawnBlack5);
+            Pawn pawnBlack6 = new("Pawn.Black.6", FColor.Black, _models);
+            _models.Add(pawnBlack6);
+            Pawn pawnBlack7 = new("Pawn.Black.7", FColor.Black, _models);
+            _models.Add(pawnBlack7);
+            Pawn pawnBlack8 = new("Pawn.Black.8", FColor.Black, _models);
+            _models.Add(pawnBlack8);
 
-            return models;
+            return _models;
         }
 
         public static List<string> GetAvalibleMoves(string coordinate)
@@ -356,7 +354,7 @@ namespace GameManager
         /// <returns>Return true if king is moved</returns>
         private bool KingFigureSet(King king, CoordinatePoint targetCoordinate)
         {
-            var CurentKing = (King)models.Where(c => c.Color != king.Color && c is King).Single();
+            var CurentKing = (King)_models.Where(c => c.Color != king.Color && c is King).Single();
 
             if (CheckCastling(king, out CoordinatePoint coordinatePoint))
             {
@@ -382,7 +380,7 @@ namespace GameManager
         /// <returns>Return true if rook position is valid</returns>
         private static bool CheckRook(King king, out CoordinatePoint coordinatePoint)
         {
-            var modelNew = models.Where(f => f.Color == king.Color && f is Rook && !f.isMoved).ToList();
+            var modelNew = _models.Where(f => f.Color == king.Color && f is Rook && !f.isMoved).ToList();
             foreach (var item in modelNew)
             {
                 if (CheckEpmtyCells(king, (Rook)item, out CoordinatePoint coordinte))
@@ -409,7 +407,7 @@ namespace GameManager
             {
                 var coordinatePoint1 = new CoordinatePoint(king.Coordinate.X + 1, king.Coordinate.Y);
                 var coordinatePoint2 = new CoordinatePoint(king.Coordinate.X + 2, king.Coordinate.Y);
-                foreach (var item in models)
+                foreach (var item in _models)
                 {
                     if (item.Coordinate != coordinatePoint1 & item.Coordinate != coordinatePoint2)
                     {
@@ -422,14 +420,14 @@ namespace GameManager
                 var coordinatePoint1 = new CoordinatePoint(king.Coordinate.X - 1, king.Coordinate.Y);
                 var coordinatePoint2 = new CoordinatePoint(king.Coordinate.X - 2, king.Coordinate.Y);
                 var coordinatePoint3 = new CoordinatePoint(king.Coordinate.X - 3, king.Coordinate.Y);
-                foreach (var item in models)
+                foreach (var item in _models)
                 {
                     if (item.Coordinate != coordinatePoint1 & item.Coordinate != coordinatePoint2
                                                             & item.Coordinate != coordinatePoint3)
                         count++;
                 }
             }
-            if (count == models.Count)
+            if (count == _models.Count)
             {
                 coordinatePoint = rook.Coordinate;
                 return true;
@@ -469,7 +467,7 @@ namespace GameManager
         /// <param name="coordinatePoint"></param>
         private static void SetRookCastling(CoordinatePoint coordinatePoint)
         {
-            foreach (var item in models.Where(c => c is Rook))
+            foreach (var item in _models.Where(c => c is Rook))
             {
                 if (item.Coordinate == coordinatePoint)
                 {
@@ -492,12 +490,12 @@ namespace GameManager
         /// <param name="targetCoordinate">Target coordinate</param>
         private void PawnFigureSet(Pawn pawn, CoordinatePoint targetCoordinate)
         {
-            var CurentKing = (King)models.Where(c => c.Color != pawn.Color && c is King).Single();
+            var CurentKing = (King)_models.Where(c => c.Color != pawn.Color && c is King).Single();
             if (CheckPawnChange(targetCoordinate, pawn))
             {
-                coordinate = targetCoordinate;
+                _coordinate = targetCoordinate;
                 pawn.SetFigurePosition(targetCoordinate);
-                chengedPawn = pawn;
+                _chengedPawn = pawn;
                 MessagePawnChange(pawn.Color, "Please enter a new Figure for change");
             }
             else
@@ -534,17 +532,17 @@ namespace GameManager
             string[] strCurrent = info.Split('.');
             var currentFigur = strCurrent[0];
             string currentColor = strCurrent[1];
-            pawnCount++;
+            _pawnCount++;
             var baseFigure = GetFigure(currentFigur, currentColor);
-            baseFigure.Coordinate = coordinate;
-            models.Add(baseFigure);
+            baseFigure.Coordinate = _coordinate;
+            _models.Add(baseFigure);
             baseFigure.SetPicture += SetFigurePicture;
             baseFigure.RemovePicture += RemoveFigurePicture;
             baseFigure.DeletePicture += DeleteFigurePicture;
             baseFigure.MessageForMove += MessageMove;
-            baseFigure.SetFigurePosition(coordinate);
-            chengedPawn.RemoveFigurePosition();
-            models.Remove(chengedPawn);
+            baseFigure.SetFigurePosition(_coordinate);
+            _chengedPawn.RemoveFigurePosition();
+            _models.Remove(_chengedPawn);
         }
 
         /// <summary>
@@ -558,11 +556,11 @@ namespace GameManager
             var fColor = color == "White" ? FColor.White : FColor.Black;
             return figure switch
             {
-                "Queen" => new Queen(figure + "." + color + '.' + pawnCount, fColor, models),
-                "King" => new King(figure + "." + color + '.' + pawnCount, fColor, models),
-                "Rook" => new Rook(figure + "." + color + "." + pawnCount, fColor, models),
-                "Bishop" => new Bishop(figure + "." + color + "." + pawnCount, fColor, models),
-                "Knight" => new Knight(figure + "." + color + "." + pawnCount, fColor, models),
+                "Queen" => new Queen(figure + "." + color + '.' + _pawnCount, fColor, _models),
+                "King" => new King(figure + "." + color + '.' + _pawnCount, fColor, _models),
+                "Rook" => new Rook(figure + "." + color + "." + _pawnCount, fColor, _models),
+                "Bishop" => new Bishop(figure + "." + color + "." + _pawnCount, fColor, _models),
+                "Knight" => new Knight(figure + "." + color + "." + _pawnCount, fColor, _models),
                 _ => null,
             };
         }

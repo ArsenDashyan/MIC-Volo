@@ -8,38 +8,36 @@ namespace GameManager
     public delegate void MessageForMate(object sender, string str);
     public delegate void Picture(object sender, string e);
     public delegate void Message(object sender, (string, string) e);
-    public class Manager
+    public class KingGame
     {
         #region Property and Feld
-        private static readonly List<BaseFigure> models = new();
-        private readonly List<CoordinatePoint> currentListForBabyGame = new();
+        private static readonly List<BaseFigure> _models = new();
+        private readonly List<CoordinatePoint> _currentListForBabyGame = new();
         private BaseFigure CurentKing =>
-               (BaseFigure)models.Where(c => c.Color == currentFigureColor && c is King).Single();
-        private readonly FColor currentFigureColor;
-        private BaseFigure baseFigure;
+               (BaseFigure)_models.Where(c => c.Color == _currentFigureColor && c is King).Single();
+        private readonly FColor _currentFigureColor;
+        private BaseFigure _baseFigure;
         public event MessageForMate MateMessage;
         public event Message MessageForMove;
         public event Message MessageProgress;
         public event Picture SetPicture;
         public event Picture RemovePicture;
-        private int whiteKingCount = 0;
-        private int whiteQueenCount = 0;
-        private int whiteBishopCount = 0;
-        private int whiteRookCount = 0;
-        private int whitePawnCount = 0;
-        private int whiteKnightCount = 0;
-        private int blackKingCount = 0;
-        private int blackQueenCount = 0;
-        private int blackBishopCount = 0;
-        private int blackRookCount = 0;
-        private int blackPawnCount = 0;
-        private int blackKnightCount = 0;
-        private int countForProgressStart = 0;
+        private static int _whiteKingCount = 0;
+        private static int _whiteQueenCount = 0;
+        private static int _whiteBishopCount = 0;
+        private static int _whiteRookCount = 0;
+        private static int _whiteKnightCount = 0;
+        private static int _blackKingCount = 0;
+        private static int _blackQueenCount = 0;
+        private static int _blackBishopCount = 0;
+        private static int _blackRookCount = 0;
+        private static int _blackKnightCount = 0;
+        private static int _countForProgressStart = 0;
         #endregion
 
-        public Manager(string currentFigureColor)
+        public KingGame(string currentFigureColor)
         {
-            this.currentFigureColor = currentFigureColor == "White" ? FColor.White : FColor.Black;
+            this._currentFigureColor = currentFigureColor == "White" ? FColor.White : FColor.Black;
         }
 
         #region Events Method
@@ -75,10 +73,10 @@ namespace GameManager
         }
         private void MessageForProgress()
         {
-            if (countForProgressStart == 0)
+            if (_countForProgressStart == 0)
             {
                 MessageProgress(this, ("", ""));
-                countForProgressStart++;
+                _countForProgressStart++;
             }
         }
 
@@ -92,7 +90,7 @@ namespace GameManager
             MessageForProgress();
             if (!UnderAttack())
             {
-                if (!currentListForBabyGame.BabyGame())
+                if (!_currentListForBabyGame.BabyGame())
                 {
                     if (!IsMate())
                         MoveWithBlock();
@@ -252,7 +250,7 @@ namespace GameManager
         /// <returns>Return blocking position list</returns>
         private List<KeyValuePair<CoordinatePoint, (int, BaseFigure)>> HalfBlock()
         {
-            var modelNew = models.Where(c => c.Color != currentFigureColor).Reverse().ToList();
+            var modelNew = _models.Where(c => c.Color != _currentFigureColor).Reverse().ToList();
             var list = new List<KeyValuePair<CoordinatePoint, (int, BaseFigure)>>();
             int currentKingHalf = CurentKing.Coordinate.GetCurrentKingHalf();
             foreach (var figur in modelNew)
@@ -319,7 +317,7 @@ namespace GameManager
         /// </summary>
         private void MoveWithShax()
         {
-            var modelNew = models.Where(c => c.Color != currentFigureColor && !(c is King)).ToList();
+            var modelNew = _models.Where(c => c.Color != _currentFigureColor && !(c is King)).ToList();
             var list = new List<KeyValuePair<CoordinatePoint, (int, BaseFigure)>>();
             foreach (var figur in modelNew)
             {
@@ -347,7 +345,7 @@ namespace GameManager
         /// </summary>
         private void MoveWithBlock()
         {
-            var modelNew = models.Where(c => c.Color != currentFigureColor).Reverse().ToList();
+            var modelNew = _models.Where(c => c.Color != _currentFigureColor).Reverse().ToList();
             var list = HalfBlock().Where(c => c.Value.Item1 != 0).ToList();
             var minMoves = list.OrderBy(c => c.Value.Item1).FirstOrDefault();
             var maxMoves = list.OrderBy(c => c.Value.Item1).LastOrDefault();
@@ -370,7 +368,7 @@ namespace GameManager
         /// <returns>Return true if figure exist</returns>
         private bool IsMate()
         {
-            var modelNew = models.Where(c => c.Color != currentFigureColor && !(c is King)).ToList();
+            var modelNew = _models.Where(c => c.Color != _currentFigureColor && !(c is King)).ToList();
             var list = new List<KeyValuePair<CoordinatePoint, (int, BaseFigure)>>();
             foreach (var figur in modelNew)
             {
@@ -393,7 +391,7 @@ namespace GameManager
         /// <returns>Return true if figure is under attack</returns>
         private static bool IsUnderAttack(BaseFigure baseFigure, CoordinatePoint CoordinatPoint)
         {
-            var modelNew = models.Where(c => c.Color != baseFigure.Color).ToList();
+            var modelNew = _models.Where(c => c.Color != baseFigure.Color).ToList();
             foreach (var item in modelNew)
             {
                 IAvailableMoves itemFigur = (IAvailableMoves)item;
@@ -413,7 +411,7 @@ namespace GameManager
         /// <returns>Return true if figure is protected</returns>
         private static bool IsProtected(BaseFigure baseFigure, CoordinatePoint CoordinatPoint)
         {
-            var model = models.Where(c => c != baseFigure && c.Color == baseFigure.Color).ToList();
+            var model = _models.Where(c => c != baseFigure && c.Color == baseFigure.Color).ToList();
             foreach (var item in model)
             {
                 IAvailableMoves tempfigur = (IAvailableMoves)item;
@@ -544,7 +542,7 @@ namespace GameManager
         /// </summary>
         private void AntiBabyGame()
         {
-            var modelNew = models.Where(c => c.Color != currentFigureColor).ToList();
+            var modelNew = _models.Where(c => c.Color != _currentFigureColor).ToList();
             var destination = new List<(double, BaseFigure)>();
             foreach (var figur in modelNew)
             {
@@ -569,7 +567,7 @@ namespace GameManager
         /// <returns>Return true or false</returns>
         private bool UnderAttack()
         {
-            var modelNew = models.Where(c => c.Color != currentFigureColor).ToList();
+            var modelNew = _models.Where(c => c.Color != _currentFigureColor).ToList();
             foreach (var figur in modelNew)
             {
                 var tempFigur = (IAvailableMoves)figur;
@@ -611,7 +609,7 @@ namespace GameManager
         /// <returns>Return danger position List for current king </returns>
         private static List<CoordinatePoint> DangerPosition(BaseFigure model)
         {
-            var modelNew = models.Where(c => c.Color != model.Color);
+            var modelNew = _models.Where(c => c.Color != model.Color);
             var result = new List<CoordinatePoint>();
             foreach (var item in modelNew)
             {
@@ -634,24 +632,24 @@ namespace GameManager
             var currentCoordinate = new CoordinatePoint(int.Parse(strCurrent[0]), int.Parse(strCurrent[1]));
             string[] strTarget = target.Split('.');
             var targetCoordinate = new CoordinatePoint(int.Parse(strTarget[0]), int.Parse(strTarget[1]));
-            foreach (var item in models)
+            foreach (var item in _models)
             {
                 if (item.Coordinate == currentCoordinate)
                 {
-                    if (item.Color == currentFigureColor)
+                    if (item.Color == _currentFigureColor)
                     {
-                        baseFigure = item;
+                        _baseFigure = item;
                         break;
                     }
                 }
             }
-            IAvailableMoves available = (IAvailableMoves)baseFigure;
-            if (baseFigure is King)
+            IAvailableMoves available = (IAvailableMoves)_baseFigure;
+            if (_baseFigure is King)
             {
                 if (GetCurrentKingMoves().Contains(targetCoordinate))
                 {
-                    currentListForBabyGame.Add(targetCoordinate);
-                    baseFigure.SetFigurePosition(targetCoordinate);
+                    _currentListForBabyGame.Add(targetCoordinate);
+                    _baseFigure.SetFigurePosition(targetCoordinate);
                     return true;
                 }
                 else
@@ -661,7 +659,7 @@ namespace GameManager
             }
             else if (available.AvailableMoves().Contains(targetCoordinate))
             {
-                baseFigure.SetFigurePosition(targetCoordinate);
+                _baseFigure.SetFigurePosition(targetCoordinate);
                 return true;
             }
             else
@@ -680,32 +678,32 @@ namespace GameManager
         {
             string[] info = name.Split('.');
             var coordinatePoint = new CoordinatePoint(int.Parse(info[2]), int.Parse(info[3]));
-            if (GetFigure(info[0], info[1], out baseFigure))
+            if (GetFigure(info[0], info[1], out _baseFigure))
             {
-                baseFigure.SetPicture += SetFigurePicture;
-                baseFigure.RemovePicture += RemoveFigurePicture;
-                baseFigure.DeletePicture += delegate {};
-                baseFigure.MessageForMove += MessageMove;
-                models.Add(baseFigure);
+                _baseFigure.SetPicture += SetFigurePicture;
+                _baseFigure.RemovePicture += RemoveFigurePicture;
+                _baseFigure.DeletePicture += delegate {};
+                _baseFigure.MessageForMove += MessageMove;
+                _models.Add(_baseFigure);
                 if (!GetPosition().Contains(coordinatePoint))
                 {
-                    if (baseFigure is King king)
+                    if (_baseFigure is King king)
                     {
                         if (!DangerPosition(king).Contains(coordinatePoint))
                         {
-                            baseFigure.SetFigurePosition(coordinatePoint);
+                            _baseFigure.SetFigurePosition(coordinatePoint);
                         }
                         else
                         {
                             if (name.Split('.')[1] == "White")
-                                whiteKingCount = 0;
+                                _whiteKingCount = 0;
                             else
-                                blackKingCount = 0;
+                                _blackKingCount = 0;
                         }
                     }
                     else
                     {
-                        baseFigure.SetFigurePosition(coordinatePoint);
+                        _baseFigure.SetFigurePosition(coordinatePoint);
                     }
                 }
             }
@@ -718,17 +716,17 @@ namespace GameManager
         /// <param name="color">The figure color</param>
         /// <param name="baseFigure">figure instance type</param>
         /// <returns>Return figure instance</returns>
-        public bool GetFigure(string figure, string color, out BaseFigure baseFigure)
+        public static bool GetFigure(string figure, string color, out BaseFigure baseFigure)
         {
             if (color == "White")
             {
                 switch (figure)
                 {
                     case "Queen":
-                        if (whiteQueenCount == 0)
+                        if (_whiteQueenCount == 0)
                         {
-                            whiteQueenCount++;
-                            baseFigure = new Queen(figure + "." + color + '.' + whiteQueenCount, FColor.White, models);
+                            _whiteQueenCount++;
+                            baseFigure = new Queen(figure + "." + color + '.' + _whiteQueenCount, FColor.White, _models);
                             return true;
                         }
                         else
@@ -737,10 +735,10 @@ namespace GameManager
                             return false;
                         }
                     case "King":
-                        if (whiteKingCount == 0)
+                        if (_whiteKingCount == 0)
                         {
-                            whiteKingCount++;
-                            baseFigure = new King(figure + "." + color + '.' + whiteKingCount, FColor.White, models);
+                            _whiteKingCount++;
+                            baseFigure = new King(figure + "." + color + '.' + _whiteKingCount, FColor.White, _models);
                             return true;
                         }
                         else
@@ -749,10 +747,10 @@ namespace GameManager
                             return false;
                         }
                     case "Rook":
-                        if (whiteRookCount <= 1)
+                        if (_whiteRookCount <= 1)
                         {
-                            whiteRookCount++;
-                            baseFigure = new Rook(figure + "." + color + "." + whiteRookCount, FColor.White, models);
+                            _whiteRookCount++;
+                            baseFigure = new Rook(figure + "." + color + "." + _whiteRookCount, FColor.White, _models);
                             return true;
                         }
                         else
@@ -761,10 +759,10 @@ namespace GameManager
                             return false;
                         }
                     case "Bishop":
-                        if (whiteBishopCount <= 1)
+                        if (_whiteBishopCount <= 1)
                         {
-                            whiteBishopCount++;
-                            baseFigure = new Bishop(figure + "." + color + "." + whiteBishopCount, FColor.White, models);
+                            _whiteBishopCount++;
+                            baseFigure = new Bishop(figure + "." + color + "." + _whiteBishopCount, FColor.White, _models);
                             return true;
                         }
                         else
@@ -773,22 +771,10 @@ namespace GameManager
                             return false;
                         }
                     case "Knight":
-                        if (whiteKnightCount <= 1)
+                        if (_whiteKnightCount <= 1)
                         {
-                            whiteKnightCount++;
-                            baseFigure = new Knight(figure + "." + color + "." + whiteKnightCount, FColor.White, models);
-                            return true;
-                        }
-                        else
-                        {
-                            baseFigure = null;
-                            return false;
-                        }
-                    case "Pawn":
-                        if (whitePawnCount <= 7)
-                        {
-                            whitePawnCount++;
-                            baseFigure = new Pawn(figure + "." + color + "." + whitePawnCount, FColor.White, models);
+                            _whiteKnightCount++;
+                            baseFigure = new Knight(figure + "." + color + "." + _whiteKnightCount, FColor.White, _models);
                             return true;
                         }
                         else
@@ -806,10 +792,10 @@ namespace GameManager
                 switch (figure)
                 {
                     case "Queen":
-                        if (blackQueenCount == 0)
+                        if (_blackQueenCount == 0)
                         {
-                            blackQueenCount++;
-                            baseFigure = new Queen(figure + "." + color + '.' + blackQueenCount, FColor.Black, models);
+                            _blackQueenCount++;
+                            baseFigure = new Queen(figure + "." + color + '.' + _blackQueenCount, FColor.Black, _models);
                             return true;
                         }
                         else
@@ -818,10 +804,10 @@ namespace GameManager
                             return false;
                         }
                     case "King":
-                        if (blackKingCount == 0)
+                        if (_blackKingCount == 0)
                         {
-                            blackKingCount++;
-                            baseFigure = new King(figure + "." + color + '.' + blackKingCount, FColor.Black, models);
+                            _blackKingCount++;
+                            baseFigure = new King(figure + "." + color + '.' + _blackKingCount, FColor.Black, _models);
                             return true;
                         }
                         else
@@ -830,10 +816,10 @@ namespace GameManager
                             return false;
                         }
                     case "Rook":
-                        if (blackRookCount <= 1)
+                        if (_blackRookCount <= 1)
                         {
-                            blackRookCount++;
-                            baseFigure = new Rook(figure + "." + color + "." + blackRookCount, FColor.Black, models);
+                            _blackRookCount++;
+                            baseFigure = new Rook(figure + "." + color + "." + _blackRookCount, FColor.Black, _models);
                             return true;
                         }
                         else
@@ -842,10 +828,10 @@ namespace GameManager
                             return false;
                         }
                     case "Bishop":
-                        if (blackBishopCount <= 1)
+                        if (_blackBishopCount <= 1)
                         {
-                            blackBishopCount++;
-                            baseFigure = new Bishop(figure + "." + color + "." + blackBishopCount, FColor.Black, models);
+                            _blackBishopCount++;
+                            baseFigure = new Bishop(figure + "." + color + "." + _blackBishopCount, FColor.Black, _models);
                             return true;
                         }
                         else
@@ -854,22 +840,10 @@ namespace GameManager
                             return false;
                         }
                     case "Knight":
-                        if (blackKnightCount <= 1)
+                        if (_blackKnightCount <= 1)
                         {
-                            blackKnightCount++;
-                            baseFigure = new Knight(figure + "." + color + "." + blackKnightCount, FColor.Black, models);
-                            return true;
-                        }
-                        else
-                        {
-                            baseFigure = null;
-                            return false;
-                        }
-                    case "Pawn":
-                        if (blackPawnCount <= 7)
-                        {
-                            blackPawnCount++;
-                            baseFigure = new Pawn(figure + "." + color + "." + blackPawnCount, FColor.Black, models);
+                            _blackKnightCount++;
+                            baseFigure = new Knight(figure + "." + color + "." + _blackKnightCount, FColor.Black, _models);
                             return true;
                         }
                         else
@@ -891,7 +865,7 @@ namespace GameManager
         private static List<CoordinatePoint> GetPosition()
         {
             var positions = new List<CoordinatePoint>();
-            foreach (var item in models)
+            foreach (var item in _models)
             {
                 positions.Add(item.Coordinate);
             }
@@ -902,34 +876,30 @@ namespace GameManager
         /// Get all figures names for reset bord
         /// </summary>
         /// <returns>Return all figures names</returns>
-        public List<string> GetNamesForReset()
+        public static List<string> GetNamesForReset()
         {
             var names = new List<string>();
-            if (models.Count != 0)
+            if (_models.Count != 0)
             {
-                foreach (var item in models)
+                foreach (var item in _models)
                 {
                     names.Add(item.Name);
                 }
-                whiteKingCount = 0;
-                whiteQueenCount = 0;
-                whiteBishopCount = 0;
-                whiteRookCount = 0;
-                whitePawnCount = 0;
-                whiteKnightCount = 0;
-                blackKingCount = 0;
-                blackQueenCount = 0;
-                blackBishopCount = 0;
-                blackRookCount = 0;
-                blackPawnCount = 0;
-                blackKnightCount = 0;
-                countForProgressStart = 0;
-                models.Clear();
+                _whiteKingCount = 0;
+                _whiteQueenCount = 0;
+                _whiteBishopCount = 0;
+                _whiteRookCount = 0;
+                _whiteKnightCount = 0;
+                _blackKingCount = 0;
+                _blackQueenCount = 0;
+                _blackBishopCount = 0;
+                _blackRookCount = 0;
+                _blackKnightCount = 0;
+                _countForProgressStart = 0;
+                _models.Clear();
             }
             else
-            {
-                names.Add("0");
-            }
+                names = null;
             return names;
         }
 
@@ -946,7 +916,7 @@ namespace GameManager
         /// <returns>Return a current figure</returns>
         private static BaseFigure CheckedCurrentFigure(CoordinatePoint coordinatePoint)
         {
-            foreach (var item in models)
+            foreach (var item in _models)
             {
                 if (item.Coordinate == coordinatePoint)
                     return item;

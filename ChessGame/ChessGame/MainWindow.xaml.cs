@@ -18,30 +18,25 @@ namespace ChessGame
     public partial class MainWindow : Window
     {
         #region Property and Feld
-        private UIElement DragObjectImage { get => dragObjectImage; set => dragObjectImage = value; }
-        public static int CurrentGameStatus { get => currentGameStatus; set => currentGameStatus = value; }
-
-        private UIElement dragObjectImage = null;
-        private MovesKnight movesKnight;
-        private readonly PawnChengesPage pawnChengesPage = new();
-        private List<string> models = new();
-        private readonly List<string> modelsForDeleteid = new();
-        private readonly List<(Brush, Border)> colorsBorder = new();
-        CancellationTokenSource cancellationTokenSource;
-        CancellationToken cancellationToken;
-        private static int currentGameStatus;
-        public string currentFigureColor;
-        private string startCoordinate;
-        private int countForKnightMoves = 0;
-        private bool colorPower = false;
-        private int iBlack = 0;
-        private int jBlack = 0;
-        private int iWhite = 0;
-        private int jWhite = 0;
-        private static readonly string filepath = "C:\\Users\\arsen\\OneDrive\\Desktop\\Notes\\";
-        private static string gameStory;
-        private static string names;
+        public static int CurrentGameStatus { get => _currentGameStatus; set => _currentGameStatus = value; }
+        private UIElement _dragObjectImage;
+        private readonly PawnChengesPage _pawnChengesPage = new();
+        private readonly List<string> _modelsForDeleteid = new();
+        private readonly List<(Brush, Border)> _colorsBorder = new();
+        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationToken _cancellationToken;
         public GameManagment gameManagment;
+        private static int _currentGameStatus;
+        public string currentFigureColor;
+        private string _startCoordinate;
+        private bool _colorPower = false;
+        private int _iBlack = 0;
+        private int _jBlack = 0;
+        private int _iWhite = 0;
+        private int _jWhite = 0;
+        private static readonly string _filepath = "C:\\Users\\arsen\\OneDrive\\Desktop\\Notes\\";
+        private static string _gameStory;
+        private static string _names;
 
         #endregion
 
@@ -49,16 +44,9 @@ namespace ChessGame
         {
             InitializeComponent();
             InitializeGameManagment();
-            InitializeKnightGame();
         }
 
         #region Methods for Events
-        private void InitializeKnightGame()
-        {
-            movesKnight = new MovesKnight();
-            movesKnight.SetPicture += SetFigurePicture;
-            movesKnight.MessageForMoveKnight += delegate { };
-        }
         private void InitializeGameManagment()
         {
             gameManagment = new(currentFigureColor, CurrentGameStatus);
@@ -105,27 +93,27 @@ namespace ChessGame
             bitmap.EndInit();
             image.Source = bitmap;
             image.Tag = str;
-            modelsForDeleteid.Add(str);
+            _modelsForDeleteid.Add(str);
             if (str.Contains("White"))
             {
-                if (iBlack == 5)
+                if (_iBlack == 5)
                 {
-                    iBlack = 0;
-                    jBlack++;
+                    _iBlack = 0;
+                    _jBlack++;
                 }
-                Grid.SetColumn(image, iBlack++);
-                Grid.SetRow(image, jBlack);
+                Grid.SetColumn(image, _iBlack++);
+                Grid.SetRow(image, _jBlack);
                 WhiteDeleteFigure.Children.Add(image);
             }
             else
             {
-                if (iWhite == 5)
+                if (_iWhite == 5)
                 {
-                    iWhite = 0;
-                    jWhite++;
+                    _iWhite = 0;
+                    _jWhite++;
                 }
-                Grid.SetColumn(image, iWhite++);
-                Grid.SetRow(image, jWhite);
+                Grid.SetColumn(image, _iWhite++);
+                Grid.SetRow(image, _jWhite);
                 BlackDeleteFigure.Children.Add(image);
             }
         }
@@ -191,21 +179,21 @@ namespace ChessGame
         /// <param name="coordinate"></param>
         public void MessageForPawnChange(object sender, string message)
         {
-            pawnChengesPage.Show();
-            pawnChengesPage.MessageCloseAndChange += ChooseButton_Click;
+            _pawnChengesPage.Show();
+            _pawnChengesPage.MessageCloseAndChange += ChooseButton_Click;
         }
         public async void MessageForProgress(object sender, (string, string) e)
         {
-            cancellationTokenSource = new CancellationTokenSource();
-            cancellationToken = cancellationTokenSource.Token;
+            _cancellationTokenSource = new CancellationTokenSource();
+            _cancellationToken = _cancellationTokenSource.Token;
             int completedPercentage = 0;
             for (int i = 0; i < 100; i++)
             {
-                if (cancellationToken.IsCancellationRequested)
+                if (_cancellationToken.IsCancellationRequested)
                     break;
                 try
                 {
-                    await Task.Delay(1000, cancellationToken);
+                    await Task.Delay(1000, _cancellationToken);
                     completedPercentage = (i + 1);
                 }
                 catch (Exception)
@@ -214,7 +202,7 @@ namespace ChessGame
                 }
                 Progress.Value = completedPercentage;
             }
-            string messageForProgress = cancellationToken.IsCancellationRequested ?
+            string messageForProgress = _cancellationToken.IsCancellationRequested ?
                 string.Format($"Process was cancelled at {completedPercentage}%") :
                 "Process completed normally";
             ProgressTextBox.Text = messageForProgress;
@@ -325,7 +313,7 @@ namespace ChessGame
         public void MessageMateForKingHame(object sender, string message)
         {
             MessageBox.Show(message);
-            cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Cancel();
         }
         public static void MessageCheckStandard(object sender, string message)
         {
@@ -418,7 +406,7 @@ namespace ChessGame
         {
             if (GetCurrentFigureCoordinate(KnightStartLetter, KnightStartNumber, out string currentCoord))
             {
-                movesKnight.CreateStartKnight(currentCoord);
+                gameManagment.CreateStartKnight(currentCoord);
                 KnightSetBtn.IsEnabled = false;
             }
         }
@@ -426,10 +414,9 @@ namespace ChessGame
         {
             if (GetCurrentFigureCoordinate(KnightTargetLetter, KnightTargetNumber, out string currentCoord))
             {
-                movesKnight.CreateTargetKnight(currentCoord);
-                countForKnightMoves = movesKnight.MinKnightCount();
-                KnightMovesMessage.Text = $"For target coordinate your need {countForKnightMoves} moves";
-                countForKnightMoves = 0;
+                gameManagment.CreateTargetKnight(currentCoord);
+                KnightMovesMessage.Text = $"For target coordinate your need " +
+                                     $"{gameManagment.MinKnightCount()} moves";
                 KnightSetBtn.IsEnabled = true;
             }
         }
@@ -441,10 +428,10 @@ namespace ChessGame
         /// <summary>
         /// Reset Board for start game
         /// </summary>
-        private void ResetBoard()
+        private void ResetBoard(int status)
         {
-            models = gameManagment.GetAllFiguresForReset();
-            if (models[0] != "0")
+           var models = GameManagment.GetAllFiguresForReset(status);
+            if (models != null)
             {
                 foreach (var item in models)
                 {
@@ -454,7 +441,7 @@ namespace ChessGame
         }
         private void ResetDeleteBoard()
         {
-            foreach (var item in modelsForDeleteid)
+            foreach (var item in _modelsForDeleteid)
             {
                 if (item.Contains("White"))
                     RemovePicture(item, WhiteDeleteFigure);
@@ -489,7 +476,7 @@ namespace ChessGame
         /// <param name="e"></param>
         private void Reset_Button(object sender, RoutedEventArgs e)
         {
-            ResetBoard();
+            ResetBoard(CurrentGameStatus);
             PlayB2.IsEnabled = true;
             CheckBlack.IsEnabled = true;
             CheckWhite.IsEnabled = true;
@@ -504,18 +491,18 @@ namespace ChessGame
             InputCoordinatsLetter_Selected.IsEnabled = false;
             InputCoordinatsNumber_Selected.IsEnabled = false;
             InstalB3.IsEnabled = false;
-            cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Cancel();
             Progress.Value = 0;
             MovesTextBox.Text = " ";
             ProgressTextBox.Text = " ";
         }
         private void ResetStandardGame_Click(object sender, RoutedEventArgs e)
         {
-            gameStory = MovesTextBoxStandard.Text;
-            AddGameStoryWithNote(names);
-            names = string.Empty;
-            gameStory = string.Empty;
-            ResetBoard();
+            _gameStory = MovesTextBoxStandard.Text;
+            AddGameStoryWithNote(_names);
+            _names = string.Empty;
+            _gameStory = string.Empty;
+            ResetBoard(CurrentGameStatus);
             ResetDeleteBoard();
             ShowStandardGamePanel();
             gameManagment.SetAllFigures();
@@ -530,7 +517,7 @@ namespace ChessGame
         /// <param name="e"></param>
         private void Reset_ButtonForKnight(object sender, RoutedEventArgs e)
         {
-            ResetBoard();
+            ResetBoard(CurrentGameStatus);
             KnightSetBtn.IsEnabled = true;
             KnightMovesMessage.Text = "";
             KnightStartLetter.Text = "";
@@ -550,14 +537,15 @@ namespace ChessGame
                 string imageName = image.Source.ToString();
                 if (image != null && imageName.Contains(currentFigureColor))
                 {
-                    this.DragObjectImage = image;
+                    this._dragObjectImage = image;
                     int coordX = Grid.GetColumn(image);
                     int coordY = Grid.GetRow(image);
-                    this.startCoordinate = $"{coordX}.{coordY}";
-                    var colorsForFigure = GameManagment.GetAvalibleMoves(this.startCoordinate);
+                    this._startCoordinate = $"{coordX}.{coordY}";
+                    InitializeGameManagment();
+                    var colorsForFigure = GameManagment.GetAvalibleMoves(this._startCoordinate);
                     if (colorsForFigure != null)
                         GetColoredCells(colorsForFigure);
-                    DragDrop.DoDragDrop(image, this.DragObjectImage, DragDropEffects.Move);
+                    DragDrop.DoDragDrop(image, this._dragObjectImage, DragDropEffects.Move);
                 }
             }
             catch (Exception)
@@ -570,11 +558,11 @@ namespace ChessGame
             int coordX = Grid.GetColumn((UIElement)e.OriginalSource);
             int coordY = Grid.GetRow((UIElement)e.OriginalSource);
             string coordinate = $"{coordX}.{coordY}";
-            if (coordinate != this.startCoordinate)
+            if (coordinate != this._startCoordinate)
             {
                 RemoveColoredCells();
                 InitializeGameManagment();
-                gameManagment.Managment((this.startCoordinate, coordinate));
+                gameManagment.Managment((this._startCoordinate, coordinate));
                 CurrentColorManager();
             }
         }
@@ -588,14 +576,14 @@ namespace ChessGame
         }
         private void KingGame_Click(object sender, RoutedEventArgs e)
         {
-            ResetBoard();
+            ResetBoard(CurrentGameStatus);
             ShowKingGamePanel();
             CurrentGameStatus = 1;
             MessageBox.Show("You Change A King Game, Good Luck");
         }
         private void KnightGame_Click(object sender, RoutedEventArgs e)
         {
-            ResetBoard();
+            ResetBoard(CurrentGameStatus);
             ShowKnightGamePanel();
             KnightMovesMessage.Text = "";
             KnightStartLetter.Text = "";
@@ -607,7 +595,7 @@ namespace ChessGame
         }
         private void StandardGame_Click(object sender, RoutedEventArgs e)
         {
-            ResetBoard();
+            ResetBoard(CurrentGameStatus);
             ShowStandardGamePanel();
             gameManagment.SetAllFigures();
             CurrentGameStatus = 3;
@@ -677,15 +665,15 @@ namespace ChessGame
         {
             if (CurrentGameStatus == 3)
             {
-                if (colorPower)
+                if (_colorPower)
                 {
                     currentFigureColor = "White";
-                    colorPower = false;
+                    _colorPower = false;
                 }
                 else
                 {
                     currentFigureColor = "Black";
-                    colorPower = true;
+                    _colorPower = true;
                 }
             }
         }
@@ -696,14 +684,14 @@ namespace ChessGame
                 if (PlayColorWhiteStandard.IsChecked == true)
                 {
                     currentFigureColor = "White";
-                    colorPower = false;
+                    _colorPower = false;
                 }
                 else if (PlayColorBlackStandard.IsChecked == true)
                 {
                     currentFigureColor = "Black";
-                    colorPower = true;
+                    _colorPower = true;
                 }
-                names = FirstUserName.Text + SecondUserName.Text;
+                _names = FirstUserName.Text + SecondUserName.Text;
                 PlayForStandard.Visibility = Visibility.Hidden;
                 PlayColorBlackStandard.Visibility = Visibility.Hidden;
                 PlayColorWhiteStandard.Visibility = Visibility.Hidden;
@@ -725,8 +713,8 @@ namespace ChessGame
         /// <param name="e"></param>
         private void ChooseButton_Click(object sender, RoutedEventArgs e)
         {
-            string path = currentFigureColor == "White" ? pawnChengesPage.result.BlackFigurePath()
-                                                        : pawnChengesPage.result.WhiteFigurePath();
+            string path = currentFigureColor == "White" ? _pawnChengesPage.result.BlackFigurePath()
+                                                        : _pawnChengesPage.result.WhiteFigurePath();
             string[] tempFigure = path.Split('/');
             string color = tempFigure[^1].Split('.')[0];
             string figure = tempFigure[^1].Split('.')[1];
@@ -736,21 +724,21 @@ namespace ChessGame
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-            pawnChengesPage.Close();
+            _pawnChengesPage.Close();
         }
         public static void AddGameStoryWithNote(string name)
         {
             DateTime dateTime = DateTime.Now;
             string details = string.Format("{0}:{1}", name, dateTime);
-            string info = details + "\n\n" + gameStory;
-            bool flag = !File.Exists(filepath + name + ".txt");
+            string info = details + "\n\n" + _gameStory;
+            bool flag = !File.Exists(_filepath + name + ".txt");
             if (flag)
             {
-                File.Create(filepath + name + ".txt").Close();
-                File.WriteAllText(filepath + name + ".txt", info);
+                File.Create(_filepath + name + ".txt").Close();
+                File.WriteAllText(_filepath + name + ".txt", info);
             }
             else
-                File.AppendAllText(filepath + name + ".txt", "\n" + info);
+                File.AppendAllText(_filepath + name + ".txt", "\n" + info);
         }
         private void GetColoredCells(List<string> list)
         {
@@ -759,7 +747,7 @@ namespace ChessGame
             {
                 if (item is Border border)
                 {
-                    colorsBorder.Add((border.Background, border));
+                    _colorsBorder.Add((border.Background, border));
                     foreach (var coord in coordinateList)
                     {
                         if (Grid.GetColumn(border) == coord.Item1 && Grid.GetRow(border) == coord.Item2)
@@ -772,7 +760,7 @@ namespace ChessGame
         }
         private void RemoveColoredCells()
         {
-            foreach (var item in colorsBorder)
+            foreach (var item in _colorsBorder)
             {
                 item.Item2.Background = item.Item1;
             }
@@ -785,7 +773,7 @@ namespace ChessGame
                 var temp = item.Split('.');
                 list.Add((int.Parse(temp[0]), int.Parse(temp[1])));
             }
-            var temp2 = this.startCoordinate.Split('.');
+            var temp2 = this._startCoordinate.Split('.');
             return list.Where(c => c != (int.Parse(temp2[0]), int.Parse(temp2[1]))).ToList();
         }
         #endregion

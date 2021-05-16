@@ -6,18 +6,18 @@ namespace GameManager
     public class MovesKnight
     {
         #region Property and Feld
-        private static readonly List<BaseFigure> models = new();
+        private static readonly List<BaseFigure> _models = new();
         public event Picture SetPicture;
         public event Message MessageForMoveKnight;
-        private static Knight startKnight;
-        private static Knight targetKnight;
-        private int count = 1;
+        private static Knight _startKnight;
+        private static Knight _targetKnight;
         #endregion
 
         public int MinKnightCount()
         {
-            CoordinatePoint coordinatPoint = startKnight.Coordinate;
-            CoordinatePoint coordinatPoint1 = targetKnight.Coordinate;
+            int count = 1;
+            CoordinatePoint coordinatPoint = _startKnight.Coordinate;
+            CoordinatePoint coordinatPoint1 = _targetKnight.Coordinate;
             var knightMoves = KnightMove.Crosswise(coordinatPoint1);
             var endMoves = KnightMove.Crosswise(coordinatPoint);
             if (knightMoves.Contains((coordinatPoint)))
@@ -63,23 +63,23 @@ namespace GameManager
         }
         public void CreateStartKnight(string coordinate)
         {
-            startKnight = new Knight("Knight.Black.1", FColor.Black, models);
-            models.Add(startKnight);
+            _startKnight = new Knight("Knight.Black.1", FColor.Black, _models);
+            _models.Add(_startKnight);
             string[] point = coordinate.Split('.');
             var coordinatPoint = new CoordinatePoint(int.Parse(point[0]),int.Parse(point[1]));
-            startKnight.SetPicture += SetFigurePicture;
-            startKnight.MessageForMove += MessageForMove;
-            startKnight.SetFigurePosition(coordinatPoint);
+            _startKnight.SetPicture += SetFigurePicture;
+            _startKnight.MessageForMove += MessageForMove;
+            _startKnight.SetFigurePosition(coordinatPoint);
         }
         public void CreateTargetKnight(string coordinate)
         {
-            targetKnight = new Knight("Knight.Black.2", FColor.White, models);
-            models.Add(targetKnight);
+            _targetKnight = new Knight("Knight.Black.2", FColor.White, _models);
+            _models.Add(_targetKnight);
             string[] point = coordinate.Split('.');
             var coordinatPoint = new CoordinatePoint(int.Parse(point[0]), int.Parse(point[1]));
-            targetKnight.SetPicture += SetFigurePicture;
-            targetKnight.MessageForMove += MessageForMove;
-            targetKnight.SetFigurePosition(coordinatPoint);
+            _targetKnight.SetPicture += SetFigurePicture;
+            _targetKnight.MessageForMove += MessageForMove;
+            _targetKnight.SetFigurePosition(coordinatPoint);
         }
         private void SetFigurePicture(object sender, string coordinate)
         {
@@ -92,18 +92,16 @@ namespace GameManager
         public static List<string> GetNamesForReset()
         {
             var positions = new List<string>();
-            if (models.Count != 0)
+            if (_models.Count != 0)
             {
-                foreach (var item in models)
+                foreach (var item in _models)
                 {
                     positions.Add(item.Name);
                 }
-                models.Clear();
+                _models.Clear();
             }
             else
-            {
-                positions.Add("0");
-            }
+                positions = null;
             return positions;
         }
     }
