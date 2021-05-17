@@ -96,7 +96,6 @@ namespace GameManager
             var antiCheck = (IAntiCheck)baseFigure;
             return antiCheck.MovesWithKingIsNotUnderCheck(_models).Contains(targetCoordinate);
         }
-
         public void GetLogic(string current, string target)
         {
             var currentCoordinate = GetCoordinateByString(current);

@@ -97,7 +97,7 @@ namespace GameManager
         public void SetChangeFigureForPawn(string inputInfo)
         {
             InitializeStandard();
-            _standard.SetChangeFigureForPawn(inputInfo);
+           _standard.SetChangeFigureForPawn(inputInfo);
         }
         public static List<string> GetAllFiguresForReset(int status)
         {

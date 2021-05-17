@@ -44,6 +44,7 @@ namespace ChessGame
         {
             InitializeComponent();
             InitializeGameManagment();
+            _pawnChengesPage.MessageCloseAndChange += ChooseButton_Click;
         }
 
         #region Methods for Events
@@ -168,7 +169,6 @@ namespace ChessGame
         public void MessageForPawnChange(object sender, string message)
         {
             _pawnChengesPage.Show();
-            _pawnChengesPage.MessageCloseAndChange += ChooseButton_Click;
         }
         public async void MessageForProgress(object sender, (string, string) e)
         {
@@ -418,7 +418,7 @@ namespace ChessGame
         /// </summary>
         private void ResetBoard(int status)
         {
-           var models = GameManagment.GetAllFiguresForReset(status);
+            var models = GameManagment.GetAllFiguresForReset(status);
             if (models != null)
             {
                 foreach (var item in models)
@@ -549,7 +549,7 @@ namespace ChessGame
             if (coordinate != this._startCoordinate)
             {
                 InitializeGameManagment();
-                bool action =  gameManagment.Managment((this._startCoordinate, coordinate));
+                bool action = gameManagment.Managment((this._startCoordinate, coordinate));
                 CurrentColorManager(action);
             }
             RemoveColoredCells();
@@ -667,7 +667,7 @@ namespace ChessGame
                     }
                 }
             }
-            
+
         }
         private void PlayForStandard_Click(object sender, RoutedEventArgs e)
         {
