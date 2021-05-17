@@ -59,7 +59,6 @@ namespace ChessGame
             gameManagment.MessageProgress += MessageForProgress;
             gameManagment.RemovePicture += RemoveFigurePicture;
             gameManagment.SetPicture += SetFigurePicture;
-            gameManagment.MateMessage += MessageMateForKingHame;
         }
 
         /// <summary>

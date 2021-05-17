@@ -32,32 +32,32 @@ namespace GameManager
         private void InitializeStandard()
         {
             _standard = new Standard();
-            _standard.SetPicture += SetFigurePicture;
-            _standard.RemovePicture += RemoveFigurePicture;
-            _standard.DeletePicture += SetDeleteFigurePicture;
-            _standard.MessageForMove += MessageMoveForStandardGame;
-            _standard.MessageCheck += MessageCheckStandard;
-            _standard.MessagePawnChange += MessageForPawnChange;
+            _standard.SetPicture += SetPicture;
+            _standard.RemovePicture += RemovePicture;
+            _standard.DeletePicture += DeletePicture;
+            _standard.MessageForMove += MessageForMove;
+            _standard.MessageCheck += MessageCheck;
+            _standard.MessagePawnChange += MessagePawnChange;
+        }
+        private void InitializeKingGame()
+        {
+            _kingGame = new KingGame(currentFigureColor);
+            _kingGame.SetPicture += SetPicture;
+            _kingGame.RemovePicture += RemovePicture;
+            _kingGame.MessageForMove += MessageForMove;
+            _kingGame.MessageProgress += MessageForProgress;
+            _kingGame.MateMessage += MateMessage;
+        }
+        private void InitializeKnightGame()
+        {
+            _movesKnight = new MovesKnight();
+            _movesKnight.SetPicture += SetPicture;
+            _movesKnight.MessageForMoveKnight += delegate { };
         }
         public void IsValidForPleacement(string inputInfo)
         {
             InitializeKingGame();
             _kingGame.IsValidForPleacement(inputInfo);
-        }
-        private void InitializeKingGame()
-        {
-            _kingGame = new KingGame(currentFigureColor);
-            _kingGame.SetPicture += SetFigurePicture;
-            _kingGame.RemovePicture += RemoveFigurePicture;
-            _kingGame.MessageForMove += MessageMoveForKingGame;
-            _kingGame.MessageProgress += MessageForProgress;
-            _kingGame.MateMessage += MessageMate;
-        }
-        private void InitializeKnightGame()
-        {
-            _movesKnight = new MovesKnight();
-            _movesKnight.SetPicture += SetFigurePicture;
-            _movesKnight.MessageForMoveKnight += delegate { };
         }
         public bool Managment((string, string) tupl)
         {
@@ -85,6 +85,11 @@ namespace GameManager
             InitializeStandard();
             _standard.SetAllFigures();
         }
+        public void SetChangeFigureForPawn(string inputInfo)
+        {
+            InitializeStandard();
+           _standard.SetChangeFigureForPawn(inputInfo);
+        }
         public static List<string> GetAvalibleMoves(string coordinate)
         {
             return CurrentGameStatus switch
@@ -94,90 +99,15 @@ namespace GameManager
                 _ => null,
             };
         }
-        public void SetChangeFigureForPawn(string inputInfo)
-        {
-            InitializeStandard();
-           _standard.SetChangeFigureForPawn(inputInfo);
-        }
         public static List<string> GetAllFiguresForReset(int status)
         {
-            var models = new List<string>();
-            switch (status)
+            return status switch
             {
-                case 1:
-                    models = KingGame.GetNamesForReset();
-                    break;
-                case 2:
-                    models = MovesKnight.GetNamesForReset();
-                    break;
-                case 3:
-                    models = Standard.GetNamesForReset();
-                    break;
-            }
-            return models;
-        }
-        public void MessageMate(object sender, string message)
-        {
-            MateMessage(sender, message);
-        }
-        public void MessageCheckStandard(object sender, string message)
-        {
-            MessageCheck(sender, message);
-        }
-
-        /// <summary>
-        /// Set the figure image
-        /// </summary>
-        /// <param name="baseFigure">Figure instance</param>
-        /// <param name="coordinate">Figure </param>
-        public void SetFigurePicture(object sender, string coordinate)
-        {
-            SetPicture(this, coordinate);
-            
-        }
-        public void SetDeleteFigurePicture(object sender, string coordinate)
-        {
-            DeletePicture(this, coordinate);
-        }
-
-        /// <summary>
-        /// Remove the figure image
-        /// </summary>
-        /// <param name="baseFigure">Figure instance</param>
-        /// <param name="coordinate">Figure </param>
-        public void RemoveFigurePicture(object sender, string coordinate)
-        {
-            RemovePicture(this, coordinate);
-        }
-
-        /// <summary>
-        /// Show a figure moves
-        /// </summary>
-        /// <param name="baseFigure">Figure instanste</param>
-        /// <param name="coordinate">Figure old and new coordinate</param>
-        public void MessageMoveForKingGame(object sender, (string, string) coordinateTupl)
-        {
-            MessageForMove(this, coordinateTupl);
-        }
-
-        /// <summary>
-        /// Show a figure moves
-        /// </summary>
-        /// <param name="baseFigure">Figure instanste</param>
-        /// <param name="coordinate">Figure old and new coordinate</param>
-        public void MessageMoveForStandardGame(object sender, (string, string) coordinateTupl)
-        {
-            MessageForMove(this, coordinateTupl);
-        }
-
-        /// <summary>
-        /// Initialize a MessageForPawnChange event
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="coordinate"></param>
-        public void MessageForPawnChange(object sender, string message)
-        {
-            MessagePawnChange(sender, "Please enter a new Figure for change");
+                1 => KingGame.GetNamesForReset(),
+                2 => MovesKnight.GetNamesForReset(),
+                3 => Standard.GetNamesForReset(),
+                _ => null,
+            };
         }
         public void MessageForProgress(object sender, (string, string) e)
         {

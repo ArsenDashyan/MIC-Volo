@@ -72,7 +72,6 @@ namespace GameManager
         {
             MessageForMove(this, coordinate);
         }
-
         public void MessageChek(object sender, string message)
         {
             MessageCheck(this, message);
@@ -354,7 +353,6 @@ namespace GameManager
 
             return _models;
         }
-
         public static List<string> GetAvalibleMoves(string coordinate)
         {
             var result = new List<string>();

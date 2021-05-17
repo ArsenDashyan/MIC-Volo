@@ -40,6 +40,5 @@
                 RemovePicture(this, this.Coordinate.ToString() + '.' + this.Name);
             }
         }
-
     }
 }
