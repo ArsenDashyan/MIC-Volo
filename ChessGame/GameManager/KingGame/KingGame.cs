@@ -137,12 +137,12 @@ namespace GameManager
             CoordinatePoint temp = figure.Coordinate;
             int targetX = CurentKing.Coordinate.X + 1 == 8 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X + 1;
             int targetY = CurentKing.Coordinate.Y - 1 == -1 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y - 1;
-            foreach (var item in tempFigur.AvailableMoves().Where(c => c != temp).ToList().FiltrFor(c => c.X <= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
+            foreach (var item in tempFigur.AvailableMoves(_models).Where(c => c != temp).ToList().FiltrFor(c => c.X <= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
             {
                 figure.Coordinate = item;
                 if (!IsUnderAttack(figure, figure.Coordinate))
                 {
-                    if (GetCurrentKingMoves().Filtr(c => c.X >= targetX | c.Y <= targetY) && !tempFigur.AvailableMoves().Contains(CurentKing.Coordinate))
+                    if (GetCurrentKingMoves().Filtr(c => c.X >= targetX | c.Y <= targetY) && !tempFigur.AvailableMoves(_models).Contains(CurentKing.Coordinate))
                         countList.Add(item, (GetCurrentKingMoves().Count, figure));
                 }
             }
@@ -172,12 +172,12 @@ namespace GameManager
             CoordinatePoint temp = figure.Coordinate;
             int targetX = CurentKing.Coordinate.X - 1 == -1 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X - 1;
             int targetY = CurentKing.Coordinate.Y - 1 == -1 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y - 1;
-            foreach (var item in tempFigur.AvailableMoves().Where(c => c!=temp).ToList().FiltrFor(c => c.X >= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
+            foreach (var item in tempFigur.AvailableMoves(_models).Where(c => c!=temp).ToList().FiltrFor(c => c.X >= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
             {
                 figure.Coordinate = item;
                 if (!IsUnderAttack(figure, figure.Coordinate))
                 {
-                    if (GetCurrentKingMoves().Filtr(c => c.X <= targetX | c.Y <= targetY) && !tempFigur.AvailableMoves().Contains(CurentKing.Coordinate))
+                    if (GetCurrentKingMoves().Filtr(c => c.X <= targetX | c.Y <= targetY) && !tempFigur.AvailableMoves(_models).Contains(CurentKing.Coordinate))
                         countList.Add(item, (GetCurrentKingMoves().Count, figure));
                 }
             }
@@ -207,12 +207,12 @@ namespace GameManager
             CoordinatePoint temp = figure.Coordinate;
             int targetX = CurentKing.Coordinate.X - 1 == -1 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X - 1;
             int targetY = CurentKing.Coordinate.Y + 1 == 8 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y + 1;
-            foreach (var item in tempFigur.AvailableMoves().Where(c => c != temp).ToList().FiltrFor(c => c.X >= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
+            foreach (var item in tempFigur.AvailableMoves(_models).Where(c => c != temp).ToList().FiltrFor(c => c.X >= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
             {
                 figure.Coordinate = item;
                 if (!IsUnderAttack(figure, figure.Coordinate))
                 {
-                    if (GetCurrentKingMoves().Filtr(c => c.X <= targetX | c.Y >= targetY) && !tempFigur.AvailableMoves().Contains(CurentKing.Coordinate))
+                    if (GetCurrentKingMoves().Filtr(c => c.X <= targetX | c.Y >= targetY) && !tempFigur.AvailableMoves(_models).Contains(CurentKing.Coordinate))
                         countList.Add(item, (GetCurrentKingMoves().Count, figure));
                 }
             }
@@ -242,12 +242,12 @@ namespace GameManager
             CoordinatePoint temp = figure.Coordinate;
             int targetX = CurentKing.Coordinate.X + 1 == 8 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X + 1;
             int targetY = CurentKing.Coordinate.Y + 1 == 8 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y + 1;
-            foreach (var item in tempFigur.AvailableMoves().Where(c => c != temp).ToList().FiltrFor(c => c.X <= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
+            foreach (var item in tempFigur.AvailableMoves(_models).Where(c => c != temp).ToList().FiltrFor(c => c.X <= CurentKing.Coordinate.X && c - CurentKing.Coordinate >= 2))
             {
                 figure.Coordinate = item;
                 if (!IsUnderAttack(figure, figure.Coordinate))
                 {
-                    if (GetCurrentKingMoves().Filtr(c => c.X >= targetX | c.Y >= targetY) && !tempFigur.AvailableMoves().Contains(CurentKing.Coordinate))
+                    if (GetCurrentKingMoves().Filtr(c => c.X >= targetX | c.Y >= targetY) && !tempFigur.AvailableMoves(_models).Contains(CurentKing.Coordinate))
                         countList.Add(item, (GetCurrentKingMoves().Count, figure));
                 }
             }
@@ -310,12 +310,12 @@ namespace GameManager
             var countList = new Dictionary<CoordinatePoint, (int, BaseFigure)>();
             var tempFigur = (IAvailableMoves)figure;
             CoordinatePoint temp = figure.Coordinate;
-            foreach (var item in tempFigur.AvailableMoves().FiltrFor(c => c - CurentKing.Coordinate >= 2))
+            foreach (var item in tempFigur.AvailableMoves(_models).FiltrFor(c => c - CurentKing.Coordinate >= 2))
             {
                 figure.Coordinate = item;
                 if (!IsUnderAttack(figure, figure.Coordinate))
                 {
-                    if (tempFigur.AvailableMoves().Contains(CurentKing.Coordinate))
+                    if (tempFigur.AvailableMoves(_models).Contains(CurentKing.Coordinate))
                         countList.Add(item, (GetCurrentKingMoves().Count, figure));
                 }
             }
@@ -415,7 +415,7 @@ namespace GameManager
             foreach (var item in modelNew)
             {
                 IAvailableMoves itemFigur = (IAvailableMoves)item;
-                if (itemFigur.AvailableMoves().Contains(CoordinatPoint))
+                if (itemFigur.AvailableMoves(_models).Contains(CoordinatPoint))
                 {
                     return true;
                 }
@@ -435,7 +435,7 @@ namespace GameManager
             foreach (var item in model)
             {
                 IAvailableMoves tempfigur = (IAvailableMoves)item;
-                if (tempfigur.AvailableMoves().Contains(CoordinatPoint))
+                if (tempfigur.AvailableMoves(_models).Contains(CoordinatPoint))
                     return true;
             }
             return false;
@@ -470,7 +470,7 @@ namespace GameManager
             }
             if (temp == null)
             {
-                foreach (var item in tempFigure.AvailableMoves())
+                foreach (var item in tempFigure.AvailableMoves(_models))
                 {
                     if (!IsUnderAttack(baseFigure, item))
                     {
@@ -485,14 +485,14 @@ namespace GameManager
         {
             CoordinatePoint temp = baseFigure.Coordinate;
             IAvailableMoves tempFigure = (IAvailableMoves)baseFigure;
-            foreach (var item in tempFigure.AvailableMoves())
+            foreach (var item in tempFigure.AvailableMoves(_models))
             {
                 baseFigure.Coordinate = item;
                 if (IsProtected(baseFigure, item))
                 {
                     if (CoordinatePoint.Modul(item, king.Coordinate) >= 2d)
                     {
-                        if (tempFigure.AvailableMoves().Contains(king.Coordinate))
+                        if (tempFigure.AvailableMoves(_models).Contains(king.Coordinate))
                         {
                             tempForItem = item;
                             baseFigure.Coordinate = temp;
@@ -509,14 +509,14 @@ namespace GameManager
         {
             CoordinatePoint temp = baseFigure.Coordinate;
             IAvailableMoves tempFigure = (IAvailableMoves)baseFigure;
-            foreach (var item in tempFigure.AvailableMoves())
+            foreach (var item in tempFigure.AvailableMoves(_models))
             {
                 baseFigure.Coordinate = item;
                 if (!IsUnderAttack(baseFigure, baseFigure.Coordinate))
                 {
                     if (CoordinatePoint.Modul(item, king.Coordinate) >= 2d)
                     {
-                        if (tempFigure.AvailableMoves().Contains(king.Coordinate))
+                        if (tempFigure.AvailableMoves(_models).Contains(king.Coordinate))
                         {
                             tempForItem = item;
                             baseFigure.Coordinate = temp;
@@ -533,14 +533,14 @@ namespace GameManager
         {
             CoordinatePoint temp = baseFigure.Coordinate;
             IAvailableMoves tempFigure = (IAvailableMoves)baseFigure;
-            foreach (var item in tempFigure.AvailableMoves())
+            foreach (var item in tempFigure.AvailableMoves(_models))
             {
                 baseFigure.Coordinate = item;
                 if (!IsUnderAttack(baseFigure, baseFigure.Coordinate))
                 {
                     if (CoordinatePoint.Modul(item, king.Coordinate) > 2)
                     {
-                        if (tempFigure.AvailableMoves().Count == 14)
+                        if (tempFigure.AvailableMoves(_models).Count == 14)
                         {
                             tempForItem = item;
                             baseFigure.Coordinate = temp;
@@ -612,7 +612,7 @@ namespace GameManager
         {
             var currentKing = (IAvailableMoves)CurentKing;
             var result = new List<CoordinatePoint>();
-            foreach (var item in currentKing.AvailableMoves())
+            foreach (var item in currentKing.AvailableMoves(_models))
             {
                 if (!DangerPosition(CurentKing).Contains(item))
                 {
@@ -634,7 +634,7 @@ namespace GameManager
             foreach (var item in modelNew)
             {
                 var temp = (IAvailableMoves)item;
-                var array = temp.AvailableMoves();
+                var array = temp.AvailableMoves(_models);
                 result.AddRange(array);
             }
             return result;
@@ -677,7 +677,7 @@ namespace GameManager
                     return false;
                 }
             }
-            else if (available.AvailableMoves().Contains(targetCoordinate))
+            else if (available.AvailableMoves(_models).Contains(targetCoordinate))
             {
                 _baseFigure.SetFigurePosition(targetCoordinate);
                 return true;
@@ -700,7 +700,7 @@ namespace GameManager
             var coordinatePoint = new CoordinatePoint(int.Parse(info[2]), int.Parse(info[3]));
             if (GetFigure(info[0], info[1], out _baseFigure))
             {
-                _baseFigure.SetPicture += SetFigurePicture;
+                _baseFigure.SetFigurePicture += SetFigurePicture;
                 _baseFigure.RemovePicture += RemoveFigurePicture;
                 _baseFigure.MessageForMove += MessageMove;
                 _models.Add(_baseFigure);
@@ -741,7 +741,7 @@ namespace GameManager
                         if (_whiteQueenCount == 0)
                         {
                             _whiteQueenCount++;
-                            baseFigure = new Queen(figure + "." + color + '.' + _whiteQueenCount, FColor.White, _models);
+                            baseFigure = new Queen(figure + "." + color + '.' + _whiteQueenCount, FColor.White);
                             return true;
                         }
                         else
@@ -753,7 +753,7 @@ namespace GameManager
                         if (_whiteKingCount == 0)
                         {
                             _whiteKingCount++;
-                            baseFigure = new King(figure + "." + color + '.' + _whiteKingCount, FColor.White, _models);
+                            baseFigure = new King(figure + "." + color + '.' + _whiteKingCount, FColor.White);
                             return true;
                         }
                         else
@@ -765,7 +765,7 @@ namespace GameManager
                         if (_whiteRookCount <= 1)
                         {
                             _whiteRookCount++;
-                            baseFigure = new Rook(figure + "." + color + "." + _whiteRookCount, FColor.White, _models);
+                            baseFigure = new Rook(figure + "." + color + "." + _whiteRookCount, FColor.White);
                             return true;
                         }
                         else
@@ -777,7 +777,7 @@ namespace GameManager
                         if (_whiteBishopCount <= 1)
                         {
                             _whiteBishopCount++;
-                            baseFigure = new Bishop(figure + "." + color + "." + _whiteBishopCount, FColor.White, _models);
+                            baseFigure = new Bishop(figure + "." + color + "." + _whiteBishopCount, FColor.White);
                             return true;
                         }
                         else
@@ -789,7 +789,7 @@ namespace GameManager
                         if (_whiteKnightCount <= 1)
                         {
                             _whiteKnightCount++;
-                            baseFigure = new Knight(figure + "." + color + "." + _whiteKnightCount, FColor.White, _models);
+                            baseFigure = new Knight(figure + "." + color + "." + _whiteKnightCount, FColor.White);
                             return true;
                         }
                         else
@@ -810,7 +810,7 @@ namespace GameManager
                         if (_blackQueenCount == 0)
                         {
                             _blackQueenCount++;
-                            baseFigure = new Queen(figure + "." + color + '.' + _blackQueenCount, FColor.Black, _models);
+                            baseFigure = new Queen(figure + "." + color + '.' + _blackQueenCount, FColor.Black);
                             return true;
                         }
                         else
@@ -822,7 +822,7 @@ namespace GameManager
                         if (_blackKingCount == 0)
                         {
                             _blackKingCount++;
-                            baseFigure = new King(figure + "." + color + '.' + _blackKingCount, FColor.Black, _models);
+                            baseFigure = new King(figure + "." + color + '.' + _blackKingCount, FColor.Black);
                             return true;
                         }
                         else
@@ -834,7 +834,7 @@ namespace GameManager
                         if (_blackRookCount <= 1)
                         {
                             _blackRookCount++;
-                            baseFigure = new Rook(figure + "." + color + "." + _blackRookCount, FColor.Black, _models);
+                            baseFigure = new Rook(figure + "." + color + "." + _blackRookCount, FColor.Black);
                             return true;
                         }
                         else
@@ -846,7 +846,7 @@ namespace GameManager
                         if (_blackBishopCount <= 1)
                         {
                             _blackBishopCount++;
-                            baseFigure = new Bishop(figure + "." + color + "." + _blackBishopCount, FColor.Black, _models);
+                            baseFigure = new Bishop(figure + "." + color + "." + _blackBishopCount, FColor.Black);
                             return true;
                         }
                         else
@@ -858,7 +858,7 @@ namespace GameManager
                         if (_blackKnightCount <= 1)
                         {
                             _blackKnightCount++;
-                            baseFigure = new Knight(figure + "." + color + "." + _blackKnightCount, FColor.Black, _models);
+                            baseFigure = new Knight(figure + "." + color + "." + _blackKnightCount, FColor.Black);
                             return true;
                         }
                         else
@@ -943,7 +943,7 @@ namespace GameManager
             var currentCoordinate = GetCoordinateByString(coordinate);
             var baseFigure = CheckedCurrentFigure(currentCoordinate);
             var antiCheck = (IAntiCheck)baseFigure;
-            var movesList = antiCheck.MovesWithKingIsNotUnderCheck();
+            var movesList = antiCheck.MovesWithKingIsNotUnderCheck(_models);
             foreach (var item in movesList)
             {
                 result.Add($"{item.X}.{item.Y}");

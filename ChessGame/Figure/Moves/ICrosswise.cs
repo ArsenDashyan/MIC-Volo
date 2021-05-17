@@ -4,8 +4,8 @@ namespace Figure
 {
     public interface ICrosswise
     {
-        List<CoordinatePoint> Vertical();
-        List<CoordinatePoint> Horizontal();
-        List<CoordinatePoint> Crosswise();
+        List<CoordinatePoint> Vertical(List<BaseFigure> othereFigures);
+        List<CoordinatePoint> Horizontal(List<BaseFigure> othereFigures);
+        List<CoordinatePoint> Crosswise(List<BaseFigure> othereFigures);
     }
 }

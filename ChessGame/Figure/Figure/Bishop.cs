@@ -5,16 +5,14 @@ namespace Figure
 {
     public class Bishop : BaseFigure, IDiagonal, IAvailableMoves, IAntiCheck
     {
-        public readonly List<BaseFigure> othereFigures;
-        public Bishop(string name, FColor color, List<BaseFigure> allFigures) : base(color)
+        public Bishop(string name, FColor color) : base(name,color)
         {
             Name = name;
             Color = color;
-            othereFigures = allFigures;
         }
 
         #region Move
-        public List<CoordinatePoint> RightIndex()
+        public List<CoordinatePoint> RightIndex(List<BaseFigure> othereFigures)
         {
             int sum = this.Coordinate.X + this.Coordinate.Y;
             var arr = new List<CoordinatePoint>();
@@ -55,7 +53,7 @@ namespace Figure
             }
             return arr;
         }
-        public List<CoordinatePoint> LeftIndex()
+        public List<CoordinatePoint> LeftIndex(List<BaseFigure> othereFigures)
         {
             var arr = new List<CoordinatePoint>();
             int sub = this.Coordinate.X - this.Coordinate.Y;
@@ -98,11 +96,11 @@ namespace Figure
             }
             return arr;
         }
-        public List<CoordinatePoint> AvailableMoves()
+        public List<CoordinatePoint> AvailableMoves(List<BaseFigure> othereFigures)
         {
             var result = new List<CoordinatePoint>();
-            result.AddRange(RightIndex());
-            result.AddRange(LeftIndex());
+            result.AddRange(RightIndex(othereFigures));
+            result.AddRange(LeftIndex(othereFigures));
             return result;
         }
 
@@ -111,28 +109,28 @@ namespace Figure
         /// </summary>
         /// <param name="model">King instance withe or Black</param>
         /// <returns>Return danger position List for current king </returns>
-        private List<CoordinatePoint> DangerPosition()
+        private List<CoordinatePoint> DangerPosition(List<BaseFigure> othereFigures)
         {
             var modelNew = othereFigures.Where(c => c.Color != this.Color);
             var result = new List<CoordinatePoint>();
             foreach (var item in modelNew)
             {
                 var temp = (IAvailableMoves)item;
-                var array = temp.AvailableMoves();
+                var array = temp.AvailableMoves(othereFigures);
                 result.AddRange(array);
             }
             return result;
         }
-        public List<CoordinatePoint> MovesWithKingIsNotUnderCheck()
+        public List<CoordinatePoint> MovesWithKingIsNotUnderCheck(List<BaseFigure> othereFigures)
         {
             var thisKing = (BaseFigure)othereFigures.Where(c => c.Color == this.Color && c is King).Single();
             var king = (King)thisKing;
             var temp = this.Coordinate;
             var goodMoves = new List<CoordinatePoint>();
-            foreach (var item in this.AvailableMoves())
+            foreach (var item in this.AvailableMoves(othereFigures))
             {
                 this.Coordinate = item;
-                if (!DangerPosition().Contains(thisKing.Coordinate))
+                if (!DangerPosition(othereFigures).Contains(thisKing.Coordinate))
                 {
                     goodMoves.Add(item);
                 }

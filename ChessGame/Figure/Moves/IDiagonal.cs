@@ -4,7 +4,7 @@ namespace Figure
 {
     public interface IDiagonal
     {
-        List<CoordinatePoint> RightIndex();
-        List<CoordinatePoint> LeftIndex();
+        List<CoordinatePoint> RightIndex(List<BaseFigure> othereFigures);
+        List<CoordinatePoint> LeftIndex(List<BaseFigure> othereFigures);
     }
 }

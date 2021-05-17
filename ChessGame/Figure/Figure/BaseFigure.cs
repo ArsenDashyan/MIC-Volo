@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Figure
+﻿namespace Figure
 {
     public delegate void Picture(object sender, string e);
     public delegate void Message(object sender, (string, string) e);
@@ -13,15 +10,16 @@ namespace Figure
         public bool isMoved = false;
         public bool isProtected = false;
         public CoordinatePoint Coordinate { get; set; }
-        public event Picture SetPicture;
+        public event Picture SetFigurePicture;
         public event Picture RemovePicture;
         public event Message MessageForMove;
 
         #endregion
 
-        public BaseFigure(FColor fColor)
+        public BaseFigure(string name, FColor fColor)
         {
             Color = fColor;
+            Name = name;
         }
         public void SetFigurePosition(CoordinatePoint coordinate)
         {
@@ -32,15 +30,14 @@ namespace Figure
                 MessageForMove(this, (this.Coordinate.ToString() + '.' + this.Name,
                                       coordinate.ToString() + '.' + this.Name));
             this.Coordinate = coordinate;
-            SetPicture(this, coordinate.ToString() + '.' + this.Name);
+            SetFigurePicture(this, coordinate.ToString() + '.' + this.Name);
         }
         public void RemoveFigurePosition()
         {
             if (this.Coordinate != null)
             {
                 this.isMoved = true;
-                string currenrCoordinate = this.Coordinate.ToString() + '.' + this.Name;
-                RemovePicture(this, currenrCoordinate);
+                RemovePicture(this, this.Coordinate.ToString() + '.' + this.Name);
             }
         }
 

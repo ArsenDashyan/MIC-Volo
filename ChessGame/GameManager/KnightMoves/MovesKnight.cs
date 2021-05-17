@@ -1,6 +1,5 @@
 ﻿using Figure;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace GameManager
 {
@@ -64,21 +63,21 @@ namespace GameManager
         }
         public void CreateStartKnight(string coordinate)
         {
-            _startKnight = new Knight("Knight.Black.1", FColor.Black, _models);
+            _startKnight = new Knight("Knight.Black.1", FColor.Black);
             _models.Add(_startKnight);
             string[] point = coordinate.Split('.');
             var coordinatPoint = new CoordinatePoint(int.Parse(point[0]),int.Parse(point[1]));
-            _startKnight.SetPicture += SetFigurePicture;
+            _startKnight.SetFigurePicture += SetFigurePicture;
             _startKnight.MessageForMove += MessageForMove;
             _startKnight.SetFigurePosition(coordinatPoint);
         }
         public void CreateTargetKnight(string coordinate)
         {
-            _targetKnight = new Knight("Knight.Black.2", FColor.White, _models);
+            _targetKnight = new Knight("Knight.Black.2", FColor.White);
             _models.Add(_targetKnight);
             string[] point = coordinate.Split('.');
             var coordinatPoint = new CoordinatePoint(int.Parse(point[0]), int.Parse(point[1]));
-            _targetKnight.SetPicture += SetFigurePicture;
+            _targetKnight.SetFigurePicture += SetFigurePicture;
             _targetKnight.MessageForMove += MessageForMove;
             _targetKnight.SetFigurePosition(coordinatPoint);
         }

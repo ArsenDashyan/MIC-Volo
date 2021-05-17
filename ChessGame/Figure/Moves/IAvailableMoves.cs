@@ -4,6 +4,6 @@ namespace Figure
 {
     public interface IAvailableMoves
     {
-        List<CoordinatePoint> AvailableMoves();
+        List<CoordinatePoint> AvailableMoves(List<BaseFigure> othereFigures);
     }
 }

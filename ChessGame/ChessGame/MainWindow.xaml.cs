@@ -548,11 +548,11 @@ namespace ChessGame
             string coordinate = $"{coordX}.{coordY}";
             if (coordinate != this._startCoordinate)
             {
-                RemoveColoredCells();
                 InitializeGameManagment();
                 bool action =  gameManagment.Managment((this._startCoordinate, coordinate));
                 CurrentColorManager(action);
             }
+            RemoveColoredCells();
         }
 
         #endregion

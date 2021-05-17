@@ -8,16 +8,14 @@ namespace Figure
     {
         public BaseFigure chekedFigure;
         public event MessageForMate MessageCheck;
-        public readonly List<BaseFigure> othereFigures;
-        public King(string name, FColor color, List<BaseFigure> allFigures) : base(color)
+        public King(string name, FColor color) : base(name, color)
         {
             Name = name;
             Color = color;
-            othereFigures = allFigures;
         }
 
         #region Move
-        public List<CoordinatePoint> Horizontal()
+        public List<CoordinatePoint> Horizontal(List<BaseFigure> othereFigures)
         {
             var arr = new List<CoordinatePoint>();
             var newArr = new List<CoordinatePoint>();
@@ -55,7 +53,7 @@ namespace Figure
             newArr.Remove(this.Coordinate);
             return newArr;
         }
-        public List<CoordinatePoint> Vertical()
+        public List<CoordinatePoint> Vertical(List<BaseFigure> othereFigures)
         {
             var arr = new List<CoordinatePoint>();
             var newArr = new List<CoordinatePoint>();
@@ -88,14 +86,14 @@ namespace Figure
             newArr.Remove(this.Coordinate);
             return newArr;
         }
-        public List<CoordinatePoint> Crosswise()
+        public List<CoordinatePoint> Crosswise(List<BaseFigure> othereFigures)
         {
-            var arrayHor = this.Horizontal();
-            var arrayVert = this.Vertical();
+            var arrayHor = this.Horizontal(othereFigures);
+            var arrayVert = this.Vertical(othereFigures);
             arrayHor.AddRange(arrayVert);
             return arrayHor;
         }
-        public List<CoordinatePoint> RightIndex()
+        public List<CoordinatePoint> RightIndex(List<BaseFigure> othereFigures)
         {
             var arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
@@ -124,7 +122,7 @@ namespace Figure
             arr.Remove(this.Coordinate);
             return arr;
         }
-        public List<CoordinatePoint> LeftIndex()
+        public List<CoordinatePoint> LeftIndex(List<BaseFigure> othereFigures)
         {
             var arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
@@ -153,12 +151,12 @@ namespace Figure
             arr.Remove(this.Coordinate);
             return arr;
         }
-        public List<CoordinatePoint> AvailableMoves()
+        public List<CoordinatePoint> AvailableMoves(List<BaseFigure> othereFigures)
         {
             var result = new List<CoordinatePoint>();
-            result.AddRange(RightIndex());
-            result.AddRange(LeftIndex());
-            result.AddRange(Crosswise());
+            result.AddRange(RightIndex(othereFigures));
+            result.AddRange(LeftIndex(othereFigures));
+            result.AddRange(Crosswise(othereFigures));
             result.Remove(this.Coordinate);
             return result;
         }
@@ -168,28 +166,28 @@ namespace Figure
         /// </summary>
         /// <param name="model">King instance withe or Black</param>
         /// <returns>Return danger position List for current king </returns>
-        private List<CoordinatePoint> DangerPosition()
+        private List<CoordinatePoint> DangerPosition(List<BaseFigure> othereFigures)
         {
             var modelNew = othereFigures.Where(c => c.Color != this.Color);
             var result = new List<CoordinatePoint>();
             foreach (var item in modelNew)
             {
                 var temp = (IAvailableMoves)item;
-                var array = temp.AvailableMoves();
+                var array = temp.AvailableMoves(othereFigures);
                 result.AddRange(array);
             }
             return result;
         }
-        public List<CoordinatePoint> MovesWithKingIsNotUnderCheck()
+        public List<CoordinatePoint> MovesWithKingIsNotUnderCheck(List<BaseFigure> othereFigures)
         {
             var thisKing = (BaseFigure)othereFigures.Where(c => c.Color == this.Color && c is King).Single();
             var king = (King)thisKing;
             var temp = this.Coordinate;
             var goodMoves = new List<CoordinatePoint>();
-            foreach (var item in this.AvailableMoves())
+            foreach (var item in this.AvailableMoves(othereFigures))
             {
                 this.Coordinate = item;
-                if (!DangerPosition().Contains(thisKing.Coordinate))
+                if (!DangerPosition(othereFigures).Contains(thisKing.Coordinate))
                 {
                     goodMoves.Add(item);
                 }
@@ -210,31 +208,31 @@ namespace Figure
         /// <summary>
         /// Checked Current king is check or no
         /// </summary>
-        public void IsCheked()
+        public void IsCheked(List<BaseFigure> othereFigures)
         {
             var modelNew = othereFigures.Where(f => f.Color != this.Color).ToList();
             foreach (var item in modelNew)
             {
                 var temp = (IAvailableMoves)item;
-                if (temp.AvailableMoves().Contains(this.Coordinate))
+                if (temp.AvailableMoves(othereFigures).Contains(this.Coordinate))
                 {
                     this.chekedFigure = item;
                     MessageCheck(this, "Check");
-                    IsMate();
+                    IsMate(othereFigures);
                     break;
                 }
                 else
                     MessageCheck(this, " ");
             }
         }
-        private void IsMate()
+        private void IsMate(List<BaseFigure> othereFigures)
         {
             var modelNew = othereFigures.Where(f => f.Color == this.Color).ToList();
             var moves = new List<CoordinatePoint>();
             foreach (var item in modelNew)
             {
                 var temp = (IAntiCheck)item;
-                moves.AddRange(temp.MovesWithKingIsNotUnderCheck());
+                moves.AddRange(temp.MovesWithKingIsNotUnderCheck(othereFigures));
             }
             if (moves.Count == 0)
             {

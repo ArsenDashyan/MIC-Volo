@@ -4,6 +4,6 @@ namespace Figure
 {
     public interface IAntiCheck
     {
-        List<CoordinatePoint> MovesWithKingIsNotUnderCheck();
+        List<CoordinatePoint> MovesWithKingIsNotUnderCheck(List<BaseFigure> othereFigures);
     }
 }

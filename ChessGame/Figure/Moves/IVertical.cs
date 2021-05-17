@@ -4,6 +4,6 @@ namespace Figure
 {
     public interface IVertical
     {
-        public List<CoordinatePoint> Vertical();
+        public List<CoordinatePoint> Vertical(List<BaseFigure> othereFigures);
     }
 }
