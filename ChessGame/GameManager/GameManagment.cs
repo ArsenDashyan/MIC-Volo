@@ -7,7 +7,7 @@ namespace GameManager
         #region Property and Feld
         public static int CurrentGameStatus { get => _currentGameStatus; set => _currentGameStatus = value; }
         private static int _currentGameStatus;
-        private KingGame _kingGame;
+        private static KingGame _kingGame;
         private MovesKnight _movesKnight;
         private Standard _standard;
         public event MessageForMate MateMessage;
@@ -20,12 +20,17 @@ namespace GameManager
         public event Picture DeletePicture;
         public string currentFigureColor;
 
-
         #endregion
         public GameManagment(string currentFigureColor, int currentGameStatus)
         {
             this.currentFigureColor = currentFigureColor;
             CurrentGameStatus = currentGameStatus;
+        }
+
+        #region Initialize
+        public void InitializeGameManagmentComponent()
+        {
+            InitializeKingGame();
             InitializeKnightGame();
             InitializeStandard();
         }
@@ -54,22 +59,17 @@ namespace GameManager
             _movesKnight.SetPicture += SetPicture;
             _movesKnight.MessageForMoveKnight += delegate { };
         }
-        public void IsValidForPleacement(string inputInfo)
-        {
-            InitializeKingGame();
-            _kingGame.IsValidForPleacement(inputInfo);
-        }
+
+        #endregion
         public bool Managment((string, string) tupl)
         {
             switch (CurrentGameStatus)
             {
                 case 1:
-                    InitializeKingGame();
                     if (_kingGame.IsVAlidCoordinate(tupl.Item1, tupl.Item2))
                         _kingGame.Logic();
                     return false;
                 case 3:
-                    InitializeStandard();
                     if (Standard.IsVAlidCoordinate(tupl.Item1, tupl.Item2))
                     {
                         _standard.GetLogic(tupl.Item1, tupl.Item2);
@@ -80,16 +80,10 @@ namespace GameManager
             }
             return false;
         }
-        public void SetAllFigures()
-        {
-            InitializeStandard();
-            _standard.SetAllFigures();
-        }
-        public void SetChangeFigureForPawn(string inputInfo)
-        {
-            InitializeStandard();
-           _standard.SetChangeFigureForPawn(inputInfo);
-        }
+        public static void IsValidForPleacement(string inputInfo) => _kingGame.IsValidForPleacement(inputInfo);
+        public void SetChangeFigureForPawn(string inputInfo) => _standard.SetChangeFigureForPawn(inputInfo);
+        public void SetAllFigures() => _standard.SetAllFigures();
+        public void MessageForProgress(object sender, (string, string) e) => MessageProgress(this, ("", ""));
         public static List<string> GetAvalibleMoves(string coordinate)
         {
             return CurrentGameStatus switch
@@ -108,10 +102,6 @@ namespace GameManager
                 3 => Standard.GetNamesForReset(),
                 _ => null,
             };
-        }
-        public void MessageForProgress(object sender, (string, string) e)
-        {
-            MessageProgress(this, ("", ""));
         }
 
         #region Knight Game

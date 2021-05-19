@@ -50,7 +50,7 @@ namespace ChessGame
         #region Methods for Events
         private void InitializeGameManagment()
         {
-            gameManagment = new(currentFigureColor, CurrentGameStatus);
+            gameManagment = new GameManagment(currentFigureColor, CurrentGameStatus);
             gameManagment.DeletePicture += SetDeleteFigurePicture;
             gameManagment.MateMessage += MessageMateForKingHame;
             gameManagment.MessageCheck += MessageCheckStandard;
@@ -59,6 +59,7 @@ namespace ChessGame
             gameManagment.MessageProgress += MessageForProgress;
             gameManagment.RemovePicture += RemoveFigurePicture;
             gameManagment.SetPicture += SetFigurePicture;
+            gameManagment.InitializeGameManagmentComponent();
         }
 
         /// <summary>
@@ -253,7 +254,7 @@ namespace ChessGame
             if (GetCurrentFigureCoordinate(InputCoordinatsLetter, InputCoordinatsNumber, out string coord))
             {
                 inputInfo += coord;
-                gameManagment.IsValidForPleacement(inputInfo);
+                GameManagment.IsValidForPleacement(inputInfo);
             }
         }
         private void PlayB2_Click(object sender, RoutedEventArgs e)
@@ -528,7 +529,6 @@ namespace ChessGame
                     int coordX = Grid.GetColumn(image);
                     int coordY = Grid.GetRow(image);
                     this._startCoordinate = $"{coordX}.{coordY}";
-                    InitializeGameManagment();
                     var colorsForFigure = GameManagment.GetAvalibleMoves(this._startCoordinate);
                     if (colorsForFigure != null)
                         GetColoredCells(colorsForFigure);
@@ -547,7 +547,6 @@ namespace ChessGame
             string coordinate = $"{coordX}.{coordY}";
             if (coordinate != this._startCoordinate)
             {
-                InitializeGameManagment();
                 bool action = gameManagment.Managment((this._startCoordinate, coordinate));
                 CurrentColorManager(action);
             }
@@ -584,12 +583,12 @@ namespace ChessGame
         {
             ResetBoard(CurrentGameStatus);
             ShowStandardGamePanel();
-            gameManagment.SetAllFigures();
             CurrentGameStatus = 3;
             MessageBox.Show("You Change A Standard Game, Good Luck");
         }
         public void ShowStandardGamePanel()
         {
+            gameManagment.SetAllFigures();
             StandardGamePanel.Visibility = Visibility.Visible;
             PanelForGame.SelectedIndex = 2;
             KingGamePanel.Visibility = Visibility.Collapsed;

@@ -16,27 +16,26 @@ namespace ChessGame
         {
             if (CheckKing.IsChecked == true)
             {
+                MainWindow.CurrentGameStatus = 1;
                 var mainWindow = new MainWindow();
                 mainWindow.ShowKingGamePanel();
                 mainWindow.Show();
-                MainWindow.CurrentGameStatus = 1;
                 this.Close();
             }
             if (CheckKnight.IsChecked == true)
             {
+                MainWindow.CurrentGameStatus = 2;
                 var mainWindow = new MainWindow();
                 mainWindow.ShowKnightGamePanel();
                 mainWindow.Show();
-                MainWindow.CurrentGameStatus = 2;
                 this.Close();
             }
             if (StandardGame.IsChecked == true)
             {
+                MainWindow.CurrentGameStatus = 3;
                 var mainWindow = new MainWindow();
                 mainWindow.ShowStandardGamePanel();
                 mainWindow.Show();
-                mainWindow.gameManagment.SetAllFigures();
-                MainWindow.CurrentGameStatus = 3;
                 this.Close();
             }
         }

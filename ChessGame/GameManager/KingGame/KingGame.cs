@@ -709,7 +709,10 @@ namespace GameManager
                     if (_baseFigure is King king)
                     {
                         if (!DangerPosition(king).Contains(coordinatePoint))
+                        {
                             _baseFigure.SetFigurePosition(coordinatePoint);
+                            _baseFigure.isMoved = true;
+                        }
                         else
                         {
                             if (name.Split('.')[1] == "White")
