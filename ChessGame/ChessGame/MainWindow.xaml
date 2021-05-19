@@ -198,6 +198,7 @@
                         <Label Content="Moves" HorizontalAlignment="Left" Margin="6,238,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     </Grid>
                 </TabItem>
+
                 <TabItem Name="KnightMovesPanel" Header="   Knight  Moves   ">
                     <Grid Name="KnightPage" Background="#FFA8857D" Margin="2,2,2,2">
                         <Label Content="Start CoordinateLetter and Number" HorizontalAlignment="Left"  VerticalAlignment="Top" RenderTransformOrigin="0.434,-0.133" FontSize="14" FontWeight="Bold" Margin="5,22,0,0"/>
@@ -327,6 +328,20 @@
                         </Grid>
                         <TextBox x:Name="FirstUserName" HorizontalAlignment="Left" Margin="254,318,0,0" Text=" " TextWrapping="Wrap" VerticalAlignment="Top" Width="76" Height="28"/>
                         <TextBox x:Name="SecondUserName" HorizontalAlignment="Left" Margin="256,355,0,0" Text=" " TextWrapping="Wrap" VerticalAlignment="Top" Width="75" Height="28"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header=" Pawn Change Window" Name="PawnChangePanel">
+                    <Grid Background="#FFA8857D" Margin="2,2,2,2">
+                        <Label Content="Please select a figure for changed" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Foreground="#FF440505"/>
+                        <Image Source="Resources/Black.Knight.png" Width="80" Margin="216,200,60,246"/>
+                        <Image Source="Resources/Black.Rook.png" Width="80" Margin="216,50,60,399"/>
+                        <Image Source="Resources/Black.Bishop.png" Width="80" Margin="33,200,248,246" />
+                        <Image Source="Resources/Black.Queen.png" Width="80" Margin="33,50,242,394" />
+                        <CheckBox Name="CheckQuuen" HorizontalAlignment="Left" Margin="61,130,0,0" VerticalAlignment="Top" FontSize="14"/>
+                        <CheckBox Name="CheckKnight" HorizontalAlignment="Left" Margin="256,276,0,0" VerticalAlignment="Top" FontSize="14"/>
+                        <CheckBox Name="CheckBishop" HorizontalAlignment="Left" Margin="60,276,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.406,-0.329"/>
+                        <CheckBox Name="CheckRook" HorizontalAlignment="Left" Margin="247,130,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.406,-0.329"/>
+                        <Button Name="ChangeBtn"  Content="Change" HorizontalAlignment="Left" Margin="133,332,0,0"  Width="82" Background="#FF876E6E" FontSize="14" FontWeight="Bold" Click="ChooseButton_Click" Height="34" VerticalAlignment="Top" />
                     </Grid>
                 </TabItem>
             </TabControl>

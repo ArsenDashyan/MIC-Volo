@@ -20,7 +20,6 @@ namespace ChessGame
         #region Property and Feld
         public static int CurrentGameStatus { get => _currentGameStatus; set => _currentGameStatus = value; }
         private UIElement _dragObjectImage;
-        private readonly PawnChengesPage _pawnChengesPage = new();
         private readonly List<string> _modelsForDeleteid = new();
         private readonly List<(Brush, Border)> _colorsBorder = new();
         private CancellationTokenSource _cancellationTokenSource;
@@ -44,7 +43,6 @@ namespace ChessGame
         {
             InitializeComponent();
             InitializeGameManagment();
-            _pawnChengesPage.MessageCloseAndChange += ChooseButton_Click;
         }
 
         #region Methods for Events
@@ -168,7 +166,9 @@ namespace ChessGame
         /// <param name="coordinate"></param>
         public void MessageForPawnChange(object sender, string message)
         {
-            _pawnChengesPage.Show();
+            StandardGamePanel.Visibility = Visibility.Collapsed;
+            PawnChangePanel.Visibility = Visibility.Visible;
+            PanelForGame.SelectedIndex = 3;
         }
         public async void MessageForProgress(object sender, (string, string) e)
         {
@@ -593,6 +593,7 @@ namespace ChessGame
             PanelForGame.SelectedIndex = 2;
             KingGamePanel.Visibility = Visibility.Collapsed;
             KnightMovesPanel.Visibility = Visibility.Collapsed;
+            PawnChangePanel.Visibility = Visibility.Collapsed;
             PlayForStandard.Visibility = Visibility.Visible;
             PlayColorBlackStandard.Visibility = Visibility.Visible;
             PlayColorWhiteStandard.Visibility = Visibility.Visible;
@@ -612,6 +613,7 @@ namespace ChessGame
             KnightMovesPanel.Visibility = Visibility.Visible;
             PanelForGame.SelectedIndex = 1;
             StandardGamePanel.Visibility = Visibility.Collapsed;
+            PawnChangePanel.Visibility = Visibility.Collapsed;
             KingGamePanel.Visibility = Visibility.Collapsed;
             InputCoordinatsLetter_Corrent.IsEnabled = true;
             InputCoordinatsNumber_Corrent.IsEnabled = true;
@@ -625,6 +627,7 @@ namespace ChessGame
             PanelForGame.SelectedIndex = 0;
             StandardGamePanel.Visibility = Visibility.Collapsed;
             KnightMovesPanel.Visibility = Visibility.Collapsed;
+            PawnChangePanel.Visibility = Visibility.Collapsed;
             PlayB2.IsEnabled = true;
             CheckBlack.IsEnabled = true;
             CheckWhite.IsEnabled = true;
@@ -703,18 +706,25 @@ namespace ChessGame
         /// <param name="e"></param>
         private void ChooseButton_Click(object sender, RoutedEventArgs e)
         {
-            string path = currentFigureColor == "White" ? _pawnChengesPage.result.BlackFigurePath()
-                                                        : _pawnChengesPage.result.WhiteFigurePath();
+            string result = string.Empty;
+            if (CheckBishop.IsChecked == true)
+                result = "Bishop";
+            else if (CheckKnight.IsChecked == true)
+                result = "Knight";
+            else if (CheckQuuen.IsChecked == true)
+                result = "Queen";
+            else if (CheckRook.IsChecked == true)
+                result = "Rook";
+            string path = currentFigureColor == "White" ? result.BlackFigurePath()
+                                                        : result.WhiteFigurePath();
             string[] tempFigure = path.Split('/');
             string color = tempFigure[^1].Split('.')[0];
             string figure = tempFigure[^1].Split('.')[1];
             string inputInfo = figure + '.' + color;
             gameManagment.SetChangeFigureForPawn(inputInfo);
-        }
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-            _pawnChengesPage.Close();
+            StandardGamePanel.Visibility = Visibility.Visible;
+            PawnChangePanel.Visibility = Visibility.Collapsed;
+            PanelForGame.SelectedIndex = 2;
         }
         public static void AddGameStoryWithNote(string name)
         {
