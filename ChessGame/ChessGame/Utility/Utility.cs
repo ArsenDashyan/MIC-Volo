@@ -52,27 +52,18 @@ namespace ChessGame
         /// <returns>Return true if a letter convert to numbre and false when not convert</returns>
         public static int CharToInt(this char ch)
         {
-            switch (Char.ToLower(ch))
+            return Char.ToLower(ch) switch
             {
-                case 'a':
-                    return 0;
-                case 'b':
-                    return 1;
-                case 'c':
-                    return 2;
-                case 'd':
-                    return 3;
-                case 'e':
-                    return 4;
-                case 'f':
-                    return 5;
-                case 'g':
-                    return 6;
-                case 'h':
-                    return 7;
-                default:
-                    return 808;
-            }
+                'a' => 0,
+                'b' => 1,
+                'c' => 2,
+                'd' => 3,
+                'e' => 4,
+                'f' => 5,
+                'g' => 6,
+                'h' => 7,
+                _ => 808,
+            };
         }
 
         /// <summary>
@@ -84,12 +75,12 @@ namespace ChessGame
         {
             string result = str switch
             {
-                "Queen" => "Resources/White.Queen.png",
-                "King" => "Resources/White.King.png",
-                "Bishop" => "Resources/White.Bishop.png",
-                "Rook" => "Resources/White.Rook.png",
-                "Knight" => "Resources/White.Knight.png",
-                "Pawn" => "Resources/White.Pawn.png",
+                "Queen" => "Resources/Pictures/White.Queen.png",
+                "King" => "Resources/Pictures/White.King.png",
+                "Bishop" => "Resources/Pictures/White.Bishop.png",
+                "Rook" => "Resources/Pictures/White.Rook.png",
+                "Knight" => "Resources/Pictures/White.Knight.png",
+                "Pawn" => "Resources/Pictures/White.Pawn.png",
                 _ => ""
             };
             return result;
@@ -104,12 +95,12 @@ namespace ChessGame
         {
             string result = str switch
             {
-                "Queen" => "Resources/Black.Queen.png",
-                "King" => "Resources/Black.King.png",
-                "Bishop" => "Resources/Black.Bishop.png",
-                "Rook" => "Resources/Black.Rook.png",
-                "Knight" => "Resources/Black.Knight.png",
-                "Pawn" => "Resources/Black.Pawn.png",
+                "Queen" => "Resources/Pictures/Black.Queen.png",
+                "King" => "Resources/Pictures/Black.King.png",
+                "Bishop" => "Resources/Pictures/Black.Bishop.png",
+                "Rook" => "Resources/Pictures/Black.Rook.png",
+                "Knight" => "Resources/Pictures/Black.Knight.png",
+                "Pawn" => "Resources/Pictures/Black.Pawn.png",
                 _ => ""
             };
             return result;

@@ -326,17 +326,17 @@
                             <Border BorderThickness="1"  Grid.Column="4" Grid.Row="2"/>
 
                         </Grid>
-                        <TextBox x:Name="FirstUserName" HorizontalAlignment="Left" Margin="254,318,0,0" Text=" " TextWrapping="Wrap" VerticalAlignment="Top" Width="76" Height="28"/>
-                        <TextBox x:Name="SecondUserName" HorizontalAlignment="Left" Margin="256,355,0,0" Text=" " TextWrapping="Wrap" VerticalAlignment="Top" Width="75" Height="28"/>
+                        <TextBox x:Name="FirstUserName" HorizontalAlignment="Left" Margin="254,318,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="76" Height="28"/>
+                        <TextBox x:Name="SecondUserName" HorizontalAlignment="Left" Margin="254,355,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="76" Height="28"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header=" Pawn Change Window" Name="PawnChangePanel">
                     <Grid Background="#FFA8857D" Margin="2,2,2,2">
                         <Label Content="Please select a figure for changed" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Foreground="#FF440505"/>
-                        <Image Source="Resources/Black.Knight.png" Width="80" Margin="216,200,60,246"/>
-                        <Image Source="Resources/Black.Rook.png" Width="80" Margin="216,50,60,399"/>
-                        <Image Source="Resources/Black.Bishop.png" Width="80" Margin="33,200,248,246" />
-                        <Image Source="Resources/Black.Queen.png" Width="80" Margin="33,50,242,394" />
+                        <Image Source="Resources/Pictures/Black.Knight.png" Width="60" Margin="216,200,60,246"/>
+                        <Image Source="Resources/Pictures/Black.Rook.png" Width="60" Margin="216,50,60,399"/>
+                        <Image Source="Resources/Pictures/Black.Bishop.png" Width="60" Margin="30,200,248,246" />
+                        <Image Source="Resources/Pictures/Black.Queen.png" Width="60" Margin="30,50,242,394" />
                         <CheckBox Name="CheckQuuen" HorizontalAlignment="Left" Margin="61,130,0,0" VerticalAlignment="Top" FontSize="14"/>
                         <CheckBox Name="CheckKnight" HorizontalAlignment="Left" Margin="256,276,0,0" VerticalAlignment="Top" FontSize="14"/>
                         <CheckBox Name="CheckBishop" HorizontalAlignment="Left" Margin="60,276,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.406,-0.329"/>

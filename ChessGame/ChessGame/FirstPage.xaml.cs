@@ -16,7 +16,7 @@ namespace ChessGame
         {
             if (CheckKing.IsChecked == true)
             {
-                MainWindow.CurrentGameStatus = 1;
+                MainWindow.currentGameStatus = 1;
                 var mainWindow = new MainWindow();
                 mainWindow.ShowKingGamePanel();
                 mainWindow.Show();
@@ -24,7 +24,7 @@ namespace ChessGame
             }
             if (CheckKnight.IsChecked == true)
             {
-                MainWindow.CurrentGameStatus = 2;
+                MainWindow.currentGameStatus = 2;
                 var mainWindow = new MainWindow();
                 mainWindow.ShowKnightGamePanel();
                 mainWindow.Show();
@@ -32,7 +32,7 @@ namespace ChessGame
             }
             if (StandardGame.IsChecked == true)
             {
-                MainWindow.CurrentGameStatus = 3;
+                MainWindow.currentGameStatus = 3;
                 var mainWindow = new MainWindow();
                 mainWindow.ShowStandardGamePanel();
                 mainWindow.Show();

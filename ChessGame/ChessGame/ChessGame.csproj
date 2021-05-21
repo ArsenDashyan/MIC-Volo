@@ -31,20 +31,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Black.Bishop.png">
+    <Resource Include="Resources\Pictures\Black.Bishop.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Black.King.png" />
-    <Resource Include="Resources\Black.Knight.png" />
-    <Resource Include="Resources\Black.Pawn.png" />
-    <Resource Include="Resources\Black.Queen.png" />
-    <Resource Include="Resources\Black.Rook.png" />
-    <Resource Include="Resources\White.Bishop.png" />
-    <Resource Include="Resources\White.King.png" />
-    <Resource Include="Resources\White.Knight.png" />
-    <Resource Include="Resources\White.Pawn.png" />
-    <Resource Include="Resources\White.Queen.png" />
-    <Resource Include="Resources\White.Rook.png" />
+    <Resource Include="Resources\Pictures\Black.King.png" />
+    <Resource Include="Resources\Pictures\Black.Knight.png" />
+    <Resource Include="Resources\Pictures\Black.Pawn.png" />
+    <Resource Include="Resources\Pictures\Black.Queen.png" />
+    <Resource Include="Resources\Pictures\Black.Rook.png" />
+    <Resource Include="Resources\Pictures\White.Bishop.png" />
+    <Resource Include="Resources\Pictures\White.King.png" />
+    <Resource Include="Resources\Pictures\White.Knight.png" />
+    <Resource Include="Resources\Pictures\White.Pawn.png" />
+    <Resource Include="Resources\Pictures\White.Queen.png" />
+    <Resource Include="Resources\Pictures\White.Rook.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\Notes\" />
   </ItemGroup>
 
 </Project>
