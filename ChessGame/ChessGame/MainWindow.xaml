@@ -252,7 +252,7 @@
                 <TabItem Name="StandardGamePanel" Header="   Standard  Game   ">
                     <Grid Background="#FFA8857D" Margin="2,2,2,2">
 
-                        <Button Name="ResetStandardGame" Content="Reset" FontSize="14" FontWeight="Bold" Background="#FFDA1717" Margin="180,492,0,0" Click="ResetStandardGame_Click" HorizontalAlignment="Left" Width="145" Height="23" VerticalAlignment="Top">
+                        <Button Name="ResetStandardGame" Content="Reset" FontSize="14" FontWeight="Bold" Background="#FFDA1717" Margin="180,482,0,0" Click="ResetStandardGame_Click" HorizontalAlignment="Left" Width="146" Height="22" VerticalAlignment="Top">
                             <Button.Effect>
                                 <DropShadowEffect/>
                             </Button.Effect>
@@ -342,6 +342,20 @@
                         <CheckBox Name="CheckBishop" HorizontalAlignment="Left" Margin="60,276,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.406,-0.329"/>
                         <CheckBox Name="CheckRook" HorizontalAlignment="Left" Margin="247,130,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.406,-0.329"/>
                         <Button Name="ChangeBtn"  Content="Change" HorizontalAlignment="Left" Margin="133,332,0,0"  Width="82" Background="#FF876E6E" FontSize="14" FontWeight="Bold" Click="ChooseButton_Click" Height="34" VerticalAlignment="Top" />
+                    </Grid>
+                </TabItem>
+                <TabItem Header=" Choose Game" Name="StartGamePanel">
+                    <Grid Background="#FFA8857D" Margin="2">
+                        <ComboBox Name="GameTypeComboBox" HorizontalAlignment="Center" Margin="0,48,0,0" VerticalAlignment="Top" Width="294" Height="36">
+                            <ComboBoxItem Content="King Game"/>
+                            <ComboBoxItem Content="Knight Moves"/>
+                            <ComboBoxItem Content="Standard Game"/>
+                        </ComboBox>
+                        <Button Name="ChooseGameType" Click="ChooseGameType_Click" Content="Play" FontSize="16" Background="Bisque" HorizontalAlignment="Left" Margin="89,110,0,0" VerticalAlignment="Top" Width="150" Height="50"/>
+                        <Label Name="SomeGameLabel" Content="If do you want continue some game please sellect else turn play" FontSize="12" HorizontalAlignment="Center" Margin="0,228,0,0" VerticalAlignment="Top" Width="347" Height="40"/>
+                        <ComboBox Name="SomeGameComboBox" HorizontalAlignment="Center" Margin="0,300,0,0" VerticalAlignment="Top" Width="294" Height="36"/>
+                        <Button  Name="SomeGamePlay" Click="SomeGamePlay_Click" Content="Play" FontSize="16" Background="Bisque" HorizontalAlignment="Left" Margin="89,360,0,0" VerticalAlignment="Top" Width="150" Height="50"/>
+
                     </Grid>
                 </TabItem>
             </TabControl>

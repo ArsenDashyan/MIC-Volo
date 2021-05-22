@@ -24,7 +24,7 @@ namespace ChessGame
         private CancellationTokenSource _cancellationTokenSource;
         private CancellationToken _cancellationToken;
         public GameManagment gameManagment;
-        public static int currentGameStatus;
+        public int currentGameStatus;
         public string currentFigureColor;
         private string _startCoordinate;
         private bool _colorPower = false;
@@ -41,6 +41,7 @@ namespace ChessGame
         {
             InitializeComponent();
             InitializeGameManagment();
+            ShowPanels();
         }
 
         #region Methods for Events
@@ -592,6 +593,7 @@ namespace ChessGame
             KingGamePanel.Visibility = Visibility.Collapsed;
             KnightMovesPanel.Visibility = Visibility.Collapsed;
             PawnChangePanel.Visibility = Visibility.Collapsed;
+            StartGamePanel.Visibility = Visibility.Collapsed;
             PlayForStandard.Visibility = Visibility.Visible;
             PlayColorBlackStandard.Visibility = Visibility.Visible;
             PlayColorWhiteStandard.Visibility = Visibility.Visible;
@@ -613,6 +615,7 @@ namespace ChessGame
             StandardGamePanel.Visibility = Visibility.Collapsed;
             PawnChangePanel.Visibility = Visibility.Collapsed;
             KingGamePanel.Visibility = Visibility.Collapsed;
+            StartGamePanel.Visibility = Visibility.Collapsed;
             InputCoordinatsLetter_Corrent.IsEnabled = true;
             InputCoordinatsNumber_Corrent.IsEnabled = true;
             InputCoordinatsLetter_Selected.IsEnabled = true;
@@ -626,6 +629,7 @@ namespace ChessGame
             StandardGamePanel.Visibility = Visibility.Collapsed;
             KnightMovesPanel.Visibility = Visibility.Collapsed;
             PawnChangePanel.Visibility = Visibility.Collapsed;
+            StartGamePanel.Visibility = Visibility.Collapsed;
             PlayB2.IsEnabled = true;
             CheckBlack.IsEnabled = true;
             CheckWhite.IsEnabled = true;
@@ -641,6 +645,61 @@ namespace ChessGame
             InputCoordinatsNumber_Selected.IsEnabled = false;
             InstalB3.IsEnabled = false;
         }
+
+        public void ShowPanels()
+        {
+            PanelForGame.SelectedIndex = 4;
+            KingGamePanel.Visibility = Visibility.Collapsed;
+            StandardGamePanel.Visibility = Visibility.Collapsed;
+            KnightMovesPanel.Visibility = Visibility.Collapsed;
+            PawnChangePanel.Visibility = Visibility.Collapsed;
+            SomeGameLabel.Visibility = Visibility.Hidden;
+            SomeGameComboBox.Visibility = Visibility.Hidden;
+            SomeGamePlay.Visibility = Visibility.Hidden;
+        }
+        private void ChooseGameType_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                switch (GameTypeComboBox.Text)
+                {
+                    case "King Game":
+                        currentGameStatus = 1;
+                        ShowKingGamePanel();
+                        break;
+                    case "Knight Moves":
+                        currentGameStatus = 2;
+                        ShowKnightGamePanel();
+                        break;
+                    case "Standard Game":
+                        currentGameStatus = 3;
+                        SomeGameLabel.Visibility = Visibility.Visible;
+                        SomeGameComboBox.Visibility = Visibility.Visible;
+                        SomeGamePlay.Visibility = Visibility.Visible;
+                        GameTypeComboBox.Visibility = Visibility.Hidden;
+                        ChooseGameType.Visibility = Visibility.Hidden;
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("You don't choose game type");
+            }
+        }
+
+        private void SomeGamePlay_Click(object sender, RoutedEventArgs e)
+        {
+            if (SomeGameComboBox.Text == string.Empty)
+            {
+                ShowStandardGamePanel();
+            }
+            else
+            {
+
+            }
+
+        }
+
         #endregion
 
         #region Standard Game
@@ -772,5 +831,7 @@ namespace ChessGame
             return list.Where(c => c != (int.Parse(temp2[0]), int.Parse(temp2[1]))).ToList();
         }
         #endregion
+
+        
     }
 }
