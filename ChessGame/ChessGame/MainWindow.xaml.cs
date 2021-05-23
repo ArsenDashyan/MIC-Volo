@@ -32,15 +32,12 @@ namespace ChessGame
         private int _jBlack = 0;
         private int _iWhite = 0;
         private int _jWhite = 0;
-        private static string _gameStory;
-        private static string _names;
 
         #endregion
 
         public MainWindow()
         {
             InitializeComponent();
-            InitializeGameManagment();
             ShowPanels();
         }
 
@@ -447,7 +444,7 @@ namespace ChessGame
             {
                 if (item is Image image1)
                 {
-                    if (name == image1.Tag.ToString())
+                    if (image1.Tag.ToString().Contains(name))
                     {
                         grid.Children.Remove(image1);
                         break;
@@ -485,14 +482,10 @@ namespace ChessGame
         }
         private void ResetStandardGame_Click(object sender, RoutedEventArgs e)
         {
-            _gameStory = MovesTextBoxStandard.Text;
-            AddGameStoryWithNote(_names);
-            _names = string.Empty;
-            _gameStory = string.Empty;
+            AddGameStoryWithNote();
             ResetBoard(currentGameStatus);
             ResetDeleteBoard();
             ShowStandardGamePanel();
-            gameManagment.SetAllFigures();
             currentGameStatus = 3;
             MessageBox.Show("You Change A Standard Game, Good Luck");
         }
@@ -587,7 +580,6 @@ namespace ChessGame
         }
         public void ShowStandardGamePanel()
         {
-            gameManagment.SetAllFigures();
             StandardGamePanel.Visibility = Visibility.Visible;
             PanelForGame.SelectedIndex = 2;
             KingGamePanel.Visibility = Visibility.Collapsed;
@@ -604,9 +596,10 @@ namespace ChessGame
             InputCoordinatsLetter_Selected.IsEnabled = true;
             InputCoordinatsNumber_Selected.IsEnabled = true;
             InstalB3.IsEnabled = true;
-            MovesTextBoxStandard.Text = " ";
+            MovesTextBoxStandard.Text = "";
             FirstUserName.Text = " ";
             SecondUserName.Text = " ";
+            gameManagment.SetAllFigures();
         }
         public void ShowKnightGamePanel()
         {
@@ -645,7 +638,6 @@ namespace ChessGame
             InputCoordinatsNumber_Selected.IsEnabled = false;
             InstalB3.IsEnabled = false;
         }
-
         public void ShowPanels()
         {
             PanelForGame.SelectedIndex = 4;
@@ -666,15 +658,18 @@ namespace ChessGame
                     case "King Game":
                         currentGameStatus = 1;
                         ShowKingGamePanel();
+                        InitializeGameManagment();
                         break;
                     case "Knight Moves":
                         currentGameStatus = 2;
                         ShowKnightGamePanel();
+                        InitializeGameManagment();
                         break;
                     case "Standard Game":
                         currentGameStatus = 3;
                         SomeGameLabel.Visibility = Visibility.Visible;
                         SomeGameComboBox.Visibility = Visibility.Visible;
+                        GetItemsComboBox();
                         SomeGamePlay.Visibility = Visibility.Visible;
                         GameTypeComboBox.Visibility = Visibility.Hidden;
                         ChooseGameType.Visibility = Visibility.Hidden;
@@ -686,16 +681,42 @@ namespace ChessGame
                 MessageBox.Show("You don't choose game type");
             }
         }
-
+        public void GetItemsComboBox()
+        {
+            using (ChessGDBContext context = new ChessGDBContext())
+            {
+                var list = context.UserDetails.ToList();
+                foreach (var item in list)
+                {
+                    SomeGameComboBox.Items.Add($"{item.Name} - {item.Opponent}");
+                }
+            }
+        }
         private void SomeGamePlay_Click(object sender, RoutedEventArgs e)
         {
+
             if (SomeGameComboBox.Text == string.Empty)
             {
+                InitializeGameManagment();
                 ShowStandardGamePanel();
             }
-            else
+            else if (SomeGameComboBox.IsTextSearchEnabled)
             {
-
+                string json;
+                using (ChessGDBContext context = new ChessGDBContext())
+                {
+                    var list = context.UserDetails.ToList();
+                    var gameList = context.GameDetails.ToList();
+                    var user = list.Where(u => $"{u.Name} - {u.Opponent}" == SomeGameComboBox.SelectedItem.ToString());
+                    var tempUser = (UserDetail)user;
+                    var game = gameList.Where(g => g.GameId == tempUser.Id);
+                    var tempGame = (GameDetail)game;
+                    json = tempGame.GameCondition;
+                    MovesTextBoxStandard.Text = tempGame.GameStory;
+                }
+                InitializeGameManagment();
+                ShowStandardGamePanel();
+                // gameManagment.SetAllFigures();
             }
 
         }
@@ -741,12 +762,12 @@ namespace ChessGame
                     currentFigureColor = "Black";
                     _colorPower = true;
                 }
-                _names = $"{FirstUserName.Text}{SecondUserName.Text}";
                 PlayForStandard.Visibility = Visibility.Hidden;
                 PlayColorBlackStandard.Visibility = Visibility.Hidden;
                 PlayColorWhiteStandard.Visibility = Visibility.Hidden;
                 FirstUserName.Visibility = Visibility.Hidden;
                 SecondUserName.Visibility = Visibility.Hidden;
+                InitializeGameManagment();
                 MessageBox.Show("Good Luck!!!");
             }
             catch (Exception)
@@ -783,16 +804,26 @@ namespace ChessGame
             PawnChangePanel.Visibility = Visibility.Collapsed;
             PanelForGame.SelectedIndex = 2;
         }
-        public static void AddGameStoryWithNote(string name)
+        public void AddGameStoryWithNote()
         {
-            string info = $"{name}:{DateTime.Now}" + "\n\n" + _gameStory;
-            if (!File.Exists($"{name}.txt"))
+            using (ChessGDBContext context = new ChessGDBContext())
             {
-                File.Create($"{name}.txt").Close();
-                File.WriteAllText($"{name}.txt", info);
+                GameDetail gameDetail = new GameDetail()
+                {
+                    GameCondition = GameManagment.GetAllFiguresForSave(),
+                    GameStory = MovesTextBoxStandard.Text,
+                    DateTime = DateTime.Now,
+                };
+                UserDetail user = new UserDetail()
+                {
+                    Name = FirstUserName.Text.ToLower(),
+                    Opponent = SecondUserName.Text.ToLower(),
+                    GameDetail = gameDetail
+                };
+                context.UserDetails.Add(user);
+                context.GameDetails.Add(gameDetail);
+                context.SaveChanges();
             }
-            else
-                File.AppendAllText($"{name}.txt", "\n" + info);
         }
         private void GetColoredCells(List<string> list)
         {
@@ -831,7 +862,5 @@ namespace ChessGame
             return list.Where(c => c != (int.Parse(temp2[0]), int.Parse(temp2[1]))).ToList();
         }
         #endregion
-
-        
     }
 }

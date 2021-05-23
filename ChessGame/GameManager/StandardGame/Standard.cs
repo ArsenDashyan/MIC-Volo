@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 
 namespace GameManager
 {
@@ -252,6 +253,21 @@ namespace GameManager
             else
                 positions = null;
             return positions;
+        }
+        public static string GetNamesForSave()
+        {
+            var positions = new List<string>();
+            if (_models.Count != 0)
+            {
+                foreach (var item in _models)
+                {
+                    positions.Add(item.Name + '.' + item.Coordinate);
+                }
+            }
+            else
+                positions = null;
+            var json = JsonSerializer.Serialize(positions);
+            return json;
         }
 
         /// <summary>

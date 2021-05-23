@@ -103,6 +103,7 @@ namespace GameManager
                 _ => null,
             };
         }
+        public static string GetAllFiguresForSave() => Standard.GetNamesForSave();
 
         #region Knight Game
         public void CreateStartKnight(string coordinate)
