@@ -482,7 +482,6 @@ namespace ChessGame
         }
         private void ResetStandardGame_Click(object sender, RoutedEventArgs e)
         {
-            AddGameStoryWithNote();
             ResetBoard(currentGameStatus);
             ResetDeleteBoard();
             ShowStandardGamePanel();
@@ -600,10 +599,8 @@ namespace ChessGame
             InputCoordinatsLetter_Selected.IsEnabled = true;
             InputCoordinatsNumber_Selected.IsEnabled = true;
             InstalB3.IsEnabled = true;
-            
             FirstUserName.Text = " ";
             SecondUserName.Text = " ";
-            
         }
         public void ShowKnightGamePanel()
         {
@@ -708,7 +705,7 @@ namespace ChessGame
             else if (SomeGameComboBox.IsTextSearchEnabled)
             {
                 string json = string.Empty;
-                using (ChessGDBContext context = new ChessGDBContext())
+                using (var context = new ChessGDBContext())
                 {
                     var list = context.UserDetails.ToList();
                     var gameList = context.GameDetails.ToList();
@@ -731,13 +728,12 @@ namespace ChessGame
                     //var tempUser = (UserDetail)user;
                     //var game = gameList.Where(g => g.GameId == tempUser.Id);
                     //var tempGame = (GameDetail)game;
-                    
+
                 }
                 InitializeGameManagment();
                 ShowStandardGamePanel();
                 gameManagment.SetConditionFigures(json);
             }
-
         }
 
         #endregion
@@ -825,23 +821,22 @@ namespace ChessGame
         }
         public void AddGameStoryWithNote()
         {
-            using (ChessGDBContext context = new ChessGDBContext())
+            using (var context = new ChessGDBContext())
             {
-                GameDetail gameDetail = new GameDetail()
+                var list = context.UserDetails.ToList();
+                var gameDetail = new GameDetail()
                 {
                     GameCondition = GameManagment.GetAllFiguresForSave(),
                     GameStory = MovesTextBoxStandard.Text,
                     DateTime = DateTime.Now,
-                    GameId = 3
                 };
-                UserDetail user = new UserDetail()
+                var user = new UserDetail()
                 {
                     Name = FirstUserName.Text.ToLower(),
                     Opponent = SecondUserName.Text.ToLower(),
                     GameDetail = gameDetail,
-                    Id = 3
+                    Id = list.Count + 1
                 };
-                context.RemoveRange();
                 context.UserDetails.Add(user);
                 context.GameDetails.Add(gameDetail);
                 context.SaveChanges();
@@ -882,6 +877,24 @@ namespace ChessGame
             }
             var temp2 = this._startCoordinate.Split('.');
             return list.Where(c => c != (int.Parse(temp2[0]), int.Parse(temp2[1]))).ToList();
+        }
+        protected override void OnClosed(EventArgs e)
+        {
+            if (currentGameStatus == 3)
+            {
+                var result = MessageBox.Show("Saved the current game?",
+                                "Message",
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Information);
+                if (result == MessageBoxResult.Yes)
+                {
+                    AddGameStoryWithNote();
+                }
+                else
+                {
+                    base.OnClosed(e);
+                }
+            }
         }
         #endregion
     }
