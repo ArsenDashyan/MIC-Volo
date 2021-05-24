@@ -124,5 +124,55 @@ namespace GameManager
 
             }
         }
+
+        public static FColor StringToEnum(this string color)
+        {
+            switch (color)
+            {
+                case "White":
+                    return FColor.White;
+                case "Black":
+                    return FColor.Black;
+                default:
+                    return FColor.Black;
+            }
+        }
+
+        public static CoordinatePoint StringToCoordinatPoint(this string coordinate)
+        {
+            var temp = coordinate.Split('.');
+            int number;
+            switch (temp[0])
+            {
+                case "a":
+                    number = 0;
+                    break;
+                case "b":
+                    number = 1;
+                    break;
+                case "c":
+                    number = 2;
+                    break;
+                case "d":
+                    number = 3;
+                    break;
+                case "e":
+                    number = 4;
+                    break;
+                case "f":
+                    number = 5;
+                    break;
+                case "g":
+                    number = 6;
+                    break;
+                case "h":
+                    number = 7;
+                    break;
+                default:
+                    number = 808;
+                    break;
+            }
+            return new CoordinatePoint(number, int.Parse(temp[1])-1);
+        }
     }
 }

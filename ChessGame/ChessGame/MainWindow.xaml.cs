@@ -486,6 +486,8 @@ namespace ChessGame
             ResetBoard(currentGameStatus);
             ResetDeleteBoard();
             ShowStandardGamePanel();
+            gameManagment.SetAllFigures();
+            MovesTextBoxStandard.Text = "";
             currentGameStatus = 3;
             MessageBox.Show("You Change A Standard Game, Good Luck");
         }
@@ -575,6 +577,8 @@ namespace ChessGame
         {
             ResetBoard(currentGameStatus);
             ShowStandardGamePanel();
+            gameManagment.SetAllFigures();
+            MovesTextBoxStandard.Text = "";
             currentGameStatus = 3;
             MessageBox.Show("You Change A Standard Game, Good Luck");
         }
@@ -596,10 +600,10 @@ namespace ChessGame
             InputCoordinatsLetter_Selected.IsEnabled = true;
             InputCoordinatsNumber_Selected.IsEnabled = true;
             InstalB3.IsEnabled = true;
-            MovesTextBoxStandard.Text = "";
+            
             FirstUserName.Text = " ";
             SecondUserName.Text = " ";
-            gameManagment.SetAllFigures();
+            
         }
         public void ShowKnightGamePanel()
         {
@@ -694,29 +698,44 @@ namespace ChessGame
         }
         private void SomeGamePlay_Click(object sender, RoutedEventArgs e)
         {
-
             if (SomeGameComboBox.Text == string.Empty)
             {
                 InitializeGameManagment();
                 ShowStandardGamePanel();
+                gameManagment.SetAllFigures();
+                MovesTextBoxStandard.Text = "";
             }
             else if (SomeGameComboBox.IsTextSearchEnabled)
             {
-                string json;
+                string json = string.Empty;
                 using (ChessGDBContext context = new ChessGDBContext())
                 {
                     var list = context.UserDetails.ToList();
                     var gameList = context.GameDetails.ToList();
-                    var user = list.Where(u => $"{u.Name} - {u.Opponent}" == SomeGameComboBox.SelectedItem.ToString());
-                    var tempUser = (UserDetail)user;
-                    var game = gameList.Where(g => g.GameId == tempUser.Id);
-                    var tempGame = (GameDetail)game;
-                    json = tempGame.GameCondition;
-                    MovesTextBoxStandard.Text = tempGame.GameStory;
+                    foreach (var item in list)
+                    {
+                        if ($"{item.Name} - {item.Opponent}" == SomeGameComboBox.SelectedItem.ToString())
+                        {
+                            foreach (var game in gameList)
+                            {
+                                if (game.GameId == item.Id)
+                                {
+                                    json = game.GameCondition;
+                                    MovesTextBoxStandard.Text = game.GameStory;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    //var user = list.Where(u => $"{u.Name} - {u.Opponent}" == SomeGameComboBox.SelectedItem.ToString());
+                    //var tempUser = (UserDetail)user;
+                    //var game = gameList.Where(g => g.GameId == tempUser.Id);
+                    //var tempGame = (GameDetail)game;
+                    
                 }
                 InitializeGameManagment();
                 ShowStandardGamePanel();
-                // gameManagment.SetAllFigures();
+                gameManagment.SetConditionFigures(json);
             }
 
         }
@@ -813,13 +832,16 @@ namespace ChessGame
                     GameCondition = GameManagment.GetAllFiguresForSave(),
                     GameStory = MovesTextBoxStandard.Text,
                     DateTime = DateTime.Now,
+                    GameId = 3
                 };
                 UserDetail user = new UserDetail()
                 {
                     Name = FirstUserName.Text.ToLower(),
                     Opponent = SecondUserName.Text.ToLower(),
-                    GameDetail = gameDetail
+                    GameDetail = gameDetail,
+                    Id = 3
                 };
+                context.RemoveRange();
                 context.UserDetails.Add(user);
                 context.GameDetails.Add(gameDetail);
                 context.SaveChanges();

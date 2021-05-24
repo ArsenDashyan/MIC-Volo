@@ -105,6 +105,7 @@ namespace GameManager
         }
         public static string GetAllFiguresForSave() => Standard.GetNamesForSave();
 
+        public void SetConditionFigures(string json) => _standard.SetConditionFigures(json);
         #region Knight Game
         public void CreateStartKnight(string coordinate)
         {

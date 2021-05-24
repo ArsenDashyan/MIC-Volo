@@ -1,4 +1,5 @@
 ﻿using Figure;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -235,6 +236,39 @@ namespace GameManager
             }
         }
 
+        public void SetConditionFigures(string json)
+        {
+            var conditionList = JsonConvert.DeserializeObject<List<string>>(json);
+            foreach (var tempItem in conditionList)
+            {
+                var figureInfo = tempItem.Split('|');
+                var figureName = figureInfo[1].Split('.');
+                var item = GetBaseFigure(tempItem);
+                item.SetFigurePicture += SetFigurePicture;
+                item.RemovePicture += RemoveFigurePicture;
+                item.MessageForMove += MessageMove;
+                if (item is King king)
+                    king.MessageCheck += MessageChek;
+                item.SetFigurePosition(figureInfo[1].StringToCoordinatPoint());
+            }
+        }
+
+        public BaseFigure GetBaseFigure(string info)
+        {
+            var figureInfo = info.Split('|');
+            var figureName = figureInfo[0].Split('.');
+            return figureName[0] switch
+            {
+                "Queen" => new Queen(figureInfo[0], figureName[1].StringToEnum()),
+                "King" => new King(figureInfo[0], figureName[1].StringToEnum()),
+                "Rook" => new Rook(figureInfo[0], figureName[1].StringToEnum()),
+                "Bishop" => new Bishop(figureInfo[0], figureName[1].StringToEnum()),
+                "Knight" => new Knight(figureInfo[0], figureName[1].StringToEnum()),
+                "Pawn" => new Pawn(figureInfo[0], figureName[1].StringToEnum()),
+                _ => null,
+            };
+        }
+
         /// <summary>
         /// Get all figures names for reset bord
         /// </summary>
@@ -261,12 +295,12 @@ namespace GameManager
             {
                 foreach (var item in _models)
                 {
-                    positions.Add(item.Name + '.' + item.Coordinate);
+                    positions.Add(item.Name + '|' + item.Coordinate);
                 }
             }
             else
                 positions = null;
-            var json = JsonSerializer.Serialize(positions);
+            var json = System.Text.Json.JsonSerializer.Serialize(positions);
             return json;
         }
 
