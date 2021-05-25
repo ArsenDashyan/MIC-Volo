@@ -648,6 +648,8 @@ namespace ChessGame
             PawnChangePanel.Visibility = Visibility.Collapsed;
             SomeGameLabel.Visibility = Visibility.Hidden;
             SomeGameComboBox.Visibility = Visibility.Hidden;
+            DateTimeComboBox.Visibility = Visibility.Hidden;
+            CheckUsers.Visibility = Visibility.Hidden;
             SomeGamePlay.Visibility = Visibility.Hidden;
         }
         private void ChooseGameType_Click(object sender, RoutedEventArgs e)
@@ -670,8 +672,8 @@ namespace ChessGame
                         currentGameStatus = 3;
                         SomeGameLabel.Visibility = Visibility.Visible;
                         SomeGameComboBox.Visibility = Visibility.Visible;
-                        GetItemsComboBox();
-                        SomeGamePlay.Visibility = Visibility.Visible;
+                        GetItemsSomeGameComboBox();
+                        CheckUsers.Visibility = Visibility.Visible;
                         GameTypeComboBox.Visibility = Visibility.Hidden;
                         ChooseGameType.Visibility = Visibility.Hidden;
                         break;
@@ -682,14 +684,33 @@ namespace ChessGame
                 MessageBox.Show("You don't choose game type");
             }
         }
-        public void GetItemsComboBox()
+        public void GetItemsSomeGameComboBox()
         {
-            using (ChessGDBContext context = new ChessGDBContext())
+            using (ChessDBContext context = new ChessDBContext())
             {
-                var list = context.UserDetails.ToList();
+                var list = context.Users.ToList();
                 foreach (var item in list)
                 {
                     SomeGameComboBox.Items.Add($"{item.Name} - {item.Opponent}");
+                }
+            }
+        }
+        public void GetItemsCheckUsersComboBox()
+        {
+            var result = SomeGameComboBox.Text.Split('-');
+            using (ChessDBContext context = new ChessDBContext())
+            {
+                var userList = context.Users.ToList();
+                var gameList = context.Games.ToList();
+                if (userList.Filtr(u => result[0].Contains(u.Name) && result[1].Contains(u.Opponent), out User resultUser))
+                {
+                    foreach (var item in gameList)
+                    {
+                        if (item.UserId == resultUser.Id)
+                        {
+                            DateTimeComboBox.Items.Add($"{item.DateTime}");
+                        }
+                    }
                 }
             }
         }
@@ -702,33 +723,17 @@ namespace ChessGame
                 gameManagment.SetAllFigures();
                 MovesTextBoxStandard.Text = "";
             }
-            else if (SomeGameComboBox.IsTextSearchEnabled)
+            else if (DateTimeComboBox.IsTextSearchEnabled)
             {
                 string json = string.Empty;
-                using (var context = new ChessGDBContext())
+                using (var context = new ChessDBContext())
                 {
-                    var list = context.UserDetails.ToList();
-                    var gameList = context.GameDetails.ToList();
-                    foreach (var item in list)
+                    var gameList = context.Games.ToList();
+                    if(gameList.Filtr(g=> $"{g.DateTime}" == DateTimeComboBox.SelectedItem.ToString(), out Game game))
                     {
-                        if ($"{item.Name} - {item.Opponent}" == SomeGameComboBox.SelectedItem.ToString())
-                        {
-                            foreach (var game in gameList)
-                            {
-                                if (game.GameId == item.Id)
-                                {
-                                    json = game.GameCondition;
-                                    MovesTextBoxStandard.Text = game.GameStory;
-                                    break;
-                                }
-                            }
-                        }
+                        json = game.GameCondition;
+                        MovesTextBoxStandard.Text = game.GameStory;
                     }
-                    //var user = list.Where(u => $"{u.Name} - {u.Opponent}" == SomeGameComboBox.SelectedItem.ToString());
-                    //var tempUser = (UserDetail)user;
-                    //var game = gameList.Where(g => g.GameId == tempUser.Id);
-                    //var tempGame = (GameDetail)game;
-
                 }
                 InitializeGameManagment();
                 ShowStandardGamePanel();
@@ -821,25 +826,34 @@ namespace ChessGame
         }
         public void AddGameStoryWithNote()
         {
-            using (var context = new ChessGDBContext())
+            using (var context = new ChessDBContext())
             {
-                var list = context.UserDetails.ToList();
-                var gameDetail = new GameDetail()
+                var userList = context.Users.ToList();
+                var user = new User()
+                {
+                    Name = FirstUserName.Text.ToLower(),
+                    Opponent = SecondUserName.Text.ToLower(),
+                };
+                var gameDetail = new Game()
                 {
                     GameCondition = GameManagment.GetAllFiguresForSave(),
                     GameStory = MovesTextBoxStandard.Text,
                     DateTime = DateTime.Now,
                 };
-                var user = new UserDetail()
+                if (userList.Filtr(u => u.Name == user.Name && u.Opponent == user.Opponent, out User resultUser))
                 {
-                    Name = FirstUserName.Text.ToLower(),
-                    Opponent = SecondUserName.Text.ToLower(),
-                    GameDetail = gameDetail,
-                    Id = list.Count + 1
-                };
-                context.UserDetails.Add(user);
-                context.GameDetails.Add(gameDetail);
-                context.SaveChanges();
+                    gameDetail.UserId = resultUser.Id;
+                    context.Games.Add(gameDetail);
+                    context.SaveChanges();
+                }
+                else
+                {
+                    context.Users.Add(user);
+                    context.SaveChanges();
+                    gameDetail.UserId = user.Id;
+                    context.Games.Add(gameDetail);
+                    context.SaveChanges();
+                }
             }
         }
         private void GetColoredCells(List<string> list)
@@ -897,5 +911,11 @@ namespace ChessGame
             }
         }
         #endregion
+        private void CheckUsers_Click(object sender, RoutedEventArgs e)
+        {
+            DateTimeComboBox.Visibility = Visibility.Visible;
+            SomeGamePlay.Visibility = Visibility.Visible;
+            GetItemsCheckUsersComboBox();
+        }
     }
 }

@@ -235,7 +235,6 @@ namespace GameManager
                 }
             }
         }
-
         public void SetConditionFigures(string json)
         {
             var conditionList = JsonConvert.DeserializeObject<List<string>>(json);
@@ -247,12 +246,12 @@ namespace GameManager
                 item.SetFigurePicture += SetFigurePicture;
                 item.RemovePicture += RemoveFigurePicture;
                 item.MessageForMove += MessageMove;
+                _models.Add(item);
                 if (item is King king)
                     king.MessageCheck += MessageChek;
                 item.SetFigurePosition(figureInfo[1].StringToCoordinatPoint());
             }
         }
-
         public BaseFigure GetBaseFigure(string info)
         {
             var figureInfo = info.Split('|');

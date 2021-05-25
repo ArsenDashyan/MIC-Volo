@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ChessGame
 {
@@ -104,6 +105,27 @@ namespace ChessGame
                 _ => ""
             };
             return result;
+        }
+
+        /// <summary>
+        /// Universal filtr method for IEnumerable collections
+        /// </summary>
+        /// <typeparam name="T">Type for collectios</typeparam>
+        /// <param name="list">Collections name</param>
+        /// <param name="func">Funcon for filtr</param>
+        /// <returns></returns>
+        public static bool Filtr<T>(this IEnumerable<T> list, Func<T, bool> func, out T temp)
+        {
+            foreach (var item in list)
+            {
+                if (func(item))
+                {
+                    temp = item;
+                    return true;
+                }
+            }
+            temp = default;
+            return false;
         }
     }
 }

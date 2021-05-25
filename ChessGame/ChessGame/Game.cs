@@ -5,13 +5,14 @@ using System.Collections.Generic;
 
 namespace ChessGame
 {
-    public partial class GameDetail
+    public partial class Game
     {
-        public int GameId { get; set; }
+        public int Id { get; set; }
         public string GameCondition { get; set; }
         public string GameStory { get; set; }
-        public DateTime DateTime { get; set; }
+        public int UserId { get; set; }
+        public DateTime? DateTime { get; set; }
 
-        public virtual UserDetail Game { get; set; }
+        public virtual User User { get; set; }
     }
 }

@@ -6,26 +6,26 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ChessGame
 {
-    public partial class ChessGDBContext : DbContext
+    public partial class ChessDBContext : DbContext
     {
-        public ChessGDBContext()
+        public ChessDBContext()
         {
         }
 
-        public ChessGDBContext(DbContextOptions<ChessGDBContext> options)
+        public ChessDBContext(DbContextOptions<ChessDBContext> options)
             : base(options)
         {
         }
 
-        public virtual DbSet<GameDetail> GameDetails { get; set; }
-        public virtual DbSet<UserDetail> UserDetails { get; set; }
+        public virtual DbSet<Game> Games { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb; Database=ChessGDB; Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-4FGA99L\\sqlexpress; Database=ChessDB; Trusted_Connection=True;");
             }
         }
 
@@ -33,28 +33,24 @@ namespace ChessGame
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            modelBuilder.Entity<GameDetail>(entity =>
+            modelBuilder.Entity<Game>(entity =>
             {
-                entity.HasKey(e => e.GameId);
-
-                entity.Property(e => e.GameId).ValueGeneratedNever();
-
                 entity.Property(e => e.DateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.GameCondition).IsRequired();
 
                 entity.Property(e => e.GameStory).IsRequired();
 
-                entity.HasOne(d => d.Game)
-                    .WithOne(p => p.GameDetail)
-                    .HasForeignKey<GameDetail>(d => d.GameId)
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Games)
+                    .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_GameDetails_UserDetails");
+                    .HasConstraintName("FK_Games_User");
             });
 
-            modelBuilder.Entity<UserDetail>(entity =>
+            modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.ToTable("User");
 
                 entity.Property(e => e.Name)
                     .IsRequired()

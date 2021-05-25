@@ -353,8 +353,10 @@
                         </ComboBox>
                         <Button Name="ChooseGameType" Click="ChooseGameType_Click" Content="Play" FontSize="16" Background="Bisque" HorizontalAlignment="Left" Margin="89,110,0,0" VerticalAlignment="Top" Width="150" Height="50"/>
                         <Label Name="SomeGameLabel" Content="If do you want continue some game please sellect else turn play" FontSize="12" HorizontalAlignment="Center" Margin="0,228,0,0" VerticalAlignment="Top" Width="347" Height="40"/>
-                        <ComboBox Name="SomeGameComboBox" HorizontalAlignment="Center" Margin="0,300,0,0" VerticalAlignment="Top" Width="294" Height="36"/>
-                        <Button  Name="SomeGamePlay" Click="SomeGamePlay_Click" Content="Play" FontSize="16" Background="Bisque" HorizontalAlignment="Left" Margin="89,360,0,0" VerticalAlignment="Top" Width="150" Height="50"/>
+                        <ComboBox Name="SomeGameComboBox" HorizontalAlignment="Right" Margin="0,300,31,0" VerticalAlignment="Top" Width="294" Height="36"/>
+                        <Button  Name="SomeGamePlay" Click="SomeGamePlay_Click" Content="Play" FontSize="16" Background="Bisque" HorizontalAlignment="Left" Margin="89,453,0,0" VerticalAlignment="Top" Width="150" Height="50"/>
+                        <ComboBox Name="DateTimeComboBox" HorizontalAlignment="Right" Margin="0,390,31,0" VerticalAlignment="Top" Width="294" Height="36"/>
+                        <Button Name="CheckUsers" Click="CheckUsers_Click" Content="Check" FontSize="14" Background="Bisque" HorizontalAlignment="Left" Margin="113,346,0,0" VerticalAlignment="Top" Width="104" Height="29"/>
 
                     </Grid>
                 </TabItem>

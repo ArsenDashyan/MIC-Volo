@@ -5,12 +5,17 @@ using System.Collections.Generic;
 
 namespace ChessGame
 {
-    public partial class UserDetail
+    public partial class User
     {
+        public User()
+        {
+            Games = new HashSet<Game>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Opponent { get; set; }
 
-        public virtual GameDetail GameDetail { get; set; }
+        public virtual ICollection<Game> Games { get; set; }
     }
 }
