@@ -647,6 +647,7 @@ namespace ChessGame
             KnightMovesPanel.Visibility = Visibility.Collapsed;
             PawnChangePanel.Visibility = Visibility.Collapsed;
             SomeGameLabel.Visibility = Visibility.Hidden;
+            SomeGameLabel2.Visibility = Visibility.Hidden;
             SomeGameComboBox.Visibility = Visibility.Hidden;
             DateTimeComboBox.Visibility = Visibility.Hidden;
             CheckUsers.Visibility = Visibility.Hidden;
@@ -671,11 +672,13 @@ namespace ChessGame
                     case "Standard Game":
                         currentGameStatus = 3;
                         SomeGameLabel.Visibility = Visibility.Visible;
+                        SomeGameLabel2.Visibility = Visibility.Visible;
                         SomeGameComboBox.Visibility = Visibility.Visible;
                         GetItemsSomeGameComboBox();
                         CheckUsers.Visibility = Visibility.Visible;
                         GameTypeComboBox.Visibility = Visibility.Hidden;
                         ChooseGameType.Visibility = Visibility.Hidden;
+                        SomeGamePlay.Visibility = Visibility.Visible;
                         break;
                 }
             }
@@ -729,7 +732,7 @@ namespace ChessGame
                 using (var context = new ChessDBContext())
                 {
                     var gameList = context.Games.ToList();
-                    if(gameList.Filtr(g=> $"{g.DateTime}" == DateTimeComboBox.SelectedItem.ToString(), out Game game))
+                    if (gameList.Filtr(g => $"{g.DateTime}" == DateTimeComboBox.SelectedItem.ToString(), out Game game))
                     {
                         json = game.GameCondition;
                         MovesTextBoxStandard.Text = game.GameStory;
@@ -910,12 +913,13 @@ namespace ChessGame
                 }
             }
         }
-        #endregion
         private void CheckUsers_Click(object sender, RoutedEventArgs e)
         {
             DateTimeComboBox.Visibility = Visibility.Visible;
             SomeGamePlay.Visibility = Visibility.Visible;
             GetItemsCheckUsersComboBox();
         }
+
+        #endregion
     }
 }

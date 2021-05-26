@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 
 namespace GameManager
 {
@@ -241,18 +240,19 @@ namespace GameManager
             foreach (var tempItem in conditionList)
             {
                 var figureInfo = tempItem.Split('|');
-                var figureName = figureInfo[1].Split('.');
                 var item = GetBaseFigure(tempItem);
                 item.SetFigurePicture += SetFigurePicture;
                 item.RemovePicture += RemoveFigurePicture;
                 item.MessageForMove += MessageMove;
+                item.isMoved = figureInfo[2] == "true";
+                item.isProtected = figureInfo[3] == "true";
                 _models.Add(item);
                 if (item is King king)
                     king.MessageCheck += MessageChek;
                 item.SetFigurePosition(figureInfo[1].StringToCoordinatPoint());
             }
         }
-        public BaseFigure GetBaseFigure(string info)
+        public static BaseFigure GetBaseFigure(string info)
         {
             var figureInfo = info.Split('|');
             var figureName = figureInfo[0].Split('.');
@@ -287,14 +287,14 @@ namespace GameManager
                 positions = null;
             return positions;
         }
-        public static string GetNamesForSave()
+        public static string GetDetailForSave()
         {
             var positions = new List<string>();
             if (_models.Count != 0)
             {
                 foreach (var item in _models)
                 {
-                    positions.Add(item.Name + '|' + item.Coordinate);
+                    positions.Add(item.ToString());
                 }
             }
             else
@@ -429,7 +429,7 @@ namespace GameManager
         {
             var CurentKing = (King)_models.Where(c => c.Color != king.Color && c is King).Single();
 
-            if (CheckCastling(king, out CoordinatePoint coordinatePoint))
+            if (CheckCastling(king, targetCoordinate, out CoordinatePoint coordinatePoint))
             {
                 SetRookCastling(coordinatePoint);
                 king.SetFigurePosition(targetCoordinate);
@@ -548,14 +548,14 @@ namespace GameManager
         /// <param name="king">Current king</param>
         /// <param name="coordinatePoint"></param>
         /// <returns>Return true, if castling is valid</returns>
-        private static bool CheckCastling(King king, out CoordinatePoint coordinatePoint)
+        private static bool CheckCastling(King king,CoordinatePoint targetCoordinate, out CoordinatePoint coordinatePoint)
         {
             if (king.isMoved)
             {
                 coordinatePoint = null;
                 return false;
             }
-            else
+            else if(!GetCurrentKingMoves(king).Contains(targetCoordinate))
             {
                 if (CheckRook(king, out CoordinatePoint coordinate))
                 {
@@ -565,6 +565,8 @@ namespace GameManager
                 coordinatePoint = null;
                 return false;
             }
+            coordinatePoint = null;
+            return false;
         }
 
         /// <summary>

@@ -40,5 +40,9 @@
                 RemovePicture(this, this.Coordinate.ToString() + '.' + this.Name);
             }
         }
+        public override string ToString()
+        {
+            return $"{this.Name}|{this.Coordinate}|{this.isMoved}|{this.isProtected}";
+        }
     }
 }
