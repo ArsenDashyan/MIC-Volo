@@ -244,8 +244,8 @@ namespace GameManager
                 item.SetFigurePicture += SetFigurePicture;
                 item.RemovePicture += RemoveFigurePicture;
                 item.MessageForMove += MessageMove;
-                item.isMoved = figureInfo[2] == "true";
-                item.isProtected = figureInfo[3] == "true";
+                item.isMoved = figureInfo[2] == "True";
+                item.isProtected = figureInfo[3] == "True";
                 _models.Add(item);
                 if (item is King king)
                     king.MessageCheck += MessageChek;
@@ -428,7 +428,6 @@ namespace GameManager
         private static void KingFigureSet(King king, CoordinatePoint targetCoordinate)
         {
             var CurentKing = (King)_models.Where(c => c.Color != king.Color && c is King).Single();
-
             if (CheckCastling(king, targetCoordinate, out CoordinatePoint coordinatePoint))
             {
                 SetRookCastling(coordinatePoint);
@@ -555,7 +554,7 @@ namespace GameManager
                 coordinatePoint = null;
                 return false;
             }
-            else if(!GetCurrentKingMoves(king).Contains(targetCoordinate))
+            else if(GetCurrentKingMoves(king).Contains(targetCoordinate))
             {
                 if (CheckRook(king, out CoordinatePoint coordinate))
                 {

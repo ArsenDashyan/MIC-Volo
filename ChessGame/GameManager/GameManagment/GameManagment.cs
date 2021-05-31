@@ -7,6 +7,7 @@ namespace GameManager
         #region Property and Feld
         public static int CurrentGameStatus { get => _currentGameStatus; set => _currentGameStatus = value; }
         private static int _currentGameStatus;
+        public string currentFigureColor;
         private static KingGame _kingGame;
         private MovesKnight _movesKnight;
         private Standard _standard;
@@ -18,9 +19,9 @@ namespace GameManager
         public event MessageForMate MessagePawnChange;
         public event MessageForMate MessageCheck;
         public event Picture DeletePicture;
-        public string currentFigureColor;
 
         #endregion
+
         public GameManagment(string currentFigureColor, int currentGameStatus)
         {
             this.currentFigureColor = currentFigureColor;
@@ -61,6 +62,8 @@ namespace GameManager
         }
 
         #endregion
+
+        #region Methods
         public bool Managment((string, string) tupl)
         {
             switch (CurrentGameStatus)
@@ -80,10 +83,6 @@ namespace GameManager
             }
             return false;
         }
-        public static void IsValidForPleacement(string inputInfo) => _kingGame.IsValidForPleacement(inputInfo);
-        public void SetChangeFigureForPawn(string inputInfo) => _standard.SetChangeFigureForPawn(inputInfo);
-        public void SetAllFigures() => _standard.SetAllFigures();
-        public void MessageForProgress(object sender, (string, string) e) => MessageProgress(this, ("", ""));
         public static List<string> GetAvalibleMoves(string coordinate)
         {
             return CurrentGameStatus switch
@@ -103,8 +102,22 @@ namespace GameManager
                 _ => null,
             };
         }
+
+        #endregion
+
+        #region Standard Game
+        public void SetChangeFigureForPawn(string inputInfo) => _standard.SetChangeFigureForPawn(inputInfo);
+        public void SetAllFigures() => _standard.SetAllFigures();
         public static string GetAllFiguresForSave() => Standard.GetDetailForSave();
         public void SetConditionFigures(string json) => _standard.SetConditionFigures(json);
+
+        #endregion
+
+        #region King Game
+        public static void IsValidForPleacement(string inputInfo) => _kingGame.IsValidForPleacement(inputInfo);
+        public void MessageForProgress(object sender, (string, string) e) => MessageProgress(this, ("", ""));
+
+        #endregion
 
         #region Knight Game
         public void CreateStartKnight(string coordinate)

@@ -576,6 +576,7 @@ namespace ChessGame
         {
             ResetBoard(currentGameStatus);
             ShowStandardGamePanel();
+            InitializeGameManagment();
             gameManagment.SetAllFigures();
             MovesTextBoxStandard.Text = "";
             currentGameStatus = 3;
@@ -694,7 +695,7 @@ namespace ChessGame
                 var list = context.Users.ToList();
                 foreach (var item in list)
                 {
-                    SomeGameComboBox.Items.Add($"{item.Name} - {item.Opponent}");
+                  SomeGameComboBox.Items.Add($"{item.Name} - {item.Opponent}");
                 }
             }
         }
