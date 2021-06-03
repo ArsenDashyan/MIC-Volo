@@ -46,7 +46,7 @@ namespace ChessGame
         private void InitializeGameManagment()
         {
             gameManagment = new GameManagment(currentFigureColor, currentGameStatus);
-            gameManagment.DeletePicture += SetDeleteFigurePicture;
+            gameManagment.DeletePicture += RemoveDeletedFigure;
             gameManagment.MateMessage += MessageMateForKingHame;
             gameManagment.MessageCheck += MessageCheckStandard;
             gameManagment.MessageForMove += MessageMoveForAllGame;
@@ -77,7 +77,13 @@ namespace ChessGame
             Grid.SetRow(image, int.Parse(coord[1]) - 1);
             Board.Children.Add(image);
         }
-        public void SetDeleteFigurePicture(object sender, string coordinate)
+
+        /// <summary>
+        /// removes eaten figure to deleted tab
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="coordinate"></param>
+        public void RemoveDeletedFigure(object sender, string coordinate)
         {
             string[] coord = coordinate.Split('.');
             string str = coord[2] + '.' + coord[3] + '.' + coord[4];
@@ -167,6 +173,12 @@ namespace ChessGame
             PawnChangePanel.Visibility = Visibility.Visible;
             PanelForGame.SelectedIndex = 3;
         }
+
+        /// <summary>
+        /// showing the progress of the King's game, the duraation of the game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public async void MessageForProgress(object sender, (string, string) e)
         {
             _cancellationTokenSource = new CancellationTokenSource();
@@ -242,6 +254,12 @@ namespace ChessGame
         #endregion
 
         #region King game Button
+
+        /// <summary>
+        /// possitioing the selected figure
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PleacementB1_Click(object sender, RoutedEventArgs e)
         {
             string[] tempFigure = GetCurrentFigureImage().Split('/');
@@ -254,6 +272,12 @@ namespace ChessGame
                 GameManagment.IsValidForPleacement(inputInfo);
             }
         }
+
+        /// <summary>
+        /// play button of the King's game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PlayB2_Click(object sender, RoutedEventArgs e)
         {
             if (SetCurrentColor())
@@ -283,6 +307,11 @@ namespace ChessGame
                 }
             }
         }
+        /// <summary>
+        /// moving the pice durring the game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void InstallButton(object sender, RoutedEventArgs e)
         {
             PlayB2.IsEnabled = false;
@@ -300,6 +329,11 @@ namespace ChessGame
             MessageBox.Show(message);
             _cancellationTokenSource.Cancel();
         }
+        /// <summary>
+        /// the message of the Check
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="message"></param>
         public static void MessageCheckStandard(object sender, string message)
         {
             if (message != " ")
@@ -387,6 +421,12 @@ namespace ChessGame
         #endregion
 
         #region For Knight Moves
+
+        /// <summary>
+        /// button for the positioning the Knight
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void KnightSetButton(object sender, RoutedEventArgs e)
         {
             if (GetCurrentFigureCoordinate(KnightStartLetter, KnightStartNumber, out string currentCoord))
@@ -395,6 +435,11 @@ namespace ChessGame
                 KnightSetBtn.IsEnabled = false;
             }
         }
+        /// <summary>
+        /// showing the amount the moves of the Knight
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void KnightMoveCheck_Click(object sender, RoutedEventArgs e)
         {
             if (GetCurrentFigureCoordinate(KnightTargetLetter, KnightTargetNumber, out string currentCoord))
@@ -424,6 +469,9 @@ namespace ChessGame
                 }
             }
         }
+        /// <summary>
+        /// removes the pices from the 'eaten tab'
+        /// </summary>
         private void ResetDeleteBoard()
         {
             foreach (var item in _modelsForDeleteid)
@@ -481,6 +529,12 @@ namespace ChessGame
             MovesTextBox.Text = string.Empty;
             ProgressTextBox.Text = string.Empty;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ResetStandardGame_Click(object sender, RoutedEventArgs e)
         {
             ResetBoard(currentGameStatus);
@@ -512,6 +566,12 @@ namespace ChessGame
         #endregion
 
         #region Drag and Drop
+
+        /// <summary>
+        /// method of the drag when mousedowning on figure
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Board_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             try
@@ -535,6 +595,12 @@ namespace ChessGame
                 MessageBox.Show("You did not choose the color for game");
             }
         }
+
+        /// <summary>
+        /// method of the drop when mouseuping on board
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Image_Drop(object sender, DragEventArgs e)
         {
             int coordX = Grid.GetColumn((UIElement)e.OriginalSource);
@@ -550,10 +616,22 @@ namespace ChessGame
         #endregion
 
         #region MenuStrip
+
+        /// <summary>
+        /// abot button of the game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("This Game Create Arsen Dashyan");
         }
+
+        /// <summary>
+        /// the King's game button of the menubar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void KingGame_Click(object sender, RoutedEventArgs e)
         {
             ResetBoard(currentGameStatus);
@@ -584,6 +662,10 @@ namespace ChessGame
             currentGameStatus = 3;
             MessageBox.Show("You Change A Standard Game, Good Luck");
         }
+
+        /// <summary>
+        /// Shows the standart game's panel
+        /// </summary>
         public void ShowStandardGamePanel()
         {
             StandardGamePanel.Visibility = Visibility.Visible;
@@ -648,6 +730,10 @@ namespace ChessGame
             InputCoordinatsNumber_Selected.IsEnabled = false;
             InstalB3.IsEnabled = false;
         }
+
+        /// <summary>
+        ///  in the starting point shows the panel
+        /// </summary>
         public void ShowPanels()
         {
             PanelForGame.SelectedIndex = 4;
@@ -662,6 +748,12 @@ namespace ChessGame
             CheckUsers.Visibility = Visibility.Hidden;
             SomeGamePlay.Visibility = Visibility.Hidden;
         }
+
+        /// <summary>
+        /// button for your selected game's type
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChooseGameType_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -697,6 +789,10 @@ namespace ChessGame
                 MessageBox.Show("You don't choose game type");
             }
         }
+
+        /// <summary>
+        /// filling the user's name in the Combobox from the DB
+        /// </summary>
         public void GetItemsSomeGameComboBox()
         {
             using (ChessDBContext context = new ChessDBContext())
@@ -708,6 +804,10 @@ namespace ChessGame
                 }
             }
         }
+
+        /// <summary>
+        /// filling the selected users' games sorting by the date
+        /// </summary>
         public void GetItemsCheckUsersComboBox()
         {
             var result = SomeGameComboBox.Text.Split('-');
@@ -725,6 +825,12 @@ namespace ChessGame
                 }
             }
         }
+
+        /// <summary>
+        /// button that starting the doesn't endeed game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SomeGamePlay_Click(object sender, RoutedEventArgs e)
         {
             if (SomeGameComboBox.Text == string.Empty)
@@ -760,6 +866,11 @@ namespace ChessGame
 
         #region Standard Game
 
+        /// <summary>
+        /// button that filling the selected users' game into Combobox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CheckUsers_Click(object sender, RoutedEventArgs e)
         {
             DateTimeComboBox.Visibility = Visibility.Visible;
@@ -784,6 +895,12 @@ namespace ChessGame
                 _colorPower = true;
             }
         }
+
+        /// <summary>
+        /// play button which appearing after choosing new standart game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PlayForStandard_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -836,6 +953,10 @@ namespace ChessGame
             PawnChangePanel.Visibility = Visibility.Collapsed;
             PanelForGame.SelectedIndex = 2;
         }
+
+        /// <summary>
+        /// adds standart game's info into DB
+        /// </summary>
         public void AddGameStoryInDB()
         {
             using (var context = new ChessDBContext())
@@ -869,6 +990,11 @@ namespace ChessGame
                 }
             }
         }
+
+        /// <summary>
+        /// when clicking on the pice showing te available moves
+        /// </summary>
+        /// <param name="list"> fiure's availabele coordinates</param>
         private void GetColoredCells(List<string> list)
         {
             var coordinateList = GetCoordinateList(list);
@@ -885,6 +1011,10 @@ namespace ChessGame
                 }
             }
         }
+
+        /// <summary>
+        /// remove the available moves' coloures from the board
+        /// </summary>
         private void RemoveColoredCells()
         {
             foreach (var item in _colorsBorder)
@@ -892,6 +1022,12 @@ namespace ChessGame
                 item.Item2.Background = item.Item1;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="listColors"></param>
+        /// <returns></returns>
         private List<(int, int)> GetCoordinateList(List<string> listColors)
         {
             var list = new List<(int, int)>();

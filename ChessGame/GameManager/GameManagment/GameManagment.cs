@@ -64,6 +64,12 @@ namespace GameManager
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// decides which logic will run after getting the info from UI
+        /// </summary>
+        /// <param name="tupl">choosen cell's coordintes </param>
+        /// <returns>true if standard game, and false otherway</returns>
         public bool Managment((string, string) tupl)
         {
             switch (CurrentGameStatus)
@@ -83,6 +89,12 @@ namespace GameManager
             }
             return false;
         }
+
+        /// <summary>
+        /// getting the available moves for current game's type
+        /// </summary>
+        /// <param name="coordinate">currenet coordinate</param>
+        /// <returns>available moves</returns>
         public static List<string> GetAvalibleMoves(string coordinate)
         {
             return CurrentGameStatus switch
@@ -92,6 +104,12 @@ namespace GameManager
                 _ => null,
             };
         }
+
+        /// <summary>
+        /// gives the info about all figures for deleting
+        /// </summary>
+        /// <param name="status">current game status</param>
+        /// <returns>info about figures</returns>
         public static List<string> GetAllFiguresForReset(int status)
         {
             return status switch
@@ -120,14 +138,29 @@ namespace GameManager
         #endregion
 
         #region Knight Game
+
+        /// <summary>
+        /// creates the knight in the starting point
+        /// </summary>
+        /// <param name="coordinate">starting coordinate</param>
         public void CreateStartKnight(string coordinate)
         {
             _movesKnight.CreateStartKnight(coordinate);
         }
+
+        /// <summary>
+        /// creates the aimed knght 
+        /// </summary>
+        /// <param name="coordinate">target coordnate</param>
         public void CreateTargetKnight(string coordinate)
         {
             _movesKnight.CreateTargetKnight(coordinate);
         }
+
+        /// <summary>
+        /// counts the coordinate form starting position to targetting position 
+        /// </summary>
+        /// <returns>returns the count</returns>
         public static int MinKnightCount()
         {
             return MovesKnight.MinKnightCount();
