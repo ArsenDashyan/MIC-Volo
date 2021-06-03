@@ -96,7 +96,6 @@ namespace GameManager
             var antiCheck = (IAntiCheck)baseFigure;
             return antiCheck.MovesWithKingIsNotUnderCheck(_models).Contains(targetCoordinate);
         }
-
         public void GetLogic(string current, string target)
         {
             var currentCoordinate = GetCoordinateByString(current);
@@ -435,47 +434,11 @@ namespace GameManager
                 king.SetFigurePosition(targetCoordinate);
                 CurentKing.IsCheked(_models);
             }
-            else if (GetCurrentKingMoves(king).Contains(targetCoordinate))
+            else if (king.MovesWithKingIsNotUnderCheck(_models).Contains(targetCoordinate))
             {
                 king.SetFigurePosition(targetCoordinate);
                 CurentKing.IsCheked(_models);
             }
-        }
-
-        /// <summary>
-        /// Check the danger position for current king
-        /// </summary>
-        /// <param name="model">King instance withe or Black</param>
-        /// <returns>Return danger position List for current king </returns>
-        private static List<CoordinatePoint> DangerPosition(King king)
-        {
-            var modelNew = _models.Where(c => c.Color != king.Color);
-            var result = new List<CoordinatePoint>();
-            foreach (var item in modelNew)
-            {
-                var temp = (IAvailableMoves)item;
-                var array = temp.AvailableMoves(_models);
-                result.AddRange(array);
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Check the available moves for current king 
-        /// </summary>
-        /// <returns>Return the list</returns>
-        public static List<CoordinatePoint> GetCurrentKingMoves(King king)
-        {
-            var currentKing = (IAvailableMoves)king;
-            var result = new List<CoordinatePoint>();
-            foreach (var item in currentKing.AvailableMoves(_models))
-            {
-                if (!DangerPosition(king).Contains(item))
-                {
-                    result.Add(item);
-                }
-            }
-            return result;
         }
 
         /// <summary>
@@ -555,7 +518,7 @@ namespace GameManager
                 coordinatePoint = null;
                 return false;
             }
-            else if(GetCurrentKingMoves(king).Contains(targetCoordinate))
+            else if(king.MovesWithKingIsNotUnderCheck(_models).Contains(targetCoordinate))
             {
                 if (CheckRook(king, out CoordinatePoint coordinate))
                 {

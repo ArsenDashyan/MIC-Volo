@@ -44,16 +44,12 @@ namespace Figure
                             if (item.Coordinate == new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y - 1))
                                 if (item.Color == FColor.Black)
                                     arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y - 1));
-                                else
-                                    item.isProtected = true;
                         }
                         if (this.Coordinate.X - 1 >= 0)
                         {
                             if (item.Coordinate == new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y - 1))
                                 if (item.Color == FColor.Black)
                                     arr.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y - 1));
-                                else
-                                    item.isProtected = true;
                         }
                     }
                 }

@@ -40,13 +40,9 @@ namespace Figure
                 if (arr.Contains(item.Coordinate))
                 {
                     if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                    {
                         arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
-                    }
                     else
-                    {
                         arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                    }
                 }
             }
             newArr = arr.Distinct().ToList();
@@ -73,13 +69,9 @@ namespace Figure
                 if (arr.Contains(item.Coordinate))
                 {
                     if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                    {
                         arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
-                    }
                     else
-                    {
                         arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                    }
                 }
             }
             newArr = arr.Distinct().ToList();
@@ -110,13 +102,9 @@ namespace Figure
                 if (arr.Contains(item.Coordinate))
                 {
                     if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                    {
                         arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
-                    }
                     else
-                    {
                         arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                    }
                 }
             }
             arr.Remove(this.Coordinate);
@@ -139,13 +127,9 @@ namespace Figure
                 if (arr.Contains(item.Coordinate))
                 {
                     if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                    {
                         arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
-                    }
                     else
-                    {
                         arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                    }
                 }
             }
             arr.Remove(this.Coordinate);
@@ -195,6 +179,7 @@ namespace Figure
                 {
                     if (item == king.chekedFigure.Coordinate)
                     {
+                        IsProtected(othereFigures);
                         if (!king.chekedFigure.isProtected)
                             goodMoves.Add(item);
                     }
@@ -202,6 +187,19 @@ namespace Figure
             }
             this.Coordinate = temp;
             return goodMoves;
+        }
+        public void IsProtected(List<BaseFigure> othereFigures)
+        {
+            var model = othereFigures.Where(c => c != chekedFigure && c.Color != this.Color).ToList();
+            foreach (var item in model)
+            {
+                IAntiCheck temp = (IAntiCheck)item;
+                if (temp.MovesWithKingIsNotUnderCheck(othereFigures).Contains(this.chekedFigure.Coordinate))
+                {
+                    chekedFigure.isProtected = true;
+                    break;
+                }
+            }
         }
         #endregion
 

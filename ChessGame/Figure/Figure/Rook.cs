@@ -31,7 +31,6 @@ namespace Figure
                             arr = arr.Where(c => c.Y < item.Coordinate.Y).ToList();
                         else
                             arr = arr.Where(c => c.Y > item.Coordinate.Y).ToList();
-                        item.isProtected = true;
                     }
                     else
                     {
@@ -68,7 +67,6 @@ namespace Figure
                             arr = arr.Where(c => c.X < item.Coordinate.X).ToList();
                         else
                             arr = arr.Where(c => c.X > item.Coordinate.X).ToList();
-                        item.isProtected = true;
                     }
                     else
                     {

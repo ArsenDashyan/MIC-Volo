@@ -38,7 +38,6 @@ namespace Figure
                             arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
                         else
                             arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                        item.isProtected = true;
                     }
                     else
                     {
@@ -79,7 +78,6 @@ namespace Figure
                             arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
                         else
                             arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                        item.isProtected = true;
                     }
                     else
                     {

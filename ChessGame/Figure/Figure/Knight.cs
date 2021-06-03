@@ -35,10 +35,7 @@ namespace Figure
                 if (result.Contains(item.Coordinate))
                 {
                     if (item.Color == this.Color)
-                    {
-                        item.isProtected = true;
                         result.Remove(item.Coordinate);
-                    }
                 }
             }
             return result;
@@ -66,10 +63,7 @@ namespace Figure
                 if (result.Contains(item.Coordinate))
                 {
                     if (item.Color == this.Color)
-                    {
-                        item.isProtected = true;
                         result.Remove(item.Coordinate);
-                    }
                 }
             }
             return result;

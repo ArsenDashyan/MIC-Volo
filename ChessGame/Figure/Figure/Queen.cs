@@ -31,7 +31,6 @@ namespace Figure
                             arr = arr.Where(c => c.Y < item.Coordinate.Y).ToList();
                         else
                             arr = arr.Where(c => c.Y > item.Coordinate.Y).ToList();
-                        item.isProtected = true;
                     }
                     else
                     {
@@ -67,7 +66,6 @@ namespace Figure
                             arr = arr.Where(c => c.X < item.Coordinate.X).ToList();
                         else
                             arr = arr.Where(c => c.X > item.Coordinate.X).ToList();
-                        item.isProtected = true;
                     }
                     else
                     {
@@ -117,7 +115,6 @@ namespace Figure
                             arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
                         else
                             arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                        item.isProtected = true;
                     }
                     else
                     {
@@ -160,7 +157,6 @@ namespace Figure
                             arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
                         else
                             arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                        item.isProtected = true;
                     }
                     else
                     {
@@ -177,6 +173,8 @@ namespace Figure
             }
             return arr;
         }
+
+       
         public List<CoordinatePoint> AvailableMoves(List<BaseFigure> othereFigures)
         {
             var result = new List<CoordinatePoint>();
