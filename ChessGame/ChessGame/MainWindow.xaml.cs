@@ -28,6 +28,7 @@ namespace ChessGame
         public string currentFigureColor;
         private string _startCoordinate;
         private bool _colorPower = false;
+        private bool _isPlayed = false;
         private int _iBlack = 0;
         private int _jBlack = 0;
         private int _iWhite = 0;
@@ -477,16 +478,17 @@ namespace ChessGame
             InstalB3.IsEnabled = false;
             _cancellationTokenSource.Cancel();
             Progress.Value = 0;
-            MovesTextBox.Text = " ";
-            ProgressTextBox.Text = " ";
+            MovesTextBox.Text = string.Empty;
+            ProgressTextBox.Text = string.Empty;
         }
         private void ResetStandardGame_Click(object sender, RoutedEventArgs e)
         {
             ResetBoard(currentGameStatus);
             ResetDeleteBoard();
             ShowStandardGamePanel();
+            ShowUserPanelForStandardGame();
             gameManagment.SetAllFigures();
-            MovesTextBoxStandard.Text = "";
+            MovesTextBoxStandard.Text = string.Empty;
             currentGameStatus = 3;
             MessageBox.Show("You Change A Standard Game, Good Luck");
         }
@@ -500,11 +502,11 @@ namespace ChessGame
         {
             ResetBoard(currentGameStatus);
             KnightSetBtn.IsEnabled = true;
-            KnightMovesMessage.Text = "";
-            KnightStartLetter.Text = "";
-            KnightStartNumber.Text = "";
-            KnightTargetLetter.Text = "";
-            KnightTargetNumber.Text = "";
+            KnightMovesMessage.Text = string.Empty;
+            KnightStartLetter.Text = string.Empty;
+            KnightStartNumber.Text = string.Empty;
+            KnightTargetLetter.Text = string.Empty;
+            KnightTargetNumber.Text = string.Empty;
         }
 
         #endregion
@@ -518,14 +520,14 @@ namespace ChessGame
                 string imageName = image.Source.ToString();
                 if (image != null && imageName.Contains(currentFigureColor))
                 {
-                    this._dragObjectImage = image;
+                    _dragObjectImage = image;
                     int coordX = Grid.GetColumn(image);
                     int coordY = Grid.GetRow(image);
-                    this._startCoordinate = $"{coordX}.{coordY}";
-                    var colorsForFigure = GameManagment.GetAvalibleMoves(this._startCoordinate);
+                    _startCoordinate = $"{coordX}.{coordY}";
+                    var colorsForFigure = GameManagment.GetAvalibleMoves(_startCoordinate);
                     if (colorsForFigure != null)
                         GetColoredCells(colorsForFigure);
-                    DragDrop.DoDragDrop(image, this._dragObjectImage, DragDropEffects.Move);
+                    DragDrop.DoDragDrop(image, _dragObjectImage, DragDropEffects.Move);
                 }
             }
             catch (Exception)
@@ -537,11 +539,10 @@ namespace ChessGame
         {
             int coordX = Grid.GetColumn((UIElement)e.OriginalSource);
             int coordY = Grid.GetRow((UIElement)e.OriginalSource);
-            string coordinate = $"{coordX}.{coordY}";
-            if (coordinate != this._startCoordinate)
+            if ($"{coordX}.{coordY}" != _startCoordinate)
             {
-                bool action = gameManagment.Managment((this._startCoordinate, coordinate));
-                CurrentColorManager(action);
+                if (gameManagment.Managment((_startCoordinate, $"{coordX}.{coordY}")))
+                    CurrentColorManager();
             }
             RemoveColoredCells();
         }
@@ -576,9 +577,10 @@ namespace ChessGame
         {
             ResetBoard(currentGameStatus);
             ShowStandardGamePanel();
+            ShowUserPanelForStandardGame();
             InitializeGameManagment();
             gameManagment.SetAllFigures();
-            MovesTextBoxStandard.Text = "";
+            MovesTextBoxStandard.Text = string.Empty;
             currentGameStatus = 3;
             MessageBox.Show("You Change A Standard Game, Good Luck");
         }
@@ -590,18 +592,24 @@ namespace ChessGame
             KnightMovesPanel.Visibility = Visibility.Collapsed;
             PawnChangePanel.Visibility = Visibility.Collapsed;
             StartGamePanel.Visibility = Visibility.Collapsed;
-            PlayForStandard.Visibility = Visibility.Visible;
+        }
+        public void ShowUserPanelForStandardGame()
+        {
             PlayColorBlackStandard.Visibility = Visibility.Visible;
             PlayColorWhiteStandard.Visibility = Visibility.Visible;
             FirstUserName.Visibility = Visibility.Visible;
             SecondUserName.Visibility = Visibility.Visible;
-            InputCoordinatsLetter_Corrent.IsEnabled = true;
-            InputCoordinatsNumber_Corrent.IsEnabled = true;
-            InputCoordinatsLetter_Selected.IsEnabled = true;
-            InputCoordinatsNumber_Selected.IsEnabled = true;
-            InstalB3.IsEnabled = true;
-            FirstUserName.Text = " ";
-            SecondUserName.Text = " ";
+            PlayForStandard.Visibility = Visibility.Visible;
+            FirstUserName.Text = string.Empty;
+            SecondUserName.Text = string.Empty;
+        }
+        public void HideUserPanelForStandardGame()
+        {
+            PlayForStandard.Visibility = Visibility.Hidden;
+            PlayColorBlackStandard.Visibility = Visibility.Hidden;
+            PlayColorWhiteStandard.Visibility = Visibility.Hidden;
+            FirstUserName.Visibility = Visibility.Hidden;
+            SecondUserName.Visibility = Visibility.Hidden;
         }
         public void ShowKnightGamePanel()
         {
@@ -675,6 +683,7 @@ namespace ChessGame
                         SomeGameLabel.Visibility = Visibility.Visible;
                         SomeGameLabel2.Visibility = Visibility.Visible;
                         SomeGameComboBox.Visibility = Visibility.Visible;
+                        /* await Task.Run(() =>*/
                         GetItemsSomeGameComboBox();
                         CheckUsers.Visibility = Visibility.Visible;
                         GameTypeComboBox.Visibility = Visibility.Hidden;
@@ -695,7 +704,7 @@ namespace ChessGame
                 var list = context.Users.ToList();
                 foreach (var item in list)
                 {
-                  SomeGameComboBox.Items.Add($"{item.Name} - {item.Opponent}");
+                    SomeGameComboBox.Items.Add($"{item.Name} - {item.Opponent}");
                 }
             }
         }
@@ -711,9 +720,7 @@ namespace ChessGame
                     foreach (var item in gameList)
                     {
                         if (item.UserId == resultUser.Id)
-                        {
                             DateTimeComboBox.Items.Add($"{item.DateTime}");
-                        }
                     }
                 }
             }
@@ -724,8 +731,9 @@ namespace ChessGame
             {
                 InitializeGameManagment();
                 ShowStandardGamePanel();
+                ShowUserPanelForStandardGame();
                 gameManagment.SetAllFigures();
-                MovesTextBoxStandard.Text = "";
+                MovesTextBoxStandard.Text = string.Empty;
             }
             else if (DateTimeComboBox.IsTextSearchEnabled)
             {
@@ -737,11 +745,14 @@ namespace ChessGame
                     {
                         json = game.GameCondition;
                         MovesTextBoxStandard.Text = game.GameStory;
+                        currentFigureColor = game.CurrentColor;
                     }
                 }
                 InitializeGameManagment();
                 ShowStandardGamePanel();
+                HideUserPanelForStandardGame();
                 gameManagment.SetConditionFigures(json);
+                MessageBox.Show($"Current Color is {currentFigureColor}");
             }
         }
 
@@ -749,28 +760,29 @@ namespace ChessGame
 
         #region Standard Game
 
+        private void CheckUsers_Click(object sender, RoutedEventArgs e)
+        {
+            DateTimeComboBox.Visibility = Visibility.Visible;
+            SomeGamePlay.Visibility = Visibility.Visible;
+            GetItemsCheckUsersComboBox();
+        }
+
         /// <summary>
         /// Manage current color with Black or White
         /// </summary>
-        private void CurrentColorManager(bool action)
+        private void CurrentColorManager()
         {
-            if (action)
+            _isPlayed = true;
+            if (_colorPower)
             {
-                if (currentGameStatus == 3)
-                {
-                    if (_colorPower)
-                    {
-                        currentFigureColor = "White";
-                        _colorPower = false;
-                    }
-                    else
-                    {
-                        currentFigureColor = "Black";
-                        _colorPower = true;
-                    }
-                }
+                currentFigureColor = "White";
+                _colorPower = false;
             }
-
+            else
+            {
+                currentFigureColor = "Black";
+                _colorPower = true;
+            }
         }
         private void PlayForStandard_Click(object sender, RoutedEventArgs e)
         {
@@ -786,11 +798,7 @@ namespace ChessGame
                     currentFigureColor = "Black";
                     _colorPower = true;
                 }
-                PlayForStandard.Visibility = Visibility.Hidden;
-                PlayColorBlackStandard.Visibility = Visibility.Hidden;
-                PlayColorWhiteStandard.Visibility = Visibility.Hidden;
-                FirstUserName.Visibility = Visibility.Hidden;
-                SecondUserName.Visibility = Visibility.Hidden;
+                HideUserPanelForStandardGame();
                 InitializeGameManagment();
                 MessageBox.Show("Good Luck!!!");
             }
@@ -828,7 +836,7 @@ namespace ChessGame
             PawnChangePanel.Visibility = Visibility.Collapsed;
             PanelForGame.SelectedIndex = 2;
         }
-        public void AddGameStoryWithNote()
+        public void AddGameStoryInDB()
         {
             using (var context = new ChessDBContext())
             {
@@ -843,6 +851,7 @@ namespace ChessGame
                     GameCondition = GameManagment.GetAllFiguresForSave(),
                     GameStory = MovesTextBoxStandard.Text,
                     DateTime = DateTime.Now,
+                    CurrentColor = currentFigureColor
                 };
                 if (userList.Filtr(u => u.Name == user.Name && u.Opponent == user.Opponent, out User resultUser))
                 {
@@ -871,9 +880,7 @@ namespace ChessGame
                     foreach (var coord in coordinateList)
                     {
                         if (Grid.GetColumn(border) == coord.Item1 && Grid.GetRow(border) == coord.Item2)
-                        {
                             border.Background = Brushes.LightGoldenrodYellow;
-                        }
                     }
                 }
             }
@@ -893,32 +900,24 @@ namespace ChessGame
                 var temp = item.Split('.');
                 list.Add((int.Parse(temp[0]), int.Parse(temp[1])));
             }
-            var temp2 = this._startCoordinate.Split('.');
+            var temp2 = _startCoordinate.Split('.');
             return list.Where(c => c != (int.Parse(temp2[0]), int.Parse(temp2[1]))).ToList();
         }
         protected override void OnClosed(EventArgs e)
         {
-            if (currentGameStatus == 3)
+            if (_isPlayed)
             {
                 var result = MessageBox.Show("Saved the current game?",
                                 "Message",
                                 MessageBoxButton.YesNo,
                                 MessageBoxImage.Information);
                 if (result == MessageBoxResult.Yes)
-                {
-                    AddGameStoryWithNote();
-                }
+                    AddGameStoryInDB();
                 else
-                {
                     base.OnClosed(e);
-                }
             }
-        }
-        private void CheckUsers_Click(object sender, RoutedEventArgs e)
-        {
-            DateTimeComboBox.Visibility = Visibility.Visible;
-            SomeGamePlay.Visibility = Visibility.Visible;
-            GetItemsCheckUsersComboBox();
+            else
+                base.OnClosed(e);
         }
 
         #endregion

@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
@@ -40,6 +38,8 @@ namespace ChessGame
                 entity.Property(e => e.GameCondition).IsRequired();
 
                 entity.Property(e => e.GameStory).IsRequired();
+
+                entity.Property(e => e.CurrentColor).IsRequired();
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Games)
