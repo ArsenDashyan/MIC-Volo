@@ -16,7 +16,7 @@ namespace Figure
         {
             var arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
-            for (int i = 0; i <= 7; i++)
+            for (int i = downPoint; i <= topPoint; i++)
             {
                 var coordinatPointTemp = new CoordinatePoint(this.Coordinate.X, i);
                 arr.Add(coordinatPointTemp);
@@ -52,7 +52,7 @@ namespace Figure
         {
             var arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
-            for (int i = 0; i <= 7; i++)
+            for (int i = downPoint; i <= topPoint; i++)
             {
                 var coordinatPointTemp = new CoordinatePoint(i, this.Coordinate.Y);
                 arr.Add(coordinatPointTemp);

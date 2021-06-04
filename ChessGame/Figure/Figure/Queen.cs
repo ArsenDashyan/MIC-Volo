@@ -16,7 +16,7 @@ namespace Figure
         {
             var arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
-            for (int i = 0; i <= 7; i++)
+            for (int i = downPoint; i <= topPoint; i++)
             {
                 var coordinatPointTemp = new CoordinatePoint(this.Coordinate.X, i);
                 arr.Add(coordinatPointTemp);
@@ -51,7 +51,7 @@ namespace Figure
         {
             var arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
-            for (int i = 0; i <= 7; i++)
+            for (int i = downPoint; i <= topPoint; i++)
             {
                 var coordinatPointTemp = new CoordinatePoint(i, this.Coordinate.Y);
                 arr.Add(coordinatPointTemp);
@@ -94,9 +94,9 @@ namespace Figure
             int sum = this.Coordinate.X + this.Coordinate.Y;
             var arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
-            for (int i = 0; i <= 7; i++)
+            for (int i = downPoint; i <= topPoint; i++)
             {
-                for (int j = 0; j <= 7; j++)
+                for (int j = downPoint; j <= topPoint; j++)
                 {
                     if (i + j == sum)
                     {
@@ -136,9 +136,9 @@ namespace Figure
             var arr = new List<CoordinatePoint>();
             int sub = this.Coordinate.X - this.Coordinate.Y;
             var model = othereFigures.Where(c => c != this).ToList();
-            for (int i = 0; i <= 7; i++)
+            for (int i = downPoint; i <= topPoint; i++)
             {
-                for (int j = 0; j <= 7; j++)
+                for (int j = downPoint; j <= topPoint; j++)
                 {
                     if (i - j == sub)
                     {

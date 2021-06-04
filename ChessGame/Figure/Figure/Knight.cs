@@ -16,18 +16,18 @@ namespace Figure
         {
             var result = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
-            if (this.Coordinate.Y + 2 <= 7)
+            if (this.Coordinate.Y + 2 <= topPoint)
             {
-                if (this.Coordinate.X - 1 >= 0)
+                if (this.Coordinate.X - 1 >= downPoint)
                     result.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y + 2));
-                if (this.Coordinate.X + 1 <= 7)
+                if (this.Coordinate.X + 1 <= topPoint)
                     result.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y + 2));
             }
-            if (this.Coordinate.Y - 2 >= 0)
+            if (this.Coordinate.Y - 2 >= downPoint)
             {
-                if (this.Coordinate.X - 1 >= 0)
+                if (this.Coordinate.X - 1 >= downPoint)
                     result.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y - 2));
-                if (this.Coordinate.X + 1 <= 7)
+                if (this.Coordinate.X + 1 <= topPoint)
                     result.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y - 2));
             }
             foreach (var item in model)
@@ -44,18 +44,18 @@ namespace Figure
         {
             var result = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c != this).ToList();
-            if (this.Coordinate.Y + 1 <= 7)
+            if (this.Coordinate.Y + 1 <= topPoint)
             {
-                if (this.Coordinate.X - 2 >= 0)
+                if (this.Coordinate.X - 2 >= downPoint)
                     result.Add(new CoordinatePoint(this.Coordinate.X - 2, this.Coordinate.Y + 1));
-                if (this.Coordinate.X + 2 <= 7)
+                if (this.Coordinate.X + 2 <= topPoint)
                     result.Add(new CoordinatePoint(this.Coordinate.X + 2, this.Coordinate.Y + 1));
             }
-            if (this.Coordinate.Y - 1 >= 0)
+            if (this.Coordinate.Y - 1 >= downPoint)
             {
-                if (this.Coordinate.X - 2 >= 0)
+                if (this.Coordinate.X - 2 >= downPoint)
                     result.Add(new CoordinatePoint(this.Coordinate.X - 2, this.Coordinate.Y - 1));
-                if (this.Coordinate.X + 2 <= 7)
+                if (this.Coordinate.X + 2 <= topPoint)
                     result.Add(new CoordinatePoint(this.Coordinate.X + 2, this.Coordinate.Y - 1));
             }
             foreach (var item in model)

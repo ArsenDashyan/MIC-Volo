@@ -20,12 +20,12 @@ namespace Figure
             var arr = new List<CoordinatePoint>();
             var newArr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
-            if (this.Coordinate.X - 1 >= 0)
+            if (this.Coordinate.X - 1 >= downPoint)
             {
                 arr.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y));
                 arr.Add(this.Coordinate);
             }
-            if (this.Coordinate.X + 1 <= 7)
+            if (this.Coordinate.X + 1 <= topPoint)
             {
                 arr.Add(this.Coordinate);
                 arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y));
@@ -54,12 +54,12 @@ namespace Figure
             var arr = new List<CoordinatePoint>();
             var newArr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
-            if (this.Coordinate.Y - 1 >= 0)
+            if (this.Coordinate.Y - 1 >= downPoint)
             {
                 arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y - 1));
                 arr.Add(this.Coordinate);
             }
-            if (this.Coordinate.Y + 1 <= 7)
+            if (this.Coordinate.Y + 1 <= topPoint)
             {
                 arr.Add(this.Coordinate);
                 arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y + 1));
@@ -89,11 +89,11 @@ namespace Figure
         {
             var arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
-            if (this.Coordinate.X + 1 <= 7 && this.Coordinate.Y - 1 >= 0)
+            if (this.Coordinate.X + 1 <= topPoint && this.Coordinate.Y - 1 >= downPoint)
             {
                 arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y - 1));
             }
-            if (this.Coordinate.X - 1 >= 0 && this.Coordinate.Y + 1 <= 7)
+            if (this.Coordinate.X - 1 >= downPoint && this.Coordinate.Y + 1 <= topPoint)
             {
                 arr.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y + 1));
             }
@@ -114,11 +114,11 @@ namespace Figure
         {
             var arr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
-            if (this.Coordinate.X - 1 >= 0 && this.Coordinate.Y - 1 >= 0)
+            if (this.Coordinate.X - 1 >= downPoint && this.Coordinate.Y - 1 >= downPoint)
             {
                 arr.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y - 1));
             }
-            if (this.Coordinate.X + 1 <= 7 && this.Coordinate.Y + 1 <= 7)
+            if (this.Coordinate.X + 1 <= 7 && this.Coordinate.Y + 1 <= topPoint)
             {
                 arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y + 1));
             }

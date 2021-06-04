@@ -23,7 +23,7 @@ namespace Figure
                     arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y - 1));
                     arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y - 2));
                 }
-                else if (this.Coordinate.Y - 1 >= 0)
+                else if (this.Coordinate.Y - 1 >= downPoint)
                     arr.Add(new CoordinatePoint(this.Coordinate.X, this.Coordinate.Y - 1));
                 foreach (var item in othereFigures)
                 {
@@ -37,15 +37,15 @@ namespace Figure
                 }
                 foreach (var item in model.Where(c => c.Color == FColor.Black))
                 {
-                    if (this.Coordinate.Y - 1 >= 0)
+                    if (this.Coordinate.Y - 1 >= downPoint)
                     {
-                        if (this.Coordinate.X + 1 <= 7)
+                        if (this.Coordinate.X + 1 <= topPoint)
                         {
                             if (item.Coordinate == new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y - 1))
                                 if (item.Color == FColor.Black)
                                     arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y - 1));
                         }
-                        if (this.Coordinate.X - 1 >= 0)
+                        if (this.Coordinate.X - 1 >= downPoint)
                         {
                             if (item.Coordinate == new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y - 1))
                                 if (item.Color == FColor.Black)
@@ -75,9 +75,9 @@ namespace Figure
                 }
                 foreach (var item in othereFigures)
                 {
-                    if (this.Coordinate.Y + 1 >= 0)
+                    if (this.Coordinate.Y + 1 >= downPoint)
                     {
-                        if (this.Coordinate.X + 1 <= 7)
+                        if (this.Coordinate.X + 1 <= topPoint)
                         {
                             if (item.Coordinate == new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y + 1))
                                 if (item.Color == FColor.White)
@@ -85,7 +85,7 @@ namespace Figure
                                 else
                                     item.isProtected = true;
                         }
-                        if (this.Coordinate.X - 1 >= 0)
+                        if (this.Coordinate.X - 1 >= downPoint)
                         {
                             if (item.Coordinate == new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y + 1))
                                 if (item.Color == FColor.White)

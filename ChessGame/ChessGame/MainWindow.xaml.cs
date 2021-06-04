@@ -775,7 +775,7 @@ namespace ChessGame
                         SomeGameLabel.Visibility = Visibility.Visible;
                         SomeGameLabel2.Visibility = Visibility.Visible;
                         SomeGameComboBox.Visibility = Visibility.Visible;
-                        /* await Task.Run(() =>*/
+                        /*await Task.Run(() =>*/
                         GetItemsSomeGameComboBox();
                         CheckUsers.Visibility = Visibility.Visible;
                         GameTypeComboBox.Visibility = Visibility.Hidden;
