@@ -110,8 +110,8 @@ namespace GameManager
                     PawnFigureSet(pawn, targetCoordinate);
                 else
                     baseFigure.SetFigurePosition(targetCoordinate);
-                CurentKing.IsCheked(_models);
             }
+            CurentKing.IsCheked(_models);
         }
         private static CoordinatePoint GetCoordinateByString(string path)
         {
@@ -415,6 +415,7 @@ namespace GameManager
             }
             return result;
         }
+
         #endregion
 
         #region Castling & King Perpomance
@@ -432,13 +433,9 @@ namespace GameManager
             {
                 SetRookCastling(coordinatePoint);
                 king.SetFigurePosition(targetCoordinate);
-                CurentKing.IsCheked(_models);
             }
             else if (king.MovesWithKingIsNotUnderCheck(_models).Contains(targetCoordinate))
-            {
                 king.SetFigurePosition(targetCoordinate);
-                CurentKing.IsCheked(_models);
-            }
         }
 
         /// <summary>
@@ -511,14 +508,14 @@ namespace GameManager
         /// <param name="king">Current king</param>
         /// <param name="coordinatePoint"></param>
         /// <returns>Return true, if castling is valid</returns>
-        private static bool CheckCastling(King king,CoordinatePoint targetCoordinate, out CoordinatePoint coordinatePoint)
+        private static bool CheckCastling(King king, CoordinatePoint targetCoordinate, out CoordinatePoint coordinatePoint)
         {
             if (king.isMoved)
             {
                 coordinatePoint = null;
                 return false;
             }
-            else if(king.MovesWithKingIsNotUnderCheck(_models).Contains(targetCoordinate))
+            else if (king.MovesWithKingIsNotUnderCheck(_models).Contains(targetCoordinate))
             {
                 if (CheckRook(king, out CoordinatePoint coordinate))
                 {

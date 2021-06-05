@@ -160,47 +160,55 @@ namespace Figure
                 var array = temp.AvailableMoves(othereFigures);
                 result.AddRange(array);
             }
-            return result;
+            return result.Distinct().ToList();
         }
         public List<CoordinatePoint> MovesWithKingIsNotUnderCheck(List<BaseFigure> othereFigures)
         {
             var thisKing = (BaseFigure)othereFigures.Where(c => c.Color == this.Color && c is King).Single();
+            var models = othereFigures.Where(f => f.Color != this.Color);
             var king = (King)thisKing;
             var temp = this.Coordinate;
             var goodMoves = new List<CoordinatePoint>();
             foreach (var item in this.AvailableMoves(othereFigures))
             {
-                this.Coordinate = item;
-                if (!DangerPosition(othereFigures).Contains(thisKing.Coordinate))
+                if (CheckedCurrentFigure(item, othereFigures, out BaseFigure tempFigure))
                 {
-                    goodMoves.Add(item);
+                    this.Coordinate = item;
+                    tempFigure.Coordinate = new CoordinatePoint(808,808);
+                    if (!DangerPosition(othereFigures).Contains(thisKing.Coordinate))
+                        goodMoves.Add(item);
+                    tempFigure.Coordinate = item;
                 }
-                if (king.chekedFigure != null)
+                else
                 {
-                    if (item == king.chekedFigure.Coordinate)
-                    {
-                        IsProtected(othereFigures);
-                        if (!king.chekedFigure.isProtected)
-                            goodMoves.Add(item);
-                    }
+                    this.Coordinate = item;
+                    if (!DangerPosition(othereFigures).Contains(thisKing.Coordinate))
+                        goodMoves.Add(item);
                 }
             }
             this.Coordinate = temp;
             return goodMoves;
         }
-        public void IsProtected(List<BaseFigure> othereFigures)
+
+        /// <summary>
+        /// Check a current figure with a coordinate
+        /// </summary>
+        /// <param name="coordinatePoint">Current coordinate</param>
+        /// <returns>Return a current figure</returns>
+        private bool CheckedCurrentFigure(CoordinatePoint coordinatePoint, List<BaseFigure> otherFigures, out BaseFigure baseFigure)
         {
-            var model = othereFigures.Where(c => c != chekedFigure && c.Color != this.Color).ToList();
-            foreach (var item in model)
+            foreach (var item in otherFigures)
             {
-                IAntiCheck temp = (IAntiCheck)item;
-                if (temp.MovesWithKingIsNotUnderCheck(othereFigures).Contains(this.chekedFigure.Coordinate))
+                if (item.Coordinate == coordinatePoint)
                 {
-                    chekedFigure.isProtected = true;
-                    break;
+                    baseFigure = item;
+                    return true;
                 }
             }
+            baseFigure = null;
+            return false;
         }
+
         #endregion
 
         /// <summary>
@@ -239,5 +247,6 @@ namespace Figure
             else
                 MessageCheck(this, " ");
         }
+
     }
 }

@@ -35,21 +35,19 @@ namespace Figure
                             arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
                     }
                 }
-                foreach (var item in model.Where(c => c.Color == FColor.Black))
+                foreach (var item in model.Where(f => f.Color == FColor.Black))
                 {
                     if (this.Coordinate.Y - 1 >= downPoint)
                     {
                         if (this.Coordinate.X + 1 <= topPoint)
                         {
                             if (item.Coordinate == new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y - 1))
-                                if (item.Color == FColor.Black)
-                                    arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y - 1));
+                                arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y - 1));
                         }
                         if (this.Coordinate.X - 1 >= downPoint)
                         {
                             if (item.Coordinate == new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y - 1))
-                                if (item.Color == FColor.Black)
-                                    arr.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y - 1));
+                                arr.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y - 1));
                         }
                     }
                 }
@@ -73,25 +71,19 @@ namespace Figure
                             arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
                     }
                 }
-                foreach (var item in othereFigures)
+                foreach (var item in model.Where(f => f.Color == FColor.White))
                 {
                     if (this.Coordinate.Y + 1 >= downPoint)
                     {
                         if (this.Coordinate.X + 1 <= topPoint)
                         {
                             if (item.Coordinate == new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y + 1))
-                                if (item.Color == FColor.White)
-                                    arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y + 1));
-                                else
-                                    item.isProtected = true;
+                                arr.Add(new CoordinatePoint(this.Coordinate.X + 1, this.Coordinate.Y + 1));
                         }
                         if (this.Coordinate.X - 1 >= downPoint)
                         {
                             if (item.Coordinate == new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y + 1))
-                                if (item.Color == FColor.White)
-                                    arr.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y + 1));
-                                else
-                                    item.isProtected = true;
+                                arr.Add(new CoordinatePoint(this.Coordinate.X - 1, this.Coordinate.Y + 1));
                         }
                     }
                 }

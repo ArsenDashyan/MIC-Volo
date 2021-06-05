@@ -211,15 +211,11 @@ namespace Figure
             {
                 this.Coordinate = item;
                 if (!DangerPosition(othereFigures).Contains(thisKing.Coordinate))
-                {
                     goodMoves.Add(item);
-                }
                 if (king.chekedFigure != null)
                 {
                     if (item == king.chekedFigure.Coordinate)
-                    {
                         goodMoves.Add(item);
-                    }
                 }
             }
             this.Coordinate = temp;
