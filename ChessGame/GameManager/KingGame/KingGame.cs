@@ -490,7 +490,7 @@ namespace GameManager
                 baseFigure.Coordinate = item;
                 if (IsProtected(baseFigure, item))
                 {
-                    if (CoordinatePoint.Modul(item, king.Coordinate) >= 2d)
+                    if ((item - king.Coordinate) >= 2d)
                     {
                         if (tempFigure.AvailableMoves(_models).Contains(king.Coordinate))
                         {
@@ -514,7 +514,7 @@ namespace GameManager
                 baseFigure.Coordinate = item;
                 if (!IsUnderAttack(baseFigure, baseFigure.Coordinate))
                 {
-                    if (CoordinatePoint.Modul(item, king.Coordinate) >= 2d)
+                    if ((item - king.Coordinate) >= 2d)
                     {
                         if (tempFigure.AvailableMoves(_models).Contains(king.Coordinate))
                         {
@@ -538,7 +538,7 @@ namespace GameManager
                 baseFigure.Coordinate = item;
                 if (!IsUnderAttack(baseFigure, baseFigure.Coordinate))
                 {
-                    if (CoordinatePoint.Modul(item, king.Coordinate) > 2)
+                    if ((item - king.Coordinate) > 2)
                     {
                         if (tempFigure.AvailableMoves(_models).Count == 14)
                         {
@@ -946,7 +946,7 @@ namespace GameManager
             var currentCoordinate = GetCoordinateByString(coordinate);
             var baseFigure = CheckedCurrentFigure(currentCoordinate);
             var antiCheck = (IAntiCheck)baseFigure;
-            var movesList = antiCheck.MovesWithKingIsNotUnderCheck(_models);
+            var movesList = antiCheck.MovesWithKingIsNotUnderCheck(_models,baseFigure);
             foreach (var item in movesList)
             {
                 result.Add($"{item.X}.{item.Y}");

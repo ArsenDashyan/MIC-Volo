@@ -8,7 +8,6 @@
         public string Name { get; set; }
         public FColor Color { get; set; }
         public bool isMoved = false;
-        public bool isProtected = false;
         public const int topPoint = 7;
         public const int downPoint = 0;
         public CoordinatePoint Coordinate { get; set; }
@@ -44,7 +43,8 @@
         }
         public override string ToString()
         {
-            return $"{this.Name}|{this.Coordinate}|{this.isMoved}|{this.isProtected}";
+            return $"{this.Name}|{this.Coordinate}|{this.isMoved}";
         }
+
     }
 }

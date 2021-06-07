@@ -25,7 +25,7 @@ namespace Figure
         {
             return $"{IntToChar(X)}.{Y + 1}";
         }
-        private char IntToChar(int number)
+        private static char IntToChar(int number)
         {
             char ch = number switch
             {
@@ -41,6 +41,7 @@ namespace Figure
             };
             return ch;
         }
+
 #nullable enable
         public static bool operator ==(CoordinatePoint? p1, CoordinatePoint? p2)
         {
@@ -50,16 +51,10 @@ namespace Figure
         {
             return !(p1?.X == p2?.X && p1?.Y == p2?.Y);
         }
-
         public static double operator -(CoordinatePoint CoordinatPoint, CoordinatePoint CoordinatPoint1)
         {
             return Math.Sqrt((CoordinatPoint1.X - CoordinatPoint.X) * (CoordinatPoint1.X - CoordinatPoint.X) +
                             (CoordinatPoint1.Y - CoordinatPoint.Y) * (CoordinatPoint1.Y - CoordinatPoint.Y));
-        }
-        public static double Modul(CoordinatePoint CoordinatPoint, CoordinatePoint CoordinatPoint1)
-        {
-            return Math.Sqrt((CoordinatPoint1.X - CoordinatPoint.X) * (CoordinatPoint1.X - CoordinatPoint.X) +
-                             (CoordinatPoint1.Y - CoordinatPoint.Y) * (CoordinatPoint1.Y - CoordinatPoint.Y));
         }
     }
 }

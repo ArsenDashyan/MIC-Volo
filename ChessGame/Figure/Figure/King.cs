@@ -145,70 +145,6 @@ namespace Figure
             return result;
         }
 
-        /// <summary>
-        /// Check the danger position for current king
-        /// </summary>
-        /// <param name="model">King instance withe or Black</param>
-        /// <returns>Return danger position List for current king </returns>
-        private List<CoordinatePoint> DangerPosition(List<BaseFigure> othereFigures)
-        {
-            var modelNew = othereFigures.Where(c => c.Color != this.Color);
-            var result = new List<CoordinatePoint>();
-            foreach (var item in modelNew)
-            {
-                var temp = (IAvailableMoves)item;
-                var array = temp.AvailableMoves(othereFigures);
-                result.AddRange(array);
-            }
-            return result.Distinct().ToList();
-        }
-        public List<CoordinatePoint> MovesWithKingIsNotUnderCheck(List<BaseFigure> othereFigures)
-        {
-            var thisKing = (BaseFigure)othereFigures.Where(c => c.Color == this.Color && c is King).Single();
-            var models = othereFigures.Where(f => f.Color != this.Color);
-            var king = (King)thisKing;
-            var temp = this.Coordinate;
-            var goodMoves = new List<CoordinatePoint>();
-            foreach (var item in this.AvailableMoves(othereFigures))
-            {
-                if (CheckedCurrentFigure(item, othereFigures, out BaseFigure tempFigure))
-                {
-                    this.Coordinate = item;
-                    tempFigure.Coordinate = new CoordinatePoint(808,808);
-                    if (!DangerPosition(othereFigures).Contains(thisKing.Coordinate))
-                        goodMoves.Add(item);
-                    tempFigure.Coordinate = item;
-                }
-                else
-                {
-                    this.Coordinate = item;
-                    if (!DangerPosition(othereFigures).Contains(thisKing.Coordinate))
-                        goodMoves.Add(item);
-                }
-            }
-            this.Coordinate = temp;
-            return goodMoves;
-        }
-
-        /// <summary>
-        /// Check a current figure with a coordinate
-        /// </summary>
-        /// <param name="coordinatePoint">Current coordinate</param>
-        /// <returns>Return a current figure</returns>
-        private bool CheckedCurrentFigure(CoordinatePoint coordinatePoint, List<BaseFigure> otherFigures, out BaseFigure baseFigure)
-        {
-            foreach (var item in otherFigures)
-            {
-                if (item.Coordinate == coordinatePoint)
-                {
-                    baseFigure = item;
-                    return true;
-                }
-            }
-            baseFigure = null;
-            return false;
-        }
-
         #endregion
 
         /// <summary>
@@ -238,7 +174,7 @@ namespace Figure
             foreach (var item in modelNew)
             {
                 var temp = (IAntiCheck)item;
-                moves.AddRange(temp.MovesWithKingIsNotUnderCheck(othereFigures));
+                moves.AddRange(temp.MovesWithKingIsNotUnderCheck(othereFigures, this));
             }
             if (moves.Count == 0)
             {

@@ -776,7 +776,7 @@ namespace ChessGame
                         SomeGameLabel2.Visibility = Visibility.Visible;
                         SomeGameComboBox.Visibility = Visibility.Visible;
                         /*await Task.Run(() =>*/
-                        GetItemsSomeGameComboBox();
+                        GetItemsNotEndedComboBox();
                         CheckUsers.Visibility = Visibility.Visible;
                         GameTypeComboBox.Visibility = Visibility.Hidden;
                         ChooseGameType.Visibility = Visibility.Hidden;
@@ -793,7 +793,7 @@ namespace ChessGame
         /// <summary>
         /// filling the user's name in the Combobox from the DB
         /// </summary>
-        public void GetItemsSomeGameComboBox()
+        public void GetItemsNotEndedComboBox()
         {
             using (ChessDBContext context = new ChessDBContext())
             {

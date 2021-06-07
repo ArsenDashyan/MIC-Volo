@@ -80,48 +80,6 @@ namespace Figure
             return this.Crosswise(othereFigures);
         }
 
-        /// <summary>
-        /// Check the danger position for current king
-        /// </summary>
-        /// <param name="model">King instance withe or Black</param>
-        /// <returns>Return danger position List for current king </returns>
-        private List<CoordinatePoint> DangerPosition(List<BaseFigure> othereFigures)
-        {
-            var modelNew = othereFigures.Where(c => c.Color != this.Color);
-            var result = new List<CoordinatePoint>();
-            foreach (var item in modelNew)
-            {
-                var temp = (IAvailableMoves)item;
-                var array = temp.AvailableMoves(othereFigures);
-                result.AddRange(array);
-            }
-            return result;
-        }
-        public List<CoordinatePoint> MovesWithKingIsNotUnderCheck(List<BaseFigure> othereFigures)
-        {
-            var thisKing = (BaseFigure)othereFigures.Where(c => c.Color == this.Color && c is King).Single();
-            var king = (King)thisKing;
-            var temp = this.Coordinate;
-            var goodMoves = new List<CoordinatePoint>();
-            foreach (var item in this.AvailableMoves(othereFigures))
-            {
-                this.Coordinate = item;
-                if (!DangerPosition(othereFigures).Contains(thisKing.Coordinate))
-                {
-                    goodMoves.Add(item);
-                }
-                if (king.chekedFigure != null)
-                {
-                    if (item == king.chekedFigure.Coordinate)
-                    {
-                        goodMoves.Add(item);
-                    }
-                }
-            }
-            this.Coordinate = temp;
-            return goodMoves;
-        }
-
         #endregion
     }
 }

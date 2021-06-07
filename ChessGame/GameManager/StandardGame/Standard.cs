@@ -94,7 +94,7 @@ namespace GameManager
             var targetCoordinate = GetCoordinateByString(target);
             var baseFigure = CheckedCurrentFigure(currentCoordinate);
             var antiCheck = (IAntiCheck)baseFigure;
-            return antiCheck.MovesWithKingIsNotUnderCheck(_models).Contains(targetCoordinate);
+            return antiCheck.MovesWithKingIsNotUnderCheck(_models, baseFigure).Contains(targetCoordinate);
         }
         public void GetLogic(string current, string target)
         {
@@ -245,7 +245,6 @@ namespace GameManager
                 item.RemovePicture += RemoveFigurePicture;
                 item.MessageForMove += MessageMove;
                 item.isMoved = figureInfo[2] == "True";
-                item.isProtected = figureInfo[3] == "True";
                 _models.Add(item);
                 if (item is King king)
                     king.MessageCheck += MessageChek;
@@ -408,7 +407,7 @@ namespace GameManager
             var currentCoordinate = GetCoordinateByString(coordinate);
             var baseFigure = CheckedCurrentFigure(currentCoordinate);
             var antiCheck = (IAntiCheck)baseFigure;
-            var movesList = antiCheck.MovesWithKingIsNotUnderCheck(_models);
+            var movesList = antiCheck.MovesWithKingIsNotUnderCheck(_models, baseFigure);
             foreach (var item in movesList)
             {
                 result.Add($"{item.X}.{item.Y}");
@@ -428,13 +427,13 @@ namespace GameManager
         /// <returns>Return true if king is moved</returns>
         private static void KingFigureSet(King king, CoordinatePoint targetCoordinate)
         {
-            var CurentKing = (King)_models.Where(c => c.Color != king.Color && c is King).Single();
+            var baseFigure = (IAntiCheck)king;
             if (CheckCastling(king, targetCoordinate, out CoordinatePoint coordinatePoint))
             {
                 SetRookCastling(coordinatePoint);
                 king.SetFigurePosition(targetCoordinate);
             }
-            else if (king.MovesWithKingIsNotUnderCheck(_models).Contains(targetCoordinate))
+            else if (baseFigure.MovesWithKingIsNotUnderCheck(_models, king).Contains(targetCoordinate))
                 king.SetFigurePosition(targetCoordinate);
         }
 
@@ -510,12 +509,15 @@ namespace GameManager
         /// <returns>Return true, if castling is valid</returns>
         private static bool CheckCastling(King king, CoordinatePoint targetCoordinate, out CoordinatePoint coordinatePoint)
         {
+            var baseFigure = (IAntiCheck)king;
             if (king.isMoved)
             {
                 coordinatePoint = null;
                 return false;
             }
-            else if (king.MovesWithKingIsNotUnderCheck(_models).Contains(targetCoordinate))
+            else if (baseFigure.MovesWithKingIsNotUnderCheck(_models, king).Contains(targetCoordinate) &&
+                     king.Coordinate.X == targetCoordinate.X + 2 ||
+                     king.Coordinate.X == targetCoordinate.X - 2)
             {
                 if (CheckRook(king, out CoordinatePoint coordinate))
                 {
