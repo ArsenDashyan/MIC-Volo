@@ -4,7 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>Mag1cwind0w-O-Sunny-Day-Osd-sun.ico</ApplicationIcon>
+    <ApplicationIcon>Resources/Pictures/Mag1cwind0w-O-Sunny-Day-Osd-sun.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

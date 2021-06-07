@@ -39,12 +39,10 @@ namespace GameManager
             var firstCoordinate = Convert.ToChar(strCurrent[0]);
             var currentCoordinate = new CoordinatePoint(firstCoordinate.CharToInt(), int.Parse(strCurrent[1]) - 1);
             var baseFigure = CheckedCurrentFigure(currentCoordinate, coordinate);
-            var modelTemp = _models.Where(c => c.Color != baseFigure.Color);
-            foreach (var item in modelTemp)
+            foreach (var item in _models.Where(c => c.Color != baseFigure.Color))
             {
                 if (currentCoordinate == item.Coordinate)
                 {
-                    var tempItem = item;
                     string itemCoordinate = item.Coordinate.ToString() + '.' + item.Name;
                     RemovePicture(item, itemCoordinate);
                     DeletePicture(item, itemCoordinate);
@@ -57,26 +55,17 @@ namespace GameManager
         /// <summary>
         /// Initialize a removePicture event
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="coordinate"></param>
-        public void RemoveFigurePicture(object sender, string coordinate)
-        {
-            RemovePicture(this, coordinate);
-        }
+        public void RemoveFigurePicture(object sender, string coordinate) => RemovePicture(this, coordinate);
 
         /// <summary>
         /// Initialize a messageForMove event
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="coordinate"></param>
-        public void MessageMove(object sender, (string, string) coordinate)
-        {
-            MessageForMove(this, coordinate);
-        }
-        public void MessageChek(object sender, string message)
-        {
-            MessageCheck(this, message);
-        }
+        public void MessageMove(object sender, (string, string) coordinate) => MessageForMove(this, coordinate);
+
+        /// <summary>
+        /// Initialize a messageChek event
+        /// </summary>
+        public void MessageChek(object sender, string message) => MessageCheck(this, message);
 
         #endregion
 
@@ -90,17 +79,15 @@ namespace GameManager
         /// <returns>Return true if target coordinate is valid for figure</returns>
         public static bool IsVAlidCoordinate(string current, string target)
         {
-            var currentCoordinate = GetCoordinateByString(current);
-            var targetCoordinate = GetCoordinateByString(target);
-            var baseFigure = CheckedCurrentFigure(currentCoordinate);
+            var targetCoordinate = target.GetCoordinateByString();
+            var baseFigure = CheckedCurrentFigure(current.GetCoordinateByString());
             var antiCheck = (IAntiCheck)baseFigure;
             return antiCheck.MovesWithKingIsNotUnderCheck(_models, baseFigure).Contains(targetCoordinate);
         }
         public void GetLogic(string current, string target)
         {
-            var currentCoordinate = GetCoordinateByString(current);
-            var targetCoordinate = GetCoordinateByString(target);
-            var baseFigure = CheckedCurrentFigure(currentCoordinate);
+            var targetCoordinate = target.GetCoordinateByString();
+            var baseFigure = CheckedCurrentFigure(current.GetCoordinateByString());
             var CurentKing = (King)_models.Where(c => c.Color != baseFigure.Color && c is King).Single();
             if (baseFigure is King king)
                 KingFigureSet(king, targetCoordinate);
@@ -112,11 +99,6 @@ namespace GameManager
                     baseFigure.SetFigurePosition(targetCoordinate);
             }
             CurentKing.IsCheked(_models);
-        }
-        private static CoordinatePoint GetCoordinateByString(string path)
-        {
-            string[] strCurrent = path.Split('.');
-            return new CoordinatePoint(int.Parse(strCurrent[0]), int.Parse(strCurrent[1]));
         }
 
         /// <summary>
@@ -404,8 +386,7 @@ namespace GameManager
         public static List<string> GetAvalibleMoves(string coordinate)
         {
             var result = new List<string>();
-            var currentCoordinate = GetCoordinateByString(coordinate);
-            var baseFigure = CheckedCurrentFigure(currentCoordinate);
+            var baseFigure = CheckedCurrentFigure(coordinate.GetCoordinateByString());
             var antiCheck = (IAntiCheck)baseFigure;
             var movesList = antiCheck.MovesWithKingIsNotUnderCheck(_models, baseFigure);
             foreach (var item in movesList)
@@ -560,7 +541,6 @@ namespace GameManager
         /// <param name="targetCoordinate">Target coordinate</param>
         private void PawnFigureSet(Pawn pawn, CoordinatePoint targetCoordinate)
         {
-            var CurentKing = (King)_models.Where(c => c.Color != pawn.Color && c is King).Single();
             if (CheckPawnChange(targetCoordinate, pawn))
             {
                 _coordinate = targetCoordinate;

@@ -63,7 +63,6 @@ namespace GameManager
             {
                 if (currentCoordinate == item.Coordinate)
                 {
-                    var tempItem = item;
                     string itemCoordinate = item.Coordinate.ToString() + '.' + item.Name;
                     RemovePicture(item, itemCoordinate);
                     _models.Remove(item);
@@ -75,22 +74,12 @@ namespace GameManager
         /// <summary>
         /// Initialize a removePicture event
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="coordinate"></param>
-        public void RemoveFigurePicture(object sender, string coordinate)
-        {
-            RemovePicture(this, coordinate);
-        }
+        public void RemoveFigurePicture(object sender, string coordinate) => RemovePicture(this, coordinate);
 
         /// <summary>
         /// Initialize a messageForMove event
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="coordinate"></param>
-        public void MessageMove(object sender, (string, string) coordinate)
-        {
-            MessageForMove(this, coordinate);
-        }
+        public void MessageMove(object sender, (string, string) coordinate) => MessageForMove(this, coordinate);
         private void MessageForProgress()
         {
             if (_countForProgressStart == 0)
@@ -134,6 +123,7 @@ namespace GameManager
         {
             var countList = new Dictionary<CoordinatePoint, (int, BaseFigure)>();
             var tempFigur = (IAvailableMoves)figure;
+            var kingFigur = (IAntiCheck)CurentKing;
             CoordinatePoint temp = figure.Coordinate;
             int targetX = CurentKing.Coordinate.X + 1 == 8 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X + 1;
             int targetY = CurentKing.Coordinate.Y - 1 == -1 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y - 1;
@@ -142,8 +132,8 @@ namespace GameManager
                 figure.Coordinate = item;
                 if (!IsUnderAttack(figure, figure.Coordinate))
                 {
-                    if (GetCurrentKingMoves().Filtr(c => c.X >= targetX | c.Y <= targetY) && !tempFigur.AvailableMoves(_models).Contains(CurentKing.Coordinate))
-                        countList.Add(item, (GetCurrentKingMoves().Count, figure));
+                    if (kingFigur.MovesWithKingIsNotUnderCheck(_models,CurentKing).Filtr(c => c.X >= targetX | c.Y <= targetY) && !tempFigur.AvailableMoves(_models).Contains(CurentKing.Coordinate))
+                        countList.Add(item, (kingFigur.MovesWithKingIsNotUnderCheck(_models, CurentKing).Count, figure));
                 }
             }
             figure.Coordinate = temp;
@@ -169,6 +159,7 @@ namespace GameManager
         {
             var countList = new Dictionary<CoordinatePoint, (int, BaseFigure)>();
             var tempFigur = (IAvailableMoves)figure;
+            var kingFigur = (IAntiCheck)CurentKing;
             CoordinatePoint temp = figure.Coordinate;
             int targetX = CurentKing.Coordinate.X - 1 == -1 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X - 1;
             int targetY = CurentKing.Coordinate.Y - 1 == -1 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y - 1;
@@ -177,8 +168,8 @@ namespace GameManager
                 figure.Coordinate = item;
                 if (!IsUnderAttack(figure, figure.Coordinate))
                 {
-                    if (GetCurrentKingMoves().Filtr(c => c.X <= targetX | c.Y <= targetY) && !tempFigur.AvailableMoves(_models).Contains(CurentKing.Coordinate))
-                        countList.Add(item, (GetCurrentKingMoves().Count, figure));
+                    if (kingFigur.MovesWithKingIsNotUnderCheck(_models, CurentKing).Filtr(c => c.X <= targetX | c.Y <= targetY) && !tempFigur.AvailableMoves(_models).Contains(CurentKing.Coordinate))
+                        countList.Add(item, (kingFigur.MovesWithKingIsNotUnderCheck(_models, CurentKing).Count, figure));
                 }
             }
             figure.Coordinate = temp;
@@ -204,6 +195,7 @@ namespace GameManager
         {
             var countList = new Dictionary<CoordinatePoint, (int, BaseFigure)>();
             var tempFigur = (IAvailableMoves)figure;
+            var kingFigur = (IAntiCheck)CurentKing;
             CoordinatePoint temp = figure.Coordinate;
             int targetX = CurentKing.Coordinate.X - 1 == -1 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X - 1;
             int targetY = CurentKing.Coordinate.Y + 1 == 8 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y + 1;
@@ -212,8 +204,8 @@ namespace GameManager
                 figure.Coordinate = item;
                 if (!IsUnderAttack(figure, figure.Coordinate))
                 {
-                    if (GetCurrentKingMoves().Filtr(c => c.X <= targetX | c.Y >= targetY) && !tempFigur.AvailableMoves(_models).Contains(CurentKing.Coordinate))
-                        countList.Add(item, (GetCurrentKingMoves().Count, figure));
+                    if (kingFigur.MovesWithKingIsNotUnderCheck(_models, CurentKing).Filtr(c => c.X <= targetX | c.Y >= targetY) && !tempFigur.AvailableMoves(_models).Contains(CurentKing.Coordinate))
+                        countList.Add(item, (kingFigur.MovesWithKingIsNotUnderCheck(_models, CurentKing).Count, figure));
                 }
             }
             figure.Coordinate = temp;
@@ -239,6 +231,7 @@ namespace GameManager
         {
             var countList = new Dictionary<CoordinatePoint, (int, BaseFigure)>();
             var tempFigur = (IAvailableMoves)figure;
+            var kingFigur = (IAntiCheck)CurentKing;
             CoordinatePoint temp = figure.Coordinate;
             int targetX = CurentKing.Coordinate.X + 1 == 8 ? CurentKing.Coordinate.X : CurentKing.Coordinate.X + 1;
             int targetY = CurentKing.Coordinate.Y + 1 == 8 ? CurentKing.Coordinate.Y : CurentKing.Coordinate.Y + 1;
@@ -247,8 +240,8 @@ namespace GameManager
                 figure.Coordinate = item;
                 if (!IsUnderAttack(figure, figure.Coordinate))
                 {
-                    if (GetCurrentKingMoves().Filtr(c => c.X >= targetX | c.Y >= targetY) && !tempFigur.AvailableMoves(_models).Contains(CurentKing.Coordinate))
-                        countList.Add(item, (GetCurrentKingMoves().Count, figure));
+                    if (kingFigur.MovesWithKingIsNotUnderCheck(_models, CurentKing).Filtr(c => c.X >= targetX | c.Y >= targetY) && !tempFigur.AvailableMoves(_models).Contains(CurentKing.Coordinate))
+                        countList.Add(item, (kingFigur.MovesWithKingIsNotUnderCheck(_models, CurentKing).Count, figure));
                 }
             }
             figure.Coordinate = temp;
@@ -309,6 +302,7 @@ namespace GameManager
         {
             var countList = new Dictionary<CoordinatePoint, (int, BaseFigure)>();
             var tempFigur = (IAvailableMoves)figure;
+            var kingFigur = (IAntiCheck)CurentKing;
             CoordinatePoint temp = figure.Coordinate;
             foreach (var item in tempFigur.AvailableMoves(_models).FiltrFor(c => c - CurentKing.Coordinate >= 2))
             {
@@ -316,7 +310,7 @@ namespace GameManager
                 if (!IsUnderAttack(figure, figure.Coordinate))
                 {
                     if (tempFigur.AvailableMoves(_models).Contains(CurentKing.Coordinate))
-                        countList.Add(item, (GetCurrentKingMoves().Count, figure));
+                        countList.Add(item, (kingFigur.MovesWithKingIsNotUnderCheck(_models, CurentKing).Count, figure));
                 }
             }
             figure.Coordinate = temp;
@@ -590,7 +584,6 @@ namespace GameManager
             var modelNew = _models.Where(c => c.Color != _currentFigureColor).ToList();
             foreach (var figur in modelNew)
             {
-                var tempFigur = (IAvailableMoves)figur;
                 if (IsUnderAttack(figur, figur.Coordinate))
                 {
                     if (!IsProtected(figur, figur.Coordinate))
@@ -602,42 +595,6 @@ namespace GameManager
                 }
             }
             return false;
-        }
-
-        /// <summary>
-        /// Check the available moves for current king 
-        /// </summary>
-        /// <returns>Return the list</returns>
-        private List<CoordinatePoint> GetCurrentKingMoves()
-        {
-            var currentKing = (IAvailableMoves)CurentKing;
-            var result = new List<CoordinatePoint>();
-            foreach (var item in currentKing.AvailableMoves(_models))
-            {
-                if (!DangerPosition(CurentKing).Contains(item))
-                {
-                    result.Add(item);
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Check the danger position for current king
-        /// </summary>
-        /// <param name="model">King instance withe or Black</param>
-        /// <returns>Return danger position List for current king </returns>
-        private static List<CoordinatePoint> DangerPosition(BaseFigure model)
-        {
-            var modelNew = _models.Where(c => c.Color != model.Color);
-            var result = new List<CoordinatePoint>();
-            foreach (var item in modelNew)
-            {
-                var temp = (IAvailableMoves)item;
-                var array = temp.AvailableMoves(_models);
-                result.AddRange(array);
-            }
-            return result;
         }
 
         /// <summary>
@@ -664,18 +621,17 @@ namespace GameManager
                 }
             }
             IAvailableMoves available = (IAvailableMoves)_baseFigure;
+            var kingFigur = (IAntiCheck)_baseFigure;
             if (_baseFigure is King)
             {
-                if (GetCurrentKingMoves().Contains(targetCoordinate))
+                if (kingFigur.MovesWithKingIsNotUnderCheck(_models, _baseFigure).Contains(targetCoordinate))
                 {
                     _currentListForBabyGame.Add(targetCoordinate);
                     _baseFigure.SetFigurePosition(targetCoordinate);
                     return true;
                 }
                 else
-                {
                     return false;
-                }
             }
             else if (available.AvailableMoves(_models).Contains(targetCoordinate))
             {
@@ -683,9 +639,7 @@ namespace GameManager
                 return true;
             }
             else
-            {
                 return false;
-            }
         }
 
         /// <summary>
@@ -708,7 +662,8 @@ namespace GameManager
                 {
                     if (_baseFigure is King king)
                     {
-                        if (!DangerPosition(king).Contains(coordinatePoint))
+                        var kingFigur = (IAntiCheck)king;
+                        if (!kingFigur.DangerPosition(_models, _baseFigure).Contains(coordinatePoint))
                         {
                             _baseFigure.SetFigurePosition(coordinatePoint);
                             _baseFigure.isMoved = true;
@@ -920,11 +875,6 @@ namespace GameManager
                 names = null;
             return names;
         }
-        private static CoordinatePoint GetCoordinateByString(string path)
-        {
-            string[] strCurrent = path.Split('.');
-            return new CoordinatePoint(int.Parse(strCurrent[0]), int.Parse(strCurrent[1]));
-        }
 
         /// <summary>
         /// Check a current figure with a coordinate
@@ -943,8 +893,7 @@ namespace GameManager
         public static List<string> GetAvalibleMoves(string coordinate)
         {
             var result = new List<string>();
-            var currentCoordinate = GetCoordinateByString(coordinate);
-            var baseFigure = CheckedCurrentFigure(currentCoordinate);
+            var baseFigure = CheckedCurrentFigure(coordinate.GetCoordinateByString());
             var antiCheck = (IAntiCheck)baseFigure;
             var movesList = antiCheck.MovesWithKingIsNotUnderCheck(_models,baseFigure);
             foreach (var item in movesList)

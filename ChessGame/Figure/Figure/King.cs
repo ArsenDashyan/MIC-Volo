@@ -6,7 +6,6 @@ namespace Figure
     public delegate void MessageForMate(object sender, string str);
     public class King : BaseFigure, ICrosswise, IDiagonal, IAvailableMoves, IAntiCheck
     {
-        public BaseFigure chekedFigure;
         public event MessageForMate MessageCheck;
         public King(string name, FColor color) : base(name, color)
         {
@@ -18,7 +17,6 @@ namespace Figure
         public List<CoordinatePoint> Horizontal(List<BaseFigure> othereFigures)
         {
             var arr = new List<CoordinatePoint>();
-            var newArr = new List<CoordinatePoint>();
             var model = othereFigures.Where(c => c.Color == this.Color && c != this).ToList();
             if (this.Coordinate.X - 1 >= downPoint)
             {
@@ -38,14 +36,9 @@ namespace Figure
             foreach (var item in model)
             {
                 if (arr.Contains(item.Coordinate))
-                {
-                    if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                        arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
-                    else
-                        arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                }
+                    arr.Remove(item.Coordinate);
             }
-            newArr = arr.Distinct().ToList();
+            var newArr = arr.Distinct().ToList();
             newArr.Remove(this.Coordinate);
             return newArr;
         }
@@ -67,12 +60,7 @@ namespace Figure
             foreach (var item in model)
             {
                 if (arr.Contains(item.Coordinate))
-                {
-                    if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                        arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
-                    else
-                        arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                }
+                    arr.Remove(item.Coordinate);
             }
             newArr = arr.Distinct().ToList();
             newArr.Remove(this.Coordinate);
@@ -101,10 +89,8 @@ namespace Figure
             {
                 if (arr.Contains(item.Coordinate))
                 {
-                    if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                        arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
-                    else
-                        arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
+                    if (arr.Contains(item.Coordinate))
+                        arr.Remove(item.Coordinate);
                 }
             }
             arr.Remove(this.Coordinate);
@@ -125,12 +111,7 @@ namespace Figure
             foreach (var item in model)
             {
                 if (arr.Contains(item.Coordinate))
-                {
-                    if (arr.IndexOf(this.Coordinate) < arr.IndexOf(item.Coordinate))
-                        arr = arr.Where(c => arr.IndexOf(c) < arr.IndexOf(item.Coordinate)).ToList();
-                    else
-                        arr = arr.Where(c => arr.IndexOf(c) > arr.IndexOf(item.Coordinate)).ToList();
-                }
+                    arr.Remove(item.Coordinate);
             }
             arr.Remove(this.Coordinate);
             return arr;
@@ -158,9 +139,8 @@ namespace Figure
                 var temp = (IAvailableMoves)item;
                 if (temp.AvailableMoves(othereFigures).Contains(this.Coordinate))
                 {
-                    this.chekedFigure = item;
-                    MessageCheck(this, "Check");
                     IsMate(othereFigures);
+                    MessageCheck(this, "Check");
                     break;
                 }
                 else
@@ -177,9 +157,7 @@ namespace Figure
                 moves.AddRange(temp.MovesWithKingIsNotUnderCheck(othereFigures, this));
             }
             if (moves.Count == 0)
-            {
                 MessageCheck(this, "Mate");
-            }
             else
                 MessageCheck(this, " ");
         }

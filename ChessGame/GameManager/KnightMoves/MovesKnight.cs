@@ -81,14 +81,8 @@ namespace GameManager
             _targetKnight.MessageForMove += MessageForMove;
             _targetKnight.SetFigurePosition(coordinatPoint);
         }
-        private void SetFigurePicture(object sender, string coordinate)
-        {
-            SetPicture(this, coordinate);
-        }
-        private void MessageForMove(object sender, (string,string) coordinate)
-        {
-            MessageForMoveKnight(this, coordinate);
-        }
+        private void SetFigurePicture(object sender, string coordinate) => SetPicture(this, coordinate);
+        private void MessageForMove(object sender, (string,string) coordinate) => MessageForMoveKnight(this, coordinate);
         public static List<string> GetNamesForReset()
         {
             var positions = new List<string>();

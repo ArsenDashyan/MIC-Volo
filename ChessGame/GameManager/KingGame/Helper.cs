@@ -93,6 +93,7 @@ namespace GameManager
                     yield return item;
             }
         }
+
         /// <summary>
         /// Change the coordinat letter in int
         /// </summary>
@@ -124,7 +125,6 @@ namespace GameManager
 
             }
         }
-
         public static FColor StringToEnum(this string color)
         {
             switch (color)
@@ -137,42 +137,27 @@ namespace GameManager
                     return FColor.Black;
             }
         }
-
         public static CoordinatePoint StringToCoordinatPoint(this string coordinate)
         {
             var temp = coordinate.Split('.');
-            int number;
-            switch (temp[0])
+            var number = temp[0] switch
             {
-                case "a":
-                    number = 0;
-                    break;
-                case "b":
-                    number = 1;
-                    break;
-                case "c":
-                    number = 2;
-                    break;
-                case "d":
-                    number = 3;
-                    break;
-                case "e":
-                    number = 4;
-                    break;
-                case "f":
-                    number = 5;
-                    break;
-                case "g":
-                    number = 6;
-                    break;
-                case "h":
-                    number = 7;
-                    break;
-                default:
-                    number = 808;
-                    break;
-            }
+                "a" => 0,
+                "b" => 1,
+                "c" => 2,
+                "d" => 3,
+                "e" => 4,
+                "f" => 5,
+                "g" => 6,
+                "h" => 7,
+                _ => 808,
+            };
             return new CoordinatePoint(number, int.Parse(temp[1])-1);
+        }
+        public static CoordinatePoint GetCoordinateByString(this string path)
+        {
+            string[] strCurrent = path.Split('.');
+            return new CoordinatePoint(int.Parse(strCurrent[0]), int.Parse(strCurrent[1]));
         }
     }
 }

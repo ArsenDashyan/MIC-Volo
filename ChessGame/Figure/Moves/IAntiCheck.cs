@@ -39,7 +39,7 @@ namespace Figure
         /// </summary>
         /// <param name="model">King instance withe or Black</param>
         /// <returns>Return danger position List for current king </returns>
-        private static List<CoordinatePoint> DangerPosition(List<BaseFigure> othereFigures, BaseFigure baseFigure)
+        public List<CoordinatePoint> DangerPosition(List<BaseFigure> othereFigures, BaseFigure baseFigure)
         {
             var modelNew = othereFigures.Where(c => c.Color != baseFigure.Color);
             var result = new List<CoordinatePoint>();
