@@ -852,6 +852,10 @@ namespace ChessGame
                         json = game.GameCondition;
                         MovesTextBoxStandard.Text = game.GameStory;
                         currentFigureColor = game.CurrentColor;
+                        if (currentFigureColor == "White")
+                            _colorPower = false;
+                        else
+                            _colorPower = true;
                     }
                 }
                 InitializeGameManagment();
