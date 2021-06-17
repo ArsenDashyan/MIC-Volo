@@ -159,5 +159,6 @@ namespace GameManager
             string[] strCurrent = path.Split('.');
             return new CoordinatePoint(int.Parse(strCurrent[0]), int.Parse(strCurrent[1]));
         }
+
     }
 }

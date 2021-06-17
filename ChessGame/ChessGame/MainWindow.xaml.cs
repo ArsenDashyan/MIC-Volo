@@ -666,7 +666,7 @@ namespace ChessGame
         /// <summary>
         /// Shows the standart game's panel
         /// </summary>
-        public void ShowStandardGamePanel()
+        private void ShowStandardGamePanel()
         {
             StandardGamePanel.Visibility = Visibility.Visible;
             PanelForGame.SelectedIndex = 2;
@@ -675,7 +675,7 @@ namespace ChessGame
             PawnChangePanel.Visibility = Visibility.Collapsed;
             StartGamePanel.Visibility = Visibility.Collapsed;
         }
-        public void ShowUserPanelForStandardGame()
+        private void ShowUserPanelForStandardGame()
         {
             PlayColorBlackStandard.Visibility = Visibility.Visible;
             PlayColorWhiteStandard.Visibility = Visibility.Visible;
@@ -685,7 +685,7 @@ namespace ChessGame
             FirstUserName.Text = string.Empty;
             SecondUserName.Text = string.Empty;
         }
-        public void HideUserPanelForStandardGame()
+        private void HideUserPanelForStandardGame()
         {
             PlayForStandard.Visibility = Visibility.Hidden;
             PlayColorBlackStandard.Visibility = Visibility.Hidden;
@@ -693,7 +693,7 @@ namespace ChessGame
             FirstUserName.Visibility = Visibility.Hidden;
             SecondUserName.Visibility = Visibility.Hidden;
         }
-        public void ShowKnightGamePanel()
+        private void ShowKnightGamePanel()
         {
             KnightMovesPanel.Visibility = Visibility.Visible;
             PanelForGame.SelectedIndex = 1;
@@ -707,7 +707,7 @@ namespace ChessGame
             InputCoordinatsNumber_Selected.IsEnabled = true;
             InstalB3.IsEnabled = true;
         }
-        public void ShowKingGamePanel()
+        private void ShowKingGamePanel()
         {
             KingGamePanel.Visibility = Visibility.Visible;
             PanelForGame.SelectedIndex = 0;
@@ -734,7 +734,7 @@ namespace ChessGame
         /// <summary>
         ///  in the starting point shows the panel
         /// </summary>
-        public void ShowPanels()
+        private void ShowPanels()
         {
             PanelForGame.SelectedIndex = 4;
             KingGamePanel.Visibility = Visibility.Collapsed;
@@ -775,7 +775,6 @@ namespace ChessGame
                         SomeGameLabel.Visibility = Visibility.Visible;
                         SomeGameLabel2.Visibility = Visibility.Visible;
                         SomeGameComboBox.Visibility = Visibility.Visible;
-                        /*await Task.Run(() =>*/
                         GetItemsNotEndedComboBox();
                         CheckUsers.Visibility = Visibility.Visible;
                         GameTypeComboBox.Visibility = Visibility.Hidden;
@@ -793,7 +792,7 @@ namespace ChessGame
         /// <summary>
         /// filling the user's name in the Combobox from the DB
         /// </summary>
-        public void GetItemsNotEndedComboBox()
+        private void GetItemsNotEndedComboBox()
         {
             using (ChessDBContext context = new ChessDBContext())
             {
@@ -808,7 +807,7 @@ namespace ChessGame
         /// <summary>
         /// filling the selected users' games sorting by the date
         /// </summary>
-        public void GetItemsCheckUsersComboBox()
+        private void GetItemsCheckUsersComboBox()
         {
             var result = SomeGameComboBox.Text.Split('-');
             using (ChessDBContext context = new ChessDBContext())
@@ -865,7 +864,6 @@ namespace ChessGame
                 MessageBox.Show($"Current Color is {currentFigureColor}");
             }
         }
-
         #endregion
 
         #region Standard Game
@@ -1026,12 +1024,6 @@ namespace ChessGame
                 item.Item2.Background = item.Item1;
             }
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="listColors"></param>
-        /// <returns></returns>
         private List<(int, int)> GetCoordinateList(List<string> listColors)
         {
             var list = new List<(int, int)>();
