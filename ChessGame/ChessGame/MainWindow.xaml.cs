@@ -435,6 +435,7 @@ namespace ChessGame
                 KnightSetBtn.IsEnabled = false;
             }
         }
+
         /// <summary>
         /// showing the amount the moves of the Knight
         /// </summary>
@@ -637,6 +638,7 @@ namespace ChessGame
             ResetBoard(currentGameStatus);
             ShowKingGamePanel();
             currentGameStatus = 1;
+            InitializeGameManagment();
             MessageBox.Show("You Change A King Game, Good Luck");
         }
         private void KnightGame_Click(object sender, RoutedEventArgs e)
@@ -649,6 +651,7 @@ namespace ChessGame
             KnightTargetLetter.Text = "";
             KnightTargetNumber.Text = "";
             currentGameStatus = 2;
+            InitializeGameManagment();
             MessageBox.Show("You Change A Knight Game, Good Luck");
         }
         private void StandardGame_Click(object sender, RoutedEventArgs e)
@@ -1037,7 +1040,7 @@ namespace ChessGame
         }
         protected override void OnClosed(EventArgs e)
         {
-            if (_isPlayed)
+            if (_isPlayed && currentGameStatus == 3)
             {
                 var result = MessageBox.Show("Saved the current game?",
                                 "Message",
